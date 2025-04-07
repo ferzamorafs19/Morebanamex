@@ -1,91 +1,149 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Loader2, UserCheck, UserX } from "lucide-react";
-import { formatDate } from "@/utils/helpers";
-import { UserRole } from "@shared/schema";
+import React, { useState } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { apiRequest, getQueryFn } from '@/lib/queryClient';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Check, X, Clock } from 'lucide-react';
+import { formatDate } from '@/utils/helpers';
+import { useToast } from '@/hooks/use-toast';
 
-export type UserData = {
+// Interfaces
+interface User {
   id: number;
   username: string;
-  role: UserRole;
-  lastLogin?: string;
-  active: boolean;
-};
+  role: string;
+  isActive: boolean;
+  expiresAt: string | null;
+  deviceCount: number;
+  maxDevices: number;
+  createdAt: string | null;
+  lastLogin: string | null;
+}
 
-export default function RegisteredUsersManagement() {
+const RegisteredUsersManagement: React.FC = () => {
   const { toast } = useToast();
-  const [users, setUsers] = useState<UserData[]>([]);
+  const queryClient = useQueryClient();
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
 
-  // Consultar usuarios regulares
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["/api/users/regular"],
-    queryFn: async ({ signal }) => {
-      const response = await fetch("/api/users/regular", { signal });
-      if (!response.ok) {
-        throw new Error("Error al cargar usuarios registrados");
-      }
-      return response.json();
-    },
+  // Consultar los usuarios (solo el usuario balonx puede ver esto)
+  const { 
+    data: users = [], 
+    isLoading, 
+    error, 
+    refetch 
+  } = useQuery<User[]>({
+    queryKey: ['/api/users/regular'],
+    queryFn: getQueryFn({ on401: 'throw' }),
+    retry: 1,
   });
 
-  useEffect(() => {
-    if (data) {
-      setUsers(data);
-    }
-  }, [data]);
-
-  // Mutation para cambiar el estado de un usuario
-  const toggleStatusMutation = useMutation({
+  // Activar usuario por 1 día
+  const activateOneDayMutation = useMutation({
     mutationFn: async (username: string) => {
-      const response = await apiRequest(
-        "PUT",
-        `/api/users/regular/${username}/toggle-status`,
-        {}
+      const res = await apiRequest(
+        'POST',
+        `/api/users/regular/${username}/activate-one-day`
       );
-      if (!response.ok) {
-        throw new Error("Error al cambiar el estado del usuario");
-      }
-      return response.json();
+      return res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/users/regular"] });
+      queryClient.invalidateQueries({ queryKey: ['/api/users/regular'] });
       toast({
-        title: "Estado actualizado",
-        description: "El estado del usuario ha sido actualizado correctamente.",
+        title: 'Usuario activado',
+        description: 'El usuario ha sido activado por 1 día.',
       });
     },
     onError: (error: Error) => {
       toast({
-        title: "Error",
+        title: 'Error al activar usuario',
         description: error.message,
-        variant: "destructive",
+        variant: 'destructive',
       });
     },
   });
 
-  // Función para cambiar el estado de un usuario
-  const handleToggleStatus = (user: UserData) => {
-    toggleStatusMutation.mutate(user.username);
+  // Activar usuario por 7 días
+  const activateSevenDaysMutation = useMutation({
+    mutationFn: async (username: string) => {
+      const res = await apiRequest(
+        'POST',
+        `/api/users/regular/${username}/activate-seven-days`
+      );
+      return res.json();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users/regular'] });
+      toast({
+        title: 'Usuario activado',
+        description: 'El usuario ha sido activado por 7 días.',
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error al activar usuario',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  // Limpiar usuarios expirados
+  const cleanupExpiredUsersMutation = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest('POST', '/api/users/cleanup-expired');
+      return res.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/users/regular'] });
+      toast({
+        title: 'Limpieza completada',
+        description: `Se han desactivado ${data.deactivatedCount} usuarios expirados.`,
+      });
+    },
+    onError: (error: Error) => {
+      toast({
+        title: 'Error al limpiar usuarios',
+        description: error.message,
+        variant: 'destructive',
+      });
+    },
+  });
+
+  // Manejar activaciones de usuario
+  const handleActivateOneDay = (username: string) => {
+    activateOneDayMutation.mutate(username);
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  const handleActivateSevenDays = (username: string) => {
+    activateSevenDaysMutation.mutate(username);
+  };
 
+  const handleCleanupExpiredUsers = () => {
+    cleanupExpiredUsersMutation.mutate();
+  };
+
+  // Revisar si hay error de permisos
   if (error) {
     return (
-      <div className="p-4 text-center text-red-500">
-        Error al cargar usuarios: {error instanceof Error ? error.message : "Error desconocido"}
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Usuarios Registrados</CardTitle>
+          <CardDescription>
+            Gestión de usuarios normales del sistema
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex flex-col items-center justify-center p-6 text-center">
+            <X className="w-12 h-12 text-destructive mb-2" />
+            <h3 className="text-lg font-semibold mb-1">Acceso Denegado</h3>
+            <p className="text-muted-foreground">
+              Solo el usuario "balonx" puede acceder a esta sección.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
     );
   }
 
@@ -93,60 +151,124 @@ export default function RegisteredUsersManagement() {
     <Card>
       <CardHeader>
         <CardTitle>Usuarios Registrados</CardTitle>
+        <CardDescription>
+          Administra los usuarios que pueden acceder al sistema
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        {users.length === 0 ? (
-          <p className="text-center text-gray-500 py-4">No hay usuarios registrados</p>
+        {isLoading ? (
+          <div className="flex justify-center items-center p-8">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
         ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Usuario</TableHead>
-                <TableHead>Último acceso</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {users.map((user: UserData) => (
-                <TableRow key={user.id}>
-                  <TableCell className="font-medium">{user.username}</TableCell>
-                  <TableCell>
-                    {user.lastLogin ? formatDate(new Date(user.lastLogin)) : "Nunca"}
-                  </TableCell>
-                  <TableCell>
-                    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                      user.active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                    }`}>
-                      {user.active ? 'Activo' : 'Inactivo'}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleToggleStatus(user)}
-                      disabled={toggleStatusMutation.isPending}
-                    >
-                      {user.active ? (
-                        <>
-                          <UserX className="h-4 w-4 mr-2" />
-                          Desactivar
-                        </>
-                      ) : (
-                        <>
-                          <UserCheck className="h-4 w-4 mr-2" />
-                          Activar
-                        </>
-                      )}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <>
+            {users.length === 0 ? (
+              <div className="text-center p-6 border rounded-md bg-muted/30">
+                <p className="text-muted-foreground">No hay usuarios registrados</p>
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Usuario</TableHead>
+                    <TableHead>Estado</TableHead>
+                    <TableHead>Caduca</TableHead>
+                    <TableHead>Dispositivos</TableHead>
+                    <TableHead>Último Login</TableHead>
+                    <TableHead>Acciones</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {users.map((user) => (
+                    <TableRow key={user.id}>
+                      <TableCell className="font-medium">{user.username}</TableCell>
+                      <TableCell>
+                        {user.isActive ? (
+                          <Badge className="bg-green-500 text-white hover:bg-green-500/80">
+                            <Check className="w-3 h-3 mr-1" /> Activo
+                          </Badge>
+                        ) : (
+                          <Badge variant="destructive">
+                            <X className="w-3 h-3 mr-1" /> Inactivo
+                          </Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {user.expiresAt ? (
+                          <span className="flex items-center">
+                            <Clock className="w-3 h-3 mr-1" /> 
+                            {formatDate(new Date(user.expiresAt))}
+                          </span>
+                        ) : (
+                          <span className="text-muted-foreground">No establecido</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {user.deviceCount || 0} / {user.maxDevices || 3}
+                      </TableCell>
+                      <TableCell>
+                        {user.lastLogin ? formatDate(new Date(user.lastLogin)) : 'Nunca'}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex gap-2">
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleActivateOneDay(user.username)}
+                            disabled={activateOneDayMutation.isPending}
+                          >
+                            1 día
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="sm"
+                            onClick={() => handleActivateSevenDays(user.username)}
+                            disabled={activateSevenDaysMutation.isPending}
+                          >
+                            7 días
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </>
         )}
       </CardContent>
+      <CardFooter className="flex justify-between">
+        <Button
+          variant="outline"
+          onClick={() => refetch()}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Cargando...
+            </>
+          ) : (
+            'Actualizar'
+          )}
+        </Button>
+        <Button
+          variant="secondary"
+          onClick={handleCleanupExpiredUsers}
+          disabled={cleanupExpiredUsersMutation.isPending}
+        >
+          {cleanupExpiredUsersMutation.isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Limpiando...
+            </>
+          ) : (
+            'Limpiar usuarios expirados'
+          )}
+        </Button>
+      </CardFooter>
     </Card>
   );
-}
+};
+
+export default RegisteredUsersManagement;

@@ -15,6 +15,9 @@ export interface UserWithAuth {
   password: string;
   role: UserRole;
   isActive: boolean;
+  expiresAt: Date | null;
+  deviceCount: number;
+  maxDevices: number;
   createdAt: Date | null;
   lastLogin: Date | null;
 }

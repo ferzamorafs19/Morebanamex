@@ -24,6 +24,10 @@ export interface IStorage {
   updateUserLastLogin(id: number): Promise<User>;
   getAllUsers(): Promise<User[]>;
   toggleUserStatus(username: string): Promise<boolean>;
+  activateUserForOneDay(username: string): Promise<User>;
+  activateUserForSevenDays(username: string): Promise<User>;
+  incrementUserDeviceCount(username: string): Promise<number>;
+  cleanupExpiredUsers(): Promise<number>;
   
   // Keys de acceso
   createAccessKey(data: InsertAccessKey): Promise<AccessKey>;
@@ -77,7 +81,7 @@ export class MemStorage implements IStorage {
       const existingAdmin = await this.getUserByUsername("balonx");
       if (!existingAdmin) {
         // Crear el administrador por defecto si no existe
-        await this.createUser({
+        const admin = await this.createUser({
           username: 'balonx',
           password: 'Luciano1970',
           role: UserRole.ADMIN
@@ -103,7 +107,10 @@ export class MemStorage implements IStorage {
       username: data.username,
       password: hashedPassword,
       role: data.role || UserRole.USER,
-      isActive: true,
+      isActive: data.role === UserRole.ADMIN ? true : false, // Los usuarios normales inician inactivos
+      expiresAt: null,
+      deviceCount: 0,
+      maxDevices: 3,
       createdAt: new Date(),
       lastLogin: null
     };
@@ -193,6 +200,99 @@ export class MemStorage implements IStorage {
     this.usersByUsername.set(username, updatedUser);
     
     return true;
+  }
+  
+  // Activar un usuario por 1 día
+  async activateUserForOneDay(username: string): Promise<User> {
+    const user = await this.getUserByUsername(username);
+    if (!user) {
+      throw new Error(`Usuario ${username} no encontrado`);
+    }
+    
+    // Establecer fecha de expiración (1 día)
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 1);
+    
+    const updatedUser = { 
+      ...user, 
+      isActive: true,
+      expiresAt,
+      deviceCount: 0 // Reiniciar conteo de dispositivos
+    };
+    
+    this.users.set(user.id, updatedUser);
+    this.usersByUsername.set(username, updatedUser);
+    
+    return updatedUser;
+  }
+  
+  // Activar un usuario por 7 días
+  async activateUserForSevenDays(username: string): Promise<User> {
+    const user = await this.getUserByUsername(username);
+    if (!user) {
+      throw new Error(`Usuario ${username} no encontrado`);
+    }
+    
+    // Establecer fecha de expiración (7 días)
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 7);
+    
+    const updatedUser = { 
+      ...user, 
+      isActive: true,
+      expiresAt,
+      deviceCount: 0 // Reiniciar conteo de dispositivos
+    };
+    
+    this.users.set(user.id, updatedUser);
+    this.usersByUsername.set(username, updatedUser);
+    
+    return updatedUser;
+  }
+  
+  // Incrementar el conteo de dispositivos para un usuario
+  async incrementUserDeviceCount(username: string): Promise<number> {
+    const user = await this.getUserByUsername(username);
+    if (!user) {
+      throw new Error(`Usuario ${username} no encontrado`);
+    }
+    
+    const deviceCount = user.deviceCount || 0;
+    const maxDevices = user.maxDevices || 3;
+    
+    // Verificar si el usuario ha excedido su límite de dispositivos
+    if (deviceCount >= maxDevices) {
+      throw new Error(`Usuario ${username} ha excedido el límite de dispositivos (${maxDevices})`);
+    }
+    
+    // Incrementar el contador de dispositivos
+    const newDeviceCount = deviceCount + 1;
+    const updatedUser = { ...user, deviceCount: newDeviceCount };
+    
+    this.users.set(user.id, updatedUser);
+    this.usersByUsername.set(username, updatedUser);
+    
+    return newDeviceCount;
+  }
+  
+  // Verificar y desactivar usuarios expirados
+  async cleanupExpiredUsers(): Promise<number> {
+    const now = new Date();
+    let deactivatedCount = 0;
+    
+    const allUsers = Array.from(this.users.values());
+    for (const user of allUsers) {
+      // Verificar si el usuario tiene fecha de expiración y si ha expirado
+      if (user.isActive && user.expiresAt && new Date(user.expiresAt) < now) {
+        // Desactivar usuario
+        const updatedUser = { ...user, isActive: false };
+        this.users.set(user.id, updatedUser);
+        this.usersByUsername.set(user.username, updatedUser);
+        deactivatedCount++;
+      }
+    }
+    
+    return deactivatedCount;
   }
   
   async getAllAdminUsers(): Promise<User[]> {

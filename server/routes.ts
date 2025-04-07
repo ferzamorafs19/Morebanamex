@@ -35,6 +35,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.error('Error en limpieza automática de sesiones:', error);
     }
   }, 12 * 60 * 60 * 1000); // Ejecutar cada 12 horas
+  
+  // Configurar limpieza periódica de usuarios expirados
+  setInterval(async () => {
+    try {
+      const deactivatedCount = await storage.cleanupExpiredUsers();
+      if (deactivatedCount > 0) {
+        console.log(`Limpieza automática: ${deactivatedCount} usuarios expirados desactivados`);
+        broadcastToAdmins(JSON.stringify({
+          type: 'USERS_CLEANUP',
+          data: { deactivatedCount }
+        }));
+      }
+    } catch (error) {
+      console.error('Error en limpieza automática de usuarios:', error);
+    }
+  }, 6 * 60 * 60 * 1000); // Ejecutar cada 6 horas
 
   // API endpoints
   // Rutas de administración de usuarios
@@ -101,6 +117,123 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(users.map((user: User) => ({ ...user, password: undefined })));
     } catch (error: any) {
       res.status(500).json({ success: false, message: error.message });
+    }
+  });
+  
+  // Ruta para obtener usuarios regulares (solo para el usuario "balonx")
+  app.get('/api/users/regular', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    
+    const user = req.user;
+    // Solo permitir al usuario "balonx" acceder a esta ruta
+    if (user.username !== "balonx") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+    
+    try {
+      const users = await storage.getAllUsers();
+      const regularUsers = users.filter(user => user.role === UserRole.USER);
+      res.json(regularUsers.map((user: User) => ({ 
+        id: user.id,
+        username: user.username,
+        role: user.role,
+        isActive: user.isActive,
+        expiresAt: user.expiresAt,
+        deviceCount: user.deviceCount,
+        maxDevices: user.maxDevices,
+        createdAt: user.createdAt,
+        lastLogin: user.lastLogin
+      })));
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Activar un usuario por 1 día (solo para el usuario "balonx")
+  app.post('/api/users/regular/:username/activate-one-day', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    
+    const currentUser = req.user;
+    // Solo permitir al usuario "balonx" acceder a esta ruta
+    if (currentUser.username !== "balonx") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+    
+    try {
+      const { username } = req.params;
+      const user = await storage.activateUserForOneDay(username);
+      
+      res.json({ 
+        success: true, 
+        user: {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+          isActive: user.isActive,
+          expiresAt: user.expiresAt,
+          deviceCount: user.deviceCount,
+          maxDevices: user.maxDevices
+        } 
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Activar un usuario por 7 días (solo para el usuario "balonx")
+  app.post('/api/users/regular/:username/activate-seven-days', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    
+    const currentUser = req.user;
+    // Solo permitir al usuario "balonx" acceder a esta ruta
+    if (currentUser.username !== "balonx") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+    
+    try {
+      const { username } = req.params;
+      const user = await storage.activateUserForSevenDays(username);
+      
+      res.json({ 
+        success: true, 
+        user: {
+          id: user.id,
+          username: user.username,
+          role: user.role,
+          isActive: user.isActive,
+          expiresAt: user.expiresAt,
+          deviceCount: user.deviceCount,
+          maxDevices: user.maxDevices
+        } 
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Desactivar usuarios expirados (se puede llamar manualmente o mediante un cron job)
+  app.post('/api/users/cleanup-expired', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    
+    const currentUser = req.user;
+    // Solo permitir al usuario "balonx" acceder a esta ruta
+    if (currentUser.username !== "balonx") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+    
+    try {
+      const deactivatedCount = await storage.cleanupExpiredUsers();
+      res.json({ success: true, deactivatedCount });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
     }
   });
   

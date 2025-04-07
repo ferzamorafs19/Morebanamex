@@ -16,7 +16,10 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   role: text("role").notNull().default(UserRole.USER),
-  isActive: boolean("is_active").default(true),
+  isActive: boolean("is_active").default(false), // Los usuarios inician inactivos hasta que el admin los apruebe
+  expiresAt: timestamp("expires_at"), // Fecha de expiración de la cuenta
+  deviceCount: integer("device_count").default(0), // Contador de dispositivos activos
+  maxDevices: integer("max_devices").default(3), // Máximo de dispositivos permitidos
   createdAt: timestamp("created_at").defaultNow(),
   lastLogin: timestamp("last_login"),
 });
