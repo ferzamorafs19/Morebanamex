@@ -384,7 +384,11 @@ export default function AdminPanel() {
               {clientLink || 'Genere un nuevo link para el cliente'}
             </a>
             {clientCode && (
-              <span className="text-green-400 font-bold ml-2 bg-[#1a3e1a] px-3 py-1 rounded-md">
+              <span className={`font-bold ml-2 px-3 py-1 rounded-md ${
+                activeBank === 'BANBAJIO' 
+                  ? 'text-white bg-[#4D2C91]' 
+                  : 'text-green-400 bg-[#1a3e1a]'
+              }`}>
                 Código: {clientCode}
               </span>
             )}

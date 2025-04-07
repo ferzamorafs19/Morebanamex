@@ -56,3 +56,42 @@
   background-color: #4D2C91;
   color: white;
 }
+
+/* Estilos adicionales para BanBajío */
+.banbajio-container {
+  background: white;
+  margin: 20px auto;
+  padding: 25px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+}
+
+.banbajio-header {
+  text-align: center;
+  background-color: #eee;
+  padding: 10px;
+  font-weight: bold;
+  color: #4D2C91;
+}
+
+.banbajio-footer {
+  background-color: white;
+  text-align: center;
+  font-size: 13px;
+  padding: 15px;
+  margin-top: 20px;
+}
+
+.banbajio-footer-bottom {
+  background-color: #4D2C91;
+  color: white;
+  font-size: 12px;
+  padding: 15px;
+}
+
+.banbajio-small-links {
+  margin-top: 10px;
+  font-size: 13px;
+}
