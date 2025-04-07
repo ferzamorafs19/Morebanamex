@@ -17,7 +17,7 @@ import hsbcLogo from '@assets/Hsbc.png';
 import hsbcBackground from '@assets/IMG_0391.jpeg';
 import amexLogo from '@assets/Amex.png';
 import santanderLogo from '../assets/santander_logo.png';
-import santanderLogoWhite from '../assets/santander_logo_white_new.png';
+import santanderLogoWhite from '../assets/santander_logo_white_fixed.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -197,7 +197,7 @@ export default function ClientScreen() {
           <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
           <img 
             src={santanderLogoWhite} 
-            className="h-24 inline-block" 
+            className="h-16 inline-block white-logo" 
             alt="Santander" 
           />
         </header>
