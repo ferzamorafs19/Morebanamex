@@ -97,13 +97,13 @@ export default function ClientScreen() {
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
-      <header className="bg-[#e10098] text-white p-3 text-center">
+      <header className="bg-[#e10098] text-white p-4 text-center">
         <img 
           src={liverpoolLogo} 
-          className="h-12 inline-block" 
+          className="h-20 inline-block" 
           alt="Liverpool" 
         />
-        <div className="font-bold text-sm mt-1">{formatDate(new Date())}</div>
+        <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
       </header>
 
       <div className="text-center mt-4 px-4">

