@@ -10,7 +10,7 @@ import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
 import bbvaLogo from '@assets/bbva_logo.png';
 import bbvaLogoWhite from '../assets/bbva_logo_white.png';
-import banorteLogo from '../assets/banorte-logo.png';
+import banorteLogo from '@assets/banorte-seeklogo.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
