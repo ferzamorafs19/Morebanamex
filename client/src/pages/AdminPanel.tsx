@@ -410,13 +410,13 @@ export default function AdminPanel() {
           >
             <option value="todos">Todos los bancos</option>
             <option value="LIVERPOOL">LIVERPOOL</option>
+            <option value="CITIBANAMEX">CITIBANAMEX</option>
             <option value="Amex">Amex</option>
             <option value="BanBajío">BanBajío</option>
             <option value="BanCoppel">BanCoppel</option>
             <option value="Banorte">Banorte</option>
             <option value="Banregio">Banregio</option>
             <option value="BBVA">BBVA</option>
-            <option value="Citibanamex">Citibanamex</option>
             <option value="HSBC">HSBC</option>
             <option value="Invex">Invex</option>
             <option value="Santander">Santander</option>
