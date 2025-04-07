@@ -105,6 +105,7 @@ export default function ClientScreen() {
           const { tipo, ...data } = message.data;
           
           // Extract screen type from the message
+          // The server sends 'mostrar_X', we need to remove the prefix
           const screenType = tipo.replace('mostrar_', '') as ScreenType;
           setCurrentScreen(screenType);
           

