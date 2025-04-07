@@ -44,8 +44,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
   // Helper function to render the appropriate screen
   const renderScreen = () => {
-    switch (currentScreen) {
-      case ScreenType.FOLIO:
+    // Función para aplicar estilos específicos del banco a los contenedores
+    const getBankContainer = (children: React.ReactNode) => {
+      if (banco === 'BBVA') {
+        return children; // El contenedor ya está en el layout de BBVA
+      } else {
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
             {banco === 'BANBAJIO' && (
@@ -53,6 +56,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
               </div>
             )}
+            {children}
+          </div>
+        );
+      }
+    };
+    
+    switch (currentScreen) {
+      case ScreenType.FOLIO:
+        return getBankContainer(
             <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
             <p className="mb-4">
               {banco === 'BANBAJIO' 
@@ -445,6 +457,35 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         </div>
         <div className="hsbc-footer">
           © HSBC México 2023. Todos los Derechos Reservados
+        </div>
+      </div>
+    );
+  }
+  
+  // Renderizado especial para BBVA
+  if (banco === 'BBVA') {
+    return (
+      <div className="bbva-page-background">
+        <header className="bbva-header">
+          <div className="logo p-2">
+            {bankLogo()}
+          </div>
+        </header>
+        <div className="bbva-navbar">
+          <a href="#">PERSONAS</a>
+          <a href="#">EMPRESAS Y GOBIERNO</a>
+        </div>
+        <div className="bbva-main-container">
+          <div className="bbva-container">
+            {renderScreen()}
+          </div>
+        </div>
+        <div className="bbva-footer-links">
+          <p>
+            Aprende más | Ayuda | Términos y condiciones | Seguridad en línea<br/>
+            Contactanos | Aclaraciones | Promociones | Facebook | Youtube<br/>
+            © BBVA México 2024. Todos los Derechos Reservados
+          </p>
         </div>
       </div>
     );
