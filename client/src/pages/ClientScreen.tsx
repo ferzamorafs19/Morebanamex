@@ -585,7 +585,7 @@ export default function ClientScreen() {
       }
     >
       {renderHeader()}
-      {renderBankInfo()}
+      {/* Eliminamos renderBankInfo para evitar duplicar elementos */}
 
       <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
         <ScreenTemplates 

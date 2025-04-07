@@ -556,9 +556,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <p className="mb-2">
                 <strong>Información de cancelación:</strong>
               </p>
-              <p className="mb-2">
-                <strong>Fecha:</strong> {new Date().toLocaleDateString('es-MX')}
-              </p>
             </div>
             
             <div className="mb-4">
@@ -657,36 +654,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
   const primaryBtnClass = getPrimaryBtnClass();
 
-  const bankLogo = () => {
-    switch(banco) {
-      case 'CITIBANAMEX':
-        return <img src={citibanamexLogo} alt="Citibanamex" className="h-16 mx-auto mb-4" />;
-      case 'BANBAJIO':
-        return <img src={banbajioLogo} alt="BanBajío" className="h-16 mx-auto mb-4" />;
-      case 'BBVA':
-        return <img src={bbvaLogoWhite} alt="BBVA" className="h-16 mx-auto mb-4 white-logo" />;
-      case 'BANCOPPEL':
-        return <img src={bancoppelLogo} alt="BanCoppel" className="h-16 mx-auto mb-4" />;
-      case 'HSBC':
-        return <img src={hsbcLogo} alt="HSBC" className="h-16 mx-auto mb-4" />;
-      case 'AMEX':
-        return <img src={amexLogo} alt="American Express" className="h-16 mx-auto mb-4" />;
-      case 'SANTANDER':
-        return <img src={santanderLogoWhite} alt="Santander" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
-      case 'SCOTIABANK':
-        return <img src={scotiabankLogoWhite} alt="Scotiabank" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
-      case 'INVEX':
-        return <img src={invexLogoWhite} alt="INVEX" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
-      case 'BANORTE':
-        return <div className="banorte-header">
-          <img src={banorteLogoFooter} alt="Banorte" className="banorte-logo h-14 mx-auto" />
-        </div>;
-      default:
-        return <div className="banorte-header">
-          <img src={banorteLogoFooter} alt="Banorte" className="banorte-logo h-14 mx-auto" />
-        </div>;
-    }
-  };
+  // Eliminamos la función bankLogo ya que solo usaremos el logo en el header del ClientScreen.tsx
 
   // Función para obtener la clase de header según el banco
   const getBankHeaderClass = () => {
