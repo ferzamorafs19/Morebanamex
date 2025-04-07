@@ -138,11 +138,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.FOLIO:
         const folioContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Ingresa tu folio</h2>
+            <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
+            <p className="mb-4">Por favor, ingrese el folio de soporte técnico que su ejecutivo en línea le proporcionó.</p>
             <div className="mb-4">
+              <label className="block text-sm font-medium text-gray-700 text-left mb-1">Número de folio:</label>
               <Input 
                 type="text" 
-                placeholder="Folio" 
+                placeholder="Ingrese su número de folio" 
                 className="w-full border border-gray-300 rounded p-2 mb-3"
                 value={folioInput}
                 onChange={(e) => setFolioInput(e.target.value)}
