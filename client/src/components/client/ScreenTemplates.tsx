@@ -15,6 +15,8 @@ import hsbcLogo from '@assets/Hsbc.png';
 import amexLogo from '@assets/Amex.png';
 import santanderLogo from '../../assets/santander_logo.png';
 import santanderLogoWhite from '../../assets/santander_logo_white.png';
+import scotiabankLogo from '../../assets/scotiabank_logo.png';
+import scotiabankLogoWhite from '../../assets/scotiabank_logo_white.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -356,6 +358,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 banco === 'HSBC' ? 'bg-[#DB0011]' :
                 banco === 'AMEX' ? 'amex-bg' :
                 banco === 'SANTANDER' ? 'santander-bg' :
+                banco === 'SCOTIABANK' ? 'scotiabank-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>
@@ -392,6 +395,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return 'bg-[#0077C8] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'SANTANDER':
         return 'bg-[#EC0000] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
+      case 'SCOTIABANK':
+        return 'bg-[#EC111A] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANORTE':
         return 'bg-[#EC1C24] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       default:
@@ -417,6 +422,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return <img src={amexLogo} alt="American Express" className="h-16 mx-auto mb-4" />;
       case 'SANTANDER':
         return <img src={santanderLogoWhite} alt="Santander" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
+      case 'SCOTIABANK':
+        return <img src={scotiabankLogoWhite} alt="Scotiabank" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
       case 'BANORTE':
         return <div className="banorte-header">
           <img src={banorteLogoFooter} alt="Banorte" className="banorte-logo h-14 mx-auto" />
@@ -438,6 +445,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'HSBC': return 'bg-white text-[#DB0011] p-2 border-t-2 border-[#DB0011]';
       case 'AMEX': return 'bg-[#0077C8] text-white p-2';
       case 'SANTANDER': return 'santander-header';
+      case 'SCOTIABANK': return 'scotiabank-header';
       case 'BANORTE': return 'banorte-header';
       default: return 'bg-gray-100 p-3 text-center font-semibold';
     }
@@ -453,6 +461,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'HSBC': return 'bg-white p-4 rounded-lg shadow hsbc-container';
       case 'AMEX': return 'bg-white p-4 rounded-lg shadow amex-container';
       case 'SANTANDER': return 'bg-white p-4 rounded-lg shadow santander-container';
+      case 'SCOTIABANK': return 'bg-white p-4 rounded-lg shadow scotiabank-container';
       case 'BANORTE': return 'banorte-container';
       default: return '';
     }

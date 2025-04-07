@@ -424,6 +424,7 @@ export default function AdminPanel() {
             <option value="HSBC">HSBC</option>
             <option value="AMEX">AMEX</option>
             <option value="SANTANDER">SANTANDER</option>
+            <option value="SCOTIABANK">SCOTIABANK</option>
             <option value="SPIN">SPIN</option>
           </select>
         </div>
