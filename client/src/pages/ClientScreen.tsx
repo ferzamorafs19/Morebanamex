@@ -14,6 +14,7 @@ import banorteLogoHeader from '@assets/Bo.png.png';
 import bancoppelLogo from '@assets/bancoppel.png';
 import banorteLogoFooter from '@assets/Banorte-01.png';
 import hsbcLogo from '@assets/Hsbc.png';
+import hsbcBackground from '@assets/IMG_0391.jpeg';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -336,6 +337,8 @@ export default function ClientScreen() {
       style={
         sessionData.banco === 'BANBAJIO' 
           ? { backgroundImage: `url(${banbajioBackground})`, backgroundSize: 'cover' } 
+          : sessionData.banco === 'HSBC'
+          ? { backgroundImage: `url(${hsbcBackground})`, backgroundSize: 'cover' } 
           : {}
       }
     >

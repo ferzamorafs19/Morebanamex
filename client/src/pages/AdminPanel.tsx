@@ -32,7 +32,9 @@ export default function AdminPanel() {
   // Generate link mutation
   const generateLink = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('GET', `/api/generate-link?banco=${activeBank === 'todos' ? 'LIVERPOOL' : activeBank}`);
+      const banco = activeBank === 'todos' ? 'LIVERPOOL' : activeBank;
+      console.log(`Generating link for bank: ${banco}`);
+      const res = await apiRequest('GET', `/api/generate-link?banco=${banco}`);
       return await res.json();
     },
     onSuccess: (data) => {
