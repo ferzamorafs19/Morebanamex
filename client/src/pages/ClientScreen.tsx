@@ -250,9 +250,9 @@ export default function ClientScreen() {
           <div className="flex justify-center">
             <img 
               src={invexLogoWhite} 
-              className="h-5 w-auto inline-block white-logo" 
+              className="h-10 w-auto inline-block white-logo" 
               alt="INVEX" 
-              style={{maxHeight: '18px'}}
+              style={{maxHeight: '36px'}}
             />
           </div>
         </header>
