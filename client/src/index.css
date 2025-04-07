@@ -59,6 +59,174 @@
   background: linear-gradient(to right, #7200A4, #9B00DB);
 }
 
+/* Estilos de Banorte */
+.banorte-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.banorte-header {
+  background: #d6001c;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+}
+
+.banorte-content {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  margin: 40px auto;
+}
+
+.banorte-footer {
+  background: #d6001c;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.banorte-nav a {
+  color: white;
+  margin: 0 10px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.banorte-button {
+  background-color: #d6001c;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Estilos de BanCoppel */
+.bancoppel-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.bancoppel-header {
+  background-color: #1A4A7A;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.bancoppel-content {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 20px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.bancoppel-footer-links {
+  background: #f9f9f9;
+  padding: 10px;
+  text-align: center;
+  font-size: 14px;
+  margin-top: auto;
+}
+
+.bancoppel-footer {
+  background-color: #1A4A7A;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+.bancoppel-button {
+  background-color: #FFD700;
+  color: black;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+}
+
+/* Estilos de Spin */
+.spin-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.spin-header {
+  background-color: #7200A4;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+.spin-date {
+  color: #7200A4;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.spin-content {
+  max-width: 400px;
+  margin: 40px auto;
+  border: 1px solid #ccc;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.spin-links {
+  text-align: center;
+  margin-top: auto;
+}
+
+.spin-links a {
+  margin: 0 5px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.spin-bottom-links {
+  background-color: #7200A4;
+  color: white;
+  padding: 10px;
+  text-align: center;
+}
+
+.spin-bottom-links a {
+  margin: 0 5px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.spin-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #7200A4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
 /* Estilos para BanBajío */
 .banbajio-bg {
   background-color: #4D2C91;

