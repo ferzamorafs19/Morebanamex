@@ -247,11 +247,14 @@ export default function ClientScreen() {
       return (
         <header className="bg-[#BE0046] text-white p-4 text-center">
           <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
-          <img 
-            src={invexLogoWhite} 
-            className="h-4 inline-block white-logo" 
-            alt="INVEX" 
-          />
+          <div className="flex justify-center">
+            <img 
+              src={invexLogoWhite} 
+              className="h-3 w-auto inline-block white-logo" 
+              alt="INVEX" 
+              style={{maxHeight: '12px'}}
+            />
+          </div>
         </header>
       );
     } else {
