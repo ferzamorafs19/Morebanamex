@@ -58,13 +58,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         // Para Banorte no incluimos el logo aquí porque ya está en el header
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
-            <div className="fecha-banorte mt-2 mb-4">
-              {new Date().toLocaleDateString('es-MX', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              })}
-            </div>
             {children}
           </div>
         );
