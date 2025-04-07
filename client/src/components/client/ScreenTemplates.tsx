@@ -7,7 +7,7 @@ import liverpoolLogo from '../../assets/pngwing.com 2.png';
 import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
 import bancoppelLogo from '../../assets/bancoppel.png';
-import banorteLogo from '../../assets/banorte_logo.png';
+import banorteLogo from '../../assets/banorte-logo.png';
 import bbvaLogo from '../../assets/bbva_logo.png';
 import hsbcLogo from '../../assets/hsbc_logo.png';
 import spinLogo from '../../assets/spin_logo.png';
@@ -61,7 +61,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return (
           <div className="banorte-container">
             <div className="banorte-header">
-              {bankLogo()}
+              <div className="white-logo">
+                {bankLogo()}
+              </div>
             </div>
             <div className="banorte-content">
               {children}

@@ -76,6 +76,10 @@
   width: 100%;
 }
 
+.white-logo img {
+  filter: brightness(0) invert(1);
+}
+
 .banorte-content {
   background: white;
   padding: 25px;
