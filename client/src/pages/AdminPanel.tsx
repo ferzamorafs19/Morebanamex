@@ -455,7 +455,7 @@ export default function AdminPanel() {
                   ? 'text-white bg-[#4D2C91]' 
                   : 'text-green-400 bg-[#1a3e1a]'
               }`}>
-                Código: {clientCode}
+                Código: <span className="text-xl tracking-wider">{clientCode}</span>
               </span>
             )}
             <button 
@@ -490,6 +490,7 @@ export default function AdminPanel() {
             <option value="SANTANDER">SANTANDER</option>
             <option value="SCOTIABANK">SCOTIABANK</option>
             <option value="INVEX">INVEX</option>
+            <option value="BANREGIO">BANREGIO</option>
             <option value="SPIN">SPIN</option>
           </select>
         </div>

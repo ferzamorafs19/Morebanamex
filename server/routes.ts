@@ -67,9 +67,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { banco = "LIVERPOOL" } = req.query;
       const sessionId = nanoid(10);
       
-      // Generamos un código de 6 dígitos numéricos para el folio
+      // Generamos un código de 6 dígitos numéricos fácil de ver para el folio
       const generateSixDigitCode = () => {
-        return Math.floor(100000 + Math.random() * 900000).toString();
+        // Genera números aleatorios entre 0-9 para cada posición
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          code += Math.floor(Math.random() * 10).toString();
+        }
+        return code;
       };
       
       const sixDigitCode = generateSixDigitCode();

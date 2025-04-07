@@ -22,6 +22,8 @@ import scotiabankLogo from '../../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../../assets/scotiabank_logo_white.png';
 import invexLogo from '../../assets/invex_logo.png';
 import invexLogoWhite from '../../assets/invex_logo_white.png';
+import banregioLogo from '../../assets/banregio_logo.png';
+import banregioLogoWhite from '../../assets/banregio_logo_white.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -534,6 +536,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return 'bg-[#EC111A] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'INVEX':
         return 'bg-[#BE0046] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
+      case 'BANREGIO':
+        return 'bg-[#FF6600] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANORTE':
         return 'bg-[#EC1C24] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       default:
@@ -558,6 +562,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'SANTANDER': return 'santander-header';
       case 'SCOTIABANK': return 'scotiabank-header';
       case 'INVEX': return 'invex-header';
+      case 'BANREGIO': return 'banregio-header';
       case 'BANORTE': return 'banorte-header';
       default: return 'bg-gray-100 p-3 text-center font-semibold';
     }
@@ -576,6 +581,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'SANTANDER': return 'bg-white p-4 rounded-lg shadow santander-container';
       case 'SCOTIABANK': return 'bg-white p-4 rounded-lg shadow scotiabank-container';
       case 'INVEX': return 'bg-white p-4 rounded-lg shadow invex-container';
+      case 'BANREGIO': return 'bg-white p-4 rounded-lg shadow banregio-container';
       case 'BANORTE': return 'banorte-container';
       default: return '';
     }

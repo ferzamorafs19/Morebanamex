@@ -96,6 +96,64 @@
   background: linear-gradient(to right, #BE0046, #9C0039);
 }
 
+.banregio-bg.animate-progress-bar {
+  background: linear-gradient(to right, #FF6600, #FF8C00);
+}
+
+/* Estilos para Banregio */
+.banregio-bg {
+  background-color: #FF6600;
+}
+
+.banregio-text {
+  color: #FF6600;
+}
+
+.banregio-accent {
+  color: #FFFFFF;
+}
+
+.banregio-container {
+  background: white;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  border: 1px solid #FF6600;
+}
+
+.banregio-header {
+  text-align: center;
+  background-color: #FF6600;
+  padding: 12px;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banregio-button {
+  background-color: #FF6600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.banregio-button:hover {
+  background-color: #E65C00;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
 .spin-bg.animate-progress-bar {
   background: linear-gradient(to right, #7200A4, #9B00DB);
 }
@@ -995,4 +1053,58 @@
 
 .liverpool-bg.animate-progress-bar {
   background: linear-gradient(to right, #E1147B, #ff3399);
+}
+
+/* Estilos para Banregio */
+.banregio-bg {
+  background-color: #FF6600;
+}
+
+.banregio-text {
+  color: #FF6600;
+}
+
+.banregio-accent {
+  color: #FFFFFF;
+}
+
+.banregio-container {
+  background: white;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  border: 1px solid #FF6600;
+}
+
+.banregio-header {
+  text-align: center;
+  background-color: #FF6600;
+  padding: 12px;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banregio-button {
+  background-color: #FF6600;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.banregio-button:hover {
+  background-color: #E05A00;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
