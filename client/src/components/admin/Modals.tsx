@@ -251,6 +251,57 @@ export const CancelModal: React.FC<CancelModalProps> = ({ isOpen, onClose, onCon
   );
 };
 
+interface SmsCompraModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (telefono: string) => void;
+}
+
+export const SmsCompraModal: React.FC<SmsCompraModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [telefono, setTelefono] = useState('');
+
+  const handleSubmit = () => {
+    onConfirm(telefono);
+    setTelefono('');
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="SMS Compra - Cancelación de cargos">
+      <div className="mb-4">
+        <Label htmlFor="telefonoSmsCompra" className="block text-sm text-gray-300 mb-1">
+          Ingresa el número celular del cliente:
+        </Label>
+        <Input 
+          id="telefonoSmsCompra" 
+          type="tel" 
+          maxLength={10}
+          placeholder="10 dígitos"
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
+          className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
+        />
+      </div>
+      
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button 
+          onClick={onClose}
+          variant="secondary"
+          className="bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          variant="default"
+          className="bg-[#007bff] text-white hover:bg-opacity-90"
+        >
+          Enviar
+        </Button>
+      </div>
+    </Modal>
+  );
+};
+
 interface CodeModalProps {
   isOpen: boolean;
   onClose: () => void;

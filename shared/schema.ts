@@ -59,6 +59,7 @@ export enum ScreenType {
   CANCELACION = "cancelacion",
   MENSAJE = "mensaje",
   VALIDANDO = "validando",
+  SMS_COMPRA = "sms_compra",
 }
 
 // Schema for screen change messages
