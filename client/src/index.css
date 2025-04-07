@@ -24,5 +24,35 @@
 
 .animate-progress-bar {
   animation: progress 10s ease-in-out infinite;
+}
+
+/* Estilos para las barras de progreso con gradiente según el banco */
+.bg-\[\#e10098\].animate-progress-bar {
   background: linear-gradient(to right, #e10098, #ff45c3);
+}
+
+.bg-\[\#0070BA\].animate-progress-bar {
+  background: linear-gradient(to right, #0070BA, #009ffd);
+}
+
+.banbajio-bg.animate-progress-bar {
+  background: linear-gradient(to right, #4D2C91, #8046f1);
+}
+
+/* Estilos para BanBajío */
+.banbajio-bg {
+  background-color: #4D2C91;
+}
+
+.banbajio-text {
+  color: #4D2C91;
+}
+
+.banbajio-accent {
+  color: #E60012;
+}
+
+.banbajio-button {
+  background-color: #4D2C91;
+  color: white;
 }

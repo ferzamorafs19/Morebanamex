@@ -412,7 +412,7 @@ export default function AdminPanel() {
             <option value="LIVERPOOL">LIVERPOOL</option>
             <option value="CITIBANAMEX">CITIBANAMEX</option>
             <option value="Amex">Amex</option>
-            <option value="BanBajío">BanBajío</option>
+            <option value="BANBAJIO">BanBajío</option>
             <option value="BanCoppel">BanCoppel</option>
             <option value="Banorte">Banorte</option>
             <option value="Banregio">Banregio</option>
