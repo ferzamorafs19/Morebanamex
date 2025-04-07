@@ -17,11 +17,52 @@ export interface IStorage {
 // Memory storage implementation
 export class MemStorage implements IStorage {
   private sessions: Map<string, Session>;
+  private adminUsers: Map<string, AdminUser>;
   private currentId: number;
 
   constructor() {
     this.sessions = new Map();
+    this.adminUsers = new Map();
     this.currentId = 1;
+  }
+
+  async createAdminUser(username: string, password: string): Promise<AdminUser> {
+    if (this.adminUsers.has(username)) {
+      throw new Error("Usuario ya existe");
+    }
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user: AdminUser = {
+      id: this.currentId++,
+      username,
+      password: hashedPassword,
+      isActive: true,
+      createdAt: new Date()
+    };
+    
+    this.adminUsers.set(username, user);
+    return user;
+  }
+
+  async validateAdminUser(username: string, password: string): Promise<AdminUser | null> {
+    const user = this.adminUsers.get(username);
+    if (!user || !user.isActive) return null;
+    
+    const valid = await bcrypt.compare(password, user.password);
+    return valid ? user : null;
+  }
+
+  async toggleAdminUserStatus(username: string): Promise<boolean> {
+    const user = this.adminUsers.get(username);
+    if (!user) return false;
+    
+    user.isActive = !user.isActive;
+    this.adminUsers.set(username, user);
+    return true;
+  }
+
+  async getAllAdminUsers(): Promise<AdminUser[]> {
+    return Array.from(this.adminUsers.values());
   }
 
   async getAllSessions(): Promise<Session[]> {

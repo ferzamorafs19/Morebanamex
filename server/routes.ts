@@ -33,6 +33,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
   }, 12 * 60 * 60 * 1000); // Ejecutar cada 12 horas
 
   // API endpoints
+  // Rutas de administración de usuarios
+  app.post('/api/admin/users', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await storage.createAdminUser(username, password);
+      res.json({ success: true, user: { ...user, password: undefined } });
+    } catch (error) {
+      res.status(400).json({ success: false, message: error.message });
+    }
+  });
+
+  app.post('/api/admin/login', async (req, res) => {
+    try {
+      const { username, password } = req.body;
+      const user = await storage.validateAdminUser(username, password);
+      if (!user) {
+        return res.status(401).json({ success: false, message: "Credenciales inválidas" });
+      }
+      res.json({ success: true, user: { ...user, password: undefined } });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  app.post('/api/admin/users/:username/toggle', async (req, res) => {
+    try {
+      const { username } = req.params;
+      const success = await storage.toggleAdminUserStatus(username);
+      if (!success) {
+        return res.status(404).json({ success: false, message: "Usuario no encontrado" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
+  app.get('/api/admin/users', async (req, res) => {
+    try {
+      const users = await storage.getAllAdminUsers();
+      res.json(users.map(user => ({ ...user, password: undefined })));
+    } catch (error) {
+      res.status(500).json({ success: false, message: error.message });
+    }
+  });
+
   app.get('/api/sessions', async (req, res) => {
     try {
       const { type = 'current' } = req.query;
