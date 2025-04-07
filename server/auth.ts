@@ -193,8 +193,36 @@ export function setupAuth(app: Express) {
       res.status(500).json({ message: error.message });
     }
   });
+  
+  // Ruta para obtener usuarios regulares (solo visible para el usuario "balonx")
+  app.get("/api/users/regular", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    
+    const user = req.user as Express.User;
+    // Solo permitir al usuario "balonx" acceder a esta ruta
+    if (user.username !== "balonx") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+    
+    try {
+      // Obtener todos los usuarios (excluyendo administradores)
+      const allUsers = await storage.getAllUsers();
+      const regularUsers = allUsers.filter(u => u.role === UserRole.USER);
+      res.json(regularUsers.map((u) => ({
+        id: u.id,
+        username: u.username,
+        role: u.role,
+        active: u.isActive,
+        lastLogin: u.lastLogin
+      })));
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
 
-  // Ruta para cambiar el estado de un usuario (activar/desactivar)
+  // Ruta para cambiar el estado de un usuario administrador (activar/desactivar)
   app.put("/api/users/:username/toggle-status", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "No autenticado" });
@@ -208,6 +236,32 @@ export function setupAuth(app: Express) {
     try {
       const { username } = req.params;
       const success = await storage.toggleAdminUserStatus(username);
+      
+      if (!success) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+      
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+  
+  // Ruta para cambiar el estado de un usuario regular (activar/desactivar)
+  // Solo accesible para el usuario "balonx"
+  app.put("/api/users/regular/:username/toggle-status", async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+    
+    const currentUser = req.user as Express.User;
+    if (currentUser.username !== "balonx") {
+      return res.status(403).json({ message: "No autorizado" });
+    }
+    
+    try {
+      const { username } = req.params;
+      const success = await storage.toggleUserStatus(username);
       
       if (!success) {
         return res.status(404).json({ message: "Usuario no encontrado" });

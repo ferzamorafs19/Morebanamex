@@ -22,6 +22,8 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   validateUser(username: string, password: string): Promise<User | undefined>;
   updateUserLastLogin(id: number): Promise<User>;
+  getAllUsers(): Promise<User[]>;
+  toggleUserStatus(username: string): Promise<boolean>;
   
   // Keys de acceso
   createAccessKey(data: InsertAccessKey): Promise<AccessKey>;
@@ -180,10 +182,27 @@ export class MemStorage implements IStorage {
     return true;
   }
   
+  async toggleUserStatus(username: string): Promise<boolean> {
+    const user = await this.getUserByUsername(username);
+    if (!user) {
+      return false;
+    }
+    
+    const updatedUser = { ...user, isActive: !user.isActive };
+    this.users.set(user.id, updatedUser);
+    this.usersByUsername.set(username, updatedUser);
+    
+    return true;
+  }
+  
   async getAllAdminUsers(): Promise<User[]> {
     return Array.from(this.users.values()).filter(
       user => user.role === UserRole.ADMIN
     );
+  }
+  
+  async getAllUsers(): Promise<User[]> {
+    return Array.from(this.users.values());
   }
   
   // === Métodos de Access Keys ===
