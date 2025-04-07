@@ -10,7 +10,8 @@ import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
 import bbvaLogo from '@assets/bbva_logo.png';
 import bbvaLogoWhite from '../assets/bbva_logo_white.png';
-import banorteLogo from '@assets/banorte-seeklogo.png';
+import banorteLogoHeader from '@assets/Bo.png.png';
+import banorteLogoFooter from '@assets/Banorte-01.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -144,7 +145,7 @@ export default function ClientScreen() {
       return (
         <header className="bg-[#EC1C24] text-white p-4 text-center">
           <img 
-            src={banorteLogo} 
+            src={banorteLogoHeader} 
             className="h-20 inline-block" 
             alt="Banorte" 
           />
@@ -154,7 +155,7 @@ export default function ClientScreen() {
       return (
         <header className="bg-[#EC1C24] text-white p-4 text-center">
           <img 
-            src={banorteLogo} 
+            src={banorteLogoHeader} 
             className="h-20 inline-block" 
             alt="Banorte" 
           />

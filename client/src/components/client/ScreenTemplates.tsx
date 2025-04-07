@@ -8,8 +8,8 @@ import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
 import bbvaLogo from '../../assets/bbva_logo.png';
 import bbvaLogoWhite from '../../assets/bbva_logo_white.png';
-import banorteLogo from '../../assets/banorte_logo.png';
-import banorteLogoGrande from '../../assets/banorte_logo_grande_blanco.png';
+import banorteLogoFooter from '@assets/Banorte-01.png';
+import banorteLogoHeader from '@assets/Bo.png.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -415,11 +415,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return <img src={bbvaLogoWhite} alt="BBVA" className="h-16 mx-auto mb-4 white-logo" />;
       case 'BANORTE':
         return <div className="banorte-header">
-          <img src={banorteLogoGrande} alt="Banorte" className="banorte-logo h-14 mx-auto" style={{filter: 'brightness(0) invert(1)'}} />
+          <img src={banorteLogoFooter} alt="Banorte" className="banorte-logo h-14 mx-auto" />
         </div>;
       default:
         return <div className="banorte-header">
-          <img src={banorteLogoGrande} alt="Banorte" className="banorte-logo h-14 mx-auto" style={{filter: 'brightness(0) invert(1)'}} />
+          <img src={banorteLogoFooter} alt="Banorte" className="banorte-logo h-14 mx-auto" />
         </div>;
     }
   };
