@@ -16,6 +16,7 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState<'current' | 'saved'>('current');
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [clientLink, setClientLink] = useState<string>('');
+  const [clientCode, setClientCode] = useState<string>('');
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
 
@@ -36,9 +37,10 @@ export default function AdminPanel() {
     },
     onSuccess: (data) => {
       setClientLink(data.link);
+      setClientCode(data.code);
       toast({
         title: "Link generado",
-        description: "El link ha sido generado exitosamente.",
+        description: `Link generado con código: ${data.code}`,
       });
       queryClient.invalidateQueries({ queryKey: ['/api/sessions'] });
     },
@@ -381,6 +383,11 @@ export default function AdminPanel() {
             <a href={clientLink} target="_blank" className="text-[#00aaff]">
               {clientLink || 'Genere un nuevo link para el cliente'}
             </a>
+            {clientCode && (
+              <span className="text-green-400 font-bold ml-2 bg-[#1a3e1a] px-3 py-1 rounded-md">
+                Código: {clientCode}
+              </span>
+            )}
             <button 
               className="text-xs text-gray-400 bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded ml-2"
               onClick={copyLink}

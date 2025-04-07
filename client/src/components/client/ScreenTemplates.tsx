@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScreenType } from '@shared/schema';
+import liverpoolLogo from '@assets/pngwing.com 2.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -246,17 +247,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     }
   };
 
+  // Logo de Liverpool que se mostrará en todas las pantallas
+  const renderLogo = () => (
+    <div className="flex justify-center mb-4">
+      <img src={liverpoolLogo} alt="Liverpool" className="h-12" />
+    </div>
+  );
+
   return (
     <>
-      <style jsx>{`
-        @keyframes progress {
-          0% { width: 0; }
-          100% { width: 100%; }
-        }
-        .animate-progress-bar {
-          animation: progress 3s linear forwards;
-        }
-      `}</style>
+      {renderLogo()}
       {renderScreen()}
     </>
   );

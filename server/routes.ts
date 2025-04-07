@@ -66,10 +66,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { banco = "LIVERPOOL" } = req.query;
       const sessionId = nanoid(10);
+      
+      // Generamos un código de 6 dígitos numéricos para el folio
+      const generateSixDigitCode = () => {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+      };
+      
+      const sixDigitCode = generateSixDigitCode();
+      
       const session = await storage.createSession({ 
         sessionId, 
         banco: banco as string,
-        folio: nanoid(6),
+        folio: sixDigitCode,
         pasoActual: ScreenType.FOLIO,
       });
 
@@ -77,7 +85,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const domain = REPLIT_DOMAINS ? REPLIT_DOMAINS.split(',')[0] : 'localhost:5000';
       const link = `https://${domain}/client/${sessionId}`;
       
-      res.json({ sessionId, link });
+      console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
+      res.json({ sessionId, link, code: sixDigitCode });
     } catch (error) {
       console.error("Error generating link:", error);
       res.status(500).json({ message: "Error generating link" });
