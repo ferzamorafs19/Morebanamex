@@ -96,6 +96,10 @@
   background: linear-gradient(to right, #BE0046, #9C0039);
 }
 
+.liverpool-bg.animate-progress-bar {
+  background: linear-gradient(to right, #E1147B, #C01068);
+}
+
 .spin-bg.animate-progress-bar {
   background: linear-gradient(to right, #7200A4, #9B00DB);
 }
@@ -457,6 +461,42 @@
   padding: 10px 20px;
   font-weight: bold;
   transition: all 0.2s ease;
+}
+
+/* Estilos para Liverpool */
+.liverpool-bg {
+  background-color: #E1147B;
+}
+
+.liverpool-text {
+  color: #E1147B;
+}
+
+.liverpool-accent {
+  color: #FFFFFF;
+}
+
+.liverpool-header {
+  background-color: #E1147B;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.liverpool-button {
+  background-color: #E1147B;
+  color: white;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.liverpool-button:hover {
+  background-color: #c01168;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 .banorte-button:hover {
