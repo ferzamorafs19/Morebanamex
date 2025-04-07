@@ -122,134 +122,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   // Helper function to render the appropriate screen
   const renderScreen = () => {
     // Función para obtener el contenedor según el banco
+    // Función simplificada que solo contiene el contenido sin logos ni fechas
     const getBankContainer = (children: React.ReactNode) => {
-      if (banco === 'BANBAJIO') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
-            <div className="bajionet text-2xl font-bold mb-3">
-              <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'CITIBANAMEX') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="citibanamex-header p-4 mb-4 -mx-6 -mt-6">
-              <img src={citibanamexLogo} alt="Citibanamex" className="h-8 mx-auto" />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              Fecha: {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'BBVA') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg shadow-md text-center overflow-hidden">
-            <div className="bbva-header p-4 mb-4">
-              <img src={bbvaLogoWhite} alt="BBVA" className="h-6 mx-auto" />
-            </div>
-            <div className="px-6 pb-6">
-              <div className="fecha mb-3 font-light text-sm text-gray-700 text-right">
-                {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' })}
-              </div>
-              {children}
-            </div>
-          </div>
-        );
-      } else if (banco === 'BANORTE') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="banorte-header p-2 mb-4 -mx-6 -mt-6 flex items-center justify-center">
-              <img src={banorteLogoHeader} alt="Banorte" className="h-10" />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              {new Date().toLocaleDateString('es-MX', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'BANCOPPEL') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="bancoppel-header p-3 mb-4 -mx-6 -mt-6">
-              <img src={bancoppelLogo} alt="BanCoppel" className="h-8 mx-auto" />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'HSBC') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="hsbc-header p-3 mb-4 -mx-6 -mt-6 bg-white">
-              <img src={hsbcLogo} alt="HSBC" className="h-10 mx-auto" />
-            </div>
-            <div className="fecha mb-3 font-semibold text-sm text-black">
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: 'long', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'AMEX') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="amex-header p-3 mb-4 -mx-6 -mt-6">
-              <img src={amexLogo} alt="American Express" className="h-8 mx-auto" />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'SANTANDER') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="santander-header p-3 mb-4 -mx-6 -mt-6">
-              <img src={santanderLogoWhite} alt="Santander" className="h-28 mx-auto" />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'SCOTIABANK') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="scotiabank-header p-3 mb-4 -mx-6 -mt-6">
-              <img src={scotiabankLogoWhite} alt="Scotiabank" className="h-28 mx-auto" />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else if (banco === 'INVEX') {
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
-            <div className="invex-header p-3 mb-4 -mx-6 -mt-6">
-              <img src={invexLogoWhite} alt="INVEX" className="h-10 mx-auto" style={{ maxHeight: '36px' }} />
-            </div>
-            <div className="fecha mb-3 font-light text-sm text-gray-700">
-              {new Date().toLocaleDateString('es-MX', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-            </div>
-            {children}
-          </div>
-        );
-      } else {
-        // Default container
-        return (
-          <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
-            {children}
-          </div>
-        );
-      }
+      // Utilizamos una única plantilla para todos los bancos
+      return (
+        <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center overflow-hidden">
+          {/* Eliminamos todos los logos y fechas de los contenedores de pantalla */}
+          {children}
+        </div>
+      );
     };
     
     // Diferentes pantallas según el tipo
