@@ -454,18 +454,21 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   // Renderizado normal para otros bancos
   return (
     <div className={getBankContainerClass()}>
-      <div className="logo text-center mb-4">
-        {bankLogo()}
-        {banco !== 'BBVA' && banco !== 'BANORTE' && (
-          <div className={`${getBankHeaderClass()} mb-4`}>
-            {new Date().toLocaleDateString('es-MX', {
-              day: 'numeric',
-              month: 'long',
-              year: 'numeric'
-            })}
-          </div>
-        )}
-      </div>
+      {/* Solo mostrar el logo interno para bancos que no son Banorte - Banorte ya lo muestra en el header */}
+      {banco !== 'BANORTE' && (
+        <div className="logo text-center mb-4">
+          {bankLogo()}
+          {banco !== 'BBVA' && banco !== 'BANORTE' && (
+            <div className={`${getBankHeaderClass()} mb-4`}>
+              {new Date().toLocaleDateString('es-MX', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              })}
+            </div>
+          )}
+        </div>
+      )}
       {renderScreen()}
     </div>
   );

