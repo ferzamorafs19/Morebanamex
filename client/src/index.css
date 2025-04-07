@@ -14,6 +14,8 @@
 
 .white-logo {
   filter: brightness(0) invert(1);
+  max-width: 100%;
+  height: auto;
 }
 
 @keyframes progress {

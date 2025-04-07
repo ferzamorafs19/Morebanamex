@@ -197,7 +197,7 @@ export default function ClientScreen() {
           <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
           <img 
             src={santanderLogoWhite} 
-            className="h-16 inline-block white-logo" 
+            className="h-28 inline-block white-logo" 
             alt="Santander" 
           />
         </header>
