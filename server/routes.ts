@@ -11,13 +11,8 @@ const clients = new Map<string, WebSocket>();
 const adminClients = new Set<WebSocket>();
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  const isAdminOnly = process.env.ADMIN_ONLY === 'true';
-  const isClientOnly = process.env.CLIENT_ONLY === 'true';
-
-  // Setup authentication solo para panel admin
-  if (!isClientOnly) {
-    setupAuth(app);
-  }
+  // Setup authentication
+  setupAuth(app);
   
   // Create HTTP server
   const httpServer = createServer(app);
