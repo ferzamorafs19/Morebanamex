@@ -9,6 +9,7 @@ import citibanamexLogo from '../assets/Banamex.png';
 import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
 import bbvaLogo from '@assets/bbva_logo.png';
+import bbvaLogoWhite from '../assets/bbva_logo_white.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -131,11 +132,10 @@ export default function ClientScreen() {
       return (
         <header className="bg-[#072146] text-white p-4 text-center">
           <img 
-            src={bbvaLogo} 
-            className="h-20 inline-block" 
+            src={bbvaLogoWhite} 
+            className="h-20 inline-block white-logo" 
             alt="BBVA" 
           />
-          <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
         </header>
       );
     } else {

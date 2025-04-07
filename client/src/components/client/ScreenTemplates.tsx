@@ -6,7 +6,8 @@ import { ScreenType } from '@shared/schema';
 import liverpoolLogo from '../../assets/pngwing.com 2.png';
 import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
-import bbvaLogo from '@assets/bbva_logo.png';
+import bbvaLogo from '../../assets/bbva_logo.png';
+import bbvaLogoWhite from '../../assets/bbva_logo_white.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -400,7 +401,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'BANBAJIO':
         return <img src={banbajioLogo} alt="BanBajío" className="h-16 mx-auto mb-4" />;
       case 'BBVA':
-        return <img src={bbvaLogo} alt="BBVA" className="h-16 mx-auto mb-4" />;
+        return <img src={bbvaLogoWhite} alt="BBVA" className="h-16 mx-auto mb-4 white-logo" />;
       default:
         return <img src={liverpoolLogo} alt="Liverpool" className="h-16 mx-auto mb-4" />;
     }
