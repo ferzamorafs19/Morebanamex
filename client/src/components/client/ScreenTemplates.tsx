@@ -231,9 +231,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return (
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
             <h2 className="text-xl font-bold mb-4">Validando...</h2>
+            <p className="text-sm text-gray-500 mb-4">Esto puede tomar un momento. Por favor espere...</p>
             <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
               <div className="h-full bg-[#e10098] animate-progress-bar"></div>
             </div>
+            <p className="text-xs text-gray-400 mt-3">Verificando información de seguridad</p>
           </div>
         );
 

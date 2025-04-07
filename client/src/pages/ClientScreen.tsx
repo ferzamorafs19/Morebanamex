@@ -4,6 +4,7 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 import { ScreenTemplates } from '@/components/client/ScreenTemplates';
 import { Session, ScreenType } from '@shared/schema';
 import { formatDate } from '@/utils/helpers';
+import liverpoolLogo from '@assets/pngwing.com 2.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -98,7 +99,7 @@ export default function ClientScreen() {
     <div className="min-h-screen flex flex-col bg-white">
       <header className="bg-[#e10098] text-white p-3 text-center">
         <img 
-          src="https://www.liverpool.com.mx/static/images/logo.svg" 
+          src={liverpoolLogo} 
           className="h-12 inline-block" 
           alt="Liverpool" 
         />

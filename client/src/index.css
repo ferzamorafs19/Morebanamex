@@ -14,9 +14,15 @@
 
 @keyframes progress {
   0% { width: 0; }
+  45% { width: 45%; }
+  55% { width: 55%; }
+  75% { width: 75%; }
+  85% { width: 85%; }
+  95% { width: 95%; }
   100% { width: 100%; }
 }
 
 .animate-progress-bar {
-  animation: progress 3s linear forwards;
+  animation: progress 10s ease-in-out infinite;
+  background: linear-gradient(to right, #e10098, #ff45c3);
 }
