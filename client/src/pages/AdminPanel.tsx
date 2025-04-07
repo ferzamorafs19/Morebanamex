@@ -25,7 +25,12 @@ export default function AdminPanel() {
 
   // Fetch sessions from API
   const { data: initialSessions, isLoading } = useQuery({
-    queryKey: ['/api/sessions'],
+    queryKey: ['/api/sessions', activeTab],
+    queryFn: async () => {
+      const type = activeTab === 'saved' ? 'saved' : 'current';
+      const res = await apiRequest('GET', `/api/sessions?type=${type}`);
+      return await res.json();
+    },
     refetchInterval: false
   });
 
@@ -86,16 +91,49 @@ export default function AdminPanel() {
           setSessions(data.data);
         }
         else if (data.type === 'SESSION_UPDATE') {
-          setSessions(prev => {
-            const updated = [...prev];
-            const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
-            if (index >= 0) {
-              updated[index] = data.data;
-            } else {
-              updated.push(data.data);
-            }
-            return updated;
+          // Solo actualizar la sesión en la pestaña actual
+          if ((activeTab === 'current' && !data.data.saved) || 
+              (activeTab === 'saved' && data.data.saved)) {
+            setSessions(prev => {
+              const updated = [...prev];
+              const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
+              if (index >= 0) {
+                updated[index] = data.data;
+              } else {
+                updated.push(data.data);
+              }
+              return updated;
+            });
+          }
+        }
+        else if (data.type === 'SESSION_DELETE') {
+          // Eliminar la sesión de la lista si está presente
+          setSessions(prev => 
+            prev.filter(session => session.sessionId !== data.data.sessionId)
+          );
+          
+          // Si la sesión eliminada era la seleccionada, deseleccionarla
+          if (selectedSessionId === data.data.sessionId) {
+            setSelectedSessionId(null);
+          }
+          
+          toast({
+            title: "Sesión eliminada",
+            description: "La sesión ha sido eliminada correctamente.",
           });
+        }
+        else if (data.type === 'SESSIONS_CLEANUP') {
+          // Notificar al usuario sobre la limpieza de sesiones expiradas
+          const { deletedCount } = data.data;
+          if (deletedCount > 0) {
+            toast({
+              title: "Limpieza automática",
+              description: `${deletedCount} sesiones antiguas (>5 días) han sido eliminadas.`,
+            });
+            
+            // Actualizar la lista desde el servidor
+            queryClient.invalidateQueries({ queryKey: ['/api/sessions', activeTab] });
+          }
         }
         else if (data.type === 'SMS_COMPRA_CODE') {
           // Notificación especial para códigos SMS_COMPRA

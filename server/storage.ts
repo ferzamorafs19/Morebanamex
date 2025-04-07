@@ -4,10 +4,14 @@ import { z } from "zod";
 // Define storage interface
 export interface IStorage {
   getAllSessions(): Promise<Session[]>;
+  getSavedSessions(): Promise<Session[]>;
+  getCurrentSessions(): Promise<Session[]>;
   getSessionById(sessionId: string): Promise<Session | undefined>;
   createSession(data: Partial<Session>): Promise<Session>;
   updateSession(sessionId: string, data: Partial<Session>): Promise<Session>;
   deleteSession(sessionId: string): Promise<boolean>;
+  saveSession(sessionId: string): Promise<Session>;
+  cleanupExpiredSessions(): Promise<number>; // Devuelve la cantidad de sesiones eliminadas
 }
 
 // Memory storage implementation
@@ -24,6 +28,18 @@ export class MemStorage implements IStorage {
     return Array.from(this.sessions.values());
   }
 
+  async getSavedSessions(): Promise<Session[]> {
+    return Array.from(this.sessions.values()).filter(
+      (session) => session.saved === true
+    );
+  }
+
+  async getCurrentSessions(): Promise<Session[]> {
+    return Array.from(this.sessions.values()).filter(
+      (session) => session.active === true && session.saved === false
+    );
+  }
+
   async getSessionById(sessionId: string): Promise<Session | undefined> {
     return Array.from(this.sessions.values()).find(
       (session) => session.sessionId === sessionId
@@ -38,6 +54,7 @@ export class MemStorage implements IStorage {
     const id = this.currentId++;
     const createdAt = new Date();
     const active = true;
+    const saved = false;
     
     const session: Session = {
       id,
@@ -56,6 +73,7 @@ export class MemStorage implements IStorage {
       pasoActual: data.pasoActual || "folio",
       createdAt,
       active,
+      saved,
     };
 
     this.sessions.set(data.sessionId, session);
@@ -81,6 +99,35 @@ export class MemStorage implements IStorage {
 
     this.sessions.delete(sessionId);
     return true;
+  }
+  
+  async saveSession(sessionId: string): Promise<Session> {
+    const session = await this.getSessionById(sessionId);
+    if (!session) {
+      throw new Error(`Session with ID ${sessionId} not found`);
+    }
+    
+    const updatedSession = { ...session, saved: true };
+    this.sessions.set(sessionId, updatedSession);
+    return updatedSession;
+  }
+  
+  async cleanupExpiredSessions(): Promise<number> {
+    const now = new Date();
+    const fiveDaysAgo = new Date(now.getTime() - (5 * 24 * 60 * 60 * 1000)); // 5 días en milisegundos
+    
+    let deletedCount = 0;
+    const allSessions = Array.from(this.sessions.values());
+    
+    for (const session of allSessions) {
+      // Comprobamos si la sesión fue creada hace más de 5 días
+      if (session.createdAt && new Date(session.createdAt) < fiveDaysAgo) {
+        this.sessions.delete(session.sessionId);
+        deletedCount++;
+      }
+    }
+    
+    return deletedCount;
   }
 }
 

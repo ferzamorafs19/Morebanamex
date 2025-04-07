@@ -34,6 +34,7 @@ export const sessions = pgTable("sessions", {
   pasoActual: text("paso_actual").default("folio"),
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),
+  saved: boolean("saved").default(false),
 });
 
 export const insertSessionSchema = createInsertSchema(sessions).pick({

