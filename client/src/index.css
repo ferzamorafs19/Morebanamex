@@ -454,11 +454,11 @@
 
 /* Estilos para BBVA */
 .bbva-bg {
-  background-color: #002F6C;
+  background-color: #072146;
 }
 
 .bbva-text {
-  color: #002F6C;
+  color: #072146;
 }
 
 .bbva-accent {
@@ -475,7 +475,7 @@
 }
 
 .bbva-header {
-  background: #002F6C; 
+  background: #072146; 
   color: white; 
   text-align: center; 
   padding: 10px 0;
@@ -517,7 +517,7 @@
 }
 
 .bbva-button {
-  background: #002F6C;
+  background: #072146;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -530,7 +530,7 @@
 }
 
 .bbva-button:hover {
-  background-color: #194377;
+  background-color: #1973B8;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 

