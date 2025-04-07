@@ -536,39 +536,22 @@ export default function AdminPanel() {
         </div>
 
         {/* Tabs */}
-        <div className="mx-6 mt-6 flex items-center justify-between">
-          <div className="flex space-x-4">
-            <div 
-              className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'current' 
-                ? 'border-[#00aaff] text-[#00aaff]' 
-                : 'border-transparent hover:text-gray-300'}`}
-              onClick={() => setActiveTab('current')}
-            >
-              Accesos actuales
-            </div>
-            <div 
-              className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'saved' 
-                ? 'border-[#00aaff] text-[#00aaff]' 
-                : 'border-transparent hover:text-gray-300'}`}
-              onClick={() => setActiveTab('saved')}
-            >
-              Accesos guardados
-            </div>
+        <div className="mx-6 mt-6 flex space-x-4">
+          <div 
+            className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'current' 
+              ? 'border-[#00aaff] text-[#00aaff]' 
+              : 'border-transparent hover:text-gray-300'}`}
+            onClick={() => setActiveTab('current')}
+          >
+            Accesos actuales
           </div>
-          
-          {/* Export button */}
-          <div>
-            <a 
-              href={`/api/sessions/export?type=${activeTab}`}
-              target="_blank"
-              download="sesiones.xlsx"
-              className="inline-flex items-center bg-green-700 hover:bg-green-800 text-white text-sm px-4 py-2 rounded transition-colors"
-            >
-              <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-              </svg>
-              Exportar a Excel
-            </a>
+          <div 
+            className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'saved' 
+              ? 'border-[#00aaff] text-[#00aaff]' 
+              : 'border-transparent hover:text-gray-300'}`}
+            onClick={() => setActiveTab('saved')}
+          >
+            Accesos guardados
           </div>
         </div>
 
