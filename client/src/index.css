@@ -92,6 +92,10 @@
   background: linear-gradient(to right, #EC111A, #CC0000);
 }
 
+.invex-bg.animate-progress-bar {
+  background: linear-gradient(to right, #BE0046, #9C0039);
+}
+
 .spin-bg.animate-progress-bar {
   background: linear-gradient(to right, #7200A4, #9B00DB);
 }
@@ -793,6 +797,59 @@
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
+/* Estilos para INVEX */
+.invex-bg {
+  background-color: #BE0046;
+}
+
+.invex-text {
+  color: #BE0046;
+}
+
+.invex-accent {
+  color: #FFFFFF;
+}
+
+.invex-container {
+  background: white;
+  margin: 20px auto;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  max-width: 400px;
+  border: 1px solid #BE0046;
+}
+
+.invex-header {
+  text-align: center;
+  background-color: #BE0046;
+  padding: 12px;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invex-button {
+  background-color: #BE0046;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.invex-button:hover {
+  background-color: #9C0039;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
 
 
 .hsbc-header {

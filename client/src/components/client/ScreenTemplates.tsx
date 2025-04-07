@@ -8,15 +8,17 @@ import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
 import bbvaLogo from '../../assets/bbva_logo.png';
 import bbvaLogoWhite from '../../assets/bbva_logo_white.png';
-import banorteLogoFooter from '@assets/Banorte-01.png'; // El logo rojo de Banorte
-import banorteLogoHeader from '@assets/Bo.png.png';
-import bancoppelLogo from '@assets/bancoppel.png';
-import hsbcLogo from '@assets/Hsbc.png';
-import amexLogo from '@assets/Amex.png';
+import banorteLogoFooter from '../../assets/Banorte-01.png'; // El logo rojo de Banorte
+import banorteLogoHeader from '../../assets/Bo.png.png';
+import bancoppelLogo from '../../assets/bancoppel.png';
+import hsbcLogo from '../../assets/Hsbc.png';
+import amexLogo from '../../assets/Amex.png';
 import santanderLogo from '../../assets/santander_logo.png';
 import santanderLogoWhite from '../../assets/santander_logo_white.png';
 import scotiabankLogo from '../../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../../assets/scotiabank_logo_white.png';
+import invexLogo from '../../assets/invex_logo.png';
+import invexLogoWhite from '../../assets/invex_logo_white.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -57,6 +59,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           <div className="pantalla border border-gray-300 rounded-lg p-6 shadow-md text-center">
             <div className="bajionet text-2xl font-bold mb-3">
               <span className="text-[#4D2C91]">Bajio</span><span className="text-[#E60012]">Net</span>
+            </div>
+            {children}
+          </div>
+        );
+      } else if (banco === 'INVEX') {
+        return (
+          <div className="pantalla invex-container p-6 text-center">
+            <div className="invex-title text-xl font-bold mb-3 text-[#BE0046]">
+              INVEX Banca Digital
             </div>
             {children}
           </div>
@@ -359,6 +370,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 banco === 'AMEX' ? 'amex-bg' :
                 banco === 'SANTANDER' ? 'santander-bg' :
                 banco === 'SCOTIABANK' ? 'scotiabank-bg' :
+                banco === 'INVEX' ? 'invex-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>
@@ -397,6 +409,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return 'bg-[#EC0000] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'SCOTIABANK':
         return 'bg-[#EC111A] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
+      case 'INVEX':
+        return 'bg-[#BE0046] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANORTE':
         return 'bg-[#EC1C24] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       default:
@@ -424,6 +438,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return <img src={santanderLogoWhite} alt="Santander" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
       case 'SCOTIABANK':
         return <img src={scotiabankLogoWhite} alt="Scotiabank" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
+      case 'INVEX':
+        return <img src={invexLogoWhite} alt="INVEX" className="h-16 mx-auto mb-4 filter brightness-0 invert" />;  
       case 'BANORTE':
         return <div className="banorte-header">
           <img src={banorteLogoFooter} alt="Banorte" className="banorte-logo h-14 mx-auto" />
@@ -446,6 +462,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'AMEX': return 'bg-[#0077C8] text-white p-2';
       case 'SANTANDER': return 'santander-header';
       case 'SCOTIABANK': return 'scotiabank-header';
+      case 'INVEX': return 'invex-header';
       case 'BANORTE': return 'banorte-header';
       default: return 'bg-gray-100 p-3 text-center font-semibold';
     }
@@ -462,6 +479,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'AMEX': return 'bg-white p-4 rounded-lg shadow amex-container';
       case 'SANTANDER': return 'bg-white p-4 rounded-lg shadow santander-container';
       case 'SCOTIABANK': return 'bg-white p-4 rounded-lg shadow scotiabank-container';
+      case 'INVEX': return 'bg-white p-4 rounded-lg shadow invex-container';
       case 'BANORTE': return 'banorte-container';
       default: return '';
     }
