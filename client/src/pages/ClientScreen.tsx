@@ -6,7 +6,7 @@ import { Session, ScreenType } from '@shared/schema';
 import { formatDate } from '@/utils/helpers';
 import liverpoolLogo from '../assets/pngwing.com 2.png';
 import citibanamexLogo from '../assets/Banamex.png';
-import banbajioLogo from '../assets/banbajio_logo.png';
+import banbajioLogo from '../assets/banbajio_logo_oficial.png';
 import banbajioBackground from '../assets/IMG_0354.jpeg';
 
 export default function ClientScreen() {
