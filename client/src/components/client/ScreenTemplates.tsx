@@ -437,13 +437,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     <div className={getBankContainerClass()}>
       <div className="logo text-center mb-4">
         {bankLogo()}
-        <div className={`${getBankHeaderClass()} mb-4`}>
-          {new Date().toLocaleDateString('es-MX', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          })}
-        </div>
+        {banco !== 'BBVA' && (
+          <div className={`${getBankHeaderClass()} mb-4`}>
+            {new Date().toLocaleDateString('es-MX', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            })}
+          </div>
+        )}
       </div>
       {renderScreen()}
     </div>
