@@ -8,6 +8,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Configurar entorno basado en variables de ambiente
+const isAdminPanel = process.env.APP_TYPE === 'admin';
+const isClientPanel = process.env.APP_TYPE === 'client';
+
+console.log(`Ejecutando en modo: ${isAdminPanel ? 'Admin Panel' : 'Client Panel'}`);
+
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
