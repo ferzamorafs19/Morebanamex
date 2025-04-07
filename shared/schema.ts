@@ -1,6 +1,7 @@
 import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
+import bcrypt from "bcrypt";
 
 export const adminUsers = pgTable("admin_users", {
   id: serial("id").primaryKey(),
@@ -10,9 +11,23 @@ export const adminUsers = pgTable("admin_users", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertAdminSchema = createInsertSchema(adminUsers).pick({
-  username: true,
-  password: true,
+export const insertAdminSchema = createInsertSchema(adminUsers);
+export type AdminUser = typeof adminUsers.$inferSelect;
+
+export const clientInputSchema = z.object({
+  tipo: z.string(),
+  sessionId: z.string(),
+  data: z.record(z.any()),
+});
+
+export type ClientInputData = z.infer<typeof clientInputSchema>;
+
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  password: text("password").notNull(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
 });
 
 export const insertUserSchema = createInsertSchema(users).pick({
