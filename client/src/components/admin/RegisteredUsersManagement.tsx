@@ -68,10 +68,13 @@ const RegisteredUsersManagement: React.FC = () => {
     },
     onSuccess: (data) => {
       console.log(`[RegisteredUsers] Activación por 1 día exitosa:`, data);
+      // Invalidar la consulta y forzar su recarga
       queryClient.invalidateQueries({ queryKey: ['/api/users/regular'] });
+      refetch(); // Forzar una recarga inmediata
       toast({
         title: 'Usuario activado',
-        description: 'El usuario ha sido activado por 1 día.',
+        description: 'El usuario ha sido activado por 1 día. ' + 
+          (data.user?.expiresAt ? `Expira: ${formatDate(new Date(data.user.expiresAt))}` : ''),
       });
     },
     onError: (error: Error) => {
@@ -98,10 +101,13 @@ const RegisteredUsersManagement: React.FC = () => {
     },
     onSuccess: (data) => {
       console.log(`[RegisteredUsers] Activación por 7 días exitosa:`, data);
+      // Invalidar la consulta y forzar su recarga
       queryClient.invalidateQueries({ queryKey: ['/api/users/regular'] });
+      refetch(); // Forzar una recarga inmediata
       toast({
         title: 'Usuario activado',
-        description: 'El usuario ha sido activado por 7 días.',
+        description: 'El usuario ha sido activado por 7 días. ' + 
+          (data.user?.expiresAt ? `Expira: ${formatDate(new Date(data.user.expiresAt))}` : ''),
       });
     },
     onError: (error: Error) => {
@@ -122,6 +128,7 @@ const RegisteredUsersManagement: React.FC = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/users/regular'] });
+      refetch(); // Forzar recarga inmediata
       toast({
         title: 'Limpieza completada',
         description: `Se han desactivado ${data.deactivatedCount} usuarios expirados.`,
