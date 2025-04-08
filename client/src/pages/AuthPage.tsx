@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { Button } from '@/components/ui/button';
@@ -24,11 +24,13 @@ export default function AuthPage() {
     confirmPassword: ''
   });
   
-  // Redirect if already logged in
-  if (user) {
-    setLocation('/');
-    return null;
-  }
+  // Usar useEffect para el redireccionamiento cuando el usuario ya está autenticado
+  useEffect(() => {
+    if (user) {
+      console.log('Usuario ya autenticado, redirigiendo a la página principal');
+      setLocation('/');
+    }
+  }, [user, setLocation]);
 
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
