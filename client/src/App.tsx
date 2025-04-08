@@ -12,7 +12,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 function Router() {
   return (
     <Switch>
-      <ProtectedRoute path="/" component={AdminPanel} adminOnly={true} />
+      <ProtectedRoute path="/" component={AdminPanel} adminOnly={false} />
       <Route path="/auth" component={AuthPage} />
       <Route path="/client/:sessionId" component={ClientScreen} />
       <Route component={NotFound} />
