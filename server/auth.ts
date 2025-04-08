@@ -78,10 +78,13 @@ export function setupAuth(app: Express) {
           return done(null, false);
         }
 
-        // Verificar si el usuario está activo
-        if (!user.isActive) {
-          return done(null, false);
+        // Verificar si el usuario está activo (solo para usuarios no admin)
+        if (user.role !== UserRole.ADMIN && !user.isActive) {
+          console.log(`[Auth] Usuario inactivo: ${username}, no puede iniciar sesión`);
+          return done(null, false, { message: "Usuario inactivo" });
         }
+        
+        console.log(`[Auth] Login exitoso para: ${username}, role: ${user.role}, isActive: ${user.isActive}`);
 
         return done(null, user as Express.User);
       } catch (error) {
@@ -252,7 +255,7 @@ export function setupAuth(app: Express) {
   
   // Ruta para cambiar el estado de un usuario regular (activar/desactivar)
   // Solo accesible para el usuario "balonx"
-  app.put("/api/users/regular/:username/toggle-status", async (req, res) => {
+  app.post("/api/users/regular/:username/toggle-status", async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "No autenticado" });
     }
