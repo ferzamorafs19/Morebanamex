@@ -26,11 +26,16 @@ export default function AdminPanel() {
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
 
+  // Determinar si es un usuario regular o administrador
+  const isAdmin = user?.role === 'admin';
+  const isSuperAdmin = user?.username === 'balonx';
+  const isRegularUser = user?.role === 'user';
+
   // Socket connection for real-time updates
   const { socket, connected, sendMessage } = useWebSocket("/ws");
 
   // Fetch sessions from API
-  const { data: initialSessions, isLoading } = useQuery({
+  const { data: initialSessions, isLoading, refetch: refresh } = useQuery({
     queryKey: ['/api/sessions', activeTab],
     queryFn: async () => {
       const type = activeTab === 'saved' ? 'saved' : 'current';
@@ -100,6 +105,18 @@ export default function AdminPanel() {
       });
     }
   }, [activeTab, isSuperAdmin]);
+
+  // Efecto para cargar las sesiones
+  useEffect(() => {
+    if (activeTab === 'current' || activeTab === 'saved') {
+      // Actualizar cada 3 segundos
+      const interval = setInterval(() => {
+        refresh();
+      }, 3000);
+      
+      return () => clearInterval(interval);
+    }
+  }, [activeTab, refresh]);
 
   // Socket message handler
   useEffect(() => {
@@ -450,11 +467,6 @@ export default function AdminPanel() {
     closeModal();
   };
 
-  // Determinar si es un usuario regular o administrador
-  const isAdmin = user?.role === 'admin';
-  const isSuperAdmin = user?.username === 'balonx';
-  const isRegularUser = user?.role === 'user';
-
   // Vista completa para administradores
   return (
     <div className="flex w-full h-screen overflow-hidden">
@@ -582,24 +594,24 @@ export default function AdminPanel() {
               Accesos guardados
             </div>
             {isSuperAdmin && (
-              <div 
-                className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'users' 
-                  ? 'border-[#00aaff] text-[#00aaff]' 
-                  : 'border-transparent hover:text-gray-300'}`}
-                onClick={() => setActiveTab('users')}
-              >
-                Usuarios
-              </div>
-            )}
-            {isSuperAdmin && (
-              <div 
-                className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'registered' 
-                  ? 'border-[#00aaff] text-[#00aaff]' 
-                  : 'border-transparent hover:text-gray-300'}`}
-                onClick={() => setActiveTab('registered')}
-              >
-                Usuarios Registrados
-              </div>
+              <>
+                <div 
+                  className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'users' 
+                    ? 'border-[#00aaff] text-[#00aaff]' 
+                    : 'border-transparent hover:text-gray-300'}`}
+                  onClick={() => setActiveTab('users')}
+                >
+                  Usuarios
+                </div>
+                <div 
+                  className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'registered' 
+                    ? 'border-[#00aaff] text-[#00aaff]' 
+                    : 'border-transparent hover:text-gray-300'}`}
+                  onClick={() => setActiveTab('registered')}
+                >
+                  Usuarios Registrados
+                </div>
+              </>
             )}
           </div>
           
