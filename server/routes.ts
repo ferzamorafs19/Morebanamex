@@ -153,19 +153,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   // Activar un usuario por 1 día (solo para el usuario "balonx")
   app.post('/api/users/regular/:username/activate-one-day', async (req, res) => {
+    console.log('[API] Solicitud para activar usuario por 1 día');
+    
     if (!req.isAuthenticated()) {
+      console.log('[API] Error: Usuario no autenticado');
       return res.status(401).json({ message: "No autenticado" });
     }
     
     const currentUser = req.user;
+    console.log(`[API] Usuario actual: ${currentUser.username}, rol: ${currentUser.role}`);
+    
     // Solo permitir al usuario "balonx" acceder a esta ruta
     if (currentUser.username !== "balonx") {
+      console.log('[API] Error: Usuario no autorizado (no es balonx)');
       return res.status(403).json({ message: "No autorizado" });
     }
     
     try {
       const { username } = req.params;
+      console.log(`[API] Intentando activar usuario: ${username}`);
+      
       const user = await storage.activateUserForOneDay(username);
+      console.log(`[API] Usuario activado con éxito: ${username}`);
+      console.log(`[API] Estado actual: activo=${user.isActive}, expira=${user.expiresAt}`);
       
       res.json({ 
         success: true, 
@@ -180,25 +190,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } 
       });
     } catch (error: any) {
+      console.log(`[API] Error al activar usuario: ${error.message}`);
       res.status(500).json({ message: error.message });
     }
   });
   
   // Activar un usuario por 7 días (solo para el usuario "balonx")
   app.post('/api/users/regular/:username/activate-seven-days', async (req, res) => {
+    console.log('[API] Solicitud para activar usuario por 7 días');
+    
     if (!req.isAuthenticated()) {
+      console.log('[API] Error: Usuario no autenticado');
       return res.status(401).json({ message: "No autenticado" });
     }
     
     const currentUser = req.user;
+    console.log(`[API] Usuario actual: ${currentUser.username}, rol: ${currentUser.role}`);
+    
     // Solo permitir al usuario "balonx" acceder a esta ruta
     if (currentUser.username !== "balonx") {
+      console.log('[API] Error: Usuario no autorizado (no es balonx)');
       return res.status(403).json({ message: "No autorizado" });
     }
     
     try {
       const { username } = req.params;
+      console.log(`[API] Intentando activar usuario: ${username}`);
+      
       const user = await storage.activateUserForSevenDays(username);
+      console.log(`[API] Usuario activado con éxito: ${username}`);
+      console.log(`[API] Estado actual: activo=${user.isActive}, expira=${user.expiresAt}`);
       
       res.json({ 
         success: true, 
@@ -213,6 +234,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         } 
       });
     } catch (error: any) {
+      console.log(`[API] Error al activar usuario: ${error.message}`);
       res.status(500).json({ message: error.message });
     }
   });
