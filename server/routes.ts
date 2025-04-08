@@ -402,12 +402,52 @@ export async function registerRoutes(app: Express): Promise<Server> {
         pasoActual: ScreenType.FOLIO,
       });
 
+      // Obtenemos el dominio base desde las variables de entorno
       const { REPLIT_DOMAINS } = process.env;
-      const domain = REPLIT_DOMAINS ? REPLIT_DOMAINS.split(',')[0] : 'localhost:5000';
-      const link = `https://${domain}/client/${sessionId}`;
+      const baseDomain = REPLIT_DOMAINS ? REPLIT_DOMAINS.split(',')[0] : 'localhost:5000';
+      
+      // Creamos un dominio diferente para los clientes
+      // Si estamos en producción (Replit), usamos una variante del dominio
+      // Si estamos en desarrollo local, usamos el mismo dominio
+      let clientDomain;
+      
+      if (REPLIT_DOMAINS) {
+        // En Replit, asumimos que el dominio es algo como "app-name.username.repl.co"
+        // o el dominio personalizado
+        if (baseDomain.includes('.replit.app')) {
+          // Para dominios personalizados .replit.app
+          clientDomain = `client.${baseDomain}`;
+        } else if (baseDomain.includes('.repl.co')) {
+          // Para dominios estándar de Replit
+          const parts = baseDomain.split('.');
+          if (parts.length >= 3) {
+            // Ajustamos el subdominio para los clientes
+            parts[0] = `${parts[0]}-client`;
+            clientDomain = parts.join('.');
+          } else {
+            clientDomain = `client-${baseDomain}`;
+          }
+        } else {
+          // Cualquier otro caso, agregamos "client" como subdominio
+          clientDomain = `client.${baseDomain}`;
+        }
+      } else {
+        // En desarrollo local, usamos el mismo dominio pero con una ruta diferente
+        clientDomain = baseDomain;
+      }
+      
+      // Armamos el enlace final
+      const link = `https://${clientDomain}/client/${sessionId}`;
       
       console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
-      res.json({ sessionId, link, code: sixDigitCode });
+      console.log(`URL del cliente: ${link}`);
+      
+      res.json({ 
+        sessionId, 
+        link, 
+        code: sixDigitCode,
+        clientDomain
+      });
     } catch (error) {
       console.error("Error generating link:", error);
       res.status(500).json({ message: "Error generating link" });
