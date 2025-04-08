@@ -91,18 +91,12 @@ export default function AdminPanel() {
     }
   }, [initialSessions]);
   
-  // Redirigir a usuarios regulares si intentan acceder a pestañas restringidas
+  // Redirigir a usuarios regulares si intentan acceder a pestañas restringidas por URL
   useEffect(() => {
-    // Si es usuario regular e intenta ver pestañas de usuarios o registrados
+    // Solo verificamos si estamos en estas pestañas y no somos admin
+    // pero no mostramos ningún mensaje de error al cargar la página
     if (!isSuperAdmin && (activeTab === 'users' || activeTab === 'registered')) {
-      // Redirigir a la pestaña de accesos actuales
       setActiveTab('current');
-      
-      toast({
-        title: "Acceso restringido",
-        description: "No tienes permisos para acceder a esta sección.",
-        variant: "destructive",
-      });
     }
   }, [activeTab, isSuperAdmin]);
 
