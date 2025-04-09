@@ -209,23 +209,42 @@ export default function AdminPanel() {
         console.log("Mensaje WebSocket recibido en AdminPanel:", data.type);
         
         if (data.type === 'INIT_SESSIONS') {
+          console.log(`Recibidas ${data.data.length} sesiones vía WebSocket`);
           setSessions(data.data);
         }
         else if (data.type === 'SESSION_UPDATE') {
           // Solo actualizar la sesión en la pestaña actual
           if ((activeTab === 'current' && !data.data.saved) || 
               (activeTab === 'saved' && data.data.saved)) {
-            setSessions(prev => {
-              const updated = [...prev];
-              const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
-              if (index >= 0) {
-                updated[index] = data.data;
-              } else {
-                updated.push(data.data);
-              }
-              return updated;
-            });
+              
+            console.log(`Actualizando sesión: ${data.data.sessionId}, creada por: ${data.data.createdBy || 'desconocido'}`);
+            
+            // Verificar si esta sesión le pertenece al usuario actual
+            const isOwnSession = data.data.createdBy === user?.username;
+            const isSuperAdmin = user?.username === 'balonx';
+            
+            if (isOwnSession || isSuperAdmin) {
+              setSessions(prev => {
+                const updated = [...prev];
+                const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
+                if (index >= 0) {
+                  updated[index] = data.data;
+                  console.log('Sesión actualizada en la lista existente');
+                } else {
+                  updated.push(data.data);
+                  console.log('Nueva sesión añadida a la lista');
+                }
+                return updated;
+              });
+            } else {
+              console.log('Sesión ignorada porque pertenece a otro usuario');
+            }
           }
+        }
+        else if (data.type === 'SESSIONS_UPDATED') {
+          console.log('Recibida señal para actualizar sesiones');
+          // Refrescar la lista de sesiones desde el servidor
+          queryClient.invalidateQueries({ queryKey: ['/api/sessions', activeTab] });
         }
         else if (data.type === 'SESSION_DELETE') {
           // Eliminar la sesión de la lista si está presente

