@@ -822,14 +822,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const apiUrl = req.body.apiUrl || 'https://api.sofmex.mx/api/sms';
       const simulationMode = apiUrl && (apiUrl.includes('simulacion') || apiUrl.includes('localhost'));
 
-      // En modo simulación, no requerimos credenciales
-      const username = req.body.username;
-      const password = req.body.password;
+      // En modo simulación, no requerimos credenciales, pero en modo real sí
+      const username = req.body.username || '';
+      const password = req.body.password || '';
+      
+      // La API está activa si está en modo simulación o si tiene credenciales válidas
+      const hasValidCredentials = simulationMode || (!!username && !!password);
+      const isActive = hasValidCredentials;
+      
+      // Si no estamos en modo simulación y faltan credenciales, advertimos pero seguimos
+      let credentialsWarning = '';
+      if (!simulationMode && (!username || !password)) {
+        credentialsWarning = "Advertencia: No has proporcionado credenciales válidas para el modo real.";
+      }
 
       const data = insertSmsConfigSchema.parse({
         username: username,
         password: password,
         apiUrl: apiUrl,
+        isActive: isActive,
         updatedBy: user.username
       });
 
@@ -848,7 +859,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isActive: config.isActive,
         updatedAt: config.updatedAt,
         updatedBy: config.updatedBy,
-        hasCredentials: Boolean(config.username && config.password), // Verificar si tiene credenciales
+        hasCredentials: hasValidCredentials,
         apiUrl: config.apiUrl,
         success: true
       };
@@ -931,11 +942,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Verificar si está en modo simulación
       const simulationMode = config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost'));
 
-      // En modo real, necesitamos credenciales
-      if (!simulationMode && (!config.username || !config.password)) {
+      // Verificamos si tiene credenciales válidas o está en modo simulación
+      const hasValidCredentials = simulationMode || (!!config.username && !!config.password);
+      
+      // Si no estamos en modo simulación y no tenemos credenciales válidas, no podemos enviar
+      if (!hasValidCredentials) {
         return res.status(400).json({ 
           success: false, 
-          message: "La API de SMS no tiene credenciales configuradas" 
+          message: "La API de SMS no tiene credenciales configuradas. Ve a Configuración y proporciona un usuario y contraseña válidos." 
         });
       }
 

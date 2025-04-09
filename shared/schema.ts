@@ -126,6 +126,7 @@ export const insertSmsConfigSchema = createInsertSchema(smsConfig).pick({
   username: true,
   password: true,
   apiUrl: true,
+  isActive: true,
   updatedBy: true,
 });
 
