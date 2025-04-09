@@ -367,7 +367,20 @@ export default function ClientScreen() {
       return (
         <footer className="mt-auto">
           <div className="bg-gray-100 p-4 text-center text-sm">
-            <a href="#" className={`${
+            <a href={
+              sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/tienda/home' : 
+              sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/index.html' : 
+              sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/' :
+              sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/main/index.html' :
+              sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/' :
+              sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/' :
+              sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/' :
+              sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/personas.aspx' :
+              sessionData.banco === 'INVEX' ? 'https://www.invex.com/' :
+              sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/' :
+              sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/' :
+              'https://www.banorte.com/'
+            } target="_blank" rel="noopener noreferrer" className={`${
               sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' : 
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
@@ -381,7 +394,20 @@ export default function ClientScreen() {
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
             } mx-2`}>Aprende más</a>
-            <a href="#" className={`${
+            <a href={
+              sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/tienda/ayuda' : 
+              sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/servicios-digitales/preguntas-frecuentes.html' : 
+              sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/personas/servicios-digitales/bbva-mexico.html' :
+              sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/comercio_electronico/index.html' :
+              sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/contacto/' :
+              sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/' :
+              sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/ayuda/' :
+              sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/canales-de-atencion.aspx' :
+              sessionData.banco === 'INVEX' ? 'https://www.invex.com/contacto' :
+              sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/ayuda/' :
+              sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/centro-de-ayuda' :
+              'https://www.banorte.com/wps/portal/banorte/Home/ayuda-banorte/'
+            } target="_blank" rel="noopener noreferrer" className={`${
               sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' :
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
@@ -395,7 +421,20 @@ export default function ClientScreen() {
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
             } mx-2`}>Ayuda</a>
-            <a href="#" className={`${
+            <a href={
+              sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/ayuda/terminos-y-condiciones/terminos-y-condiciones/' : 
+              sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/terminos-y-condiciones.html' : 
+              sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/personas/informacion-adicional.html' :
+              sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/acerca_bancoppel/terminos.html' :
+              sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/condiciones/' :
+              sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/preferencias-legales/aviso-de-privacidad/' :
+              sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/terminos-condiciones-contratos/' :
+              sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/terminos-y-condiciones.aspx' :
+              sessionData.banco === 'INVEX' ? 'https://www.invex.com/aviso-de-privacidad' :
+              sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/contenido/terminos.php' :
+              sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/aviso-de-privacidad' :
+              'https://www.banorte.com/wps/portal/banorte/Home/inicio/terminos-y-condiciones'
+            } target="_blank" rel="noopener noreferrer" className={`${
               sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' :
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
@@ -409,7 +448,20 @@ export default function ClientScreen() {
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
             } mx-2`}>Términos y condiciones</a>
-            <a href="#" className={`${
+            <a href={
+              sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/ayuda/seguridad-en-sus-compras/seguridad-en-sus-compras/' : 
+              sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/seguridad.html' : 
+              sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/personas/servicios-digitales/seguridad-digital.html' :
+              sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/bancoppel_sitio/seguridad.html' :
+              sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/seguridad/' :
+              sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/seguridad/' :
+              sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/seguridad/' :
+              sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/seguridad-bancaria.aspx' :
+              sessionData.banco === 'INVEX' ? 'https://www.invex.com/seguridad' :
+              sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/seguridad.php' :
+              sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/seguridad' :
+              'https://www.banorte.com/wps/portal/banorte/Home/seguridad-banorte'
+            } target="_blank" rel="noopener noreferrer" className={`${
               sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' :
               sessionData.banco === 'CITIBANAMEX' ? 'text-[#0070BA]' : 
               sessionData.banco === 'BBVA' ? 'text-[#072146]' :
@@ -440,11 +492,76 @@ export default function ClientScreen() {
             'bg-[#EC1C24]'
           } text-white p-4 text-center text-sm`}>
             <div className="mb-3">
-              <a href="#" className="text-white mx-2">Contáctanos</a> |
-              <a href="#" className="text-white mx-2">Aclaraciones</a> |
-              <a href="#" className="text-white mx-2">Promociones</a> |
-              <a href="#" className="text-white mx-2">Facebook</a> |
-              <a href="#" className="text-white mx-2">Youtube</a>
+              <a href={
+                sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/tienda/ayuda/contacto' : 
+                sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/contacto.html' : 
+                sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/personas/contacto.html' :
+                sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/contacto/index.html' :
+                sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/contacto/' :
+                sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/contacto/' :
+                sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/contacto/' :
+                sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/canales-de-atencion.aspx' :
+                sessionData.banco === 'INVEX' ? 'https://www.invex.com/contacto' :
+                sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/contacto.php' :
+                sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/contacto' :
+                'https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte'
+              } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Contáctanos</a> |
+              <a href={
+                sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/tienda/ayuda/aclaraciones/ayuda-aclaraciones/' : 
+                sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/servicios-digitales/aclaraciones.html' : 
+                sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/personas/servicios-digitales/aclaraciones.html' :
+                sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/aclaraciones/index.html' :
+                sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/contacto/aclaraciones/' :
+                sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/disputas/' :
+                sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/aclaraciones/' :
+                sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/unidad-especializada-aclaraciones.aspx' :
+                sessionData.banco === 'INVEX' ? 'https://www.invex.com/aclaraciones' :
+                sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/ayuda/aclaraciones.php' :
+                sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/preguntas-frecuentes' :
+                'https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte/aclaraciones-en-linea'
+              } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Aclaraciones</a> |
+              <a href={
+                sessionData.banco === 'LIVERPOOL' ? 'https://www.liverpool.com.mx/tienda/promociones/' : 
+                sessionData.banco === 'CITIBANAMEX' ? 'https://www.banamex.com/es/personas/promociones.html' : 
+                sessionData.banco === 'BBVA' ? 'https://www.bbva.mx/personas/productos/promociones.html' :
+                sessionData.banco === 'BANCOPPEL' ? 'https://www.bancoppel.com/promociones/index.html' :
+                sessionData.banco === 'HSBC' ? 'https://www.hsbc.com.mx/promociones/' :
+                sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/promociones/hoteles/' :
+                sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/santander-select/promociones-exclusivas/' :
+                sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/promociones/promociones.aspx' :
+                sessionData.banco === 'INVEX' ? 'https://www.invex.com/promociones' :
+                sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/promociones/' :
+                sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/promociones' :
+                'https://www.banorte.com/wps/portal/banorte/Home/promociones/todas'
+              } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Promociones</a> |
+              <a href={
+                sessionData.banco === 'LIVERPOOL' ? 'https://www.facebook.com/liverpoolmexico' : 
+                sessionData.banco === 'CITIBANAMEX' ? 'https://www.facebook.com/CitibanamexMx' : 
+                sessionData.banco === 'BBVA' ? 'https://www.facebook.com/BBVAMexico' :
+                sessionData.banco === 'BANCOPPEL' ? 'https://www.facebook.com/BanCoppel' :
+                sessionData.banco === 'HSBC' ? 'https://www.facebook.com/HSBC.MX' :
+                sessionData.banco === 'AMEX' ? 'https://www.facebook.com/AmericanExpressMexico' :
+                sessionData.banco === 'SANTANDER' ? 'https://www.facebook.com/SantanderMexico' :
+                sessionData.banco === 'SCOTIABANK' ? 'https://www.facebook.com/ScotiabankMX' :
+                sessionData.banco === 'INVEX' ? 'https://www.facebook.com/INVEXBanco' :
+                sessionData.banco === 'BANREGIO' ? 'https://www.facebook.com/banregio' :
+                sessionData.banco === 'SPIN' ? 'https://www.facebook.com/SpinByOxxo' :
+                'https://www.facebook.com/BanorteOficial'
+              } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Facebook</a> |
+              <a href={
+                sessionData.banco === 'LIVERPOOL' ? 'https://www.youtube.com/user/liverpoolmexico' : 
+                sessionData.banco === 'CITIBANAMEX' ? 'https://www.youtube.com/user/Banamex' : 
+                sessionData.banco === 'BBVA' ? 'https://www.youtube.com/user/BBVABancomer' :
+                sessionData.banco === 'BANCOPPEL' ? 'https://www.youtube.com/channel/UCiLI7sTiT4XjzUOtYQrNtpw' :
+                sessionData.banco === 'HSBC' ? 'https://www.youtube.com/user/HSBCMEX' :
+                sessionData.banco === 'AMEX' ? 'https://www.youtube.com/user/americanexpressmexico' :
+                sessionData.banco === 'SANTANDER' ? 'https://www.youtube.com/user/SantanderMx' :
+                sessionData.banco === 'SCOTIABANK' ? 'https://www.youtube.com/user/ScotiabankMX' :
+                sessionData.banco === 'INVEX' ? 'https://www.youtube.com/channel/UCgYL-vVd9Af5oVcpOyMsefQ' :
+                sessionData.banco === 'BANREGIO' ? 'https://www.youtube.com/channel/UC0UWRvXksJJzXG-hRnGDG3g' :
+                sessionData.banco === 'SPIN' ? 'https://www.youtube.com/channel/UC6LuKC5QzmY2V4qVbJYJavw' :
+                'https://www.youtube.com/user/GFBanorte'
+              } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Youtube</a>
             </div>
             <div>© {
               sessionData.banco === 'LIVERPOOL' ? 'Liverpool' :
@@ -605,18 +722,18 @@ export default function ClientScreen() {
           
           <footer className="mt-auto">
             <div className="bg-gray-100 p-4 text-center text-sm">
-              <a href="#" className="text-gray-600 mx-2">Aprende más</a>
-              <a href="#" className="text-gray-600 mx-2">Ayuda</a>
-              <a href="#" className="text-gray-600 mx-2">Términos y condiciones</a>
-              <a href="#" className="text-gray-600 mx-2">Seguridad en línea</a>
+              <a href="https://www.banorte.com/" target="_blank" rel="noopener noreferrer" className="text-gray-600 mx-2">Aprende más</a>
+              <a href="https://www.banorte.com/wps/portal/banorte/Home/ayuda-banorte/" target="_blank" rel="noopener noreferrer" className="text-gray-600 mx-2">Ayuda</a>
+              <a href="https://www.banorte.com/wps/portal/banorte/Home/inicio/terminos-y-condiciones" target="_blank" rel="noopener noreferrer" className="text-gray-600 mx-2">Términos y condiciones</a>
+              <a href="https://www.banorte.com/wps/portal/banorte/Home/seguridad-banorte" target="_blank" rel="noopener noreferrer" className="text-gray-600 mx-2">Seguridad en línea</a>
             </div>
             <div className="bg-gray-800 text-white p-4 text-center text-sm">
               <div className="mb-3">
-                <a href="#" className="text-white mx-2">Contáctanos</a> |
-                <a href="#" className="text-white mx-2">Aclaraciones</a> |
-                <a href="#" className="text-white mx-2">Promociones</a> |
-                <a href="#" className="text-white mx-2">Facebook</a> |
-                <a href="#" className="text-white mx-2">YouTube</a>
+                <a href="https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte" target="_blank" rel="noopener noreferrer" className="text-white mx-2">Contáctanos</a> |
+                <a href="https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte/aclaraciones-en-linea" target="_blank" rel="noopener noreferrer" className="text-white mx-2">Aclaraciones</a> |
+                <a href="https://www.banorte.com/wps/portal/banorte/Home/promociones/todas" target="_blank" rel="noopener noreferrer" className="text-white mx-2">Promociones</a> |
+                <a href="https://www.facebook.com/BanorteOficial" target="_blank" rel="noopener noreferrer" className="text-white mx-2">Facebook</a> |
+                <a href="https://www.youtube.com/user/GFBanorte" target="_blank" rel="noopener noreferrer" className="text-white mx-2">YouTube</a>
               </div>
               <div>© Banca Digital 2024. Todos los Derechos Reservados</div>
             </div>
