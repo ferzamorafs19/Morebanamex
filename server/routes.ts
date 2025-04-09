@@ -1001,47 +1001,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Guardar en el historial como pendiente
       const smsRecord = await storage.addSmsToHistory(smsData);
 
-      // MODO FORZADO DE SIMULACIÓN SIEMPRE ACTIVADO PARA GARANTIZAR QUE FUNCIONE
-      // Hasta que se resuelvan los problemas de conectividad
-      console.log("ACTIVANDO MODO SIMULACIÓN FORZADO para garantizar funcionamiento");
-      
-      // Actualizar el registro como enviado (simulado)
-      await storage.updateSmsStatus(smsRecord.id, 'sent');
-      
-      return res.json({
-        success: true,
-        message: "Mensaje enviado correctamente (simulado)",
-        smsId: smsRecord.id,
-        simulated: true
-      });
+      // Verificar si estamos en modo simulación antes de continuar
+      if (simulationMode) {
+        console.log("Detectado modo simulación - Procesando SMS simulado");
+        // Actualizar el registro como enviado (simulado)
+        await storage.updateSmsStatus(smsRecord.id, 'sent');
+        
+        return res.json({
+          success: true,
+          message: "Mensaje enviado correctamente (simulado)",
+          smsId: smsRecord.id,
+          simulated: true
+        });
+      }
       
       // Implementación real de la API de Sofmex (sólo se ejecuta si no estamos en modo simulación)
       try {
-        const username = config.username;
-        const password = config.password;
+        // Primero verificamos que tengamos una configuración
+        if (!config) {
+          throw new Error("Configuración de API no encontrada");
+        }
+        
+        const username = config.username || 'josemorenofs19@gmail.com';
+        const password = config.password || 'Balon19@';
         
         // Ajustar URL base según la documentación oficial de SofMex
         const apiUrl = config.apiUrl || 'https://api.sofmex.mx';
         
         // URL específica para envío de SMS según la documentación de SofMex
-        // Ver la documentación en https://www.sofmex.com/api/swagger-ui/index.html
-        let smsApiUrl = `${apiUrl}/api/sms/enviar`;
+        // Consultar correctamente la documentación en https://api.sofmex.mx/api/swagger-ui/index.html
         
-        // Generar token de autenticación Basic
-        const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
+        // Telegram funciona con esta URL, así que usemos el mismo formato
+        let smsApiUrl = 'https://api.sofmex.mx/smssend';
+        console.log("Usando URL para API de SofMex:", smsApiUrl);
         
-        // Formato del cuerpo según la documentación de SofMex
+        // Ya no usamos autenticación básica en los headers porque pasamos los datos
+        // directamente en el cuerpo de la solicitud
+        
+        // Formato del cuerpo según el formato que espera la API
         const requestData = {
           method: 'POST',
           headers: {
-            'Authorization': `Basic ${base64Credentials}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            numero: phoneNumber,             // El número de teléfono (SofMex usa "numero")
+            numero: phoneNumber,             // El número de teléfono 
             mensaje: messageContent,         // El mensaje a enviar
-            remitente: "BCP",                // Remitente que aparecerá como origen
-            tipo: 1                          // Tipo 1 para SMS normal
+            usuario: username,               // Usuario para autenticación
+            password: password               // Contraseña para autenticación
           })
         };
 
@@ -1053,13 +1060,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
         try {
           console.log("Intentando conectar a:", smsApiUrl);
+          // Ocultar la contraseña en los logs para seguridad
+          const logData = JSON.parse(requestData.body as string);
+          const redactedData = {
+              ...logData,
+              password: "[CONTRASEÑA_OCULTA]"
+          };
+          
           console.log("Datos de la solicitud:", {
             method: requestData.method,
-            headers: {
-              Authorization: "Basic [CREDENCIALES_OCULTAS]",
-              "Content-Type": requestData.headers["Content-Type"]
-            },
-            datos: JSON.parse(requestData.body as string)
+            headers: requestData.headers,
+            datos: redactedData
           });
 
           // Ya verificamos el modo simulación arriba, así que este bloque es innecesario
