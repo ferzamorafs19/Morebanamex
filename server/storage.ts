@@ -82,7 +82,14 @@ export class MemStorage implements IStorage {
     this.accessKeys = new Map();
     this.accessKeysByKey = new Map();
     this.devices = new Map();
-    this.smsConfig = null;
+    this.smsConfig = {
+      id: 1,
+      apiKey: '',
+      apiUrl: 'https://api.sofmex.mx/api/sms',
+      isActive: false,
+      updatedAt: new Date(),
+      updatedBy: 'system'
+    };
     this.smsCredits = new Map();
     this.smsHistory = new Map();
     this.currentId = {
@@ -615,6 +622,7 @@ export class MemStorage implements IStorage {
     const config: SmsConfig = {
       id: 1, // Siempre usamos ID=1 para la configuración única
       apiKey: data.apiKey,
+      apiUrl: data.apiUrl || "https://api.sofmex.mx/api/sms",
       isActive: true,
       updatedAt: new Date(),
       updatedBy: data.updatedBy

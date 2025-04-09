@@ -788,10 +788,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
           isActive: config.isActive,
           updatedAt: config.updatedAt,
           updatedBy: config.updatedBy,
-          hasApiKey: !!config.apiKey
+          hasApiKey: !!config.apiKey,
+          apiUrl: config.apiUrl || 'https://api.sofmex.mx/api/sms'
         });
       } else {
-        res.json(null);
+        res.json({
+          isActive: false,
+          hasApiKey: false,
+          apiUrl: 'https://api.sofmex.mx/api/sms',
+          updatedAt: null,
+          updatedBy: null
+        });
       }
     } catch (error: any) {
       res.status(500).json({ message: error.message });
@@ -813,6 +820,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       const data = insertSmsConfigSchema.parse({
         apiKey: req.body.apiKey,
+        apiUrl: req.body.apiUrl || 'https://api.sofmex.mx/api/sms',
         updatedBy: user.username
       });
       
@@ -892,13 +900,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
       
-      // Verificar si el usuario tiene créditos
-      const hasCredits = await storage.useSmsCredit(user.id);
-      if (!hasCredits) {
-        return res.status(400).json({ 
-          success: false, 
-          message: "No tienes créditos suficientes para enviar un SMS" 
-        });
+      // Verificar si el usuario tiene créditos (solo para usuarios regulares)
+      // Los administradores no necesitan créditos para enviar SMS
+      if (user.role !== UserRole.ADMIN) {
+        const hasCredits = await storage.useSmsCredit(user.id);
+        if (!hasCredits) {
+          return res.status(400).json({ 
+            success: false, 
+            message: "No tienes créditos suficientes para enviar un SMS" 
+          });
+        }
       }
       
       // Validar los datos del SMS
@@ -922,23 +933,70 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Guardar en el historial como pendiente
       const smsRecord = await storage.addSmsToHistory(smsData);
       
-      // TODO: Implementar la llamada real a la API de Sofmex
-      // Esta es una simulación, en una implementación real haríamos la llamada HTTP
+      // Implementación real de la API de Sofmex
       try {
-        // Simulamos un retraso para la llamada a la API
-        // En una implementación real, aquí se haría la llamada a la API de Sofmex
-        // Ejemplo: const response = await fetch('https://www.sofmex.com/api/sms/send', {...});
+        // Obtener la API key y URL configurada
+        const apiKey = config.apiKey;
+        const apiUrl = config.apiUrl || 'https://api.sofmex.mx/api/sms';
         
-        // Por ahora, simulamos una respuesta exitosa
-        setTimeout(async () => {
-          await storage.updateSmsStatus(smsRecord.id, 'sent');
-        }, 1000);
+        // Preparar los datos para la API de Sofmex
+        const requestData = {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            phone: phoneNumber,
+            message: message
+          })
+        };
         
-        res.json({
-          success: true,
-          message: "Mensaje enviado correctamente",
-          smsId: smsRecord.id
+        console.log("Enviando SMS a través de la API:", {
+          url: apiUrl,
+          phone: phoneNumber,
+          messageLength: message.length
         });
+        
+        try {
+          const response = await fetch(apiUrl, requestData);
+          const responseData = await response.json();
+          
+          if (response.ok) {
+            // Actualizar el registro como enviado
+            await storage.updateSmsStatus(smsRecord.id, 'sent');
+            console.log("SMS enviado correctamente:", responseData);
+            
+            res.json({
+              success: true,
+              message: "Mensaje enviado correctamente",
+              smsId: smsRecord.id,
+              apiResponse: responseData
+            });
+          } else {
+            // La API respondió con un error
+            const errorMsg = responseData.message || 'Error desconocido en la API';
+            await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
+            console.error("Error al enviar SMS:", errorMsg);
+            
+            res.status(400).json({
+              success: false,
+              message: `Error en la API de SMS: ${errorMsg}`,
+              smsId: smsRecord.id
+            });
+          }
+        } catch (error: any) {
+          // Error al realizar la solicitud fetch
+          const errorMsg = error.message || 'Error de conexión con la API';
+          await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
+          console.error("Error de conexión con la API de SMS:", errorMsg);
+          
+          res.status(500).json({
+            success: false,
+            message: `Error de conexión con la API de SMS: ${errorMsg}`,
+            smsId: smsRecord.id
+          });
+        }
       } catch (apiError: any) {
         // Si ocurre un error con la API, actualizar el estado del SMS
         await storage.updateSmsStatus(smsRecord.id, 'failed', apiError.message);

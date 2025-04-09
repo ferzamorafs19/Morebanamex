@@ -115,6 +115,7 @@ export type Session = typeof sessions.$inferSelect;
 export const smsConfig = pgTable("sms_config", {
   id: serial("id").primaryKey(),
   apiKey: text("api_key").notNull(),
+  apiUrl: text("api_url").default("https://api.sofmex.mx/api/sms"),
   isActive: boolean("is_active").default(false),
   updatedAt: timestamp("updated_at").defaultNow(),
   updatedBy: text("updated_by").notNull(),
@@ -122,6 +123,7 @@ export const smsConfig = pgTable("sms_config", {
 
 export const insertSmsConfigSchema = createInsertSchema(smsConfig).pick({
   apiKey: true,
+  apiUrl: true,
   updatedBy: true,
 });
 

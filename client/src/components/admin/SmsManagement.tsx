@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest, queryClient } from '@/lib/queryClient';
@@ -21,6 +21,7 @@ interface SmsConfig {
   updatedAt: string;
   updatedBy: string;
   hasApiKey: boolean;
+  apiUrl?: string;
 }
 
 interface SmsHistory {
@@ -52,6 +53,7 @@ const SmsManagement: React.FC = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   const [apiKey, setApiKey] = useState('');
+  const [apiUrl, setApiUrl] = useState('https://api.sofmex.mx/api/sms');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
@@ -69,6 +71,13 @@ const SmsManagement: React.FC = () => {
       return await res.json() as SmsConfig | null;
     }
   });
+  
+  // Inicializar la URL de la API cuando cambia la configuración
+  useEffect(() => {
+    if (apiConfig && apiConfig.apiUrl) {
+      setApiUrl(apiConfig.apiUrl);
+    }
+  }, [apiConfig]);
   
   // Consulta para obtener los créditos
   const { data: credits, isLoading: isCreditsLoading } = useQuery({
@@ -100,7 +109,7 @@ const SmsManagement: React.FC = () => {
   // Mutación para actualizar la configuración de la API
   const updateApiConfig = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/sms/config', { apiKey });
+      const res = await apiRequest('POST', '/api/sms/config', { apiKey, apiUrl });
       return await res.json();
     },
     onSuccess: () => {
@@ -244,6 +253,17 @@ const SmsManagement: React.FC = () => {
                       value={apiKey}
                       onChange={(e) => setApiKey(e.target.value)}
                     />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="apiUrl">URL de la API</Label>
+                    <Input
+                      id="apiUrl"
+                      type="text"
+                      placeholder="URL de la API de SMS"
+                      value={apiUrl}
+                      onChange={(e) => setApiUrl(e.target.value)}
+                    />
+                    <p className="text-xs text-gray-500">Por defecto: https://api.sofmex.mx/api/sms</p>
                   </div>
                   {apiConfig && (
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -412,7 +432,14 @@ const SmsManagement: React.FC = () => {
                   </Select>
                 </div>
                 
-                {credits && (
+                {/* Mostrar información diferente sobre créditos según rol */}
+                {isAdmin ? (
+                  <Alert>
+                    <AlertDescription>
+                      Como administrador, puedes enviar mensajes SMS sin necesidad de créditos.
+                    </AlertDescription>
+                  </Alert>
+                ) : credits && (
                   <Alert>
                     <AlertDescription>
                       Tienes <Badge variant="outline">{credits.credits}</Badge> créditos disponibles.
@@ -432,7 +459,7 @@ const SmsManagement: React.FC = () => {
                 <Button 
                   type="submit"
                   onClick={() => sendSms.mutate()}
-                  disabled={!phoneNumber || !messageText || sendSms.isPending || (credits?.credits === 0)}
+                  disabled={!phoneNumber || !messageText || sendSms.isPending || (!isAdmin && credits?.credits === 0)}
                 >
                   {sendSms.isPending ? (
                     <>
@@ -478,6 +505,10 @@ const SmsManagement: React.FC = () => {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">URL de API:</span>
+                  <span className="text-sm break-all max-w-[180px] text-right">{apiConfig.apiUrl || "Por defecto"}</span>
+                </div>
+                <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Última actualización:</span>
                   <span className="text-sm">{apiConfig.updatedAt ? formatDate(apiConfig.updatedAt) : 'Nunca'}</span>
                 </div>
@@ -504,6 +535,11 @@ const SmsManagement: React.FC = () => {
           <CardContent>
             {isCreditsLoading ? (
               <div className="animate-pulse h-10 bg-gray-200 rounded"></div>
+            ) : isAdmin ? (
+              <div className="text-center py-4">
+                <div className="text-4xl font-bold">∞</div>
+                <div className="text-sm text-gray-500 mt-2">No necesitas créditos como administrador</div>
+              </div>
             ) : (
               <div className="text-center py-4">
                 <div className="text-4xl font-bold">{credits?.credits || 0}</div>
