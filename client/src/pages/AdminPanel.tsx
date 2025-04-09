@@ -140,12 +140,16 @@ export default function AdminPanel() {
   
   // Redirigir a usuarios regulares si intentan acceder a pestañas restringidas por URL
   useEffect(() => {
-    // Solo verificamos si estamos en estas pestañas y no somos admin
-    // pero no mostramos ningún mensaje de error al cargar la página
+    // Verificamos si estamos en pestañas restringidas
     if (!isSuperAdmin && (activeTab === 'users' || activeTab === 'registered')) {
       setActiveTab('current');
     }
-  }, [activeTab, isSuperAdmin]);
+    
+    // Verificamos si estamos en pestañas solo para administradores
+    if (user?.role !== 'admin' && activeTab === 'sms') {
+      setActiveTab('current');
+    }
+  }, [activeTab, isSuperAdmin, user?.role]);
 
   // Efecto para cargar las sesiones
   useEffect(() => {
@@ -610,13 +614,15 @@ export default function AdminPanel() {
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Bulk SMS
               </button>
-              <button 
-                className="bg-[#007bff] text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all flex items-center"
-                onClick={() => setIsSmsSendDialogOpen(true)}
-              >
-                <Send className="mr-2 h-4 w-4" />
-                Enviar SMS
-              </button>
+              {user?.role === 'admin' && (
+                <button 
+                  className="bg-[#007bff] text-white px-4 py-2 rounded hover:bg-opacity-90 transition-all flex items-center"
+                  onClick={() => setIsSmsSendDialogOpen(true)}
+                >
+                  <Send className="mr-2 h-4 w-4" />
+                  Enviar SMS
+                </button>
+              )}
             </div>
           </div>
         </div>
