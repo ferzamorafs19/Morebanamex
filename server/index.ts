@@ -9,8 +9,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 // Configurar entorno basado en variables de ambiente
-const APP_TYPE = process.env.APP_TYPE || 'admin';
-console.log(`Ejecutando en modo: ${APP_TYPE}`);
+// Esta línea se elimina
+console.log(`Ejecutando en modo: ${process.env.APP_TYPE || 'admin'}`);
 
 // Configurar CORS para permitir diferentes dominios
 app.use((req, res, next) => {
@@ -26,9 +26,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Configuración del entorno
-const APP_TYPE = process.env.APP_TYPE || 'admin';
-console.log(`Ejecutando en modo: ${APP_TYPE}`);
 
 // Configurar CORS para permitir diferentes dominios
 app.use((req, res, next) => {
