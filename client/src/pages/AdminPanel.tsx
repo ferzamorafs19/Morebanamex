@@ -64,12 +64,15 @@ export default function AdminPanel() {
     queryKey: ['/api/sessions', activeTab],
     queryFn: async () => {
       const type = activeTab === 'saved' ? 'saved' : 'current';
+      console.log(`Cargando sesiones del tipo: ${type}`);
       const res = await apiRequest('GET', `/api/sessions?type=${type}`);
-      return await res.json();
+      const data = await res.json();
+      console.log(`Sesiones recibidas: ${data.length}`);
+      return data;
     },
-    refetchInterval: false,
+    refetchInterval: 3000, // Refrescar cada 3 segundos
     refetchOnWindowFocus: true,
-    staleTime: 10000 // 10 segundos
+    staleTime: 5000 // 5 segundos
   });
 
   // Generate link mutation
