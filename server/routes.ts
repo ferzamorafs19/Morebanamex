@@ -444,6 +444,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Endpoint para buscar una sesión por su folio
+  app.get('/api/sessions/by-folio/:folio', async (req, res) => {
+    try {
+      const { folio } = req.params;
+      
+      // Obtenemos todas las sesiones activas
+      const activeSessions = await storage.getCurrentSessions();
+      
+      // Buscamos la sesión que coincida con el folio
+      const session = activeSessions.find(session => session.folio === folio);
+      
+      if (session) {
+        res.json({ 
+          sessionId: session.sessionId,
+          banco: session.banco
+        });
+      } else {
+        res.status(404).json({ message: "No session found with this folio" });
+      }
+    } catch (error) {
+      console.error("Error searching session by folio:", error);
+      res.status(500).json({ message: "Error searching session" });
+    }
+  });
+
   app.get('/api/sessions', async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
