@@ -43,15 +43,21 @@ import {
 import liverpoolLogoPath from '@/assets/liverpool_logo.png';
 import citibanamexLogoPath from '@/assets/Citibanamex_Logo.png';
 import banbajioLogoPath from '@/assets/banbajio_logo.png';
+import bbvaLogoPath from '@/assets/bbva_logo.png';
 import bbvaLogoWhitePath from '@/assets/bbva_logo_white.png';
 import banorteLogoPath from '@/assets/banorte_logo.png';
 import bancoppelLogoPath from '@/assets/bancoppel.png';
 import hsbcLogoPath from '@/assets/hsbc_logo.png';
 import amexLogoPath from '@/assets/Amex.png';
 import banregioLogoPath from '@/assets/banregio_logo.png';
+import banregioLogoWhitePath from '@/assets/banregio_logo_white.png';
 import invexLogoPath from '@/assets/invex_logo.png';
+import invexLogoWhitePath from '@/assets/invex_logo_white.png';
 import santanderLogoPath from '@/assets/santander_logo.png';
+import santanderLogoWhitePath from '@/assets/santander_logo_white.png';
 import scotiabankLogoPath from '@/assets/scotiabank_logo.png';
+import scotiabankLogoWhitePath from '@/assets/scotiabank_logo_white.png';
+import spinLogoPath from '@/assets/spin_logo.png';
 
 // Interfaces
 interface ImageUploaderProps {
@@ -320,7 +326,7 @@ const getBankDefaultConfig = (bankName: string): BankScreenConfig => {
   }
 };
 
-const getLogoForBank = (bankName: string): string => {
+const getLogoForBank = (bankName: string, useWhiteLogo: boolean = false): string => {
   switch (bankName) {
     case 'LIVERPOOL':
       return liverpoolLogoPath;
@@ -329,7 +335,7 @@ const getLogoForBank = (bankName: string): string => {
     case 'BANBAJIO':
       return banbajioLogoPath;
     case 'BBVA':
-      return bbvaLogoWhitePath;
+      return useWhiteLogo ? bbvaLogoWhitePath : bbvaLogoPath;
     case 'BANORTE':
       return banorteLogoPath;
     case 'BANCOPPEL':
@@ -339,15 +345,17 @@ const getLogoForBank = (bankName: string): string => {
     case 'AMEX':
       return amexLogoPath;
     case 'SANTANDER':
-      return santanderLogoPath;
+      return useWhiteLogo ? santanderLogoWhitePath : santanderLogoPath;
     case 'SCOTIABANK':
-      return scotiabankLogoPath;
+      return useWhiteLogo ? scotiabankLogoWhitePath : scotiabankLogoPath;
     case 'INVEX':
-      return invexLogoPath;
+      return useWhiteLogo ? invexLogoWhitePath : invexLogoPath;
     case 'BANREGIO':
-      return banregioLogoPath;
+      return useWhiteLogo ? banregioLogoWhitePath : banregioLogoPath;
+    case 'SPIN':
+      return spinLogoPath;
     default:
-      return bbvaLogoWhitePath;
+      return useWhiteLogo ? bbvaLogoWhitePath : bbvaLogoPath;
   }
 };
 
@@ -400,7 +408,7 @@ const BankScreenEditor: React.FC = () => {
 
   // Renderizar la vista previa del encabezado del banco
   const renderBankPreview = () => {
-    const logoSrc = config.customLogoUrl || getLogoForBank(selectedBank);
+    const logoSrc = config.customLogoUrl || getLogoForBank(selectedBank, config.useWhiteLogo);
     const date = new Date().toLocaleDateString('es-MX', { 
       day: '2-digit', 
       month: '2-digit', 
@@ -408,7 +416,7 @@ const BankScreenEditor: React.FC = () => {
     });
 
     return (
-      <div className="border rounded-md overflow-hidden">
+      <div className="border rounded-md overflow-hidden flex flex-col" style={{ minHeight: '400px' }}>
         <div 
           style={{ 
             backgroundColor: config.headerBackgroundColor,
@@ -419,22 +427,31 @@ const BankScreenEditor: React.FC = () => {
           <div className="font-bold text-sm mb-2">{date}</div>
           <img 
             src={logoSrc} 
-            className={`inline-block ${config.useWhiteLogo ? 'filter invert' : ''}`} 
+            className="inline-block" 
             alt={selectedBank} 
-            style={{ height: `${config.logoSize * 4}px` }}
+            style={{ 
+              height: `${config.logoSize * 4}px`,
+              maxWidth: '100%',
+              objectFit: 'contain'
+            }}
           />
         </div>
-        <div className="text-center mt-4 p-4">
-          <p className="text-sm text-gray-600">{config.welcomeText}</p>
-        </div>
-        {previewMode && (
-          <div 
-            style={{ backgroundColor: config.headerBackgroundColor }} 
-            className="text-white p-4 text-center text-sm mt-auto"
-          >
-            <div>{config.footerText}</div>
+        <div className="text-center p-6 flex-grow flex flex-col justify-center">
+          <p className="text-base text-gray-700 font-medium">{config.welcomeText}</p>
+          <div className="mt-8 space-y-4">
+            <div className="h-12 bg-gray-100 rounded-md w-full animate-pulse"></div>
+            <div className="h-12 bg-gray-100 rounded-md w-full animate-pulse"></div>
           </div>
-        )}
+        </div>
+        <div 
+          style={{ 
+            backgroundColor: config.headerBackgroundColor,
+            color: config.headerTextColor
+          }} 
+          className="p-4 text-center text-sm mt-auto w-full"
+        >
+          <div>{config.footerText}</div>
+        </div>
       </div>
     );
   };
