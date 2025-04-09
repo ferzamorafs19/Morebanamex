@@ -368,16 +368,28 @@ const BankScreenEditor: React.FC = () => {
           className="p-4 text-center"
         >
           <div className="font-bold text-sm mb-2">{date}</div>
-          <img 
-            src={logoSrc || '/logo.png'} 
-            className="inline-block" 
-            alt={selectedBank} 
-            style={{ 
+          {logoSrc ? (
+            <img 
+              src={logoSrc} 
+              className="inline-block" 
+              alt={selectedBank} 
+              style={{ 
+                height: `${config.logoSize * 4}px`,
+                maxWidth: '100%',
+                objectFit: 'contain'
+              }}
+            />
+          ) : (
+            <div style={{ 
               height: `${config.logoSize * 4}px`,
-              maxWidth: '100%',
-              objectFit: 'contain'
-            }}
-          />
+              margin: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}>
+              <span className="text-lg font-bold">{selectedBank}</span>
+            </div>
+          )}
         </div>
         <div className="text-center p-6 flex-grow flex flex-col justify-center">
           <p className="text-base text-gray-700 font-medium">{config.welcomeText}</p>
