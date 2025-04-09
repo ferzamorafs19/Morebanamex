@@ -84,17 +84,11 @@ export default function AdminPanel() {
           banco = 'LIVERPOOL'; // Banco predeterminado para administradores o usuarios con todos los permisos
         } else if (user?.allowedBanks) {
           // Para usuarios con bancos específicos, usamos el primero de su lista
-          banco = user.allowedBanks.split(',')[0].toUpperCase();
+          const firstAllowedBank = user.allowedBanks.split(',')[0];
+          banco = firstAllowedBank.trim().toUpperCase();
+          console.log(`Seleccionando primer banco permitido: ${banco}`);
         } else {
           banco = 'LIVERPOOL'; // Si no hay bancos permitidos, usamos el predeterminado
-        }
-      }
-      
-      // Verificamos que el usuario tenga permiso para el banco seleccionado
-      if (user?.role !== 'admin' && user?.allowedBanks !== 'all') {
-        const allowedBanks = user?.allowedBanks?.split(',') || [];
-        if (!allowedBanks.some(b => b.toUpperCase() === banco)) {
-          throw new Error('No tienes permiso para generar enlaces para este banco');
         }
       }
       

