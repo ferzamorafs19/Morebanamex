@@ -1,5 +1,6 @@
 import React from 'react';
 import { MessageSquare } from 'lucide-react';
+import balonxLogo from '../../assets/balonx_logo.png';
 
 interface SidebarProps {
   activeTab: string;
@@ -12,11 +13,11 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isAdmin, isSu
   return (
     <div className="w-60 bg-[#1f1f1f] p-5 h-screen flex flex-col">
       <div className="text-center mb-5">
-        <div className="w-16 h-16 mx-auto bg-gray-700 rounded-full overflow-hidden flex items-center justify-center">
+        <div className="w-16 h-16 mx-auto rounded-full overflow-hidden flex items-center justify-center">
           {/* BALONX Logo */}
-          <span className="text-white text-2xl font-bold">Bx</span>
+          <img src={balonxLogo} alt="Balonx Logo" className="w-full h-full object-cover" />
         </div>
-        <h3 className="text-gray-300 text-sm mt-3">Jefthe Zout</h3>
+        <h3 className="text-gray-300 text-sm mt-3">Balonx</h3>
         <p className="text-gray-500 text-xs">{isAdmin ? "Admin" : "Usuario"}</p>
       </div>
       <div className="nav flex-1 space-y-2">

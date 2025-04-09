@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useLocation } from 'wouter';
+import balonxLogo from '../assets/balonx_logo.png';
 
 export default function AuthPage() {
   const { loginMutation, registerMutation, user } = useAuth();
@@ -75,22 +76,14 @@ export default function AuthPage() {
 
   return (
     <div className="flex min-h-screen bg-gray-100">
-      {/* Logo y descripción */}
+      {/* Logo */}
       <div className="hidden md:flex flex-col justify-center items-center w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-10 text-white">
-        <div className="max-w-md">
-          <h1 className="text-4xl font-bold mb-6">Sistema de Control Bancario</h1>
-          <p className="text-xl mb-6">
-            Accede al panel de administración para gestionar tus enlaces de clientes y supervisar operaciones bancarias en tiempo real.
-          </p>
-          <div className="p-5 bg-white/10 rounded-lg backdrop-blur-sm">
-            <p className="text-lg font-medium">Características principales:</p>
-            <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Monitoreo en tiempo real de datos del cliente</li>
-              <li>Gestión de sesiones y enlaces</li>
-              <li>Generación de códigos de 6 dígitos fáciles de leer</li>
-              <li>Interfaz intuitiva para control multibancos</li>
-            </ul>
-          </div>
+        <div className="max-w-md text-center">
+          <img 
+            src={balonxLogo} 
+            alt="Balonx Logo" 
+            className="w-64 h-64 mx-auto mb-8"
+          />
         </div>
       </div>
       
