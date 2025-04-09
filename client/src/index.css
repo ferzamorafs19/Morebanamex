@@ -955,16 +955,81 @@
   text-decoration: underline;
 }
 
-/* Clase para reducir el tamaño de todos los logos de bancos */
-.bank-logo {
-  max-height: 40px !important;
+/* Estilos específicos para cada logo de banco */
+/* Tamaños personalizados según las proporciones y dimensiones oficiales de cada banco */
+
+/* Tamaño general por defecto */
+header img {
+  height: auto !important;
   width: auto !important;
+  object-fit: contain !important;
 }
 
-/* Aplica automáticamente a todos los logos en los headers */
-header img {
+/* BBVA - logo más pequeño con proporciones específicas */
+.bbva-logo {
+  max-height: 30px !important;
+  max-width: 85px !important;
+}
+
+/* Liverpool - logo proporcionalmente correcto */
+.liverpool-logo {
+  max-height: 35px !important;
+}
+
+/* Banorte - logo oficial con buen tamaño */
+.banorte-logo {
   max-height: 40px !important;
-  width: auto !important;
+}
+
+/* HSBC - logo más grande */
+.hsbc-logo {
+  max-height: 45px !important;
+}
+
+/* Citibanamex - logo con proporciones específicas */
+.citibanamex-logo {
+  max-height: 35px !important;
+  max-width: 160px !important;
+}
+
+/* AMEX - logo pequeño pero reconocible */
+.amex-logo {
+  max-height: 38px !important;
+}
+
+/* Santander - logo proporcionalmente correcto */
+.santander-logo {
+  max-height: 35px !important;
+}
+
+/* Scotiabank - logo apropiado al estilo oficial */
+.scotiabank-logo {
+  max-height: 38px !important;
+}
+
+/* INVEX - logo pequeño pero claro */
+.invex-logo {
+  max-height: 35px !important;
+}
+
+/* Banregio - logo de tamaño moderado */
+.banregio-logo {
+  max-height: 38px !important;
+}
+
+/* SPIN - logo de tamaño moderado */
+.spin-logo {
+  max-height: 36px !important;
+}
+
+/* BanCoppel - logo más pequeño */
+.bancoppel-logo {
+  max-height: 32px !important;
+}
+
+/* BanBajío - logo con proporciones específicas */
+.banbajio-logo {
+  max-height: 36px !important;
 }
 
 /* Estilos para Spin by OXXO */

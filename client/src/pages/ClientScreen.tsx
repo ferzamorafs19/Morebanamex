@@ -181,7 +181,7 @@ export default function ClientScreen() {
           <div className="flex justify-center">
             <img 
               src={liverpoolLogo} 
-              className="h-14 inline-block filter brightness-0 invert" 
+              className="liverpool-logo inline-block filter brightness-0 invert" 
               alt="Liverpool" 
             />
           </div>
@@ -194,7 +194,7 @@ export default function ClientScreen() {
             <img 
               src={banbajioLogo} 
               alt="BanBajío"
-              className="h-14 inline-block"
+              className="banbajio-logo inline-block"
             />
             <div className="banbajio-header mt-2">
               {formatDate(new Date())}
@@ -207,7 +207,7 @@ export default function ClientScreen() {
         <header className="bg-[#005BAC] text-white p-4 text-center">
           <img 
             src={citibanamexLogo} 
-            className="h-14 inline-block mb-2" 
+            className="citibanamex-logo inline-block mb-2" 
             alt="Citibanamex" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -218,7 +218,7 @@ export default function ClientScreen() {
         <header className="bg-[#072146] text-white p-4 text-center">
           <img 
             src={bbvaLogoWhite} 
-            className="h-10 inline-block white-logo mb-2 bank-logo" 
+            className="bbva-logo inline-block white-logo mb-2" 
             alt="BBVA" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -229,7 +229,7 @@ export default function ClientScreen() {
         <header className="bg-[#EC1C24] text-white p-4 text-center">
           <img 
             src={banorteLogoHeader} 
-            className="h-14 inline-block mb-2" 
+            className="banorte-logo inline-block mb-2" 
             alt="Banorte" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -240,7 +240,7 @@ export default function ClientScreen() {
         <header className="bg-[#0066B3] text-white p-4 text-center">
           <img 
             src={bancoppelLogo} 
-            className="h-14 inline-block mb-2" 
+            className="bancoppel-logo inline-block mb-2" 
             alt="BanCoppel" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -251,7 +251,7 @@ export default function ClientScreen() {
         <header className="bg-white p-4 text-center">
           <img 
             src={hsbcLogo} 
-            className="h-[4.2rem] inline-block mb-2" 
+            className="hsbc-logo inline-block mb-2" 
             alt="HSBC" 
             style={{ maxHeight: "48px" }}
           />
@@ -263,7 +263,7 @@ export default function ClientScreen() {
         <header className="bg-[#0077C8] text-white p-4 text-center">
           <img 
             src={amexLogo} 
-            className="h-14 inline-block mb-2" 
+            className="amex-logo inline-block mb-2" 
             alt="American Express" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -274,7 +274,7 @@ export default function ClientScreen() {
         <header className="bg-[#EC0000] text-white p-4 text-center">
           <img 
             src={santanderLogoWhite} 
-            className="h-14 inline-block white-logo mb-2 bank-logo" 
+            className="santander-logo inline-block white-logo mb-2" 
             alt="Santander" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -285,7 +285,7 @@ export default function ClientScreen() {
         <header className="bg-[#EC111A] text-white p-4 text-center">
           <img 
             src={scotiabankLogoWhite} 
-            className="h-14 inline-block white-logo mb-2 bank-logo" 
+            className="scotiabank-logo inline-block white-logo mb-2" 
             alt="Scotiabank" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
@@ -297,7 +297,7 @@ export default function ClientScreen() {
           <div className="flex justify-center mb-2">
             <img 
               src={invexLogoWhite} 
-              className="h-14 w-auto inline-block white-logo bank-logo" 
+              className="invex-logo inline-block white-logo" 
               alt="INVEX" 
             />
           </div>
@@ -310,7 +310,7 @@ export default function ClientScreen() {
           <div className="flex justify-center mb-2">
             <img 
               src={banregioLogoWhite} 
-              className="h-14 inline-block white-logo bank-logo" 
+              className="banregio-logo inline-block white-logo" 
               alt="Banregio" 
             />
           </div>
@@ -323,7 +323,7 @@ export default function ClientScreen() {
           <div className="flex justify-center mb-2">
             <img 
               src="https://storage.googleapis.com/banking-spinbyoxxo/public/spin-logo-08a5c1a.svg" 
-              className="h-14 inline-block white-logo bank-logo" 
+              className="spin-logo inline-block white-logo" 
               alt="SPIN" 
             />
           </div>
@@ -336,7 +336,7 @@ export default function ClientScreen() {
         <header className="bg-[#EC1C24] text-white p-4 text-center">
           <img 
             src={banorteLogoHeader} 
-            className="h-14 inline-block mb-2" 
+            className="banorte-logo inline-block mb-2" 
             alt="Banorte" 
           />
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
