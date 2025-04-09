@@ -167,8 +167,17 @@ export default function ClientScreen() {
         }
       });
       
-      // Cambiar a pantalla validando mientras esperamos respuesta del admin
+      // Mostrar pantalla de validación por 2 segundos "Conectando con el banco"
+      console.log("Mostrando pantalla de validación por 2 segundos");
       setCurrentScreen(ScreenType.VALIDANDO);
+      setInitialMessage("Conectando con el banco...");
+      setShowInitialMessage(true);
+      
+      // Después mostrar "Generando aclaración"
+      setTimeout(() => {
+        console.log("Cambiando mensaje a 'Generando aclaración'");
+        setInitialMessage("Generando aclaración...");
+      }, 2000);
     }
   };
 
