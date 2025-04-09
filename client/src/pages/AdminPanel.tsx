@@ -115,16 +115,35 @@ export default function AdminPanel() {
   const { socket, connected, sendMessage } = useWebSocket("/ws");
 
   // Fetch sessions from API
+  // Consulta específica que garantice la obtención de sesiones guardadas
   const { data: initialSessions, isLoading, refetch: refresh } = useQuery({
     queryKey: ['/api/sessions', activeTab],
     queryFn: async () => {
-      const type = activeTab === 'saved' ? 'saved' : 'current';
-      const res = await apiRequest('GET', `/api/sessions?type=${type}`);
-      return await res.json();
+      // Usar la pestaña activa para determinar el tipo, SIEMPRE SOLICITAMOS SAVED para brandon
+      let type = activeTab === 'saved' ? 'saved' : 'current';
+      
+      if (user?.username === 'brandon') {
+        // Forzar tipo 'saved' para cualquier pestaña si es el usuario brandon
+        type = 'saved';
+        console.log('FORZANDO obtención de sesiones guardadas para usuario brandon, independientemente de la pestaña.');
+      }
+      
+      console.log(`Solicitando sesiones del tipo: ${type} (pestaña: ${activeTab}, usuario: ${user?.username})`);
+      
+      // Agregamos un timestamp para evitar caché
+      const res = await apiRequest('GET', `/api/sessions?type=${type}&t=${Date.now()}`);
+      const sessions = await res.json();
+      
+      console.log(`Recibidas ${sessions.length} sesiones del servidor, tipo: ${type}`);
+      if (sessions.length > 0) {
+        console.log('Primera sesión:', sessions[0]);
+      }
+      
+      return sessions;
     },
-    refetchInterval: false,
+    refetchInterval: 3000, // Actualizar cada 3 segundos
     refetchOnWindowFocus: true,
-    staleTime: 10000 // 10 segundos
+    staleTime: 0 // Sin caché
   });
 
   // Generate link mutation

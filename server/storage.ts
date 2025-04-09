@@ -567,9 +567,20 @@ export class MemStorage implements IStorage {
   }
 
   async getSavedSessions(): Promise<Session[]> {
-    return Array.from(this.sessions.values()).filter(
+    const savedSessions = Array.from(this.sessions.values()).filter(
       (session) => session.saved === true
     );
+    
+    console.log(`[Storage] getSavedSessions: Encontradas ${savedSessions.length} sesiones guardadas`);
+    
+    // Mostrar detalles de depuración para cada sesión guardada
+    if (savedSessions.length > 0) {
+      savedSessions.forEach(session => {
+        console.log(`[Storage] Sesión guardada ${session.sessionId}, creador: ${session.createdBy || 'desconocido'}, banco: ${session.banco}`);
+      });
+    }
+    
+    return savedSessions;
   }
 
   async getCurrentSessions(): Promise<Session[]> {
@@ -646,7 +657,16 @@ export class MemStorage implements IStorage {
       throw new Error(`Session with ID ${sessionId} not found`);
     }
     
-    const updatedSession = { ...session, saved: true };
+    // Asegurarse de preservar TODOS los campos, especialmente createdBy
+    const updatedSession = { 
+      ...session, 
+      saved: true,
+      // Garantizar que se conserva createdBy (por si acaso)
+      createdBy: session.createdBy 
+    };
+    
+    console.log(`Guardando sesión ${sessionId}, creada por: ${session.createdBy || 'desconocido'}`);
+    
     this.sessions.set(sessionId, updatedSession);
     return updatedSession;
   }

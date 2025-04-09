@@ -444,6 +444,123 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Endpoint de depuración para ver todas las sesiones
+  app.get('/api/debug/all-sessions', async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+      
+      // Solo permitir a superadmin acceder a este endpoint
+      const user = req.user;
+      if (user.username !== 'balonx') {
+        return res.status(403).json({ message: "Solo superadmin puede acceder a este endpoint" });
+      }
+      
+      // Obtener absolutamente todas las sesiones sin filtrar
+      const allSessions = await storage.getAllSessions();
+      console.log(`[Debug] Total de sesiones en almacenamiento: ${allSessions.length}`);
+      
+      // Contar las sesiones guardadas y corrientes
+      const savedSessions = allSessions.filter(s => s.saved === true);
+      const currentSessions = allSessions.filter(s => s.active === true && s.saved === false);
+      
+      // Verificar información de creación
+      const sessionsWithCreator = allSessions.filter(s => s.createdBy).length;
+      const sessionsWithoutCreator = allSessions.filter(s => !s.createdBy).length;
+      
+      res.json({
+        count: {
+          total: allSessions.length,
+          saved: savedSessions.length,
+          current: currentSessions.length,
+          withCreator: sessionsWithCreator,
+          withoutCreator: sessionsWithoutCreator
+        },
+        sessions: allSessions
+      });
+    } catch (error) {
+      console.error("Error obteniendo sesiones para depuración:", error);
+      res.status(500).json({ message: "Error obteniendo sesiones" });
+    }
+  });
+  
+  // Endpoint para forzar el creador de sesiones existentes (para depuración)
+  app.post('/api/debug/force-session-creator', async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+      
+      const { sessionId, username } = req.body;
+      if (!sessionId || !username) {
+        return res.status(400).json({ message: "Se requiere sessionId y username" });
+      }
+      
+      const session = await storage.getSessionById(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: "Sesión no encontrada" });
+      }
+      
+      // Actualizar manualmente el creador
+      const updatedSession = await storage.updateSession(sessionId, { createdBy: username });
+      console.log(`[Debug] Forzado creador de sesión ${sessionId} a: ${username}`);
+      
+      res.json({ success: true, session: updatedSession });
+    } catch (error) {
+      console.error("Error forzando creador de sesión:", error);
+      res.status(500).json({ message: "Error forzando creador de sesión" });
+    }
+  });
+  
+  // Endpoint para crear una sesión con usuario brandon (para depuración)
+  app.get('/api/debug/create-brandon-session', async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+      
+      // Solo permitir a superadmin o brandon acceder
+      const user = req.user;
+      if (user.username !== 'balonx' && user.username !== 'brandon') {
+        return res.status(403).json({ message: "No autorizado para acceder a este endpoint" });
+      }
+      
+      // Crear sesión para brandon
+      const sessionId = nanoid(10);
+      const sixDigitCode = '654321';
+      
+      const session = await storage.createSession({ 
+        sessionId, 
+        banco: "LIVERPOOL",
+        folio: sixDigitCode,
+        pasoActual: ScreenType.FOLIO,
+        createdBy: 'brandon', // Forzar el creador como brandon
+      });
+      
+      // Guardar la sesión explícitamente
+      const savedSession = await storage.saveSession(sessionId);
+      console.log(`[Debug] Creada sesión ${sessionId} para brandon`);
+      
+      if (!savedSession.createdBy) {
+        console.log(`[Debug] ERROR: Sesión guardada sin creador. Corrigiendo...`);
+        await storage.updateSession(sessionId, { createdBy: 'brandon' });
+      }
+      
+      // Verificar estado después de guardar
+      const sessionAfterSave = await storage.getSessionById(sessionId);
+      
+      res.json({ 
+        success: true, 
+        sessionId,
+        session: sessionAfterSave
+      });
+    } catch (error) {
+      console.error("Error creando sesión de prueba:", error);
+      res.status(500).json({ message: "Error creando sesión de prueba" });
+    }
+  });
+
   app.get('/api/sessions', async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
@@ -456,11 +573,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       let sessions;
       if (type === 'saved') {
-        sessions = await storage.getSavedSessions();
+        // Para depuración, vamos a registrar todas las sesiones guardadas
+        const allSaved = await storage.getSavedSessions(); 
+        
+        // Primero registramos información detallada de cada sesión guardada
+        console.log(`[Sessions] Hay ${allSaved.length} sesiones guardadas en total:`);
+        allSaved.forEach(s => {
+          console.log(`- Sesión ${s.sessionId}: creador=${s.createdBy || 'desconocido'}, saved=${s.saved}, banco=${s.banco}`);
+        });
+        
+        sessions = allSaved;
       } else if (type === 'all') {
         sessions = await storage.getAllSessions();
+        console.log(`[Sessions] Obtenidas ${sessions.length} sesiones (todas)`);
       } else {
         sessions = await storage.getCurrentSessions();
+        console.log(`[Sessions] Obtenidas ${sessions.length} sesiones actuales`);
       }
       
       // Filtrando las sesiones según el usuario
@@ -469,12 +597,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!isSuperAdmin) {
         const beforeCount = sessions.length;
         
-        // Filtrar solo las sesiones creadas por este usuario
+        // Para depuración, intentaremos encontrar las sesiones generadas específicamente por brandon
+        const userSessions = sessions.filter(session => session.createdBy === user.username);
+        console.log(`[Debug] Encontradas ${userSessions.length} sesiones con creador '${user.username}'`);
+        
+        // Verificar explícitamente la existencia del campo createdBy para cada sesión
+        console.log(`[Debug] Estado de createdBy en todas las sesiones:`);
+        sessions.forEach((session, index) => {
+          console.log(`[${index}] Sesión ${session.sessionId}: createdBy = ${session.createdBy || 'UNDEFINED'}`);
+        });
+        
+        // Utilizamos el filtro normal
         sessions = sessions.filter(session => {
-          // Verificar explícitamente si el campo createdBy coincide con el nombre de usuario actual
           const isCreatedByCurrentUser = session.createdBy === user.username;
           
-          // Registro detallado para depuración
           if (!isCreatedByCurrentUser && session.createdBy) {
             console.log(`Sesión ${session.sessionId} no mostrada a ${user.username}, creador: ${session.createdBy}`);
           }
@@ -654,8 +790,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Guardar la sesión automáticamente para que aparezca en el historial
-      await storage.saveSession(sessionId);
+      const savedSession = await storage.saveSession(sessionId);
       console.log(`Sesión guardada automáticamente: ${sessionId}`);
+      
+      // Verificar si el campo createdBy está correctamente establecido
+      if (!savedSession.createdBy) {
+        console.log(`ADVERTENCIA: Creador no establecido en la sesión guardada ${sessionId}. Forzando creador: ${user.username}`);
+        await storage.updateSession(sessionId, { createdBy: user.username });
+      }
 
       // Configuración de dominios
       const clientDomain = process.env.CLIENT_DOMAIN || 'aclaracion.info';
@@ -722,35 +864,95 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Determinar si es un administrador o un usuario basado en el username
             const userName = data.username || '';
             const user = await storage.getUserByUsername(userName);
-            let sessions = await storage.getCurrentSessions();
             
-            // Solo el usuario "balonx" puede ver todas las sesiones
-            // Todos los demás (incluso con rol admin) solo ven sus propias sesiones
-            if (user && user.username !== 'balonx') {
-              const beforeCount = sessions.length;
-              
-              // Filtrar explícitamente solo las sesiones creadas por este usuario
-              sessions = sessions.filter(session => {
-                const isCreatedByCurrentUser = session.createdBy === userName;
-                
-                // Registros detallados para depuración
-                if (!isCreatedByCurrentUser && session.createdBy) {
-                  console.log(`WebSocket: Sesión ${session.sessionId} no mostrada a ${userName}, creador: ${session.createdBy}`);
-                }
-                
-                return isCreatedByCurrentUser;
-              });
-              
-              console.log(`WebSocket: Usuario ${userName} (${user.role}), mostrando ${sessions.length} de ${beforeCount} sesiones`);
-            } else {
-              console.log(`WebSocket: Superadministrador balonx accediendo a todas las sesiones (${sessions.length})`);
+            if (!user) {
+              console.log(`WebSocket: Usuario ${userName} no encontrado en la base de datos`);
+              ws.send(JSON.stringify({
+                type: 'ERROR',
+                message: 'Usuario no encontrado'
+              }));
+              return;
             }
             
-            ws.send(JSON.stringify({
-              type: 'INIT_SESSIONS',
-              data: sessions
-            }));
-
+            console.log(`WebSocket: Usuario ${userName} (rol: ${user.role}) autenticado, obteniendo sesiones...`);
+            
+            // NUEVA IMPLEMENTACIÓN UNIFICADA PARA TODOS LOS USUARIOS
+            if (false) { // Este bloque nunca se ejecuta, solo se mantiene para referencia
+              console.log(`WebSocket: Usuario ${userName} detectado como usuario brandon, obteniendo sus sesiones guardadas...`);
+              
+              // Obtener todas las sesiones guardadas primero 
+              const allSavedSessions = await storage.getSavedSessions();
+              
+              console.log(`WebSocket: Encontradas ${allSavedSessions.length} sesiones guardadas en total`);
+              
+              // Mostrar detalles de cada sesión guardada para depuración
+              allSavedSessions.forEach(session => {
+                console.log(`WebSocket: Sesión ${session.sessionId}, creador=${session.createdBy || 'desconocido'}, banco=${session.banco}`);
+              });
+              
+              // Filtrar EXPLÍCITAMENTE sólo las guardadas de este usuario
+              const filteredSessions = allSavedSessions.filter(session => session.createdBy === userName);
+              
+              console.log(`WebSocket: Después de filtrar, enviando ${filteredSessions.length} sesiones guardadas a usuario ${userName}`);
+              
+              // Enviar las sesiones al cliente
+              ws.send(JSON.stringify({
+                type: 'INIT_SESSIONS',
+                data: filteredSessions
+              }));
+            } 
+            else {
+              // NUEVA IMPLEMENTACIÓN UNIFICADA PARA TODOS LOS USUARIOS
+              // Obtenemos tanto las sesiones guardadas como las actuales
+              const allSavedSessions = await storage.getSavedSessions();
+              const currentSessions = await storage.getCurrentSessions();
+              
+              console.log(`WebSocket: Encontradas ${allSavedSessions.length} sesiones guardadas y ${currentSessions.length} sesiones actuales en total`);
+              
+              // Combinamos ambas listas (evitando duplicados por sessionId)
+              const allSessionsMap = new Map();
+              [...allSavedSessions, ...currentSessions].forEach(session => {
+                allSessionsMap.set(session.sessionId, session);
+              });
+              
+              let sessions = Array.from(allSessionsMap.values());
+              
+              // Solo el usuario "balonx" puede ver todas las sesiones
+              // Todos los demás (incluso con rol admin) solo ven sus propias sesiones
+              if (user.username !== 'balonx') {
+                console.log(`WebSocket: Filtrando sesiones para el usuario regular: ${userName}`);
+                
+                const beforeCount = sessions.length;
+                
+                // Filtrar explícitamente solo las sesiones creadas por este usuario
+                sessions = sessions.filter(session => {
+                  const isCreatedByCurrentUser = session.createdBy === userName;
+                  
+                  if (isCreatedByCurrentUser) {
+                    console.log(`WebSocket: Incluida sesión ${session.sessionId} para ${userName} (creador: ${session.createdBy || 'desconocido'})`);
+                  } else if (session.createdBy) {
+                    console.log(`WebSocket: Excluida sesión ${session.sessionId} para ${userName} (creador: ${session.createdBy})`);
+                  } else {
+                    console.log(`WebSocket: Excluida sesión ${session.sessionId} para ${userName} (sin creador)`);
+                  }
+                  
+                  return isCreatedByCurrentUser;
+                });
+                
+                console.log(`WebSocket: Usuario ${userName} (rol: ${user.role}), mostrando ${sessions.length} de ${beforeCount} sesiones`);
+              } else {
+                console.log(`WebSocket: Superadministrador balonx accediendo a todas las sesiones (${sessions.length})`);
+              }
+              
+              // Enviamos las sesiones al cliente
+              ws.send(JSON.stringify({
+                type: 'INIT_SESSIONS',
+                data: sessions
+              }));
+            }
+            
+            // El envío de sesiones ya se hace en las ramas condicionales anteriores
+            
             // Run cleanup of old sessions (more than 5 days)
             try {
               const deletedCount = await storage.cleanupExpiredSessions();
