@@ -20,8 +20,9 @@ interface SmsConfig {
   isActive: boolean;
   updatedAt: string;
   updatedBy: string;
-  hasApiKey: boolean;
+  hasCredentials: boolean;
   apiUrl?: string;
+  username?: string;
 }
 
 interface SmsHistory {
@@ -52,7 +53,8 @@ const SmsManagement: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
-  const [apiKey, setApiKey] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [apiUrl, setApiUrl] = useState('https://api.sofmex.mx/api/sms');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
@@ -77,6 +79,7 @@ const SmsManagement: React.FC = () => {
     if (apiConfig && apiConfig.apiUrl) {
       setApiUrl(apiConfig.apiUrl);
     }
+    // No inicializamos username/password ya que son credenciales sensibles que no se devuelven de la API
   }, [apiConfig]);
   
   // Consulta para obtener los créditos
@@ -109,7 +112,7 @@ const SmsManagement: React.FC = () => {
   // Mutación para actualizar la configuración de la API
   const updateApiConfig = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/sms/config', { apiKey, apiUrl });
+      const res = await apiRequest('POST', '/api/sms/config', { username, password, apiUrl });
       return await res.json();
     },
     onSuccess: () => {
@@ -253,13 +256,23 @@ const SmsManagement: React.FC = () => {
                 </DialogHeader>
                 <div className="space-y-4 py-4">
                   <div className="space-y-2">
-                    <Label htmlFor="apiKey">API Key de SofMex</Label>
+                    <Label htmlFor="username">Usuario SofMex</Label>
                     <Input
-                      id="apiKey"
+                      id="username"
+                      type="text"
+                      placeholder="Usuario de SofMex"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Contraseña SofMex</Label>
+                    <Input
+                      id="password"
                       type="password"
-                      placeholder="API Key de SofMex"
-                      value={apiKey}
-                      onChange={(e) => setApiKey(e.target.value)}
+                      placeholder="Contraseña de SofMex"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                   </div>
                   <div className="space-y-2">
@@ -298,7 +311,7 @@ const SmsManagement: React.FC = () => {
                       <Badge variant={apiConfig.isActive ? "default" : "outline"}>
                         {apiConfig.isActive ? "Activo" : "Inactivo"}
                       </Badge>
-                      {apiConfig.hasApiKey && <span>(API Key configurada)</span>}
+                      {apiConfig.hasCredentials && <span>(Credenciales configuradas)</span>}
                     </div>
                   )}
                 </div>
@@ -313,7 +326,7 @@ const SmsManagement: React.FC = () => {
                   <Button 
                     type="submit"
                     onClick={() => updateApiConfig.mutate()}
-                    disabled={(!apiKey && !apiUrl) || updateApiConfig.isPending}
+                    disabled={(!username && !password && !apiUrl) || updateApiConfig.isPending}
                   >
                     {updateApiConfig.isPending ? "Guardando..." : "Guardar"}
                   </Button>
@@ -526,9 +539,9 @@ const SmsManagement: React.FC = () => {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">API Key:</span>
-                  <Badge variant={apiConfig.hasApiKey ? "outline" : "destructive"}>
-                    {apiConfig.hasApiKey ? "Configurada" : "No configurada"}
+                  <span className="text-sm font-medium">Credenciales:</span>
+                  <Badge variant={apiConfig.hasCredentials ? "outline" : "destructive"}>
+                    {apiConfig.hasCredentials ? "Configuradas" : "No configuradas"}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">

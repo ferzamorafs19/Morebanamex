@@ -84,7 +84,8 @@ export class MemStorage implements IStorage {
     this.devices = new Map();
     this.smsConfig = {
       id: 1,
-      apiKey: '',
+      username: null,
+      password: null,
       apiUrl: 'https://api.sofmex.mx/api/sms',
       isActive: false,
       updatedAt: new Date(),
@@ -620,9 +621,14 @@ export class MemStorage implements IStorage {
   
   async updateSmsConfig(data: InsertSmsConfig): Promise<SmsConfig> {
     // Preparar valores con tipos seguros
-    let apiKey: string | null = null;
-    if (typeof data.apiKey === 'string') {
-      apiKey = data.apiKey;
+    let username: string | null = null;
+    if (typeof data.username === 'string') {
+      username = data.username;
+    }
+    
+    let password: string | null = null;
+    if (typeof data.password === 'string') {
+      password = data.password;
     }
     
     let apiUrl: string = "https://api.sofmex.mx/api/sms";
@@ -632,7 +638,8 @@ export class MemStorage implements IStorage {
     
     const config: SmsConfig = {
       id: 1, // Siempre usamos ID=1 para la configuración única
-      apiKey,
+      username,
+      password,
       apiUrl,
       isActive: true,
       updatedAt: new Date(),

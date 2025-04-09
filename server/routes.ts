@@ -782,19 +782,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const config = await storage.getSmsConfig();
-      // Si hay una config, ocultamos la api key por seguridad, solo mostramos si está activa
+      // Si hay una config, ocultamos las credenciales por seguridad, solo mostramos si están activas
       if (config) {
         res.json({
           isActive: config.isActive,
           updatedAt: config.updatedAt,
           updatedBy: config.updatedBy,
-          hasApiKey: !!config.apiKey, // Verificar si hay API Key configurada
+          hasCredentials: !!(config.username && config.password), // Verificar si hay credenciales configuradas
           apiUrl: config.apiUrl || 'https://api.sofmex.mx/api/sms'
         });
       } else {
         res.json({
           isActive: false,
-          hasApiKey: false,
+          hasCredentials: false,
           apiUrl: 'https://api.sofmex.mx/api/sms',
           updatedAt: null,
           updatedBy: null
@@ -822,11 +822,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const apiUrl = req.body.apiUrl || 'https://api.sofmex.mx/api/sms';
       const simulationMode = apiUrl && (apiUrl.includes('simulacion') || apiUrl.includes('localhost'));
 
-      // En modo simulación, no requerimos API key
-      const apiKey = req.body.apiKey;
+      // En modo simulación, no requerimos credenciales
+      const username = req.body.username;
+      const password = req.body.password;
 
       const data = insertSmsConfigSchema.parse({
-        apiKey: apiKey,
+        username: username,
+        password: password,
         apiUrl: apiUrl,
         updatedBy: user.username
       });
@@ -838,7 +840,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isActive: boolean | null;
         updatedAt: Date | null;
         updatedBy: string;
-        hasApiKey: boolean;
+        hasCredentials: boolean;
         apiUrl: string | null;
         success: boolean;
         message?: string;
@@ -846,7 +848,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isActive: config.isActive,
         updatedAt: config.updatedAt,
         updatedBy: config.updatedBy,
-        hasApiKey: Boolean(config.apiKey), // Verificar si tiene API Key
+        hasCredentials: Boolean(config.username && config.password), // Verificar si tiene credenciales
         apiUrl: config.apiUrl,
         success: true
       };
@@ -929,11 +931,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Verificar si está en modo simulación
       const simulationMode = config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost'));
 
-      // En modo real, necesitamos una API key
-      if (!simulationMode && !config.apiKey) {
+      // En modo real, necesitamos credenciales
+      if (!simulationMode && (!config.username || !config.password)) {
         return res.status(400).json({ 
           success: false, 
-          message: "La API de SMS no tiene API Key configurada" 
+          message: "La API de SMS no tiene credenciales configuradas" 
         });
       }
 
@@ -972,15 +974,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Implementación real de la API de Sofmex
       try {
-        const apiKey = config.apiKey;
+        const username = config.username;
+        const password = config.password;
         const apiUrl = config.apiUrl || 'https://api.sofmex.mx/api/sms';
 
-        // Usamos directamente la API Key en lugar de autenticar con usuario/contraseña
+        // Usamos autenticación básica con usuario/contraseña
         const smsApiUrl = apiUrl;
+        
+        // Generar token de autenticación Basic
+        const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
+        
         const requestData = {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${apiKey}`,
+            'Authorization': `Basic ${base64Credentials}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -1000,7 +1007,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           console.log("Datos de la solicitud:", {
             method: requestData.method,
             headers: {
-              Authorization: "Bearer [API_KEY_OCULTA]",
+              Authorization: "Basic [CREDENCIALES_OCULTAS]",
               "Content-Type": requestData.headers["Content-Type"]
             },
             datos: JSON.parse(requestData.body as string)
