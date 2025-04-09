@@ -946,11 +946,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      // Verificar si está en modo simulación (ahora con la URL simple 'simulacion')
-      const simulationMode = config.apiUrl === 'simulacion' || 
+      // Verificar si está en modo simulación (con la URL simple 'simulacion')
+      const simulationMode = !config.apiUrl || 
+                           config.apiUrl === 'simulacion' || 
                            (config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost')));
+      
+      console.log("Modo simulación detectado:", simulationMode);
 
-      // Verificamos si tiene credenciales válidas o está en modo simulación
+      // En modo simulación no necesitamos credenciales válidas
       const hasValidCredentials = simulationMode || (!!config.username && !!config.password);
       
       // Si no estamos en modo simulación y no tenemos credenciales válidas, no podemos enviar
@@ -994,7 +997,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Guardar en el historial como pendiente
       const smsRecord = await storage.addSmsToHistory(smsData);
 
-      // Implementación real de la API de Sofmex
+      // Verificar si estamos en modo simulación antes de continuar
+      if (simulationMode) {
+        console.log("Detectado modo simulación - Procesando SMS simulado");
+        // Actualizar el registro como enviado (simulado)
+        await storage.updateSmsStatus(smsRecord.id, 'sent');
+        
+        return res.json({
+          success: true,
+          message: "Mensaje enviado correctamente (simulado)",
+          smsId: smsRecord.id,
+          simulated: true
+        });
+      }
+      
+      // Implementación real de la API de Sofmex (sólo se ejecuta si no estamos en modo simulación)
       try {
         const username = config.username;
         const password = config.password;
@@ -1003,11 +1020,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // URL específica para envío de SMS según la documentación
         let smsApiUrl = `${apiUrl}/enviarSms`;
-        
-        // Si es una URL simplificada para modo simulación
-        if (apiUrl === 'simulacion') {
-          smsApiUrl = 'simulacion';
-        }
         
         // Generar token de autenticación Basic
         const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
