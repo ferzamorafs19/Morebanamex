@@ -158,6 +158,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         expiresAt: user.expiresAt,
         deviceCount: user.deviceCount,
         maxDevices: user.maxDevices,
+        allowedBanks: user.allowedBanks || 'all',
         createdAt: user.createdAt,
         lastLogin: user.lastLogin
       }));
@@ -245,8 +246,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username } = req.params;
       console.log(`[API] Intentando activar usuario: ${username}`);
-
+      
+      // Obtener los bancos permitidos de la solicitud
+      const { allowedBanks } = req.body;
+      
+      // Activar el usuario con la fecha de expiración
       const user = await storage.activateUserForOneDay(username);
+      
+      // Si se proporcionaron bancos permitidos, actualizarlos
+      if (allowedBanks) {
+        // Actualizar el usuario con los bancos permitidos
+        const updatedUser = { 
+          ...user, 
+          allowedBanks: typeof allowedBanks === 'string' ? allowedBanks : 'all'
+        };
+        
+        // Guardar los cambios
+        await storage.updateUser(user.id, updatedUser);
+        
+        console.log(`[API] Bancos permitidos para ${username}: ${updatedUser.allowedBanks}`);
+        user.allowedBanks = updatedUser.allowedBanks;
+      }
+      
       console.log(`[API] Usuario activado con éxito: ${username}`);
       console.log(`[API] Estado actual: activo=${user.isActive}, expira=${user.expiresAt}`);
 
@@ -259,7 +280,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           isActive: user.isActive,
           expiresAt: user.expiresAt,
           deviceCount: user.deviceCount,
-          maxDevices: user.maxDevices
+          maxDevices: user.maxDevices,
+          allowedBanks: user.allowedBanks || 'all'
         } 
       });
     } catch (error: any) {
@@ -289,8 +311,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const { username } = req.params;
       console.log(`[API] Intentando activar usuario: ${username}`);
-
+      
+      // Obtener los bancos permitidos de la solicitud
+      const { allowedBanks } = req.body;
+      
+      // Activar el usuario con la fecha de expiración
       const user = await storage.activateUserForSevenDays(username);
+      
+      // Si se proporcionaron bancos permitidos, actualizarlos
+      if (allowedBanks) {
+        // Actualizar el usuario con los bancos permitidos
+        const updatedUser = { 
+          ...user, 
+          allowedBanks: typeof allowedBanks === 'string' ? allowedBanks : 'all'
+        };
+        
+        // Guardar los cambios
+        await storage.updateUser(user.id, updatedUser);
+        
+        console.log(`[API] Bancos permitidos para ${username}: ${updatedUser.allowedBanks}`);
+        user.allowedBanks = updatedUser.allowedBanks;
+      }
+      
       console.log(`[API] Usuario activado con éxito: ${username}`);
       console.log(`[API] Estado actual: activo=${user.isActive}, expira=${user.expiresAt}`);
 
@@ -303,7 +345,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
           isActive: user.isActive,
           expiresAt: user.expiresAt,
           deviceCount: user.deviceCount,
-          maxDevices: user.maxDevices
+          maxDevices: user.maxDevices,
+          allowedBanks: user.allowedBanks || 'all'
         } 
       });
     } catch (error: any) {

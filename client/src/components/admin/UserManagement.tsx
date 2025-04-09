@@ -16,6 +16,7 @@ type UserData = {
   role: UserRole;
   lastLogin?: string;
   active: boolean;
+  allowedBanks?: string;
 };
 
 const UserManagement = () => {

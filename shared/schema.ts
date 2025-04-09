@@ -10,6 +10,24 @@ export enum UserRole {
   USER = "user"
 }
 
+// Bancos disponibles
+export enum BankType {
+  ALL = "all",
+  LIVERPOOL = "liverpool",
+  CITIBANAMEX = "citibanamex",
+  BANBAJIO = "banbajio",
+  BBVA = "bbva",
+  BANORTE = "banorte",
+  BANCOPPEL = "bancoppel",
+  HSBC = "hsbc",
+  AMEX = "amex",
+  SANTANDER = "santander",
+  SCOTIABANK = "scotiabank",
+  INVEX = "invex",
+  BANREGIO = "banregio",
+  SPIN = "spin"
+}
+
 // Tabla de usuarios del sistema
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -20,6 +38,7 @@ export const users = pgTable("users", {
   expiresAt: timestamp("expires_at"), // Fecha de expiración de la cuenta
   deviceCount: integer("device_count").default(0), // Contador de dispositivos activos
   maxDevices: integer("max_devices").default(3), // Máximo de dispositivos permitidos
+  allowedBanks: text("allowed_banks").default('all'), // Bancos permitidos: 'all' o lista separada por comas
   createdAt: timestamp("created_at").defaultNow(),
   lastLogin: timestamp("last_login"),
 });

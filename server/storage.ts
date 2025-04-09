@@ -22,6 +22,7 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   validateUser(username: string, password: string): Promise<User | undefined>;
   updateUserLastLogin(id: number): Promise<User>;
+  updateUser(id: number, data: Partial<User>): Promise<User>;
   getAllUsers(): Promise<User[]>;
   toggleUserStatus(username: string): Promise<boolean>;
   activateUserForOneDay(username: string): Promise<User>;
@@ -146,6 +147,7 @@ export class MemStorage implements IStorage {
       expiresAt: null,
       deviceCount: 0,
       maxDevices: 3,
+      allowedBanks: 'all', // Por defecto, todos los bancos están permitidos
       createdAt: new Date(),
       lastLogin: null
     };
@@ -197,6 +199,20 @@ export class MemStorage implements IStorage {
     }
     
     const updatedUser = { ...user, lastLogin: new Date() };
+    this.users.set(id, updatedUser);
+    this.usersByUsername.set(user.username, updatedUser);
+    
+    return updatedUser;
+  }
+  
+  async updateUser(id: number, data: Partial<User>): Promise<User> {
+    const user = await this.getUserById(id);
+    
+    if (!user) {
+      throw new Error(`Usuario con ID ${id} no encontrado`);
+    }
+    
+    const updatedUser = { ...user, ...data };
     this.users.set(id, updatedUser);
     this.usersByUsername.set(user.username, updatedUser);
     
