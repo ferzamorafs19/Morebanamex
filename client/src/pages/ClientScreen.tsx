@@ -251,8 +251,9 @@ export default function ClientScreen() {
         <header className="bg-white p-4 text-center">
           <img 
             src={hsbcLogo} 
-            className="h-14 inline-block mb-2" 
+            className="h-[4.2rem] inline-block mb-2" 
             alt="HSBC" 
+            style={{ maxHeight: "48px" }}
           />
           <div className="font-bold text-sm text-black">{formatDate(new Date())}</div>
         </header>
