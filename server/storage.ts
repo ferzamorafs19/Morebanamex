@@ -612,6 +612,7 @@ export class MemStorage implements IStorage {
       createdAt,
       active,
       saved,
+      createdBy: data.createdBy || null,
     };
 
     this.sessions.set(data.sessionId, session);

