@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { BankType } from '@shared/schema';
 import { 
   Card, 
   CardContent, 
@@ -21,40 +22,38 @@ import {
   TabsList, 
   TabsTrigger 
 } from '@/components/ui/tabs';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
-import { BankType } from '@shared/schema';
-import { 
-  Save, 
-  Upload, 
-  Image, 
-  Type, 
-  PanelLeftClose, 
-  PanelRightClose, 
-  Palette, 
-  Layout, 
-  Loader2 
+import { Slider } from '@/components/ui/slider';
+import {
+  Save,
+  Loader2,
+  Palette,
+  Type,
+  Layout,
+  Upload,
+  PanelLeftClose,
+  PanelRightClose
 } from 'lucide-react';
 
 // Importamos los logos de bancos
 import liverpoolLogoPath from '@/assets/liverpool_logo.png';
 import citibanamexLogoPath from '@/assets/Citibanamex_Logo.png';
 import banbajioLogoPath from '@/assets/banbajio_logo.png';
-import bbvaLogoWhitePath from '@/assets/bbva_logo.png';
-import banorteLogoPath from '@/assets/Banorte-01.png';
+import bbvaLogoWhitePath from '@/assets/bbva_logo_white.png';
+import banorteLogoPath from '@/assets/banorte_logo.png';
 import bancoppelLogoPath from '@/assets/bancoppel.png';
-import hsbcLogoPath from '@/assets/Hsbc.png';
+import hsbcLogoPath from '@/assets/hsbc_logo.png';
 import amexLogoPath from '@/assets/Amex.png';
 import banregioLogoPath from '@/assets/banregio_logo.png';
-import invexLogoPath from '@/assets/Invex.png';
+import invexLogoPath from '@/assets/invex_logo.png';
 import santanderLogoPath from '@/assets/santander_logo.png';
 import scotiabankLogoPath from '@/assets/scotiabank_logo.png';
 
-// Componentes auxiliares
+// Interfaces
 interface ImageUploaderProps {
   onImageChange: (url: string) => void;
   previewUrl: string | null;
@@ -62,6 +61,24 @@ interface ImageUploaderProps {
   onSizeChange: (size: number) => void;
 }
 
+interface ColorPickerProps {
+  label: string;
+  value: string;
+  onChange: (value: string) => void;
+}
+
+interface BankScreenConfig {
+  bank: string;
+  headerBackgroundColor: string;
+  headerTextColor: string;
+  logoSize: number;
+  customLogoUrl: string | null;
+  welcomeText: string;
+  footerText: string;
+  useWhiteLogo: boolean;
+}
+
+// Componentes auxiliares
 const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageChange, previewUrl, size, onSizeChange }) => {
   const fileInputRef = React.useRef<HTMLInputElement>(null);
   
@@ -141,12 +158,6 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onImageChange, previewUrl
   );
 };
 
-interface ColorPickerProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-}
-
 const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange }) => {
   return (
     <div className="flex flex-col space-y-1.5">
@@ -168,17 +179,6 @@ const ColorPicker: React.FC<ColorPickerProps> = ({ label, value, onChange }) => 
     </div>
   );
 };
-
-interface BankScreenConfig {
-  bank: string;
-  headerBackgroundColor: string;
-  headerTextColor: string;
-  logoSize: number;
-  customLogoUrl: string | null;
-  welcomeText: string;
-  footerText: string;
-  useWhiteLogo: boolean;
-}
 
 const defaultConfig: BankScreenConfig = {
   bank: 'BBVA',
@@ -320,7 +320,7 @@ const getBankDefaultConfig = (bankName: string): BankScreenConfig => {
   }
 };
 
-const getLogoForBank = (bankName: string) => {
+const getLogoForBank = (bankName: string): string => {
   switch (bankName) {
     case 'LIVERPOOL':
       return liverpoolLogoPath;
@@ -351,6 +351,7 @@ const getLogoForBank = (bankName: string) => {
   }
 };
 
+// Componente principal
 const BankScreenEditor: React.FC = () => {
   const { toast } = useToast();
   const [selectedBank, setSelectedBank] = useState<string>('BBVA');
@@ -377,7 +378,6 @@ const BankScreenEditor: React.FC = () => {
       toast({
         title: "Configuración guardada",
         description: `La configuración para ${selectedBank} ha sido actualizada correctamente.`,
-        variant: "default",
       });
     } catch (error) {
       toast({
@@ -395,7 +395,6 @@ const BankScreenEditor: React.FC = () => {
     toast({
       title: "Configuración restablecida",
       description: `Se han restaurado los valores predeterminados para ${selectedBank}.`,
-      variant: "default",
     });
   };
 
@@ -420,7 +419,7 @@ const BankScreenEditor: React.FC = () => {
           <div className="font-bold text-sm mb-2">{date}</div>
           <img 
             src={logoSrc} 
-            className={`h-${config.logoSize} inline-block ${config.useWhiteLogo ? 'white-logo' : ''}`} 
+            className={`inline-block ${config.useWhiteLogo ? 'filter invert' : ''}`} 
             alt={selectedBank} 
             style={{ height: `${config.logoSize * 4}px` }}
           />
