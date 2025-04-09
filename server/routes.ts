@@ -463,15 +463,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sessions = await storage.getCurrentSessions();
       }
       
-      // Filtrar las sesiones por usuario, excepto para el usuario admin principal (balonx)
-      if (currentUser.role === 'admin' && currentUser.username === 'balonx') {
-        // El administrador principal (balonx) puede ver todas las sesiones
-        res.json(sessions);
-      } else {
-        // Los demás usuarios solo pueden ver sus propias sesiones
-        const userSessions = sessions.filter(session => session.createdBy === currentUser.username);
-        res.json(userSessions);
-      }
+      // Todos los usuarios, incluido el administrador, solo pueden ver sus propias sesiones
+      const userSessions = sessions.filter(session => session.createdBy === currentUser.username);
+      res.json(userSessions);
     } catch (error) {
       console.error("Error fetching sessions:", error);
       res.status(500).json({ message: "Error fetching sessions" });
@@ -660,12 +654,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
             adminClients.add(ws);
             console.log('Admin client registered');
 
-            // Send sessions to the admin - current sessions by default
-            const sessions = await storage.getCurrentSessions();
-            ws.send(JSON.stringify({
-              type: 'INIT_SESSIONS',
-              data: sessions
-            }));
+            // Identifica el usuario en la sesión
+            const cookies = req.headers.cookie?.split(';').reduce((acc, cookie) => {
+              const [key, value] = cookie.trim().split('=');
+              return { ...acc, [key]: value };
+            }, {} as Record<string, string>) || {};
+            
+            let userId = null;
+            if (cookies.connect_sid) {
+              try {
+                // Obtener sesiones del usuario actual solamente
+                const sessions = await storage.getCurrentSessions();
+                
+                // Extraer el username de alguna manera - por ejemplo, con una cookie encriptada
+                // Como no tenemos una forma directa de obtener el usuario desde el WebSocket,
+                // filtramos las sesiones después en el cliente
+                ws.send(JSON.stringify({
+                  type: 'INIT_SESSIONS',
+                  data: sessions
+                }));
+              } catch (error) {
+                console.error("Error getting sessions:", error);
+                ws.send(JSON.stringify({
+                  type: 'INIT_SESSIONS',
+                  data: []
+                }));
+              }
+            } else {
+              console.log("No cookie found, sending empty sessions");
+              ws.send(JSON.stringify({
+                type: 'INIT_SESSIONS',
+                data: []
+              }));
+            }
 
             // Run cleanup of old sessions (more than 5 days)
             try {

