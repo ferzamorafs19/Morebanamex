@@ -991,14 +991,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       try {
         const username = config.username;
         const password = config.password;
-        const apiUrl = config.apiUrl || 'https://api.sofmex.mx/api/sms';
-
-        // Usamos autenticación básica con usuario/contraseña
-        const smsApiUrl = apiUrl;
+        // Ajustar URL base según la documentación de SofMex
+        const apiUrl = config.apiUrl || 'https://www.sofmex.com/api';
+        
+        // URL específica para envío de SMS según la documentación
+        let smsApiUrl = `${apiUrl}/enviarSms`;
+        
+        // Si es una URL simplificada para modo simulación
+        if (apiUrl === 'simulacion') {
+          smsApiUrl = 'simulacion';
+        }
         
         // Generar token de autenticación Basic
         const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
         
+        // Formato del cuerpo según la documentación de SofMex
         const requestData = {
           method: 'POST',
           headers: {
@@ -1006,8 +1013,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            phone: phoneNumber,
-            message: message
+            telefono: phoneNumber,           // Cambio de 'phone' a 'telefono'
+            mensaje: message,                // Cambio de 'message' a 'mensaje'
+            usuario: username,               // Agregar usuario
+            credenciales: password           // Agregar credenciales
           })
         };
 

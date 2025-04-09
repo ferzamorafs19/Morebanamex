@@ -55,7 +55,7 @@ const SmsManagement: React.FC = () => {
   const isAdmin = user?.role === 'admin';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [apiUrl, setApiUrl] = useState('https://api.sofmex.mx/api/sms');
+  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
@@ -285,8 +285,8 @@ const SmsManagement: React.FC = () => {
                       onChange={(e) => setApiUrl(e.target.value)}
                     />
                     <div className="flex flex-col gap-1 text-xs text-gray-500">
-                      <p>Por defecto: https://api.sofmex.mx/api/sms</p>
-                      <p>Para pruebas sin API key, usa: https://localhost:3000/simulacion</p>
+                      <p>Por defecto: https://www.sofmex.com/api</p>
+                      <p>Para pruebas, usa simplemente: simulacion</p>
                     </div>
                     <div className="flex items-center space-x-2 mt-2">
                       <Switch
@@ -296,7 +296,7 @@ const SmsManagement: React.FC = () => {
                           if (checked) {
                             setApiUrl('simulacion');
                           } else {
-                            setApiUrl('https://api.sofmex.mx/api/sms');
+                            setApiUrl('https://www.sofmex.com/api');
                           }
                         }}
                       />
