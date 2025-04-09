@@ -1025,7 +1025,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         
         // URL específica para envío de SMS según la documentación de SofMex
         // Ver la documentación en https://www.sofmex.com/api/swagger-ui/index.html
-        let smsApiUrl = `${apiUrl}/api/sms`;
+        let smsApiUrl = `${apiUrl}/api/sms/enviar`;
         
         // Generar token de autenticación Basic
         const base64Credentials = Buffer.from(`${username}:${password}`).toString('base64');
@@ -1038,10 +1038,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            telefono: phoneNumber,           // Cambio de 'phone' a 'telefono'
-            mensaje: messageContent,        // Cambio de 'message' a 'mensaje'
-            usuario: username,               // Agregar usuario
-            credenciales: password           // Agregar credenciales
+            numero: phoneNumber,             // El número de teléfono (SofMex usa "numero")
+            mensaje: messageContent,         // El mensaje a enviar
+            remitente: "BCP",                // Remitente que aparecerá como origen
+            tipo: 1                          // Tipo 1 para SMS normal
           })
         };
 
