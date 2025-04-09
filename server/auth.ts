@@ -53,10 +53,11 @@ export function setupAuth(app: Express) {
     saveUninitialized: true,
     store: sessionStore,
     cookie: {
-      secure: false, // Permite cookies en HTTP
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
-      sameSite: 'lax',
-      httpOnly: true
+      secure: false, // Permite cookies en entorno de desarrollo
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días
+      sameSite: 'none',
+      httpOnly: false, // Para desarrollo en Replit
+      path: '/'
     },
   };
 
