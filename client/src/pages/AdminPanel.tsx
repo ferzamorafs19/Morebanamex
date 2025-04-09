@@ -39,6 +39,61 @@ export default function AdminPanel() {
       }
     }
   }, [user]);
+  
+  // Verificar si hay parámetros para generar un enlace automáticamente
+  useEffect(() => {
+    if (!user) return;
+    
+    const params = new URLSearchParams(window.location.search);
+    const generateLink = params.get('generateLink');
+    const banco = params.get('banco') || 'LIVERPOOL';
+    
+    // Si está solicitando generar un enlace automáticamente y el usuario está autenticado
+    if (generateLink === 'true') {
+      console.log('Generando enlace automáticamente para banco:', banco);
+      
+      // Hacer la solicitud a la API directamente
+      fetch(`/api/generate-link?banco=${banco}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Error al generar enlace');
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('Enlace generado correctamente:', data);
+        
+        // Abrir la sesión del cliente automáticamente
+        if (data.link) {
+          window.open(data.link, '_blank');
+        }
+        
+        // Notificar al usuario
+        toast({
+          title: "Enlace generado",
+          description: `Código: ${data.code}. Se ha abierto en una nueva pestaña.`
+        });
+        
+        // Limpiar los parámetros de URL
+        const newUrl = window.location.pathname;
+        window.history.pushState({}, '', newUrl);
+      })
+      .catch(error => {
+        console.error('Error generando enlace:', error);
+        toast({
+          title: "Error al generar enlace",
+          description: error.message,
+          variant: "destructive"
+        });
+      });
+    }
+  }, [user, toast]);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [clientLink, setClientLink] = useState<string>('');
   const [clientCode, setClientCode] = useState<string>('');

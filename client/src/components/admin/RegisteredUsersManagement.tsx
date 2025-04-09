@@ -369,8 +369,14 @@ const RegisteredUsersManagement: React.FC = () => {
       }
     }
     
-    // Generar el enlace
-    generateLinkMutation.mutate(bancoSeleccionado);
+    // Generar el enlace directamente (alternativa para cuando hay problemas de autenticación)
+    if (user.username === "balonx") {
+      // Para el administrador, usamos la API normal
+      generateLinkMutation.mutate(bancoSeleccionado);
+    } else {
+      // Abrir directamente la URL en modo admin en una nueva pestaña
+      window.open(`/admin?generateLink=true&banco=${bancoSeleccionado}`, '_blank');
+    }
   };
   
   // Función para copiar el enlace al portapapeles
