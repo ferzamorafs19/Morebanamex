@@ -604,7 +604,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
       console.log(`URL del cliente: ${link}`);
-      console.log(`Generado por usuario: ${user.username}, Permisos de bancos: ${user.allowedBanks || 'all'}`);
+      console.log(`Generado por usuario: ${user.username}, Permisos de bancos: ${(user as any).allowedBanks || 'all'}`);
 
       // Notificar a los clientes de admin sobre el nuevo enlace
       broadcastToAdmins(JSON.stringify({
