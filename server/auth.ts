@@ -49,14 +49,15 @@ export function setupAuth(app: Express) {
   // Configurar sesiones y passport
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || nanoid(),
-    resave: true,
-    saveUninitialized: true,
+    resave: false,
+    saveUninitialized: false,
     store: sessionStore,
+    name: 'banksystem.sid', // Nombre específico para evitar conflictos
     cookie: {
-      secure: false, // Permite cookies en entorno de desarrollo
+      secure: process.env.NODE_ENV === 'production', // Cookies seguras solo en producción
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días
-      sameSite: 'none',
-      httpOnly: false, // Para desarrollo en Replit
+      sameSite: 'lax', // Menos restrictivo que 'strict', más seguro que 'none'
+      httpOnly: true, // Mayor seguridad
       path: '/'
     },
   };
@@ -146,68 +147,110 @@ export function setupAuth(app: Express) {
 
   // Ruta para login
   app.post("/api/login", (req, res, next) => {
-    passport.authenticate("local", (err: Error, user: Express.User | false | null, info: any) => {
-      if (err) return next(err);
-      if (!user) {
-        return res.status(401).json({ message: "Credenciales inválidas" });
+    // Regenerar ID de sesión antes de iniciar sesión
+    req.session.regenerate((regenerateErr) => {
+      if (regenerateErr) {
+        console.error("[Auth] Error regenerando sesión antes del login:", regenerateErr);
+        // Continuar a pesar del error
       }
       
-      // Verificar límite de dispositivos
-      if (user.deviceCount >= user.maxDevices && user.role !== UserRole.ADMIN) {
-        console.log(`[Auth] Usuario ${user.username} - Límite de dispositivos excedido: ${user.deviceCount}/${user.maxDevices}`);
-        return res.status(403).json({ 
-          message: "Has alcanzado el límite de dispositivos conectados. Cierra sesión en otro dispositivo para continuar.",
-          error: "DEVICE_LIMIT_REACHED",
-          deviceCount: user.deviceCount,
-          maxDevices: user.maxDevices
-        });
-      }
-      
-      req.login(user, async (loginErr) => {
-        if (loginErr) return next(loginErr);
-        
-        // Incrementar contador de dispositivos y actualizar fecha de último login
-        try {
-          // Los admins no están sujetos al límite de dispositivos
-          if (user.role !== UserRole.ADMIN) {
-            await storage.incrementUserDeviceCount(user.username);
-            console.log(`[Auth] Usuario ${user.username} - Incrementado contador de dispositivos a ${user.deviceCount + 1}`);
-          }
-          
-          await storage.updateUserLastLogin(user.id);
-        } catch (error) {
-          console.error("Error actualizando datos de usuario:", error);
+      passport.authenticate("local", (err: Error, user: Express.User | false | null, info: any) => {
+        if (err) {
+          console.error("[Auth] Error en autenticación:", err);
+          return next(err);
         }
         
-        return res.json({ ...user, password: undefined });
-      });
-    })(req, res, next);
+        if (!user) {
+          console.log("[Auth] Intento de login fallido (credenciales inválidas)");
+          return res.status(401).json({ message: "Credenciales inválidas" });
+        }
+        
+        console.log(`[Auth] Usuario autenticado: ${user.username}, role: ${user.role}`);
+        
+        // Verificar límite de dispositivos
+        if (user.deviceCount >= user.maxDevices && user.role !== UserRole.ADMIN) {
+          console.log(`[Auth] Usuario ${user.username} - Límite de dispositivos excedido: ${user.deviceCount}/${user.maxDevices}`);
+          return res.status(403).json({ 
+            message: "Has alcanzado el límite de dispositivos conectados. Cierra sesión en otro dispositivo para continuar.",
+            error: "DEVICE_LIMIT_REACHED",
+            deviceCount: user.deviceCount,
+            maxDevices: user.maxDevices
+          });
+        }
+        
+        req.login(user, async (loginErr) => {
+          if (loginErr) {
+            console.error(`[Auth] Error en login para ${user.username}:`, loginErr);
+            return next(loginErr);
+          }
+          
+          // Incrementar contador de dispositivos y actualizar fecha de último login
+          try {
+            // Los admins no están sujetos al límite de dispositivos
+            if (user.role !== UserRole.ADMIN) {
+              await storage.incrementUserDeviceCount(user.username);
+              console.log(`[Auth] Usuario ${user.username} - Incrementado contador de dispositivos a ${user.deviceCount + 1}`);
+            }
+            
+            await storage.updateUserLastLogin(user.id);
+            console.log(`[Auth] Login completado con éxito para: ${user.username}`);
+          } catch (error) {
+            console.error(`[Auth] Error actualizando datos de usuario ${user.username}:`, error);
+          }
+          
+          return res.json({ ...user, password: undefined });
+        });
+      })(req, res, next);
+    });
   });
 
   // Ruta para logout - Reduce el contador de dispositivos al cerrar sesión
   app.post("/api/logout", async (req, res, next) => {
+    // Solo procesar si hay sesión activa
+    if (!req.isAuthenticated()) {
+      return res.json({ success: true, message: "No había sesión activa" });
+    }
+    
+    // Capturar datos del usuario antes de cerrar sesión
+    const user = req.user;
+    const username = user.username;
+    const isAdmin = user.role === UserRole.ADMIN;
+    
+    console.log(`[Auth] Solicitud de cierre de sesión para: ${username}`);
+    
     // Decrementar el contador de dispositivos si es un usuario no admin
-    if (req.isAuthenticated() && req.user.role !== UserRole.ADMIN) {
+    if (!isAdmin) {
       try {
-        // Obtenemos el usuario actual para decrementar su contador de dispositivos
-        const user = req.user;
-        console.log(`[Auth] Reduciendo contador de dispositivos para ${user.username}`);
+        console.log(`[Auth] Reduciendo contador de dispositivos para ${username}`);
         
-        // Implementar método para decrementar el contador (necesita crearse en storage.ts)
         // NO disminuimos por debajo de 0 por seguridad
         if (user.deviceCount > 0) {
           // Decrementar el contador
-          const updatedUser = await storage.decrementUserDeviceCount(user.username);
+          const updatedUser = await storage.decrementUserDeviceCount(username);
           console.log(`[Auth] Contador de dispositivos actualizado a ${updatedUser.deviceCount}`);
         }
       } catch (error) {
-        console.error("Error decrementando contador de dispositivos:", error);
+        console.error(`[Auth] Error decrementando contador de dispositivos para ${username}:`, error);
       }
     }
     
+    // Cerrar sesión
     req.logout((err) => {
-      if (err) return next(err);
-      res.json({ success: true });
+      if (err) {
+        console.error(`[Auth] Error al cerrar sesión para ${username}:`, err);
+        return next(err);
+      }
+      
+      // Regenerar ID de sesión para mayor seguridad
+      req.session.regenerate((regenerateErr) => {
+        if (regenerateErr) {
+          console.error(`[Auth] Error al regenerar sesión para ${username}:`, regenerateErr);
+          // Continuar aunque falle la regeneración
+        }
+        
+        console.log(`[Auth] Sesión cerrada correctamente para: ${username}`);
+        res.json({ success: true });
+      });
     });
   });
 
