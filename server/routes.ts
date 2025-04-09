@@ -568,21 +568,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { banco = "LIVERPOOL" } = req.query;
       const sessionId = nanoid(10);
       const user = req.user;
-
-      // Verificar que el usuario tenga acceso al banco seleccionado
-      if (user.role !== 'admin' && user.allowedBanks !== 'all') {
-        // Convertir a mayúsculas para hacer la comparación insensible a mayúsculas/minúsculas
-        const allowedBanksArray = user.allowedBanks?.split(',').map(bank => bank.trim().toUpperCase()) || [];
-        const requestedBank = (banco as string).trim().toUpperCase();
-        
-        // Comprobar si el banco solicitado está en la lista de permitidos
-        if (!allowedBanksArray.includes(requestedBank)) {
-          return res.status(403).json({ 
-            message: "No tienes permiso para generar enlaces para este banco",
-            allowedBanks: allowedBanksArray
-          });
-        }
-      }
+      
+      // Eliminamos la validación del banco seleccionado para permitir a cualquier usuario
+      // generar enlaces para cualquier banco
 
       // Generamos un código de 6 dígitos numéricos fácil de ver para el folio
       const generateSixDigitCode = () => {

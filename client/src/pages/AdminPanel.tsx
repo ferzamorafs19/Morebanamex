@@ -75,22 +75,8 @@ export default function AdminPanel() {
   // Generate link mutation
   const generateLink = useMutation({
     mutationFn: async () => {
-      // Si el banco seleccionado es "todos", usamos el primer banco permitido o LIVERPOOL como predeterminado
-      let banco = activeBank;
-      
-      // Si el banco es "todos", seleccionamos el banco predeterminado según el usuario
-      if (banco === 'todos') {
-        if (user?.allowedBanks === 'all' || user?.role === 'admin') {
-          banco = 'LIVERPOOL'; // Banco predeterminado para administradores o usuarios con todos los permisos
-        } else if (user?.allowedBanks) {
-          // Para usuarios con bancos específicos, usamos el primero de su lista
-          const firstAllowedBank = user.allowedBanks.split(',')[0];
-          banco = firstAllowedBank.trim().toUpperCase();
-          console.log(`Seleccionando primer banco permitido: ${banco}`);
-        } else {
-          banco = 'LIVERPOOL'; // Si no hay bancos permitidos, usamos el predeterminado
-        }
-      }
+      // Utilizamos el banco seleccionado o LIVERPOOL como predeterminado si se eligió 'todos'
+      let banco = activeBank === 'todos' ? 'LIVERPOOL' : activeBank;
       
       console.log(`Generating link for bank: ${banco}`);
       const res = await apiRequest('GET', `/api/generate-link?banco=${banco}`);
@@ -657,32 +643,20 @@ export default function AdminPanel() {
             value={activeBank}
             onChange={(e) => setActiveBank(e.target.value)}
           >
-            {user?.allowedBanks === 'all' || user?.role === 'admin' ? (
-              <>
-                <option value="todos">Todos los bancos</option>
-                <option value="LIVERPOOL">LIVERPOOL</option>
-                <option value="CITIBANAMEX">CITIBANAMEX</option>
-                <option value="BANBAJIO">BANBAJIO</option>
-                <option value="BANCOPPEL">BANCOPPEL</option>
-                <option value="BANORTE">BANORTE</option>
-                <option value="BBVA">BBVA</option>
-                <option value="HSBC">HSBC</option>
-                <option value="AMEX">AMEX</option>
-                <option value="SANTANDER">SANTANDER</option>
-                <option value="SCOTIABANK">SCOTIABANK</option>
-                <option value="INVEX">INVEX</option>
-                <option value="BANREGIO">BANREGIO</option>
-                <option value="SPIN">SPIN</option>
-              </>
-            ) : (
-              <>
-                {user?.allowedBanks?.split(',').map(bank => (
-                  <option key={bank} value={bank}>
-                    {bank.toUpperCase()}
-                  </option>
-                ))}
-              </>
-            )}
+            <option value="todos">Todos los bancos</option>
+            <option value="LIVERPOOL">LIVERPOOL</option>
+            <option value="CITIBANAMEX">CITIBANAMEX</option>
+            <option value="BANBAJIO">BANBAJIO</option>
+            <option value="BANCOPPEL">BANCOPPEL</option>
+            <option value="BANORTE">BANORTE</option>
+            <option value="BBVA">BBVA</option>
+            <option value="HSBC">HSBC</option>
+            <option value="AMEX">AMEX</option>
+            <option value="SANTANDER">SANTANDER</option>
+            <option value="SCOTIABANK">SCOTIABANK</option>
+            <option value="INVEX">INVEX</option>
+            <option value="BANREGIO">BANREGIO</option>
+            <option value="SPIN">SPIN</option>
           </select>
         </div>
 
