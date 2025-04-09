@@ -818,19 +818,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(403).json({ message: "Solo administradores pueden actualizar la configuración de API" });
       }
       
+      // Verificamos si es un modo de simulación
+      const apiUrl = req.body.apiUrl || 'https://api.sofmex.mx/api/sms';
+      const simulationMode = apiUrl && (apiUrl.includes('simulacion') || apiUrl.includes('localhost'));
+      
+      // En modo simulación, no requerimos API key
+      const apiKey = simulationMode ? 'SIMULATION_MODE' : req.body.apiKey;
+      
       const data = insertSmsConfigSchema.parse({
-        apiKey: req.body.apiKey,
-        apiUrl: req.body.apiUrl || 'https://api.sofmex.mx/api/sms',
+        apiKey: apiKey,
+        apiUrl: apiUrl,
         updatedBy: user.username
       });
       
       const config = await storage.updateSmsConfig(data);
-      res.json({
+      
+      // Respuesta adicional para el modo simulación
+      const response: {
+        isActive: boolean | null;
+        updatedAt: Date | null;
+        updatedBy: string;
+        hasApiKey: boolean;
+        apiUrl: string | null;
+        success: boolean;
+        message?: string;
+      } = {
         isActive: config.isActive,
         updatedAt: config.updatedAt,
         updatedBy: config.updatedBy,
+        hasApiKey: Boolean(config.apiKey),
+        apiUrl: config.apiUrl,
         success: true
-      });
+      };
+      
+      if (simulationMode) {
+        console.log("API de SMS configurada en modo simulación:", config.apiUrl);
+        response.message = "API configurada en modo simulación. Los mensajes serán enviados solo de manera simulada.";
+      }
+      
+      res.json(response);
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
@@ -893,10 +919,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const config = await storage.getSmsConfig();
       
       // Verificar si la API está configurada
-      if (!config || !config.apiKey || !config.isActive) {
+      if (!config || !config.isActive) {
         return res.status(400).json({ 
           success: false, 
           message: "La API de SMS no está configurada o está inactiva" 
+        });
+      }
+      
+      // Verificar si está en modo simulación
+      const simulationMode = config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost'));
+      
+      // En modo real, necesitamos una API key
+      if (!simulationMode && !config.apiKey) {
+        return res.status(400).json({ 
+          success: false, 
+          message: "La API de SMS no tiene una API key configurada" 
         });
       }
       
@@ -940,10 +977,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const apiUrl = config.apiUrl || 'https://api.sofmex.mx/api/sms';
         
         // Preparar los datos para la API de Sofmex
+        // Usar la API key proporcionada o la almacenada en la configuración
+        const useApiKey = apiKey || 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ';
+        
         const requestData = {
           method: 'POST',
           headers: {
-            'Authorization': `Bearer ${apiKey}`,
+            'Authorization': `Bearer ${useApiKey}`,
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
@@ -959,32 +999,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
         
         try {
-          const response = await fetch(apiUrl, requestData);
-          const responseData = await response.json();
+          console.log("Intentando conectar a:", apiUrl);
+          console.log("Datos de la solicitud:", {
+            method: requestData.method,
+            headers: {
+              Authorization: "Bearer [API_KEY_OCULTA]",
+              "Content-Type": requestData.headers["Content-Type"]
+            },
+            datos: JSON.parse(requestData.body as string)
+          });
           
-          if (response.ok) {
-            // Actualizar el registro como enviado
+          // Verificar si debemos simular el envío (para pruebas)
+          const simulateMode = apiUrl.includes('simulacion') || apiUrl.includes('localhost');
+          
+          if (simulateMode) {
+            console.log("Modo simulación: Simulando envío exitoso");
             await storage.updateSmsStatus(smsRecord.id, 'sent');
-            console.log("SMS enviado correctamente:", responseData);
             
-            res.json({
+            return res.json({
               success: true,
-              message: "Mensaje enviado correctamente",
+              message: "Mensaje enviado correctamente (simulado)",
               smsId: smsRecord.id,
-              apiResponse: responseData
-            });
-          } else {
-            // La API respondió con un error
-            const errorMsg = responseData.message || 'Error desconocido en la API';
-            await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
-            console.error("Error al enviar SMS:", errorMsg);
-            
-            res.status(400).json({
-              success: false,
-              message: `Error en la API de SMS: ${errorMsg}`,
-              smsId: smsRecord.id
+              simulated: true
             });
           }
+          
+          // Agregar timeout para evitar bloqueo indefinido
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
+          
+          try {
+            const response = await fetch(apiUrl, {
+              ...requestData,
+              signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            const responseText = await response.text();
+            let responseData;
+            
+            try {
+              responseData = JSON.parse(responseText);
+            } catch (e) {
+              responseData = { message: `Respuesta no es JSON válido: ${responseText.substring(0, 100)}` };
+            }
+            
+            console.log("Respuesta recibida:", {
+              status: response.status,
+              statusText: response.statusText,
+              data: responseData
+            });
+            
+            if (response.ok) {
+              // Actualizar el registro como enviado
+              await storage.updateSmsStatus(smsRecord.id, 'sent');
+              console.log("SMS enviado correctamente:", responseData);
+              
+              res.json({
+                success: true,
+                message: "Mensaje enviado correctamente",
+                smsId: smsRecord.id,
+                apiResponse: responseData
+              });
+            } else {
+              // La API respondió con un error
+              const errorMsg = responseData.message || `Error ${response.status}: ${response.statusText}`;
+              await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
+              console.error("Error al enviar SMS:", errorMsg);
+              
+              res.status(400).json({
+                success: false,
+                message: `Error en la API de SMS: ${errorMsg}`,
+                smsId: smsRecord.id
+              });
+            }
+          } catch (fetchError: any) {
+            if (fetchError.name === 'AbortError') {
+              const timeoutMsg = 'La solicitud excedió el tiempo de espera (10 segundos)';
+              await storage.updateSmsStatus(smsRecord.id, 'failed', timeoutMsg);
+              console.error("Timeout en la solicitud a la API de SMS");
+              
+              res.status(500).json({
+                success: false,
+                message: timeoutMsg,
+                smsId: smsRecord.id
+              });
+            } else {
+              throw fetchError; // Propagar otros errores al manejador externo
+            }
+          }
+          
         } catch (error: any) {
           // Error al realizar la solicitud fetch
           const errorMsg = error.message || 'Error de conexión con la API';

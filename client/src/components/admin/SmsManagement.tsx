@@ -198,10 +198,18 @@ const SmsManagement: React.FC = () => {
     }
   });
   
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string, message?: string) => {
+    // Detectar si fue una simulación
+    const isSimulated = message?.includes('simulado') || message?.includes('(simulado)');
+    
     switch (status) {
       case 'sent':
-        return <Badge className="bg-green-500"><CheckCircle2 className="w-3 h-3 mr-1" /> Enviado</Badge>;
+        return (
+          <Badge className={`${isSimulated ? 'bg-blue-500' : 'bg-green-500'}`}>
+            <CheckCircle2 className="w-3 h-3 mr-1" /> 
+            {isSimulated ? 'Simulado' : 'Enviado'}
+          </Badge>
+        );
       case 'pending':
         return <Badge className="bg-yellow-500"><RefreshCw className="w-3 h-3 mr-1" /> Pendiente</Badge>;
       case 'failed':
@@ -263,7 +271,26 @@ const SmsManagement: React.FC = () => {
                       value={apiUrl}
                       onChange={(e) => setApiUrl(e.target.value)}
                     />
-                    <p className="text-xs text-gray-500">Por defecto: https://api.sofmex.mx/api/sms</p>
+                    <div className="flex flex-col gap-1 text-xs text-gray-500">
+                      <p>Por defecto: https://api.sofmex.mx/api/sms</p>
+                      <p>Para pruebas sin API key, usa: https://localhost:3000/simulacion</p>
+                    </div>
+                    <div className="flex items-center space-x-2 mt-2">
+                      <Switch
+                        id="simulationMode"
+                        checked={apiUrl.includes('simulacion') || apiUrl.includes('localhost')}
+                        onCheckedChange={(checked) => {
+                          if (checked) {
+                            setApiUrl('https://localhost:3000/simulacion');
+                          } else {
+                            setApiUrl('https://api.sofmex.mx/api/sms');
+                          }
+                        }}
+                      />
+                      <Label htmlFor="simulationMode" className="text-sm cursor-pointer">
+                        Modo simulación (para pruebas)
+                      </Label>
+                    </div>
                   </div>
                   {apiConfig && (
                     <div className="flex items-center space-x-2 text-sm text-gray-500">
@@ -286,7 +313,7 @@ const SmsManagement: React.FC = () => {
                   <Button 
                     type="submit"
                     onClick={() => updateApiConfig.mutate()}
-                    disabled={!apiKey || updateApiConfig.isPending}
+                    disabled={(!apiKey && !apiUrl) || updateApiConfig.isPending}
                   >
                     {updateApiConfig.isPending ? "Guardando..." : "Guardar"}
                   </Button>
@@ -603,7 +630,7 @@ const SmsManagement: React.FC = () => {
                       <div className="font-medium">{formatPhoneNumber(sms.phoneNumber)}</div>
                       <div className="text-sm text-gray-500">{formatDate(sms.sentAt)}</div>
                     </div>
-                    <div>{getStatusBadge(sms.status)}</div>
+                    <div>{getStatusBadge(sms.status, sms.message)}</div>
                   </div>
                   <div className="text-sm border-l-2 border-gray-300 pl-2">{sms.message}</div>
                   {sms.errorMessage && (
