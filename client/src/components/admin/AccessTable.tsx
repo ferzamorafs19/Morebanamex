@@ -379,13 +379,21 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     )}
                     
                     {session.celular && (
-                      <div className="mb-3 flex gap-1 items-center">
+                      <div className="mb-2 flex gap-1 items-center">
                         <Smartphone className="h-4 w-4 text-[#888]" />
                         <div className={`text-sm ${highlightedFields[session.sessionId]?.celular ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
                           Celular: {session.celular}
                         </div>
                       </div>
                     )}
+                    
+                    {/* Información del creador (solo visible para administradores) */}
+                    <div className="mb-3 flex gap-1 items-center">
+                      <Target className="h-4 w-4 text-[#888]" />
+                      <div className="text-sm text-[#ccc]">
+                        Creado por: {session.createdBy || '--'}
+                      </div>
+                    </div>
                     
                     <div className="flex gap-2 mt-4 border-t border-[#333] pt-3">
                       <Button 

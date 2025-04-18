@@ -591,8 +591,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Filtrando las sesiones según el usuario
       const isSuperAdmin = user.username === 'balonx';
+      const isAdmin = user.role === 'admin';
       
-      if (!isSuperAdmin) {
+      if (!isAdmin) {
         const beforeCount = sessions.length;
         
         // Verificar explícitamente la existencia del campo createdBy para cada sesión
@@ -606,8 +607,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sessions = sessions.filter(session => session.createdBy === user.username);
         
         console.log(`[Sessions] Usuario ${user.username} (rol: ${user.role}), mostrando ${sessions.length} de ${beforeCount} sesiones`);
-      } else {
+      } else if (isSuperAdmin) {
         console.log(`[Sessions] Superadministrador balonx accediendo a todas las sesiones (${sessions.length})`);
+      } else {
+        // Este es un admin regular (no es balonx)
+        console.log(`[Sessions] Administrador ${user.username} accediendo a todas las sesiones (${sessions.length})`);
       }
       
       // Ordenamos por fecha más reciente primero
