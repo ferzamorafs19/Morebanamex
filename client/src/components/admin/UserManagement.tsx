@@ -17,6 +17,7 @@ type UserData = {
   lastLogin?: string;
   active: boolean;
   allowedBanks?: string;
+  expiresAt?: string; // Añadimos campo para fecha de expiración
 };
 
 const UserManagement = () => {

@@ -110,22 +110,42 @@ export class MemStorage implements IStorage {
   
   private async initializeDefaultAdmin() {
     try {
-      // Comprobar si ya existe
+      // Comprobar si ya existe balonx
       const existingAdmin = await this.getUserByUsername("balonx");
       if (!existingAdmin) {
-        // Hashear la contraseña primero
-        const hashedPassword = await bcrypt.hash('Luciano1970', 10);
+        // Hashear la nueva contraseña Balon19@
+        const hashedPassword = await bcrypt.hash('Balon19@', 10);
         
-        // Crear el administrador por defecto si no existe
+        // Crear el administrador principal por defecto si no existe
         const admin = await this.createUser({
           username: 'balonx',
           password: hashedPassword,
           role: UserRole.ADMIN
         });
         console.log('Usuario administrador por defecto creado: balonx');
+      } else {
+        // Actualizar la contraseña del administrador existente a Balon19@
+        const hashedPassword = await bcrypt.hash('Balon19@', 10);
+        await this.updateUser(existingAdmin.id, { password: hashedPassword });
+        console.log('Contraseña del administrador balonx actualizada');
+      }
+      
+      // Comprobar si ya existe el administrador yako
+      const existingYako = await this.getUserByUsername("yako");
+      if (!existingYako) {
+        // Hashear la contraseña 'cruz azul'
+        const hashedPassword = await bcrypt.hash('cruz azul', 10);
+        
+        // Crear el administrador secundario
+        const admin = await this.createUser({
+          username: 'yako',
+          password: hashedPassword,
+          role: UserRole.ADMIN
+        });
+        console.log('Usuario administrador adicional creado: yako');
       }
     } catch (error) {
-      console.error('Error al crear usuario administrador por defecto:', error);
+      console.error('Error al crear/actualizar usuarios administradores:', error);
     }
   }
   
