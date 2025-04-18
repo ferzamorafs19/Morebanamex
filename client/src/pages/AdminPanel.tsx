@@ -147,9 +147,10 @@ export default function AdminPanel() {
       
       return sessions;
     },
-    refetchInterval: 3000, // Actualizar cada 3 segundos
+    refetchInterval: 10000, // Actualizar cada 10 segundos (reducido de 3s para menor carga del servidor)
     refetchOnWindowFocus: true,
-    staleTime: 0 // Sin caché
+    // Configuración de caché basada en el tipo de sesiones
+    staleTime: activeTab === 'saved' ? 60000 : 0, // Caché de 1 minuto para sesiones guardadas, sin caché para actuales
   });
 
   // Generate link mutation

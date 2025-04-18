@@ -191,7 +191,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
             <div className="space-y-4">
               {filteredSessions.map((session, index) => (
                 <Card 
-                  key={session.id}
+                  key={session.sessionId}
                   className={`bg-[#1e1e1e] border-[#2c2c2c] ${selectedSessionId === session.sessionId ? 'border-[#4c4c4c]' : ''} 
                     ${highlightedRows[session.sessionId] ? 'bg-[#1a4c64] transition-colors duration-500' : ''}`}
                   onClick={() => onSelectSession(session.sessionId)}
@@ -351,7 +351,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
               
               {filteredSessions.map((session, index) => (
                 <tr 
-                  key={session.id}
+                  key={session.sessionId}
                   className={`border-b border-[#2c2c2c] ${selectedSessionId === session.sessionId ? 'bg-[#2a2a2a]' : ''} 
                     ${highlightedRows[session.sessionId] ? 'bg-[#1a4c64] transition-colors duration-500' : ''}`}
                   onClick={() => onSelectSession(session.sessionId)}
