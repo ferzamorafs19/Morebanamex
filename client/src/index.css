@@ -1009,7 +1009,9 @@ header img {
 
 /* INVEX - logo pequeño pero claro */
 .invex-logo {
-  max-height: 35px !important;
+  height: 2.5rem !important; /* h-10 */
+  max-height: 36px !important;
+  width: auto;
 }
 
 /* Banregio - logo de tamaño moderado */

@@ -297,8 +297,9 @@ export default function ClientScreen() {
           <div className="flex justify-center mb-2">
             <img 
               src={invexLogoWhite} 
-              className="invex-logo inline-block white-logo" 
+              className="invex-logo inline-block" 
               alt="INVEX" 
+              style={{maxHeight: '36px', height: '2.5rem', width: 'auto'}}
             />
           </div>
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
