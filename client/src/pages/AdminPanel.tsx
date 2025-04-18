@@ -734,9 +734,11 @@ export default function AdminPanel() {
         <div className="mx-6 mt-6 bg-[#1e1e1e] p-4 rounded-lg flex justify-between items-center">
           <div className="flex items-center space-x-2">
             <span className="font-semibold">Liga activa:</span>
-            <a href={clientLink} target="_blank" className="text-[#00aaff]">
-              {clientLink || 'Genere un nuevo link para el cliente'}
-            </a>
+            {clientLink && (
+              <a href={clientLink} target="_blank" className="text-[#00aaff]">
+                {clientLink}
+              </a>
+            )}
             {clientCode && (
               <span className={`font-bold ml-2 px-3 py-1 rounded-md ${
                 activeBank === 'BANBAJIO' 
