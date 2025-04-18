@@ -385,16 +385,19 @@ export const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, onC
     <Modal isOpen={isOpen} onClose={onClose} title="Mensaje personalizado">
       <div className="mb-4">
         <Label htmlFor="mensajeTexto" className="block text-sm text-gray-300 mb-1">
-          Escribe el mensaje (máx. 300 caracteres):
+          Escribe el mensaje (máx. 4000 caracteres - tamaño de una hoja oficio):
         </Label>
         <Textarea 
           id="mensajeTexto" 
-          maxLength={300}
-          rows={5}
+          maxLength={4000}
+          rows={8}
           value={mensaje}
-          onChange={(e) => setMensaje(e.target.value)}
+          onChange={(e) => setMensaje(e.target.value.slice(0, 4000))}
           className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
         />
+        <div className="text-right text-xs text-gray-500 mt-1">
+          {mensaje.length}/4000 caracteres
+        </div>
       </div>
       
       <div className="flex justify-end space-x-2 mt-6">
