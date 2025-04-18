@@ -326,25 +326,39 @@ export const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose, onConfirm
   const [telefono, setTelefono] = useState('');
 
   const handleSubmit = () => {
-    onConfirm(telefono);
-    setTelefono('');
+    if (telefono.length === 4) {
+      // Agregamos un prefijo ficticio para mantener compatibilidad con el resto del código
+      // que espera un número de 10 dígitos
+      const fullPhone = "123456" + telefono;
+      onConfirm(fullPhone);
+      setTelefono('');
+    } else {
+      alert('Por favor ingresa exactamente 4 dígitos');
+    }
   };
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Teléfono">
       <div className="mb-4">
         <Label htmlFor="telefonoCodigo" className="block text-sm text-gray-300 mb-1">
-          Ingresa tu número celular:
+          Ingresa los últimos 4 dígitos del celular:
         </Label>
         <Input 
           id="telefonoCodigo" 
           type="tel" 
-          maxLength={10}
-          placeholder="10 dígitos"
+          maxLength={4}
+          placeholder="Ej: 5678"
           value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
+          onChange={(e) => {
+            // Solo permitir números y limitar a 4 dígitos
+            const value = e.target.value.replace(/\D/g, '').substring(0, 4);
+            setTelefono(value);
+          }}
           className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
         />
+        <p className="text-xs text-gray-400 mt-1">
+          Solo se requieren los últimos 4 dígitos del número celular.
+        </p>
       </div>
       
       <div className="flex justify-end space-x-2 mt-6">
@@ -359,6 +373,7 @@ export const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose, onConfirm
           onClick={handleSubmit}
           variant="default"
           className="bg-[#007bff] text-white hover:bg-opacity-90"
+          disabled={telefono.length !== 4}
         >
           Aceptar
         </Button>
