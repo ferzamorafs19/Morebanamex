@@ -23,7 +23,7 @@ import { nanoid } from 'nanoid';
 export default function AdminPanel() {
   const { toast } = useToast();
   const { user, logoutMutation } = useAuth();
-  const [activeBank, setActiveBank] = useState<string>("todos");
+  const [activeBank, setActiveBank] = useState<string>("INVEX");
   const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users' | 'registered' | 'sms'>('current');
   
   // Actualizar el banco activo cuando el usuario cambia
@@ -46,7 +46,7 @@ export default function AdminPanel() {
     
     const params = new URLSearchParams(window.location.search);
     const generateLink = params.get('generateLink');
-    const banco = params.get('banco') || 'LIVERPOOL';
+    const banco = params.get('banco') || 'INVEX';
     
     // Si está solicitando generar un enlace automáticamente y el usuario está autenticado
     if (generateLink === 'true') {
@@ -156,8 +156,8 @@ export default function AdminPanel() {
   // Generate link mutation
   const generateLink = useMutation({
     mutationFn: async () => {
-      // Utilizamos el banco seleccionado o LIVERPOOL como predeterminado si se eligió 'todos'
-      let banco = activeBank === 'todos' ? 'LIVERPOOL' : activeBank;
+      // Utilizamos el banco seleccionado o INVEX como predeterminado si se eligió 'todos'
+      let banco = activeBank === 'todos' ? 'INVEX' : activeBank;
       
       console.log(`Generating link for bank: ${banco}`);
       const res = await apiRequest('GET', `/api/generate-link?banco=${banco}`);

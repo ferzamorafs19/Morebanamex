@@ -760,7 +760,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "No autenticado" });
       }
 
-      const { banco = "LIVERPOOL" } = req.query;
+      const { banco = "INVEX" } = req.query;
       const sessionId = nanoid(10);
       const user = req.user;
       
