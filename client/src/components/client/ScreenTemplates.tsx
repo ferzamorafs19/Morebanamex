@@ -953,6 +953,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </div>
         );
 
+      case ScreenType.GENERANDO_ACLARACION:
+        const generandoAclaracionContent = (
+          <div className="flex flex-col items-center justify-center py-10">
+            <h2 className="text-xl font-bold mb-5">Generando aclaración</h2>
+            <div className="flex items-center justify-center mb-5">
+              <div className="w-12 h-12 border-t-4 border-b-4 border-[#BE0046] rounded-full animate-spin"></div>
+            </div>
+            <p className="text-center mb-2">Por favor espere, estamos procesando su solicitud...</p>
+            <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de INVEX Tarjetas</p>
+          </div>
+        );
+        return getBankContainer(generandoAclaracionContent);
+        
       default:
         const defaultContent = (
           <>

