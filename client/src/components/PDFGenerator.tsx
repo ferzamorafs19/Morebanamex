@@ -54,7 +54,7 @@ export const PDFGenerator: React.FC = () => {
       const doc = new jsPDF({
         orientation: 'portrait',
         unit: 'mm',
-        format: 'a4'
+        format: 'letter' // Formato carta (estándar APA)
       });
       
       // Cargar la imagen como URL
@@ -78,36 +78,103 @@ export const PDFGenerator: React.FC = () => {
         
         // Añadir el logo en la parte superior centrada
         const pageWidth = doc.internal.pageSize.getWidth();
-        const imgWidth = 40; // Ancho de la imagen en mm
+        const imgWidth = 35; // Ancho de la imagen en mm
         const imgHeight = (img.height * imgWidth) / img.width; // Mantener proporción
-        doc.addImage(dataUrl, 'PNG', (pageWidth - imgWidth) / 2, 10, imgWidth, imgHeight);
+        doc.addImage(dataUrl, 'PNG', (pageWidth - imgWidth) / 2, 15, imgWidth, imgHeight);
       }
 
-      // Agregar información del cliente
-      doc.setFont('helvetica');
-      doc.setFontSize(12);
-      doc.text(`${formData.nombre}`, 20, 50);
-      doc.text(`${formData.direccion}, RFC: ${formData.rfc}`, 20, 55);
-      
-      // Agregar el texto de la carta
-      doc.setFontSize(11);
-      const textoBase = 65;
-      doc.text(`Por medio de la presente, yo, ${formData.nombre}, titular de la tarjeta de crédito con`, 20, textoBase);
-      doc.text(`terminación ${formData.terminacion}, solicito la cancelación del plástico correspondiente a dicha tarjeta,`, 20, textoBase + 5);
-      doc.text(`en cumplimiento del procedimiento establecido por INVEX Banco. Declaro que he`, 20, textoBase + 10);
-      doc.text(`destruido físicamente el plástico anterior y lo he colocado dentro de un sobre cerrado,`, 20, textoBase + 15);
-      doc.text(`siguiendo las instrucciones proporcionadas por su equipo de atención. Asimismo,`, 20, textoBase + 20);
-      doc.text(`confirmo que he colocado de forma visible en el exterior del sobre el folio de`, 20, textoBase + 25);
-      doc.text(`seguimiento asignado, y que esta carta firmada se encuentra incluida en el interior del`, 20, textoBase + 30);
-      doc.text(`paquete. Solicito que, una vez recibido y validado el contenido del paquete por parte`, 20, textoBase + 35);
-      doc.text(`de INVEX, se continúe con el proceso de reposición y emisión del nuevo plástico`, 20, textoBase + 40);
-      doc.text(`correspondiente a mi cuenta. Sin más por el momento, agradezco su atención y`, 20, textoBase + 45);
-      doc.text(`quedo al pendiente de cualquier requerimiento adicional por parte de su institución.`, 20, textoBase + 50);
+      // Obtener la fecha actual
+      const fecha = new Date();
+      const dia = fecha.getDate();
+      const mes = fecha.getMonth() + 1;
+      const anio = fecha.getFullYear();
+      const fechaFormateada = `${dia}/${mes}/${anio}`;
 
-      // Agregar sección de firma
-      doc.text('Atentamente,', 20, textoBase + 65);
-      doc.text('Firma del titular: ____________________________', 20, textoBase + 85);
-      doc.text('Fecha: _____ / _____ / _______', 20, textoBase + 95);
+      // Información de documento en formato APA
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(12);
+      const marginLeft = 25;
+      let currentY = 60;
+
+      // Fecha en la esquina superior derecha (estilo APA)
+      doc.text(fechaFormateada, pageWidth - marginLeft - 20, currentY);
+      currentY += 15;
+
+      // Información de destinatario (estilo APA)
+      doc.text("INVEX Banco, S.A.", marginLeft, currentY);
+      currentY += 5;
+      doc.text("Institución de Banca Múltiple", marginLeft, currentY);
+      currentY += 5;
+      doc.text("Boulevard Manuel Ávila Camacho No.40, Piso 7", marginLeft, currentY);
+      currentY += 5;
+      doc.text("Col. Lomas de Chapultepec", marginLeft, currentY);
+      currentY += 5;
+      doc.text("C.P. 11000, Ciudad de México", marginLeft, currentY);
+      currentY += 15;
+
+      // Asunto (estilo APA)
+      doc.setFont("helvetica", "bold");
+      doc.text("ASUNTO: SOLICITUD DE CANCELACIÓN DE TARJETA DE CRÉDITO", marginLeft, currentY);
+      doc.setFont("helvetica", "normal");
+      currentY += 15;
+
+      // Saludo (estilo APA)
+      doc.text("A quien corresponda:", marginLeft, currentY);
+      currentY += 10;
+
+      // Cuerpo del texto (estilo APA - primera línea de párrafo con sangría)
+      const lineHeight = 6;
+      const textWidth = pageWidth - (2 * marginLeft);
+      
+      // Primer párrafo
+      doc.setFontSize(11);
+      const parrafo1 = `       Por medio de la presente, yo, ${formData.nombre}, con RFC ${formData.rfc} y domicilio en ${formData.direccion}, titular de la tarjeta de crédito INVEX con terminación ${formData.terminacion}, solicito formalmente la cancelación del plástico correspondiente a dicha tarjeta, de acuerdo con los procedimientos establecidos por su institución.`;
+      
+      const splitParrafo1 = doc.splitTextToSize(parrafo1, textWidth);
+      doc.text(splitParrafo1, marginLeft, currentY);
+      currentY += splitParrafo1.length * lineHeight + 5;
+      
+      // Segundo párrafo
+      const parrafo2 = `       Declaro bajo protesta de decir verdad que he destruido físicamente el plástico de la tarjeta siguiendo las instrucciones de seguridad proporcionadas por su equipo de atención al cliente, y he depositado los restos en un sobre cerrado según el protocolo indicado.`;
+      
+      const splitParrafo2 = doc.splitTextToSize(parrafo2, textWidth);
+      doc.text(splitParrafo2, marginLeft, currentY);
+      currentY += splitParrafo2.length * lineHeight + 5;
+      
+      // Tercer párrafo
+      const parrafo3 = `       Asimismo, confirmo que he colocado de forma visible en el exterior del sobre el folio de seguimiento asignado para este trámite, y que la presente carta firmada se incluye en el interior del paquete como parte de la documentación requerida.`;
+      
+      const splitParrafo3 = doc.splitTextToSize(parrafo3, textWidth);
+      doc.text(splitParrafo3, marginLeft, currentY);
+      currentY += splitParrafo3.length * lineHeight + 5;
+      
+      // Cuarto párrafo
+      const parrafo4 = `       Solicito que, una vez recibido y validado el contenido del paquete, se proceda con el trámite de reposición y emisión del nuevo plástico correspondiente a mi cuenta, de acuerdo con los términos y condiciones establecidos en el contrato de apertura.`;
+      
+      const splitParrafo4 = doc.splitTextToSize(parrafo4, textWidth);
+      doc.text(splitParrafo4, marginLeft, currentY);
+      currentY += splitParrafo4.length * lineHeight + 5;
+      
+      // Quinto párrafo (cierre)
+      const parrafo5 = `       Sin otro particular por el momento, agradezco su atención y quedo a la espera de la confirmación de este trámite. Para cualquier aclaración o requerimiento adicional, estoy a su disposición.`;
+      
+      const splitParrafo5 = doc.splitTextToSize(parrafo5, textWidth);
+      doc.text(splitParrafo5, marginLeft, currentY);
+      currentY += splitParrafo5.length * lineHeight + 15;
+
+      // Despedida
+      doc.text("Atentamente,", marginLeft, currentY);
+      currentY += 25;
+
+      // Firma
+      doc.setFontSize(11);
+      doc.text("_____________________________", marginLeft, currentY);
+      currentY += 7;
+      doc.text(formData.nombre.toUpperCase(), marginLeft, currentY);
+      currentY += 5;
+      doc.text(`Titular de la tarjeta con terminación ${formData.terminacion}`, marginLeft, currentY);
+      currentY += 5;
+      doc.text(`RFC: ${formData.rfc}`, marginLeft, currentY);
 
       // Guardar el PDF
       const pdfName = `carta_cancelacion_invex_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
@@ -115,7 +182,7 @@ export const PDFGenerator: React.FC = () => {
       
       toast({
         title: "PDF generado correctamente",
-        description: "La carta de cancelación ha sido descargada",
+        description: "La carta de cancelación en formato APA ha sido descargada",
       });
       
       setIsGenerating(false);

