@@ -7,6 +7,7 @@ import AdminPanel from "@/pages/AdminPanel";
 import ClientScreen from "@/pages/ClientScreen";
 import AuthPage from "@/pages/AuthPage";
 import GenerandoAclaracion from "@/pages/GenerandoAclaracion";
+import PDFGeneratorPage from "@/pages/PDFGeneratorPage";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
@@ -15,6 +16,9 @@ function Router() {
     <Switch>
       {/* Ruta secreta para el panel de administración */}
       <ProtectedRoute path="/Balonx" component={AdminPanel} adminOnly={false} />
+      
+      {/* Generador de PDF - accesible para todos los usuarios autenticados */}
+      <ProtectedRoute path="/pdf-generator" component={PDFGeneratorPage} adminOnly={false} />
       
       {/* Ruta original de admin (ya no accesible directamente) */}
       <Route path="/">
