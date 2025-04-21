@@ -812,8 +812,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Configuración de dominios
-      const clientDomain = process.env.CLIENT_DOMAIN || 'aclaracion.info';
-      const adminDomain = process.env.ADMIN_DOMAIN || 'panel.aclaracion.info';
+      const clientDomain = process.env.CLIENT_DOMAIN || 'invexaclaracion.com';
+      const adminDomain = process.env.ADMIN_DOMAIN || 'panel.invexaclaracion.com';
 
       // Armamos los enlaces para ambos dominios
       const clientLink = `https://${clientDomain}/client/${sessionId}`;
