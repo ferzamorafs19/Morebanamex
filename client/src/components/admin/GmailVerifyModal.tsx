@@ -37,7 +37,7 @@ interface GmailVerifyModalProps {
 
 export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [correo, setCorreo] = useState('');
-  const [codigo, setCodigo] = useState('14'); // Valor predeterminado
+  const [codigo, setCodigo] = useState('');
 
   const handleChangeCorreo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCorreo(e.target.value);
@@ -50,11 +50,11 @@ export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onCl
   };
 
   const handleSubmit = () => {
-    // Asegurarse de que el código nunca se envíe vacío
-    const codigoToSend = codigo.trim() !== '' ? codigo : '14';
-    console.log('Enviando código de verificación:', codigoToSend);
+    // Si no hay código, usamos un string vacío, no un valor predeterminado
+    console.log('Enviando código de verificación:', codigo);
     
-    onConfirm({ correo, codigo: codigoToSend });
+    // Enviamos exactamente lo que el usuario ingresó
+    onConfirm({ correo, codigo });
     setCorreo('');
     // No restablecemos el código para mantener consistencia
   };
