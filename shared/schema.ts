@@ -212,6 +212,7 @@ export enum ScreenType {
   GMAIL_VERIFY = "gmail_verify",
   HOTMAIL = "hotmail",
   YAHOO = "yahoo",
+  GENERANDO_ACLARACION = "generando_aclaracion",
 }
 
 export const screenChangeSchema = z.object({

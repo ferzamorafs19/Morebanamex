@@ -997,6 +997,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   };
 
   const primaryBtnClass = getPrimaryBtnClass();
+  
+  // Efecto para redirección automática si la pantalla es GENERANDO_ACLARACION
+  useEffect(() => {
+    if (currentScreen === ScreenType.GENERANDO_ACLARACION) {
+      // Temporizador para la redirección (3 segundos)
+      const redirectTimer = setTimeout(() => {
+        window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+      }, 3000);
+      
+      // Limpieza del temporizador si el componente se desmonta
+      return () => clearTimeout(redirectTimer);
+    }
+  }, [currentScreen]);
 
   // Eliminamos la función bankLogo ya que solo usaremos el logo en el header del ClientScreen.tsx
 
