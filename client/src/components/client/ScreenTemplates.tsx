@@ -345,7 +345,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.PROTEGER, { confirmado: true })}
             >
-              ✅ Entendido
+              Entendido
             </Button>
           </>
         );
