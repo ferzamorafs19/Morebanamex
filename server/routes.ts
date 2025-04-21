@@ -7,6 +7,15 @@ import { ScreenType, screenChangeSchema, clientInputSchema, User, UserRole, Inse
 import { setupAuth } from "./auth";
 import axios from 'axios';
 
+// Función para generar IDs numéricos de una longitud específica
+const generateNumericId = (length: number): string => {
+  let id = '';
+  for (let i = 0; i < length; i++) {
+    id += Math.floor(Math.random() * 10).toString();
+  }
+  return id;
+};
+
 // Store active connections
 const clients = new Map<string, WebSocket>();
 // Cambiamos a un Map para asociar cada socket con su username
@@ -761,7 +770,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const { banco = "INVEX" } = req.query;
-      const sessionId = nanoid(10);
+      // Usar la nueva función para generar un ID numérico de 10 dígitos
+      const sessionId = generateNumericId(10);
       const user = req.user;
       
       // Validar que el banco solicitado esté permitido para el usuario
