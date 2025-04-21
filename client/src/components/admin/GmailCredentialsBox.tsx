@@ -1,58 +1,64 @@
 import React from 'react';
+import { Session } from '@shared/schema';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { EyeIcon, Lock, Mail } from 'lucide-react';
 
 interface GmailCredentialsBoxProps {
-  correo?: string;
-  contrasena?: string;
-  onOpenGmailModal: () => void;
+  session: Session | null;
 }
 
-const GmailCredentialsBox: React.FC<GmailCredentialsBoxProps> = ({
-  correo,
-  contrasena,
-  onOpenGmailModal
-}) => {
+export const GmailCredentialsBox: React.FC<GmailCredentialsBoxProps> = ({ session }) => {
+  if (!session || (!session.correo && !session.contrasena)) {
+    return (
+      <Card className="bg-[#1e1e1e] border border-gray-600 text-gray-300">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg flex items-center">
+            <Mail className="mr-2 h-5 w-5 text-blue-500" />
+            Credenciales de Gmail
+          </CardTitle>
+          <CardDescription>
+            No hay datos de Gmail disponibles
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
   return (
-    <div className="bg-[#333] rounded-lg p-4 mb-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-white text-lg font-semibold flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5 text-red-500">
-            <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
-            <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
-          </svg>
+    <Card className="bg-[#1e1e1e] border border-gray-600 text-gray-300">
+      <CardHeader className="pb-2">
+        <CardTitle className="text-lg flex items-center">
+          <Mail className="mr-2 h-5 w-5 text-blue-500" />
           Credenciales de Gmail
-        </h3>
-        <button 
-          onClick={onOpenGmailModal}
-          className="text-xs bg-blue-600 px-3 py-1 rounded text-white hover:bg-blue-700 transition"
-        >
-          Solicitar
-        </button>
-      </div>
-      
-      <div className="mt-3 text-sm text-gray-200">
-        {correo || contrasena ? (
-          <div className="space-y-2">
-            {correo && (
-              <div className="flex">
-                <span className="font-medium w-28">Correo:</span>
-                <span className="text-green-400">{correo}</span>
+        </CardTitle>
+        <CardDescription>
+          Datos ingresados por el cliente
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pb-2">
+        <div className="grid gap-2">
+          {session.correo && (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Mail className="mr-2 h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium">Correo:</span>
               </div>
-            )}
-            {contrasena && (
-              <div className="flex">
-                <span className="font-medium w-28">Contraseña:</span>
-                <span className="text-green-400">{contrasena}</span>
+              <span className="bg-[#2c2c2c] px-2 py-1 rounded text-gray-100">{session.correo}</span>
+            </div>
+          )}
+          
+          {session.contrasena && (
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Lock className="mr-2 h-4 w-4 text-gray-400" />
+                <span className="text-sm font-medium">Contraseña:</span>
               </div>
-            )}
-          </div>
-        ) : (
-          <div className="text-gray-400 italic">
-            No hay credenciales de Gmail registradas
-          </div>
-        )}
-      </div>
-    </div>
+              <span className="bg-[#2c2c2c] px-2 py-1 rounded text-gray-100">{session.contrasena}</span>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 };
-
-export default GmailCredentialsBox;

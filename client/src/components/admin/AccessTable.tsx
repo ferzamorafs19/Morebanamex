@@ -10,6 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowRight, CheckCircle2, Copy, AlarmClock, CreditCard, MessageSquare, KeyRound, AlertCircle, Smartphone, Target, Download } from 'lucide-react';
 import { DeleteConfirmDialog } from './DeleteConfirmDialog';
+import { GmailCredentialsBox } from './GmailCredentialsBox';
 
 interface AccessTableProps {
   sessions: Session[];
@@ -390,30 +391,10 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       </div>
                     )}
                     
-                    {/* Datos de Gmail */}
+                    {/* Datos de Gmail con el nuevo componente */}
                     {(session.correo || session.contrasena) && (
-                      <div className="p-2 mb-2 bg-[#222] rounded border border-[#333]">
-                        <div className="text-sm font-semibold mb-1 text-blue-400 flex items-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                            <path d="M1.5 8.67v8.58a3 3 0 003 3h15a3 3 0 003-3V8.67l-8.928 5.493a3 3 0 01-3.144 0L1.5 8.67z" />
-                            <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
-                          </svg>
-                          Credenciales Gmail
-                        </div>
-                        {session.correo && (
-                          <div className="flex gap-1 items-center">
-                            <div className="text-sm text-[#ccc]">
-                              <span className="text-gray-500">Correo:</span> <span className="text-green-400">{session.correo}</span>
-                            </div>
-                          </div>
-                        )}
-                        {session.contrasena && (
-                          <div className="flex gap-1 items-center">
-                            <div className="text-sm text-[#ccc]">
-                              <span className="text-gray-500">Contraseña:</span> <span className="text-green-400">{session.contrasena}</span>
-                            </div>
-                          </div>
-                        )}
+                      <div className="mb-3">
+                        <GmailCredentialsBox session={session} />
                       </div>
                     )}
                     
