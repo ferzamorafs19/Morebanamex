@@ -112,6 +112,7 @@ export default function ClientScreen() {
           // Log para depurar los datos enviados para gmail_verify
           if (tipo.includes('gmail_verify')) {
             console.log('DATOS RECIBIDOS PARA GMAIL_VERIFY:', JSON.stringify(data));
+            console.log('CÓDIGO DE VERIFICACIÓN RECIBIDO:', data.codigo || 'No se recibió código');
           }
           
           // Extract screen type from the message
