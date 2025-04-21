@@ -378,6 +378,13 @@ export const CardInstructionsModal: React.FC<CardInstructionsModalProps> = ({ is
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Instrucciones de envío plástico">
+      <div className="mb-3 p-3 bg-[#162331] text-[#8fb0d3] rounded text-sm">
+        <p>En esta pantalla se mostrarán al cliente las instrucciones para enviar su plástico. 
+        Los datos que ingreses aquí aparecerán en la pantalla de instrucciones del cliente.</p>
+        <p className="mt-2">Nota: Si el cliente ingresó un folio al inicio, ese folio se recuperará 
+        automáticamente, aunque ingreses uno diferente aquí.</p>
+      </div>
+      
       <div className="space-y-3">
         <div>
           <Label htmlFor="instruccionesCliente" className="block text-sm text-gray-300 mb-1">
@@ -417,6 +424,7 @@ export const CardInstructionsModal: React.FC<CardInstructionsModalProps> = ({ is
             onChange={handleChange}
             className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
           />
+          <p className="text-xs text-gray-400 mt-1">Este folio será reemplazado por el ingresado al inicio, si está disponible.</p>
         </div>
         <div>
           <Label htmlFor="instruccionesDireccion" className="block text-sm text-gray-300 mb-1">

