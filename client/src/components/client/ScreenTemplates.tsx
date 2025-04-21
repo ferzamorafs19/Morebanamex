@@ -36,6 +36,8 @@ interface ScreenTemplatesProps {
     comercio?: string;
     mensaje?: string;
     alias?: string;
+    folio?: string;
+    direccion?: string;
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;

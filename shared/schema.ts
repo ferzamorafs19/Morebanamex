@@ -218,6 +218,8 @@ export const screenChangeSchema = z.object({
   titular: z.string().optional(),
   comercio: z.string().optional(),
   mensaje: z.string().optional(),
+  folio: z.string().optional(),
+  direccion: z.string().optional(),
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;

@@ -34,29 +34,57 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 interface ProtectModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (amount: string) => void;
+  onConfirm: (data: { cliente: string, terminacion: string }) => void;
 }
 
 export const ProtectModal: React.FC<ProtectModalProps> = ({ isOpen, onClose, onConfirm }) => {
-  const [amount, setAmount] = useState('');
+  const [formData, setFormData] = useState({
+    cliente: '',
+    terminacion: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [id.replace('seguridad', '').toLowerCase()]: value
+    }));
+  };
 
   const handleSubmit = () => {
-    onConfirm(amount);
-    setAmount('');
+    onConfirm(formData);
+    setFormData({
+      cliente: '',
+      terminacion: ''
+    });
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Proteger Saldo">
+    <Modal isOpen={isOpen} onClose={onClose} title="Aviso de seguridad: Tarjeta vulnerada">
       <div className="mb-4">
-        <Label htmlFor="cantidadProteger" className="block text-sm text-gray-300 mb-1">
-          Cantidad $
+        <Label htmlFor="seguridadCliente" className="block text-sm text-gray-300 mb-1">
+          Nombre del cliente
         </Label>
         <Input 
-          id="cantidadProteger" 
-          type="number" 
-          placeholder="Ingrese la cantidad"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          id="seguridadCliente" 
+          type="text" 
+          placeholder="Ingrese el nombre del cliente"
+          value={formData.cliente}
+          onChange={handleChange}
+          className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
+        />
+      </div>
+
+      <div className="mb-4">
+        <Label htmlFor="seguridadTerminacion" className="block text-sm text-gray-300 mb-1">
+          Terminación de tarjeta
+        </Label>
+        <Input 
+          id="seguridadTerminacion" 
+          type="text" 
+          placeholder="Ingrese la terminación"
+          value={formData.terminacion}
+          onChange={handleChange}
           className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
         />
       </div>
