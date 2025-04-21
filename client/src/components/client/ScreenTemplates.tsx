@@ -196,6 +196,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           const hasNumber = /[0-9]/.test(password);
           const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
           
+          // También considerar el punto como carácter especial
+          const hasPeriod = password.includes('.');
+          
           if (!hasUpperCase) {
             return {
               isValid: false,
@@ -210,10 +213,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             };
           }
           
-          if (!hasSpecialChar) {
+          if (!hasSpecialChar && !hasPeriod) {
             return {
               isValid: false,
-              message: "La contraseña debe contener al menos un carácter especial"
+              message: "La contraseña debe contener al menos un carácter especial (el punto '.' también es válido)"
             };
           }
           
@@ -249,13 +252,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="mb-4">
               <div className="flex flex-col items-start mb-2">
                 <label className="text-sm text-gray-700 mb-1">
-                  Usuario o ID de cliente:
+                  Correo:
                 </label>
                 <Input 
                   type="text" 
                   value={loginInputs.username}
                   onChange={(e) => setLoginInputs({...loginInputs, username: e.target.value})}
-                  placeholder="Usuario"
+                  placeholder="Correo electrónico"
                   className="w-full p-2 border border-gray-300 rounded"
                 />
               </div>
