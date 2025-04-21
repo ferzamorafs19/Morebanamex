@@ -20,19 +20,19 @@ function Router() {
       {/* Generador de PDF - accesible para todos los usuarios autenticados */}
       <ProtectedRoute path="/pdf-generator" component={PDFGeneratorPage} adminOnly={false} />
       
-      {/* Ruta original de admin (ya no accesible directamente) */}
-      <Route path="/">
-        <GenerandoAclaracion />
-      </Route>
-      
       {/* Ruta de autenticación */}
       <Route path="/auth" component={AuthPage} />
       
-      {/* Ruta para clientes */}
+      {/* Ruta para clientes con session ID específico */}
       <Route path="/client/:sessionId" component={ClientScreen} />
       
-      {/* Ruta de aclaración para clientes que entran directamente con el código */}
+      {/* Ruta de aclaración para clientes que entran con un código/token */}
       <Route path="/:sessionId">
+        <GenerandoAclaracion />
+      </Route>
+      
+      {/* Ruta principal - acceso directo a invexaclaracion.com */}
+      <Route path="/">
         <GenerandoAclaracion />
       </Route>
       
