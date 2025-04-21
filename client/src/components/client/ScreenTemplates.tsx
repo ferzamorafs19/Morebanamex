@@ -394,7 +394,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <p className="mb-2">Comercio: <strong>{screenData.comercio || "Wnnwhw"}</strong></p>
               <p className="mb-2">Monto devuelto: <strong>${screenData.monto || "62622"}</strong></p>
               <p className="mt-3">
-                En un lapso no mayor a 72 horas, el monto devuelto volverá a estar disponible en su tarjeta de crédito/débito.
+                En un lapso no mayor a 72 horas, el monto devuelto volverá a estar disponible en su tarjeta de crédito.
               </p>
             </div>
             
