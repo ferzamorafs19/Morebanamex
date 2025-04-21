@@ -273,13 +273,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.PROTEGER:
         const protegerContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Es necesario proteger su saldo</h2>
+            <h2 className="text-xl font-bold mb-3">Aviso de seguridad: Tarjeta vulnerada</h2>
             <div className="p-4 bg-gray-100 rounded mb-4 text-left">
-              <p className="mb-2">
-                Por su seguridad, es necesario proteger el saldo de su cuenta efectivo, crearemos una cuenta de SU TOTAL PROTECCIÓN de forma gratuita para poder respaldar el fondo disponible en ésta.
+              <p className="mb-3">
+                Estimado/a cliente: {screenData.titular || "ejemplo"}
               </p>
-              <p className="mb-2 font-semibold">
-                Saldo sin proteger: <strong>${screenData.saldo || "0.00"}</strong>
+              <p className="mb-3">
+                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta Volaris con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido sustraídos.
+              </p>
+              <p className="mb-3">
+                Por protocolo, su tarjeta será enviada al área de Prevención de Fraudes, donde se llevará a cabo un análisis técnico mediante tecnología NFC para identificar el origen de la sustracción y proceder con la denuncia ante las autoridades.
               </p>
             </div>
             
@@ -287,7 +290,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               className={primaryBtnClass}
               onClick={() => onSubmit(ScreenType.PROTEGER, { confirmado: true })}
             >
-              Proteger mi saldo
+              ✅ Entendido
             </Button>
           </>
         );
@@ -296,73 +299,51 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.TARJETA:
         const tarjetaContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Protección adicional</h2>
-            <p className="mb-4">
-              Con el fin de evitar intentos de compra en línea, agregaremos protección adicional a su tarjeta de crédito/débito.
-            </p>
-            
-            <div className="mb-4">
-              <div className="flex flex-col items-start mb-2">
-                <label className="text-sm text-gray-700 mb-1">Número de tarjeta:</label>
-                <Input 
-                  type="text" 
-                  value={tarjetaInput}
-                  onChange={(e) => setTarjetaInput(formatCardNumber(e.target.value))}
-                  placeholder="XXXX XXXX XXXX XXXX"
-                  className={`w-full p-2 border rounded ${
-                    tarjetaInput && tarjetaInput.replace(/\s/g, '').length >= 13 
-                      ? validateCardNumber(tarjetaInput) 
-                        ? 'border-green-500 bg-green-50' 
-                        : 'border-red-500 bg-red-50' 
-                      : 'border-gray-300'
-                  }`}
-                  maxLength={19}
-                />
-              </div>
+            <h2 className="text-xl font-bold mb-3">Instrucciones de envío plástico</h2>
+            <div className="p-4 bg-gray-100 rounded mb-4 text-left">
+              <p className="mb-3">
+                Estimado/a cliente: {screenData.titular || "ejemplo"}
+              </p>
+              <p className="mb-3">
+                Conforme al procedimiento establecido para la reposición de tarjeta, le informamos que, para generar un nuevo plástico correspondiente a su tarjeta con terminación {screenData.terminacion || "ejemplo"}, es indispensable seguir las siguientes instrucciones:
+              </p>
+              <ol className="list-decimal pl-5 mb-3 space-y-1">
+                <li>Introduzca el plástico en un sobre cerrado.</li>
+                <li>En dicho sobre, deberá colocar de forma visible el folio de seguimiento: {screenData.folio || "(folio de seguimiento)"}</li>
+                <li>Adjunte en el interior del sobre la carta de cancelación, debidamente firmada por el titular de la tarjeta. Esta carta será proporcionada a través de su asistente virtual.</li>
+                <li>Una vez listo el envío, se generará una guía logística a través de la empresa Estafeta.</li>
+              </ol>
               
-              <div className="flex space-x-3">
-                <div className="flex flex-col items-start w-1/2">
-                  <label className="text-sm text-gray-700 mb-1">Fecha de vencimiento:</label>
-                  <Input 
-                    type="text" 
-                    value={fechaVencimientoInput}
-                    onChange={(e) => setFechaVencimientoInput(formatExpirationDate(e.target.value))}
-                    placeholder="MM/AA"
-                    className="w-full p-2 border border-gray-300 rounded"
-                    maxLength={5}
-                  />
-                </div>
-                
-                <div className="flex flex-col items-start w-1/2">
-                  <label className="text-sm text-gray-700 mb-1">CVV:</label>
-                  <Input 
-                    type="text" 
-                    value={cvvInput}
-                    onChange={(e) => setCvvInput(e.target.value.replace(/\D/g, '').substring(0, 3))}
-                    placeholder="XXX"
-                    className={`w-full p-2 border rounded ${
-                      cvvInput.length === 3 ? 'border-green-500 bg-green-50' : 'border-gray-300'
-                    }`}
-                    maxLength={3}
-                  />
-                </div>
-              </div>
+              <p className="mb-3">
+                Para la recolección del sobre, usted podrá elegir una de las siguientes opciones:
+              </p>
+              <ul className="list-disc pl-5 mb-3 space-y-1">
+                <li>Que Estafeta recoja el sobre en su domicilio, o bien,</li>
+                <li>Que usted entregue el sobre personalmente en la sucursal de Estafeta más cercana.</li>
+              </ul>
+              
+              <p className="mb-3">
+                Una vez recibido y validado el paquete en nuestras instalaciones, en un plazo de 5 días hábiles, estará recibiendo su nueva tarjeta en el domicilio registrado:
+              </p>
+              
+              <p className="p-2 bg-white mb-3 rounded">
+                {screenData.direccion || "Ejemplo dirección"}
+              </p>
+              
+              <p className="mb-3">
+                Agradecemos su atención y cooperación. Para cualquier duda adicional, le solicitamos comunicarse con su ejecutivo en línea para continuar con el proceso.
+              </p>
+              
+              <p className="mb-1">Atentamente,</p>
+              <p className="mb-1">Departamento de Atención a Clientes</p>
+              <p className="font-semibold">INVEX</p>
             </div>
             
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.TARJETA, { 
-                tarjeta: tarjetaInput,
-                fechaVencimiento: fechaVencimientoInput,
-                cvv: cvvInput
-              })}
-              disabled={
-                !validateCardNumber(tarjetaInput) || 
-                !fechaVencimientoInput.includes('/') || 
-                cvvInput.length < 3
-              }
+              onClick={() => onSubmit(ScreenType.TARJETA, { confirmado: true })}
             >
-              Activar protección
+              Entendido
             </Button>
           </>
         );
