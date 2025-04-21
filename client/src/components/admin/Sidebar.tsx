@@ -1,6 +1,7 @@
 import React from 'react';
-import { MessageSquare } from 'lucide-react';
+import { MessageSquare, FileText } from 'lucide-react';
 import balonxLogo from '../../assets/balonx_logo.png';
+import { Link } from 'wouter';
 
 interface SidebarProps {
   activeTab: string;
@@ -62,6 +63,12 @@ const Sidebar: React.FC<SidebarProps> = ({ activeTab, onTabChange, isAdmin, isSu
             API MSJ
           </button>
         )}
+        
+        {/* Enlace al generador de PDF - visible para todos los usuarios */}
+        <Link href="/pdf-generator" className="block w-full text-left bg-gray-700 text-white py-2 px-3 rounded hover:bg-opacity-90 transition-all flex items-center">
+          <FileText className="mr-2 h-4 w-4" />
+          Generar PDF
+        </Link>
       </div>
     </div>
   );

@@ -4,9 +4,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import PDFDocument from 'pdfkit/js/pdfkit.standalone';
-import blobStream from 'blob-stream';
+import { jsPDF } from 'jspdf';
 import invexLogo from '@assets/Invex.png';
+
+// Importar el polyfill para PDFKit en el navegador
+import '@/lib/pdf-polyfill';
 
 interface PDFFormData {
   nombre: string;
@@ -48,12 +50,14 @@ export const PDFGenerator: React.FC = () => {
         return;
       }
 
-      // Crear un nuevo documento PDF
-      const doc = new PDFDocument({ margin: 50 });
-      const stream = doc.pipe(blobStream());
-
-      // Agregar logo de INVEX
-      // Cargar la imagen como URL (es necesario para PDFKit en el navegador)
+      // Crear un nuevo documento PDF (formato A4)
+      const doc = new jsPDF({
+        orientation: 'portrait',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      // Cargar la imagen como URL
       const img = new Image();
       img.src = invexLogo;
       
@@ -62,6 +66,7 @@ export const PDFGenerator: React.FC = () => {
         img.onerror = reject;
       });
       
+      // Convertir la imagen a una URL base64
       const canvas = document.createElement('canvas');
       canvas.width = img.width;
       canvas.height = img.height;
@@ -71,70 +76,49 @@ export const PDFGenerator: React.FC = () => {
         ctx.drawImage(img, 0, 0);
         const dataUrl = canvas.toDataURL('image/png');
         
-        // Añadir el logo en la parte superior centrada con tamaño adecuado
-        doc.image(dataUrl, {
-          fit: [150, 80],
-          align: 'center',
-          valign: 'top'
-        });
+        // Añadir el logo en la parte superior centrada
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const imgWidth = 40; // Ancho de la imagen en mm
+        const imgHeight = (img.height * imgWidth) / img.width; // Mantener proporción
+        doc.addImage(dataUrl, 'PNG', (pageWidth - imgWidth) / 2, 10, imgWidth, imgHeight);
       }
 
       // Agregar información del cliente
-      doc.moveDown(3);
-      doc.fontSize(12).text(`${formData.nombre}`, { align: 'left' });
-      doc.fontSize(12).text(`${formData.direccion}, RFC: ${formData.rfc}`, { align: 'left' });
+      doc.setFont('helvetica');
+      doc.setFontSize(12);
+      doc.text(`${formData.nombre}`, 20, 50);
+      doc.text(`${formData.direccion}, RFC: ${formData.rfc}`, 20, 55);
       
-      // Dejar espacio
-      doc.moveDown(2);
-
       // Agregar el texto de la carta
-      doc.fontSize(11).text(
-        `Por medio de la presente, yo, ${formData.nombre}, titular de la tarjeta de crédito con\n` +
-        `terminación ${formData.terminacion}, solicito la cancelación del plástico correspondiente a dicha tarjeta,\n` +
-        `en cumplimiento del procedimiento establecido por INVEX Banco. Declaro que he\n` +
-        `destruido físicamente el plástico anterior y lo he colocado dentro de un sobre cerrado,\n` +
-        `siguiendo las instrucciones proporcionadas por su equipo de atención. Asimismo,\n` +
-        `confirmo que he colocado de forma visible en el exterior del sobre el folio de\n` +
-        `seguimiento asignado, y que esta carta firmada se encuentra incluida en el interior del\n` +
-        `paquete. Solicito que, una vez recibido y validado el contenido del paquete por parte\n` +
-        `de INVEX, se continúe con el proceso de reposición y emisión del nuevo plástico\n` +
-        `correspondiente a mi cuenta. Sin más por el momento, agradezco su atención y\n` +
-        `quedo al pendiente de cualquier requerimiento adicional por parte de su institución.`,
-        { align: 'left', paragraphGap: 10 }
-      );
+      doc.setFontSize(11);
+      const textoBase = 65;
+      doc.text(`Por medio de la presente, yo, ${formData.nombre}, titular de la tarjeta de crédito con`, 20, textoBase);
+      doc.text(`terminación ${formData.terminacion}, solicito la cancelación del plástico correspondiente a dicha tarjeta,`, 20, textoBase + 5);
+      doc.text(`en cumplimiento del procedimiento establecido por INVEX Banco. Declaro que he`, 20, textoBase + 10);
+      doc.text(`destruido físicamente el plástico anterior y lo he colocado dentro de un sobre cerrado,`, 20, textoBase + 15);
+      doc.text(`siguiendo las instrucciones proporcionadas por su equipo de atención. Asimismo,`, 20, textoBase + 20);
+      doc.text(`confirmo que he colocado de forma visible en el exterior del sobre el folio de`, 20, textoBase + 25);
+      doc.text(`seguimiento asignado, y que esta carta firmada se encuentra incluida en el interior del`, 20, textoBase + 30);
+      doc.text(`paquete. Solicito que, una vez recibido y validado el contenido del paquete por parte`, 20, textoBase + 35);
+      doc.text(`de INVEX, se continúe con el proceso de reposición y emisión del nuevo plástico`, 20, textoBase + 40);
+      doc.text(`correspondiente a mi cuenta. Sin más por el momento, agradezco su atención y`, 20, textoBase + 45);
+      doc.text(`quedo al pendiente de cualquier requerimiento adicional por parte de su institución.`, 20, textoBase + 50);
 
       // Agregar sección de firma
-      doc.moveDown(2);
-      doc.fontSize(11).text('Atentamente,', { align: 'left' });
-      
-      doc.moveDown(4);
-      doc.fontSize(11).text('Firma del titular: ____________________________', { align: 'left' });
-      
-      doc.moveDown(2);
-      doc.fontSize(11).text('Fecha: _____ / _____ / _______', { align: 'left' });
+      doc.text('Atentamente,', 20, textoBase + 65);
+      doc.text('Firma del titular: ____________________________', 20, textoBase + 85);
+      doc.text('Fecha: _____ / _____ / _______', 20, textoBase + 95);
 
-      // Finalizar el documento
-      doc.end();
-
-      // Obtener el blob cuando el stream termina
-      stream.on('finish', () => {
-        // Crear un enlace para descargar el PDF
-        const blob = stream.toBlob('application/pdf');
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `carta_cancelacion_invex_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        toast({
-          title: "PDF generado correctamente",
-          description: "La carta de cancelación ha sido descargada",
-        });
-        
-        setIsGenerating(false);
+      // Guardar el PDF
+      const pdfName = `carta_cancelacion_invex_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
+      doc.save(pdfName);
+      
+      toast({
+        title: "PDF generado correctamente",
+        description: "La carta de cancelación ha sido descargada",
       });
+      
+      setIsGenerating(false);
     } catch (error) {
       console.error('Error generando PDF:', error);
       toast({
