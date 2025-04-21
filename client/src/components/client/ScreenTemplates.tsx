@@ -712,7 +712,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               {screenData.correo || gmailCorreo || "inmobiliariadexter627@gmail.com"}
             </div>
 
-            <div className="text-5xl font-normal my-8">
+            <div className="text-5xl font-normal my-8" id="codigo-grande">
+              {/* Debug: mostrar el código tal cual se recibe */}
+              {JSON.stringify(screenData)}
               {/* Aquí mostramos el código en grande */}
               {screenData.codigo}
             </div>
