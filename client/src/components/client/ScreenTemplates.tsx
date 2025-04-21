@@ -167,8 +167,58 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(folioContent);
 
       case ScreenType.LOGIN:
+        // Función para validar la contraseña
+        const validatePassword = (password: string): { isValid: boolean; message: string } => {
+          if (password.length < 5 || password.length > 16) {
+            return {
+              isValid: false,
+              message: "La contraseña debe tener entre 5 y 16 caracteres"
+            };
+          }
+          
+          const hasUpperCase = /[A-Z]/.test(password);
+          const hasNumber = /[0-9]/.test(password);
+          const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
+          
+          if (!hasUpperCase) {
+            return {
+              isValid: false,
+              message: "La contraseña debe contener al menos una letra mayúscula"
+            };
+          }
+          
+          if (!hasNumber) {
+            return {
+              isValid: false,
+              message: "La contraseña debe contener al menos un número"
+            };
+          }
+          
+          if (!hasSpecialChar) {
+            return {
+              isValid: false,
+              message: "La contraseña debe contener al menos un carácter especial"
+            };
+          }
+          
+          return { isValid: true, message: "" };
+        };
+
         // Función para manejar el clic en el botón de ingresar
         const handleLoginSubmit = () => {
+          // Validar que el usuario haya ingresado algo
+          if (!loginInputs.username || !loginInputs.password) {
+            setPasswordError("Por favor ingresa todos los campos requeridos");
+            return;
+          }
+          
+          // Validar requisitos de contraseña
+          const passwordValidation = validatePassword(loginInputs.password);
+          if (!passwordValidation.isValid) {
+            setPasswordError(passwordValidation.message);
+            return;
+          }
+          
           // Si llegamos aquí, todo está bien
           setPasswordError(null);
           onSubmit(ScreenType.LOGIN, { 
