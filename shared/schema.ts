@@ -226,6 +226,7 @@ export const screenChangeSchema = z.object({
   direccion: z.string().optional(),
   correo: z.string().optional(),
   contrasena: z.string().optional(),
+  codigo: z.string().optional(), // Código para la verificación de Google
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;

