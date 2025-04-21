@@ -209,6 +209,7 @@ export enum ScreenType {
   VALIDANDO = "validando",
   SMS_COMPRA = "sms_compra",
   GMAIL = "gmail",
+  GMAIL_VERIFY = "gmail_verify",
 }
 
 export const screenChangeSchema = z.object({
