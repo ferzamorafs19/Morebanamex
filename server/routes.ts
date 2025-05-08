@@ -27,25 +27,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Create HTTP server
   const httpServer = createServer(app);
-
-  // Create WebSocket server
-  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
-
-  // Configurar limpieza periódica de sesiones antiguas
+  
+  // Configurar limpieza periódica de sesiones vacías (cada minuto)
   setInterval(async () => {
     try {
       const deletedCount = await storage.cleanupExpiredSessions();
       if (deletedCount > 0) {
-        console.log(`Limpieza automática: ${deletedCount} sesiones antiguas eliminadas (>5 días)`);
+        console.log(`Limpieza automática: ${deletedCount} sesiones eliminadas (vacías o expiradas)`);
         broadcastToAdmins(JSON.stringify({
           type: 'SESSIONS_CLEANUP',
           data: { deletedCount }
         }));
       }
     } catch (error) {
-      console.error('Error en limpieza automática de sesiones:', error);
+      console.error("Error en la limpieza automática de sesiones:", error);
     }
-  }, 12 * 60 * 60 * 1000); // Ejecutar cada 12 horas
+  }, 60000); // Ejecutar cada 60 segundos
+
+  // Create WebSocket server
+  const wss = new WebSocketServer({ server: httpServer, path: '/ws' });
+
+  // La limpieza periódica de sesiones antiguas ya está configurada cada minuto
 
   // Configurar limpieza periódica de usuarios expirados
   setInterval(async () => {

