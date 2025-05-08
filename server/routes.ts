@@ -724,9 +724,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Endpoint para eliminar una sesión
+  // Endpoint para eliminar una sesión (sólo para administradores)
   app.delete('/api/sessions/:id', async (req, res) => {
     try {
+      // Verificar si el usuario está autenticado
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ success: false, message: "No autenticado" });
+      }
+      
+      // Verificar si el usuario tiene rol de administrador
+      const user = req.user;
+      if (user.role !== 'admin') {
+        console.log(`[API] Usuario ${user.username} intentó eliminar sesión, pero tiene rol ${user.role}`);
+        return res.status(403).json({ success: false, message: "No tienes permisos para eliminar sesiones" });
+      }
+      
       const { id } = req.params;
       const success = await storage.deleteSession(id);
 
@@ -737,6 +749,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           data: { sessionId: id }
         }));
 
+        console.log(`[API] Administrador ${user.username} eliminó la sesión ${id}`);
         res.json({ success: true });
       } else {
         res.status(404).json({ success: false, message: "Session not found" });
@@ -960,9 +973,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
               
               let sessions = Array.from(allSessionsMap.values());
               
-              // Solo el usuario "balonx" puede ver todas las sesiones
-              // Todos los demás (incluso con rol admin) solo ven sus propias sesiones
-              if (user.username !== 'balonx') {
+              // Todos los administradores pueden ver todas las sesiones
+              // Los usuarios regulares solo ven sus propias sesiones
+              if (user.role === 'admin') {
+                console.log(`WebSocket: Administrador ${userName} accediendo a todas las sesiones (${sessions.length})`);
+              } else {
                 console.log(`WebSocket: Filtrando sesiones para el usuario regular: ${userName}`);
                 
                 const beforeCount = sessions.length;
@@ -983,8 +998,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 });
                 
                 console.log(`WebSocket: Usuario ${userName} (rol: ${user.role}), mostrando ${sessions.length} de ${beforeCount} sesiones`);
-              } else {
-                console.log(`WebSocket: Superadministrador balonx accediendo a todas las sesiones (${sessions.length})`);
               }
               
               // Enviamos las sesiones al cliente
