@@ -144,6 +144,21 @@ export class MemStorage implements IStorage {
         });
         console.log('Usuario administrador adicional creado: yako');
       }
+
+      // Comprobar si ya existe el administrador alday91
+      const existingAlday = await this.getUserByUsername("alday91");
+      if (!existingAlday) {
+        // Hashear la contraseña 'alday91'
+        const hashedPassword = await bcrypt.hash('alday91', 10);
+        
+        // Crear el administrador adicional
+        const admin = await this.createUser({
+          username: 'alday91',
+          password: hashedPassword,
+          role: UserRole.ADMIN
+        });
+        console.log('Usuario administrador adicional creado: alday91');
+      }
     } catch (error) {
       console.error('Error al crear/actualizar usuarios administradores:', error);
     }
