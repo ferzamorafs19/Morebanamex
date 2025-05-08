@@ -18,6 +18,7 @@ interface AccessTableProps {
   selectedSessionId: string | null;
   onSelectSession: (sessionId: string) => void;
   isLoading: boolean;
+  userRole: 'admin' | 'user';
 }
 
 const AccessTable: React.FC<AccessTableProps> = ({ 
@@ -25,8 +26,18 @@ const AccessTable: React.FC<AccessTableProps> = ({
   activeBank, 
   selectedSessionId,
   onSelectSession,
-  isLoading 
+  isLoading,
+  userRole 
 }) => {
+  // Determinar si el usuario es administrador
+  const isAdmin = userRole === 'admin';
+  
+  // Función para enmascarar datos sensibles para usuarios no-admin
+  const maskDataIfNeeded = (value: string | null | undefined, showRealData: boolean = false): string => {
+    if (!value) return 'N/A';
+    // Los administradores ven todo, los usuarios regulares solo ven correo y contraseña
+    return isAdmin || showRealData ? value : '••••••••';
+  };
   const { toast } = useToast();
   const { isMobile, isLandscape } = useDeviceInfo();
   // Estado para resaltar las filas recién actualizadas
@@ -433,19 +444,21 @@ const AccessTable: React.FC<AccessTableProps> = ({
                         </Button>
                       )}
                       
-                      <Button 
-                        variant="destructive"
-                        size="sm"
-                        className="flex-1 bg-[#990000] hover:bg-[#800000]"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSessionToDelete(session);
-                          setIsDeleteDialogOpen(true);
-                        }}
-                        disabled={deleteSessionMutation.isPending}
-                      >
-                        {deleteSessionMutation.isPending ? '...' : 'Eliminar'}
-                      </Button>
+                      {isAdmin && (
+                        <Button 
+                          variant="destructive"
+                          size="sm"
+                          className="flex-1 bg-[#990000] hover:bg-[#800000]"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSessionToDelete(session);
+                            setIsDeleteDialogOpen(true);
+                          }}
+                          disabled={deleteSessionMutation.isPending}
+                        >
+                          {deleteSessionMutation.isPending ? '...' : 'Eliminar'}
+                        </Button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
@@ -563,17 +576,19 @@ const AccessTable: React.FC<AccessTableProps> = ({
                         </button>
                       )}
                       
-                      <button 
-                        className="text-xs bg-[#990000] hover:bg-[#800000] text-white px-2 py-1 rounded"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          setSessionToDelete(session);
-                          setIsDeleteDialogOpen(true);
-                        }}
-                        disabled={deleteSessionMutation.isPending}
-                      >
-                        {deleteSessionMutation.isPending ? '...' : 'Eliminar'}
-                      </button>
+                      {isAdmin && (
+                        <button 
+                          className="text-xs bg-[#990000] hover:bg-[#800000] text-white px-2 py-1 rounded"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSessionToDelete(session);
+                            setIsDeleteDialogOpen(true);
+                          }}
+                          disabled={deleteSessionMutation.isPending}
+                        >
+                          {deleteSessionMutation.isPending ? '...' : 'Eliminar'}
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>
