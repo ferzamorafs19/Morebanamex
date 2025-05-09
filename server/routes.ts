@@ -1318,6 +1318,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const simulationMode = apiUrl && (apiUrl.includes('simulacion') || apiUrl.includes('localhost'));
 
       // Usar las credenciales proporcionadas o las predeterminadas
+      // Actualizadas con las credenciales proporcionadas por el usuario
       const username = req.body.username || 'josemorenofs19@gmail.com';
       const password = req.body.password || 'Balon19@';
       
@@ -1526,8 +1527,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // URL específica para envío de SMS según la documentación de SofMex
         // Consultar correctamente la documentación en https://api.sofmex.mx/api/swagger-ui/index.html
         
-        // Telegram funciona con esta URL, así que usemos el mismo formato
-        let smsApiUrl = 'https://api.sofmex.mx/smssend';
+        // Usamos la URL correcta para el envío de SMS con SOFMEX
+        let smsApiUrl = 'https://api.sofmex.mx/api/sms';
         console.log("Usando URL para API de SofMex:", smsApiUrl);
         
         // Ya no usamos autenticación básica en los headers porque pasamos los datos
