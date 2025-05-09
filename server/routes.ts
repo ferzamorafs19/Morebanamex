@@ -1496,7 +1496,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const loginUrl = `${baseApiUrl}/api/login`; // URL de autenticación corregida
         const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/api/sms/enviar`; // URL para enviar SMS
         
-        console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
+        console.log(`Usando credenciales: ${username}, API URLs: Login ${loginUrl}, SMS ${smsApiUrl}`);
         
         // Paso 1: Obtener token con credenciales
         console.log("Obteniendo token de autenticación");

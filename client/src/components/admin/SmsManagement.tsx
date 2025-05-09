@@ -54,7 +54,7 @@ const SmsManagement: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
-  // Solo mantenemos la URL de la API, el resto se configura automáticamente
+  // Utilizamos la URL correcta de la API para envío de SMS
   const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api/sms/enviar');
   const [apiUsername, setApiUsername] = useState('josemorenofs19@gmail.com');
   const [apiPassword, setApiPassword] = useState('Balon19@');
