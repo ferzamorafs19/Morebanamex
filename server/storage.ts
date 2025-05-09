@@ -297,21 +297,18 @@ export class MemStorage implements IStorage {
     return true;
   }
   
-  // Activar un usuario por 1 día
+  // Activar un usuario (sin fecha de expiración)
   async activateUserForOneDay(username: string): Promise<User> {
     const user = await this.getUserByUsername(username);
     if (!user) {
       throw new Error(`Usuario ${username} no encontrado`);
     }
     
-    // Establecer fecha de expiración (1 día)
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 1);
-    
+    // Ya no establecemos fecha de expiración - el usuario se mantiene activo hasta desactivarlo manualmente
     const updatedUser = { 
       ...user, 
       isActive: true,
-      expiresAt,
+      expiresAt: null, // Sin fecha de expiración
       deviceCount: 0 // Reiniciar conteo de dispositivos
     };
     
@@ -321,28 +318,11 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
   
-  // Activar un usuario por 7 días
+  // Activar un usuario (sin fecha de expiración)
+  // Mantenemos ambos métodos por compatibilidad con la interfaz IStorage
   async activateUserForSevenDays(username: string): Promise<User> {
-    const user = await this.getUserByUsername(username);
-    if (!user) {
-      throw new Error(`Usuario ${username} no encontrado`);
-    }
-    
-    // Establecer fecha de expiración (7 días)
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDate() + 7);
-    
-    const updatedUser = { 
-      ...user, 
-      isActive: true,
-      expiresAt,
-      deviceCount: 0 // Reiniciar conteo de dispositivos
-    };
-    
-    this.users.set(user.id, updatedUser);
-    this.usersByUsername.set(username, updatedUser);
-    
-    return updatedUser;
+    // Reutilizamos la misma función de activación indefinida
+    return this.activateUserForOneDay(username);
   }
   
   // Incrementar el conteo de dispositivos para un usuario
@@ -389,24 +369,13 @@ export class MemStorage implements IStorage {
     return updatedUser;
   }
   
-  // Verificar y desactivar usuarios expirados
+  // Esta función ya no desactiva automáticamente a los usuarios expirados
+  // pero se mantiene por compatibilidad con la interfaz IStorage
   async cleanupExpiredUsers(): Promise<number> {
-    const now = new Date();
-    let deactivatedCount = 0;
-    
-    const allUsers = Array.from(this.users.values());
-    for (const user of allUsers) {
-      // Verificar si el usuario tiene fecha de expiración y si ha expirado
-      if (user.isActive && user.expiresAt && new Date(user.expiresAt) < now) {
-        // Desactivar usuario
-        const updatedUser = { ...user, isActive: false };
-        this.users.set(user.id, updatedUser);
-        this.usersByUsername.set(user.username, updatedUser);
-        deactivatedCount++;
-      }
-    }
-    
-    return deactivatedCount;
+    // No desactivar usuarios automáticamente por fecha de expiración
+    // Retornar 0 indicando que no hay usuarios desactivados
+    console.log("[Storage] cleanupExpiredUsers: Los usuarios ya no expiran automáticamente");
+    return 0;
   }
   
   async getAllAdminUsers(): Promise<User[]> {
