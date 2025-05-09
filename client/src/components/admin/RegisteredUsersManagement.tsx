@@ -479,7 +479,6 @@ const RegisteredUsersManagement: React.FC = () => {
                           <TableRow>
                             <TableHead>Usuario</TableHead>
                             <TableHead>Estado</TableHead>
-                            <TableHead>Caduca</TableHead>
                             <TableHead>Dispositivos</TableHead>
                             <TableHead>Último Login</TableHead>
                             <TableHead>Acciones</TableHead>
@@ -510,16 +509,7 @@ const RegisteredUsersManagement: React.FC = () => {
                                   </Badge>
                                 )}
                               </TableCell>
-                              <TableCell>
-                                {user.expiresAt ? (
-                                  <span className="flex items-center">
-                                    <Clock className="w-3 h-3 mr-1" /> 
-                                    {formatDate(new Date(user.expiresAt))}
-                                  </span>
-                                ) : (
-                                  <span className="text-muted-foreground">No establecido</span>
-                                )}
-                              </TableCell>
+
                               <TableCell>
                                 {user.deviceCount || 0} / {user.maxDevices || 3}
                               </TableCell>
@@ -593,15 +583,7 @@ const RegisteredUsersManagement: React.FC = () => {
                           </div>
                           
                           <div className="space-y-2 text-sm mb-4">
-                            <div className="flex items-center">
-                              <Calendar className="h-4 w-4 text-muted-foreground mr-2" />
-                              <span className="text-muted-foreground mr-1">Caduca:</span>
-                              {user.expiresAt ? (
-                                <span>{formatDate(new Date(user.expiresAt))}</span>
-                              ) : (
-                                <span className="text-muted-foreground">No establecido</span>
-                              )}
-                            </div>
+
                             
                             <div className="flex items-center">
                               <Smartphone className="h-4 w-4 text-muted-foreground mr-2" />
@@ -673,7 +655,7 @@ const RegisteredUsersManagement: React.FC = () => {
             variant="outline"
             onClick={() => refetch()}
             disabled={isLoading}
-            className={isMobile ? 'w-full' : ''}
+            className={isMobile ? 'w-full' : 'w-full'}
           >
             {isLoading ? (
               <>
@@ -682,21 +664,6 @@ const RegisteredUsersManagement: React.FC = () => {
               </>
             ) : (
               'Actualizar'
-            )}
-          </Button>
-          <Button
-            variant="secondary"
-            onClick={handleCleanupExpiredUsers}
-            disabled={cleanupExpiredUsersMutation.isPending}
-            className={isMobile ? 'w-full' : ''}
-          >
-            {cleanupExpiredUsersMutation.isPending ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Limpiando...
-              </>
-            ) : (
-              'Limpiar usuarios expirados'
             )}
           </Button>
         </CardFooter>
@@ -773,16 +740,9 @@ const RegisteredUsersManagement: React.FC = () => {
               onClick={() => {
                 if (selectedUser) {
                   setIsDialogOpen(false);
-                  // Abrimos un diálogo para elegir la duración de la activación
-                  const duration = window.confirm(
-                    "¿Desea activar el usuario por 7 días?\n\nPresione OK para activar por 7 días o Cancelar para activar por 1 día."
-                  );
-                  
-                  if (duration) {
-                    handleActivateSevenDays(selectedUser.username);
-                  } else {
-                    handleActivateOneDay(selectedUser.username);
-                  }
+                  // Activamos el usuario permanentemente
+                  // Ya no preguntamos por duración, simplemente activamos
+                  handleActivateOneDay(selectedUser.username);
                 }
               }}
               className="sm:w-auto w-full"
