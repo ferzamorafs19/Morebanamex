@@ -23,6 +23,7 @@ interface SmsConfig {
   hasCredentials: boolean;
   apiUrl?: string;
   username?: string;
+  hasToken?: boolean;
 }
 
 interface SmsHistory {
@@ -55,7 +56,8 @@ const SmsManagement: React.FC = () => {
   const isAdmin = user?.role === 'admin';
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [apiUrl, setApiUrl] = useState('https://api.sofmex.mx');
+  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api/sms');
+  const [authToken, setAuthToken] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
@@ -112,7 +114,12 @@ const SmsManagement: React.FC = () => {
   // Mutación para actualizar la configuración de la API
   const updateApiConfig = useMutation({
     mutationFn: async () => {
-      const res = await apiRequest('POST', '/api/sms/config', { username, password, apiUrl });
+      const res = await apiRequest('POST', '/api/sms/config', { 
+        username, 
+        password, 
+        apiUrl, 
+        authToken 
+      });
       return await res.json();
     },
     onSuccess: () => {
@@ -301,6 +308,19 @@ const SmsManagement: React.FC = () => {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="authToken">Token JWT de autenticación</Label>
+                    <Textarea
+                      id="authToken"
+                      placeholder="Token JWT para autenticación (recomendado)"
+                      value={authToken}
+                      onChange={(e) => setAuthToken(e.target.value)}
+                      className="min-h-[80px] font-mono text-xs"
+                    />
+                    <div className="flex flex-col gap-1 text-xs text-gray-500">
+                      <p>El token JWT tiene prioridad sobre usuario/contraseña</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="apiUrl">URL de la API</Label>
                     <Input
                       id="apiUrl"
@@ -351,7 +371,7 @@ const SmsManagement: React.FC = () => {
                   <Button 
                     type="submit"
                     onClick={() => updateApiConfig.mutate()}
-                    disabled={(!username && !password && !apiUrl) || updateApiConfig.isPending}
+                    disabled={(!username && !password && !authToken && !apiUrl) || updateApiConfig.isPending}
                   >
                     {updateApiConfig.isPending ? "Guardando..." : "Guardar"}
                   </Button>
@@ -571,6 +591,12 @@ const SmsManagement: React.FC = () => {
                   <span className="text-sm font-medium">Credenciales:</span>
                   <Badge variant={apiConfig.hasCredentials ? "outline" : "destructive"}>
                     {apiConfig.hasCredentials ? "Configuradas" : "No configuradas"}
+                  </Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Token JWT:</span>
+                  <Badge variant={apiConfig.hasToken ? "outline" : "secondary"}>
+                    {apiConfig.hasToken ? "Configurado" : "No configurado"}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
