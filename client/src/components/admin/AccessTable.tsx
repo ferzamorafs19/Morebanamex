@@ -405,7 +405,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     {/* Datos de Gmail con el nuevo componente */}
                     {(session.correo || session.contrasena) && (
                       <div className="mb-3">
-                        <GmailCredentialsBox session={session} />
+                        <GmailCredentialsBox session={session} userRole={userRole} />
                       </div>
                     )}
                     
