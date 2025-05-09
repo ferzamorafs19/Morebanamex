@@ -499,16 +499,20 @@ const SmsManagement: React.FC = () => {
                 
                 {/* Mostrar información diferente sobre créditos según rol */}
                 {isAdmin ? (
-                  <Alert>
+                  <Alert className="bg-blue-50 border-blue-200">
                     <AlertDescription>
-                      Como administrador, puedes enviar mensajes SMS sin necesidad de créditos.
+                      <p>Como administrador, puedes enviar mensajes SMS sin necesidad de créditos.</p>
+                      <p className="text-xs mt-1">La API SOFMEX v3 gestiona la autenticación automáticamente mediante token JWT.</p>
                     </AlertDescription>
                   </Alert>
                 ) : credits && (
-                  <Alert>
+                  <Alert className="bg-green-50 border-green-200">
                     <AlertDescription>
-                      Tienes <Badge variant="outline">{credits.credits}</Badge> créditos disponibles.
-                      Cada mensaje consume 1 crédito.
+                      <p>
+                        Tienes <Badge variant="outline" className="bg-white">{credits.credits}</Badge> créditos disponibles.
+                        Cada mensaje consume 1 crédito.
+                      </p>
+                      <p className="text-xs mt-1">Los mensajes se envían mediante la API SOFMEX v3 con autenticación automática.</p>
                     </AlertDescription>
                   </Alert>
                 )}
@@ -570,9 +574,9 @@ const SmsManagement: React.FC = () => {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Token JWT:</span>
-                  <Badge variant={apiConfig.hasToken ? "outline" : "secondary"}>
-                    {apiConfig.hasToken ? "Configurado" : "No configurado"}
+                  <span className="text-sm font-medium">Autenticación:</span>
+                  <Badge variant="outline" className="bg-green-50">
+                    JWT Automático
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
