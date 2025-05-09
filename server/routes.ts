@@ -1480,8 +1480,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Obtener la configuración actual de SMS
       const smsConfig = await storage.getSmsConfig();
       
-      // Por ahora, forzamos el modo simulación
-      const simulationMode = true;
+      // Verificar modo simulación en la configuración o usar el valor por defecto
+      const simulationMode = smsConfig ? smsConfig.apiUrl === 'simulacion' || !smsConfig.isActive : false;
       
       if (simulationMode) {
         console.log("Modo simulación activado - Procesando SMS simulado");
@@ -1506,9 +1506,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const username = smsConfig?.username || 'josemorenofs19@gmail.com';
           const password = smsConfig?.password || 'Balon19@';
           
-          // URLs base de la API según la documentación actualizada
+          // URLs base de la API según la documentación actualizada y las pruebas
           const baseApiUrl = 'https://www.sofmex.com';
-          const loginUrl = `${baseApiUrl}/login`;
+          const loginUrl = `${baseApiUrl}/api/login`; // URL correcta con /api/login
           const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/sms/v3/asignacion`;
           
           console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
@@ -1533,10 +1533,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             data: loginResponse.data
           });
           
-          // El modo simulación ya está habilitado globalmente
-          // Continuamos con el código solo para registrar logs de la API
-          
-          // El código siguiente no se ejecutará en modo simulación
+          // Verificamos la respuesta del servidor
+          // Si hay algún error de autenticación, lo manejamos
           if (loginResponse.status !== 200 || loginResponse.data.status !== 0) {
             throw new Error(`Error de autenticación: ${JSON.stringify(loginResponse.data)}`);
           }

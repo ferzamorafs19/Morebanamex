@@ -55,7 +55,7 @@ const SmsManagement: React.FC = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   // Solo mantenemos la URL de la API, el resto se configura automáticamente
-  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/sms/v3/asignacion');
+  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api/sms');
   const [apiUsername, setApiUsername] = useState('josemorenofs19@gmail.com');
   const [apiPassword, setApiPassword] = useState('Balon19@');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -335,7 +335,7 @@ const SmsManagement: React.FC = () => {
                           if (checked) {
                             setApiUrl('simulacion');
                           } else {
-                            setApiUrl('https://www.sofmex.com/sms/v3/asignacion');
+                            setApiUrl('https://www.sofmex.com/api/sms');
                           }
                         }}
                       />
