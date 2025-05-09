@@ -877,31 +877,90 @@ export default function AdminPanel() {
 
   // Vista completa para administradores
   return (
-    <div className="flex w-full h-screen overflow-hidden">
-      {/* Sidebar */}
-      <Sidebar 
-        activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab as 'current' | 'saved' | 'users' | 'registered' | 'sms')}
-        isAdmin={isAdmin}
-        isSuperAdmin={isSuperAdmin}
-      />
+    <div className="admin-container flex flex-col md:flex-row w-full h-screen overflow-hidden">
+      {/* Sidebar - visible on desktop */}
+      <div className="md:block hidden">
+        <Sidebar 
+          activeTab={activeTab}
+          onTabChange={(tab) => setActiveTab(tab as 'current' | 'saved' | 'users' | 'registered' | 'sms')}
+          isAdmin={isAdmin}
+          isSuperAdmin={isSuperAdmin}
+        />
+      </div>
+
+      {/* Mobile header - visible only on mobile */}
+      <div className="md:hidden flex items-center justify-between p-3 bg-[#16213e] border-b border-[#2a2a42] sticky top-0 z-10">
+        <h1 className="text-lg font-bold">Panel INVEX</h1>
+        <div className="flex gap-2 items-center">
+          <div className="flex items-center bg-[#be0046] px-2 py-1 rounded text-xs">
+            {isAdmin ? 
+              <span className="flex items-center"><UserCog className="w-3 h-3 mr-1" /> {user?.username}</span> : 
+              <span>{user?.username}</span>
+            }
+          </div>
+          <button 
+            onClick={() => logoutMutation.mutate()}
+            className="bg-[#0c1a2a] p-1.5 rounded"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile navigation - visible only on mobile */}
+      <div className="md:hidden admin-tabs overflow-x-auto sticky top-12 z-10">
+        <button
+          className={`admin-tab ${activeTab === 'current' ? 'active' : ''}`}
+          onClick={() => setActiveTab('current')}
+        >
+          Actuales
+        </button>
+        <button
+          className={`admin-tab ${activeTab === 'saved' ? 'active' : ''}`}
+          onClick={() => setActiveTab('saved')}
+        >
+          Guardadas
+        </button>
+        {isAdmin && (
+          <>
+            <button
+              className={`admin-tab ${activeTab === 'users' ? 'active' : ''}`}
+              onClick={() => setActiveTab('users')}
+            >
+              Usuarios
+            </button>
+            <button
+              className={`admin-tab ${activeTab === 'registered' ? 'active' : ''}`}
+              onClick={() => setActiveTab('registered')}
+            >
+              Registrados
+            </button>
+            <button
+              className={`admin-tab ${activeTab === 'sms' ? 'active' : ''}`}
+              onClick={() => setActiveTab('sms')}
+            >
+              SMS
+            </button>
+          </>
+        )}
+      </div>
 
       {/* Main Content */}
-      <div className="flex-1 bg-[#121212] text-white flex flex-col h-screen overflow-hidden">
+      <div className="flex-1 flex flex-col h-screen overflow-hidden">
         {/* Header Section */}
-        <div className="p-6 pb-0">
-          <div className="flex justify-between items-start">
+        <div className="p-4 md:p-6 pb-0">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
             <div>
-              <p className="text-[#00aaff]">Panel / Accesos</p>
-              <h1 className="text-2xl font-bold mb-3">Panel Accesos</h1>
+              <p className="text-[#be0046] text-sm">Panel / Accesos</p>
+              <h1 className="text-xl md:text-2xl font-bold mb-2 md:mb-3">Panel Accesos</h1>
               
               <div className="mt-2">
-                <label htmlFor="pantallaControl" className="text-sm text-gray-400">
+                <label htmlFor="pantallaControl" className="text-sm text-gray-300">
                   Acciones / Control de Pantalla:
                 </label>
                 <select 
                   id="pantallaControl" 
-                  className="mt-1 bg-[#2c2c2c] text-white border border-gray-700 rounded px-3 py-2 w-64"
+                  className="mt-1 bg-[#16213e] text-white border border-[#2a2a42] rounded px-3 py-2 w-full md:w-64"
                   onChange={(e) => handleScreenChange(e.target.value)}
                   value=""
                 >

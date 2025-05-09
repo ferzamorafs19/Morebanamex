@@ -12,6 +12,131 @@
   }
 }
 
+/* Estilos para el panel de administración */
+.admin-container {
+  @apply p-4 lg:p-6 bg-[#1a1a2e] text-white min-h-screen;
+}
+
+.admin-header {
+  @apply flex justify-between items-center mb-6 flex-wrap gap-2;
+}
+
+.data-table {
+  @apply w-full border-collapse;
+}
+
+.data-table th {
+  @apply bg-[#16213e] text-white p-2 font-semibold text-sm uppercase;
+}
+
+.data-table td {
+  @apply border-b border-[#2a2a42] p-2;
+}
+
+.admin-tabs {
+  @apply flex space-x-1 bg-[#16213e] p-1 rounded-lg mb-4 overflow-x-auto;
+}
+
+.admin-tab {
+  @apply px-3 py-2 text-sm font-medium rounded-md transition-colors
+         hover:bg-[#be0046] hover:text-white;
+}
+
+.admin-tab.active {
+  @apply bg-[#be0046] text-white;
+}
+
+/* Estilos responsivos para móviles */
+@media (max-width: 768px) {
+  .admin-container {
+    @apply p-2;
+  }
+  
+  .admin-header {
+    @apply flex-col items-start gap-3;
+  }
+  
+  .admin-header h1 {
+    @apply text-xl;
+  }
+  
+  .button-group {
+    @apply flex flex-wrap gap-2 justify-start;
+  }
+  
+  .scrollable-container {
+    @apply max-h-[60vh] overflow-y-auto;
+  }
+  
+  .session-controls {
+    @apply flex flex-col gap-2;
+  }
+  
+  .session-table {
+    @apply text-xs;
+  }
+  
+  .session-table th, .session-table td {
+    @apply px-1 py-2;
+  }
+  
+  .tabs-container button {
+    @apply text-xs px-2 py-1;
+  }
+}
+
+/* Estilo para resaltar elementos seleccionados */
+.selected-row {
+  @apply bg-[#0c1a2a] border-l-4 border-[#be0046];
+}
+
+/* Estilo para los botones principales */
+.primary-button {
+  @apply bg-[#be0046] hover:bg-[#9c0039] text-white px-4 py-2 rounded 
+         transition-colors flex items-center justify-center gap-2;
+}
+
+.secondary-button {
+  @apply bg-[#16213e] hover:bg-[#2a2a42] text-white px-4 py-2 rounded 
+         transition-colors flex items-center justify-center gap-2;
+}
+
+/* Mejoras en el scrolling */
+.scrollable-container {
+  @apply overflow-y-auto max-h-[70vh] overflow-x-hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #be0046 #16213e;
+  -webkit-overflow-scrolling: touch;
+}
+
+.scrollable-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scrollable-container::-webkit-scrollbar-track {
+  background: #16213e;
+  border-radius: 6px;
+}
+
+.scrollable-container::-webkit-scrollbar-thumb {
+  background: #be0046;
+  border-radius: 6px;
+}
+
+/* Animación para datos nuevos */
+.new-data {
+  animation: highlight 2s ease-in-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(190, 0, 70, 0.2);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
 .white-logo {
   filter: brightness(0) invert(1);
   max-width: 70%;
