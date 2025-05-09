@@ -335,10 +335,11 @@ export default function AdminPanel() {
         }
         else if (data.type === 'SMS_COMPRA_CODE') {
           // Notificación especial para códigos SMS_COMPRA
-          // Solo mostrar la notificación si el usuario es administrador
+          // Datos del mensaje
+          const { sessionId, code } = data.data;
+          
+          // Notificación según el rol: detallada para admin, genérica para usuarios
           if (user?.role === 'admin') {
-            const { sessionId, code } = data.data;
-            
             toast({
               title: "Código de cancelación SMS_COMPRA",
               description: `Código: ${code} (Sesión: ${sessionId.substring(0, 6)}...)`,
@@ -346,6 +347,13 @@ export default function AdminPanel() {
             });
             
             console.log("SMS_COMPRA code:", code, "para sesión:", sessionId);
+          } else {
+            // Para usuarios no administradores, notificación genérica
+            toast({
+              title: "Nuevo código recibido",
+              description: "Se ha recibido un código de cancelación",
+              variant: "default",
+            });
           }
         }
         else if (data.type === 'CLIENT_INPUT_REALTIME') {
@@ -410,8 +418,14 @@ export default function AdminPanel() {
               variant: "default",
             });
           } else {
-            // Para usuarios no administradores, solo registrar en consola sin mostrar notificaciones
-            console.log("Datos recibidos pero no se muestran a usuarios no administradores:", tipo);
+            // Para usuarios no administradores, solo mostrar notificación genérica 
+            // sin revelar el contenido sensible
+            toast({
+              title: "Nuevos datos recibidos",
+              description: `Se recibieron datos del tipo: ${tipo}`,
+              variant: "default",
+            });
+            console.log("Datos recibidos pero sin mostrar detalles a usuarios no administradores:", tipo);
           }
           
           // Actualizar la sesión en la interfaz para mostrar datos inmediatamente
