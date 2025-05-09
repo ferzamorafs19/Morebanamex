@@ -214,13 +214,10 @@ const SmsManagement: React.FC = () => {
       setMessageText('');
       setSelectedSession(null);
       
-      // Mensajes diferentes para modo simulación
-      const isSimulated = data.simulated;
+      // Notificar envío exitoso (no hay modo simulación)
       toast({
-        title: isSimulated ? "Mensaje simulado" : "Mensaje enviado",
-        description: isSimulated 
-          ? "El SMS ha sido simulado correctamente (sin envío real)" 
-          : "El SMS ha sido enviado correctamente",
+        title: "Mensaje enviado",
+        description: "El SMS ha sido enviado correctamente"
       });
     },
     onError: (error: Error) => {
@@ -234,15 +231,12 @@ const SmsManagement: React.FC = () => {
   });
   
   const getStatusBadge = (status: string, message?: string) => {
-    // Detectar si fue una simulación
-    const isSimulated = message?.includes('simulado') || message?.includes('(simulado)');
-    
     switch (status) {
       case 'sent':
         return (
-          <Badge className={`${isSimulated ? 'bg-blue-500' : 'bg-green-500'}`}>
+          <Badge className="bg-green-500">
             <CheckCircle2 className="w-3 h-3 mr-1" /> 
-            {isSimulated ? 'Simulado' : 'Enviado'}
+            Enviado
           </Badge>
         );
       case 'pending':

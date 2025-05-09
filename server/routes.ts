@@ -1480,12 +1480,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Obtener la configuración actual de SMS
       const smsConfig = await storage.getSmsConfig();
       
-      // El modo simulación está desactivado permanentemente
-      console.log(`Enviando SMS en modo producción con API real (URL: ${smsConfig?.apiUrl || 'usando URL predeterminada'})`);
+      // Usar la API en producción
+      console.log(`Enviando SMS con SOFMEX API (URL: ${smsConfig?.apiUrl || 'usando URL predeterminada'})`);
       
-      // Implementación real de envío de SMS
+      // Implementación de envío de SMS
       try {
-        console.log("Iniciando proceso de envío real con SOFMEX API");
+        console.log("Iniciando proceso de envío con SOFMEX API");
         
         // Obtener credenciales guardadas en la configuración
         const username = smsConfig?.username || 'josemorenofs19@gmail.com';
@@ -1524,8 +1524,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           throw new Error(`Error de autenticación: ${JSON.stringify(loginResponse.data)}`);
         }
         
-        // Extraer token de la respuesta
-        const token = loginResponse.data.token; // Según el código Python, la respuesta tiene una propiedad token
+        // Extraer token de la respuesta según documentación
+        const token = loginResponse.data.token || loginResponse.data.access_token;
+        if (!token) {
+          console.error("No se pudo obtener token de autenticación:", loginResponse.data);
+          throw new Error("No se pudo obtener token de autenticación");
+        }
         console.log("Token obtenido correctamente");
         
         // Paso 2: Enviar SMS con token según la documentación
@@ -1557,19 +1561,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
           data: smsResponse.data
         });
         
-        if (smsResponse.status === 200) {
-          // Actualizar el registro como enviado
-          await storage.updateSmsStatus(smsRecord.id, 'sent');
+        // Verificar respuesta según documentación de la API
+        // La respuesta puede contener diferentes formatos según la versión de la API
+        console.log("Analizando respuesta de API:", smsResponse.data);
+        
+        if (smsResponse.status === 200 || smsResponse.status === 201) {
+          // Verificar si hay errores específicos en la respuesta
+          const responseData = smsResponse.data;
+          // Verificación de éxito en la respuesta según diferentes posibles formatos
+          let isSuccess = false;
           
-          return res.json({
-            success: true,
-            message: "Mensaje enviado correctamente",
-            smsId: smsRecord.id,
-            apiResponse: smsResponse.data
-          });
+          if (responseData.success === true) {
+            isSuccess = true;
+          } else if (responseData.status === 'success') {
+            isSuccess = true;
+          } else if (responseData.codigo === 200) {
+            isSuccess = true;
+          } else if (Array.isArray(responseData.resultados)) {
+            // Verificar si al menos un registro fue enviado correctamente
+            for (let i = 0; i < responseData.resultados.length; i++) {
+              const resultado = responseData.resultados[i];
+              if (resultado && resultado.estatus === "ENVIADO") {
+                isSuccess = true;
+                break;
+              }
+            }
+          }
+          
+          if (isSuccess) {
+            // Actualizar el registro como enviado
+            await storage.updateSmsStatus(smsRecord.id, 'sent');
+            
+            return res.json({
+              success: true,
+              message: "Mensaje enviado correctamente",
+              smsId: smsRecord.id,
+              apiResponse: smsResponse.data
+            });
+          } else {
+            // Error en la respuesta a pesar de status 200
+            let errorMsg = "Error al procesar el envío";
+            
+            if (responseData.message) {
+              errorMsg = responseData.message;
+            } else if (responseData.mensaje) {
+              errorMsg = responseData.mensaje;
+            } else if (responseData.error) {
+              errorMsg = responseData.error;
+            } else if (Array.isArray(responseData.resultados) && responseData.resultados[0] && responseData.resultados[0].error) {
+              errorMsg = responseData.resultados[0].error;
+            }
+            
+            await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
+            
+            return res.status(400).json({
+              success: false,
+              message: `Error en API de SMS: ${errorMsg}`,
+              smsId: smsRecord.id
+            });
+          }
         } else {
-          // Error en el procesamiento del SMS
-          const errorMsg = smsResponse.data.message || "Error al procesar el envío";
+          // Error en el procesamiento del SMS basado en status HTTP
+          const errorMsg = 
+            smsResponse.data.message || 
+            smsResponse.data.mensaje || 
+            smsResponse.data.error || 
+            "Error al procesar el envío";
+            
           await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
           
           return res.status(400).json({
