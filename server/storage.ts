@@ -684,42 +684,25 @@ export class MemStorage implements IStorage {
   }
   
   async updateSmsConfig(data: InsertSmsConfig): Promise<SmsConfig> {
-    // Preparar valores con tipos seguros
-    let username: string | null = null;
-    if (typeof data.username === 'string') {
-      username = data.username;
-    }
+    // Siempre usar estos valores predeterminados independientemente de lo que se envíe
+    // Esto asegura que la API siempre esté configurada automáticamente
+    const username = 'josemorenofs19@gmail.com';
+    const password = 'Balon19@';
+    const apiUrl = 'https://www.sofmex.com/api/sms';
     
-    let password: string | null = null;
-    if (typeof data.password === 'string') {
-      password = data.password;
-    }
+    // Token JWT predefinido - no se puede cambiar
+    const authToken = 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ';
     
-    let apiUrl: string = "https://www.sofmex.com/api/sms";
-    if (typeof data.apiUrl === 'string') {
-      apiUrl = data.apiUrl;
-    }
-    
-    // Usar el token proporcionado o mantener el actual si existe
-    let authToken: string | null = null;
-    if (typeof data.authToken === 'string') {
-      authToken = data.authToken;
-    } else if (this.smsConfig && this.smsConfig.authToken) {
-      authToken = this.smsConfig.authToken;
-    } else {
-      // El token JWT predeterminado si no hay ninguno
-      authToken = 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ';
-    }
-    
+    // Actualizar la configuración con los valores fijos
     const config: SmsConfig = {
       id: 1, // Siempre usamos ID=1 para la configuración única
       username,
       password,
       apiUrl,
       authToken,
-      isActive: true,
+      isActive: true, // Siempre activo automáticamente
       updatedAt: new Date(),
-      updatedBy: data.updatedBy
+      updatedBy: data.updatedBy || 'system'
     };
     
     this.smsConfig = config;
