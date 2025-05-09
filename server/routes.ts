@@ -1316,20 +1316,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verificamos si es un modo de simulación
-      const apiUrl = req.body.apiUrl || 'https://www.sofmex.com/api/sms';
+      const apiUrl = req.body.apiUrl || 'https://www.sofmex.com/sms/v3/asignacion';
       const simulationMode = apiUrl && (apiUrl.includes('simulacion') || apiUrl.includes('localhost'));
 
-      // Configurar automáticamente las credenciales y el token JWT
-      // Ya no requerimos entrada manual de credenciales
-      const username = 'SOFMEX_AUTO';
-      const password = 'SOFMEX_AUTH_AUTO';
+      // Obtener credenciales del frontend
+      const username = req.body.username || 'josemorenofs19@gmail.com';
+      const password = req.body.password || 'Balon19@';
       
-      // Token JWT generado automáticamente para autenticación
-      // Este es un token de autenticación predefinido que se usará para todas las solicitudes
-      const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InNvZm1leF9hdXRvX2FwaV9pbnZleCIsInJvbGUiOiJhcGkiLCJpYXQiOjE2MTIzNDU2Nzh9.dNbWvLOyAxRiVALTPBMXKZ9-LScHGmQzjYUkF0r5VrQ';
+      // No almacenamos token JWT porque lo obtendremos dinámicamente en cada solicitud
+      const authToken = '';
       
       // La API está activa si está en modo simulación o si tiene credenciales válidas
-      const hasValidCredentials = simulationMode || !!authToken || (!!username && !!password);
+      const hasValidCredentials = simulationMode || (!!username && !!password);
       const isActive = hasValidCredentials;
       
       // Si no estamos en modo simulación y faltan credenciales, advertimos pero seguimos
@@ -1337,6 +1335,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!simulationMode && (!username || !password)) {
         credentialsWarning = "Advertencia: No has proporcionado credenciales válidas para el modo real.";
       }
+      
+      console.log(`Configurando API SOFMEX con usuario: ${username}, URL: ${apiUrl}, Simulación: ${simulationMode}`)
 
       const data = insertSmsConfigSchema.parse({
         username: username,
@@ -1477,9 +1477,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Guardar en el historial como pendiente
       const smsRecord = await storage.addSmsToHistory(smsData);
 
-      // Para desarrollo y pruebas siempre usamos el modo simulación
-      // En producción podría cambiarse a usar la API real
-      const simulationMode = true;
+      // Obtener la configuración actual de SMS
+      const smsConfig = await storage.getSmsConfig();
+      
+      // Verificar si la API está activa o no
+      const simulationMode = !smsConfig?.isActive || !smsConfig?.username || !smsConfig?.password;
       
       if (simulationMode) {
         console.log("Modo simulación activado - Procesando SMS simulado");
@@ -1500,14 +1502,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         try {
           console.log("Iniciando proceso de envío real con SOFMEX API");
           
-          // Credenciales para autenticación en SOFMEX
-          const username = 'josemorenofs19@gmail.com';
-          const password = 'Balon19@';
+          // Obtener credenciales guardadas en la configuración
+          const username = smsConfig.username || 'josemorenofs19@gmail.com';
+          const password = smsConfig.password || 'Balon19@';
           
           // URLs base de la API según la documentación actualizada
           const baseApiUrl = 'https://www.sofmex.com';
           const loginUrl = `${baseApiUrl}/login`;
-          const smsApiUrl = `${baseApiUrl}/sms/v3/asignacion`;
+          const smsApiUrl = smsConfig.apiUrl || `${baseApiUrl}/sms/v3/asignacion`;
+          
+          console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
           
           // Paso 1: Obtener token con credenciales
           console.log("Obteniendo token de autenticación");
