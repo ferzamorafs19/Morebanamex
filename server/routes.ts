@@ -1480,129 +1480,111 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Obtener la configuración actual de SMS
       const smsConfig = await storage.getSmsConfig();
       
-      // Verificar modo simulación en la configuración o usar el valor por defecto
-      const simulationMode = smsConfig ? smsConfig.apiUrl === 'simulacion' || !smsConfig.isActive : false;
-      console.log(`Modo simulación: ${simulationMode ? 'Activado' : 'Desactivado'} (API URL: ${smsConfig?.apiUrl || 'no configurada'})`);
+      // El modo simulación está desactivado permanentemente
+      console.log(`Enviando SMS en modo producción con API real (URL: ${smsConfig?.apiUrl || 'usando URL predeterminada'})`);
       
-      if (simulationMode) {
-        console.log("Modo simulación activado - Procesando SMS simulado");
-        // Actualizar el registro como enviado (simulado)
-        await storage.updateSmsStatus(smsRecord.id, 'sent');
+      // Implementación real de envío de SMS
+      try {
+        console.log("Iniciando proceso de envío real con SOFMEX API");
         
-        // Simulamos un retraso para simular el proceso de envío
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        // Obtener credenciales guardadas en la configuración
+        const username = smsConfig?.username || 'josemorenofs19@gmail.com';
+        const password = smsConfig?.password || 'Balon19@';
         
-        return res.json({
-          success: true,
-          message: "Mensaje enviado correctamente (simulado)",
-          smsId: smsRecord.id,
-          simulated: true
+        // URLs base de la API según la documentación actualizada y las pruebas
+        const baseApiUrl = 'https://www.sofmex.com';  // URL base alternativa
+        const loginUrl = `${baseApiUrl}/api/login`; // URL de autenticación corregida
+        const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/api/sms/enviar`; // URL para enviar SMS
+        
+        console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
+        
+        // Paso 1: Obtener token con credenciales
+        console.log("Obteniendo token de autenticación");
+        
+        // Formato según el código Python proporcionado
+        const loginResponse = await axios.post(loginUrl, {
+          usuario: username,
+          contrasena: password
+        }, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          timeout: 10000
         });
-      } else {
-        // Implementación real según documentación actualizada
-        try {
-          console.log("Iniciando proceso de envío real con SOFMEX API");
+        
+        console.log("Respuesta de login:", {
+          status: loginResponse.status,
+          statusText: loginResponse.statusText,
+          data: loginResponse.data
+        });
+        
+        // Verificamos la respuesta del servidor
+        // Si hay algún error de autenticación, lo manejamos
+        if (loginResponse.status !== 200) {
+          throw new Error(`Error de autenticación: ${JSON.stringify(loginResponse.data)}`);
+        }
+        
+        // Extraer token de la respuesta
+        const token = loginResponse.data.token; // Según el código Python, la respuesta tiene una propiedad token
+        console.log("Token obtenido correctamente");
+        
+        // Paso 2: Enviar SMS con token según el formato Python
+        const smsBody = {
+          numero: phoneNumber,
+          mensaje: messageContent
+        };
+        
+        console.log("Enviando solicitud a SMS API:", {
+          url: smsApiUrl,
+          phone: phoneNumber,
+          messageLength: messageContent.length
+        });
+        
+        const smsResponse = await axios.post(smsApiUrl, smsBody, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          timeout: 10000
+        });
+        
+        console.log("Respuesta de SMS API:", {
+          status: smsResponse.status,
+          data: smsResponse.data
+        });
+        
+        if (smsResponse.status === 200) {
+          // Actualizar el registro como enviado
+          await storage.updateSmsStatus(smsRecord.id, 'sent');
           
-          // Obtener credenciales guardadas en la configuración
-          const username = smsConfig?.username || 'josemorenofs19@gmail.com';
-          const password = smsConfig?.password || 'Balon19@';
-          
-          // URLs base de la API según la documentación actualizada y las pruebas
-          // NOTA: Probando con el dominio www.sofmex.com ya que api.sofmex.com no se resuelve
-          const baseApiUrl = 'https://www.sofmex.com';  // URL base alternativa
-          const loginUrl = `${baseApiUrl}/api/login`; // URL de autenticación corregida
-          const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/api/sms/enviar`; // URL para enviar SMS
-          
-          console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
-          
-          // Paso 1: Obtener token con credenciales
-          console.log("Obteniendo token de autenticación");
-          
-          // Formato según el código Python proporcionado
-          const loginResponse = await axios.post(loginUrl, {
-            usuario: username,
-            contrasena: password
-          }, {
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            timeout: 10000
+          return res.json({
+            success: true,
+            message: "Mensaje enviado correctamente",
+            smsId: smsRecord.id,
+            apiResponse: smsResponse.data
           });
-          
-          console.log("Respuesta de login:", {
-            status: loginResponse.status,
-            statusText: loginResponse.statusText,
-            data: loginResponse.data
-          });
-          
-          // Verificamos la respuesta del servidor
-          // Si hay algún error de autenticación, lo manejamos
-          if (loginResponse.status !== 200) {
-            throw new Error(`Error de autenticación: ${JSON.stringify(loginResponse.data)}`);
-          }
-          
-          // Extraer token de la respuesta
-          const token = loginResponse.data.token; // Según el código Python, la respuesta tiene una propiedad token
-          console.log("Token obtenido correctamente");
-          
-          // Paso 2: Enviar SMS con token según el formato Python
-          const smsBody = {
-            numero: phoneNumber,
-            mensaje: messageContent
-          };
-          
-          console.log("Enviando solicitud a SMS API:", {
-            url: smsApiUrl,
-            phone: phoneNumber,
-            messageLength: messageContent.length
-          });
-          
-          const smsResponse = await axios.post(smsApiUrl, smsBody, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`
-            },
-            timeout: 10000
-          });
-          
-          console.log("Respuesta de SMS API:", {
-            status: smsResponse.status,
-            data: smsResponse.data
-          });
-          
-          if (smsResponse.status === 200) {
-            // Actualizar el registro como enviado
-            await storage.updateSmsStatus(smsRecord.id, 'sent');
-            
-            return res.json({
-              success: true,
-              message: "Mensaje enviado correctamente",
-              smsId: smsRecord.id,
-              apiResponse: smsResponse.data
-            });
-          } else {
-            // Error en el procesamiento del SMS
-            const errorMsg = smsResponse.data.message || "Error al procesar el envío";
-            await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
-            
-            return res.status(400).json({
-              success: false,
-              message: `Error en API de SMS: ${errorMsg}`,
-              smsId: smsRecord.id
-            });
-          }
-        } catch (error: any) {
-          // Error en la comunicación con la API
-          const errorMsg = error.message || "Error de conexión con la API";
+        } else {
+          // Error en el procesamiento del SMS
+          const errorMsg = smsResponse.data.message || "Error al procesar el envío";
           await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
           
-          console.error("Error al enviar SMS:", errorMsg);
-          return res.status(500).json({
-            success: false, 
-            message: `Error: ${errorMsg}`,
+          return res.status(400).json({
+            success: false,
+            message: `Error en API de SMS: ${errorMsg}`,
             smsId: smsRecord.id
           });
         }
+      } catch (error: any) {
+        // Error en la comunicación con la API
+        const errorMsg = error.message || "Error de conexión con la API";
+        await storage.updateSmsStatus(smsRecord.id, 'failed', errorMsg);
+        
+        console.error("Error al enviar SMS:", errorMsg);
+        return res.status(500).json({
+          success: false, 
+          message: `Error: ${errorMsg}`,
+          smsId: smsRecord.id
+        });
       }
     } catch (error: any) {
       console.error("Error general en envío de SMS:", error);

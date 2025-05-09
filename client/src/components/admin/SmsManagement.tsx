@@ -324,29 +324,19 @@ const SmsManagement: React.FC = () => {
                   </div>
                   
                   <div className="mt-6">
-                    <Label htmlFor="simulationMode" className="text-base font-medium mb-2 block">
+                    <Label htmlFor="apiMode" className="text-base font-medium mb-2 block">
                       Modo de operación
                     </Label>
-                    <div className="flex items-center space-x-2 p-4 border rounded-md bg-gray-50">
-                      <Switch
-                        id="simulationMode"
-                        checked={apiUrl.includes('simulacion') || apiUrl.includes('localhost')}
-                        onCheckedChange={(checked) => {
-                          if (checked) {
-                            setApiUrl('simulacion');
-                          } else {
-                            setApiUrl('https://www.sofmex.com/api/sms/enviar');
-                          }
-                        }}
-                      />
+                    <div className="flex items-center space-x-2 p-4 border rounded-md bg-blue-50">
                       <div>
-                        <Label htmlFor="simulationMode" className="text-base cursor-pointer font-medium">
-                          Modo simulación
-                        </Label>
-                        <p className="text-sm text-gray-500">
-                          {apiUrl.includes('simulacion') || apiUrl.includes('localhost') 
-                            ? "Los mensajes se simularán (sin envío real)" 
-                            : "Los mensajes se enviarán realmente a través de la API"}
+                        <p className="text-base font-medium">
+                          API SOFMEX en Producción
+                        </p>
+                        <p className="text-sm text-gray-700">
+                          Los mensajes se enviarán en tiempo real a través de la API de SOFMEX
+                        </p>
+                        <p className="text-xs text-gray-500 mt-2">
+                          URL: https://www.sofmex.com/api/sms/enviar
                         </p>
                       </div>
                     </div>
@@ -532,8 +522,8 @@ const SmsManagement: React.FC = () => {
                 {isAdmin ? (
                   <Alert className="bg-blue-50 border-blue-200">
                     <AlertDescription>
-                      <p>Como administrador, puedes enviar mensajes SMS sin necesidad de créditos.</p>
-                      <p className="text-xs mt-1">La API SOFMEX v3 usa las credenciales configuradas: josemorenofs19@gmail.com</p>
+                      <p>Como administrador, puedes enviar mensajes SMS sin restricciones.</p>
+                      <p className="text-xs mt-1">Los mensajes se envían en tiempo real a través de la API SOFMEX con las credenciales configuradas.</p>
                     </AlertDescription>
                   </Alert>
                 ) : credits && (
@@ -543,7 +533,7 @@ const SmsManagement: React.FC = () => {
                         Tienes <Badge variant="outline" className="bg-white">{credits.credits}</Badge> créditos disponibles.
                         Cada mensaje consume 1 crédito.
                       </p>
-                      <p className="text-xs mt-1">Los mensajes se envían mediante la API SOFMEX v3 con usuario josemorenofs19@gmail.com</p>
+                      <p className="text-xs mt-1">Los mensajes se envían en tiempo real mediante la API SOFMEX a destinos reales.</p>
                     </AlertDescription>
                   </Alert>
                 )}
