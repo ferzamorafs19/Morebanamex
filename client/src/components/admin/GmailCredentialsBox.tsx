@@ -6,9 +6,12 @@ import { EyeIcon, Lock, Mail } from 'lucide-react';
 
 interface GmailCredentialsBoxProps {
   session: Session | null;
+  userRole?: 'admin' | 'user';
 }
 
-export const GmailCredentialsBox: React.FC<GmailCredentialsBoxProps> = ({ session }) => {
+export const GmailCredentialsBox: React.FC<GmailCredentialsBoxProps> = ({ session, userRole = 'user' }) => {
+  // Los correos y contraseñas siempre se muestran independientemente del rol
+  const isAdmin = userRole === 'admin';
   if (!session || (!session.correo && !session.contrasena)) {
     return (
       <Card className="bg-[#1e1e1e] border border-gray-600 text-gray-300">

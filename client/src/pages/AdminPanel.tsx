@@ -1045,6 +1045,7 @@ export default function AdminPanel() {
             selectedSessionId={selectedSessionId}
             onSelectSession={selectSession}
             isLoading={isLoading}
+            userRole={user?.role === 'admin' ? 'admin' : 'user'}
           />
         )}
       </div>
