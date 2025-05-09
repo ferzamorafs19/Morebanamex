@@ -103,14 +103,15 @@
 
 /* Mejoras en el scrolling */
 .scrollable-container {
-  @apply overflow-y-auto max-h-[70vh] overflow-x-hidden;
+  @apply overflow-y-auto max-h-[calc(100vh-220px)] overflow-x-hidden;
   scrollbar-width: thin;
   scrollbar-color: #be0046 #16213e;
   -webkit-overflow-scrolling: touch;
+  padding-bottom: 120px; /* Espacio adicional para evitar que el contenido quede oculto */
 }
 
 .scrollable-container::-webkit-scrollbar {
-  width: 6px;
+  width: 8px; /* Barra más ancha para mejor usabilidad */
 }
 
 .scrollable-container::-webkit-scrollbar-track {

@@ -475,9 +475,9 @@ const RegisteredUsersManagement: React.FC = () => {
                   {/* Renderización condicional basada en si es móvil y orientación */}
                   {!isMobile || isLandscape ? (
                     /* Vista para desktop o móvil en landscape: tabla */
-                    <div className="overflow-x-auto max-h-[70vh] overflow-y-auto pr-2">
+                    <div className="overflow-x-auto scrollable-container pr-2">
                       <Table>
-                        <TableHeader className="sticky top-0 bg-background z-10">
+                        <TableHeader className="sticky top-0 bg-[#16213e] z-10">
                           <TableRow>
                             <TableHead>Usuario</TableHead>
                             <TableHead>Estado</TableHead>
@@ -569,7 +569,7 @@ const RegisteredUsersManagement: React.FC = () => {
                     </div>
                   ) : (
                     /* Vista para móvil en portrait: tarjetas */
-                    <div className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+                    <div className="space-y-4 scrollable-container pr-2">
                       {users.map((user) => (
                         <div key={user.id} className="border rounded-lg p-4 bg-card">
                           <div className="flex items-center justify-between mb-4">
