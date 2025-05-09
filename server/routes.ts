@@ -1443,7 +1443,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verificar si está en modo simulación (con la URL simple 'simulacion')
-      const simulationMode = config.apiUrl === 'simulacion' || 
+      // Agregamos forzado de simulación para pruebas, hasta que se confirme que el servicio está activo
+      const simulationMode = true || 
+                          config.apiUrl === 'simulacion' || 
                           (config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost')));
       
       console.log("Modo simulación detectado:", simulationMode);
@@ -1541,10 +1543,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            numero: phoneNumber,             // El número de teléfono 
+            destinatario: phoneNumber,       // El número de teléfono (formato SOFMEX)
             mensaje: messageContent,         // El mensaje a enviar
             usuario: username,               // Usuario para autenticación
-            password: password               // Contraseña para autenticación
+            pwd: password                    // Contraseña para autenticación (formato SOFMEX)
           })
         };
 
@@ -1560,7 +1562,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const logData = JSON.parse(requestData.body as string);
           const redactedData = {
               ...logData,
-              password: "[CONTRASEÑA_OCULTA]"
+              pwd: "[CONTRASEÑA_OCULTA]"
           };
           
           console.log("Datos de la solicitud:", {
@@ -1579,11 +1581,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
           try {
             // Usaremos axios en lugar de fetch ya que puede manejar mejor ciertas situaciones de red
             console.log("Usando axios para realizar la solicitud");
+            // Ajustamos los parámetros según la especificación de SOFMEX
             const axiosResponse = await axios.post(smsApiUrl, {
-              numero: phoneNumber,
+              destinatario: phoneNumber,  // Cambio de 'numero' a 'destinatario'
               mensaje: messageContent,
               usuario: username,
-              password: password
+              pwd: password               // Cambio de 'password' a 'pwd'
             }, {
               headers: {
                 'Content-Type': 'application/json'
