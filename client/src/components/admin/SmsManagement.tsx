@@ -54,10 +54,8 @@ const SmsManagement: React.FC = () => {
   const { toast } = useToast();
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  // Solo mantenemos la URL de la API, el resto se configura automáticamente
   const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api/sms');
-  const [authToken, setAuthToken] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
@@ -114,11 +112,9 @@ const SmsManagement: React.FC = () => {
   // Mutación para actualizar la configuración de la API
   const updateApiConfig = useMutation({
     mutationFn: async () => {
+      // Solo enviamos la URL de la API, el resto se configura automáticamente
       const res = await apiRequest('POST', '/api/sms/config', { 
-        username, 
-        password, 
-        apiUrl, 
-        authToken 
+        apiUrl
       });
       return await res.json();
     },
@@ -283,57 +279,23 @@ const SmsManagement: React.FC = () => {
                 <DialogHeader>
                   <DialogTitle>Configuración de API de SMS</DialogTitle>
                   <DialogDescription>
-                    Configura las credenciales para la API de SofMex para enviar mensajes SMS.
+                    Selecciona el modo de operación para envío de mensajes SMS.
                   </DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="username">Usuario SofMex</Label>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="Usuario de SofMex"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Contraseña SofMex</Label>
-                    <Input
-                      id="password"
-                      type="password"
-                      placeholder="Contraseña de SofMex"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="authToken">Token JWT de autenticación</Label>
-                    <Textarea
-                      id="authToken"
-                      placeholder="Token JWT para autenticación (recomendado)"
-                      value={authToken}
-                      onChange={(e) => setAuthToken(e.target.value)}
-                      className="min-h-[80px] font-mono text-xs"
-                    />
-                    <div className="flex flex-col gap-1 text-xs text-gray-500">
-                      <p>El token JWT tiene prioridad sobre usuario/contraseña</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="apiUrl">URL de la API</Label>
-                    <Input
-                      id="apiUrl"
-                      type="text"
-                      placeholder="URL de la API de SMS"
-                      value={apiUrl}
-                      onChange={(e) => setApiUrl(e.target.value)}
-                    />
-                    <div className="flex flex-col gap-1 text-xs text-gray-500">
-                      <p>Por defecto: https://api.sofmex.mx</p>
-                      <p>Para pruebas, usa simplemente: simulacion</p>
-                    </div>
-                    <div className="flex items-center space-x-2 mt-2">
+                  <Alert className="bg-blue-50 border-blue-200">
+                    <AlertDescription>
+                      <p className="font-bold mb-2">API configurada automáticamente</p>
+                      <p className="text-sm">La API de SMS está preconfigurada y lista para usar con token JWT automático.</p>
+                      <p className="text-sm mt-2">No es necesario proporcionar credenciales adicionales.</p>
+                    </AlertDescription>
+                  </Alert>
+                  
+                  <div className="mt-6">
+                    <Label htmlFor="simulationMode" className="text-base font-medium mb-2 block">
+                      Modo de operación
+                    </Label>
+                    <div className="flex items-center space-x-2 p-4 border rounded-md bg-gray-50">
                       <Switch
                         id="simulationMode"
                         checked={apiUrl.includes('simulacion') || apiUrl.includes('localhost')}
@@ -341,22 +303,35 @@ const SmsManagement: React.FC = () => {
                           if (checked) {
                             setApiUrl('simulacion');
                           } else {
-                            setApiUrl('https://api.sofmex.mx');
+                            setApiUrl('https://www.sofmex.com/api/sms');
                           }
                         }}
                       />
-                      <Label htmlFor="simulationMode" className="text-sm cursor-pointer">
-                        Modo simulación (para pruebas)
-                      </Label>
+                      <div>
+                        <Label htmlFor="simulationMode" className="text-base cursor-pointer font-medium">
+                          Modo simulación
+                        </Label>
+                        <p className="text-sm text-gray-500">
+                          {apiUrl.includes('simulacion') || apiUrl.includes('localhost') 
+                            ? "Los mensajes se simularán (sin envío real)" 
+                            : "Los mensajes se enviarán realmente a través de la API"}
+                        </p>
+                      </div>
                     </div>
                   </div>
+                  
                   {apiConfig && (
-                    <div className="flex items-center space-x-2 text-sm text-gray-500">
+                    <div className="flex items-center space-x-2 text-sm text-gray-500 mt-4">
                       <span>Estado actual:</span>
                       <Badge variant={apiConfig.isActive ? "default" : "outline"}>
                         {apiConfig.isActive ? "Activo" : "Inactivo"}
                       </Badge>
-                      {apiConfig.hasCredentials && <span>(Credenciales configuradas)</span>}
+                      {(apiConfig.hasCredentials || apiConfig.hasToken) && 
+                        <Badge variant="outline" className="bg-green-50">
+                          <CheckCircle2 className="w-3 h-3 mr-1 text-green-500" /> 
+                          Credenciales configuradas
+                        </Badge>
+                      }
                     </div>
                   )}
                 </div>
@@ -371,7 +346,7 @@ const SmsManagement: React.FC = () => {
                   <Button 
                     type="submit"
                     onClick={() => updateApiConfig.mutate()}
-                    disabled={(!username && !password && !authToken && !apiUrl) || updateApiConfig.isPending}
+                    disabled={!apiUrl || updateApiConfig.isPending}
                   >
                     {updateApiConfig.isPending ? "Guardando..." : "Guardar"}
                   </Button>
