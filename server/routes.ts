@@ -1480,8 +1480,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Obtener la configuración actual de SMS
       const smsConfig = await storage.getSmsConfig();
       
-      // Verificar modo simulación en la configuración o usar el valor por defecto
-      const simulationMode = smsConfig ? smsConfig.apiUrl === 'simulacion' || !smsConfig.isActive : false;
+      // Activar modo simulación por defecto para evitar errores con la API
+      const simulationMode = true; // Forzamos el modo simulación hasta que tengamos la URL correcta
+      console.log("Modo simulación activado por defecto para debugging");
       
       if (simulationMode) {
         console.log("Modo simulación activado - Procesando SMS simulado");
@@ -1509,7 +1510,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           // URLs base de la API según la documentación actualizada y las pruebas
           const baseApiUrl = 'https://www.sofmex.com';
           const loginUrl = `${baseApiUrl}/api/login`; // URL correcta con /api/login
-          const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/sms/v3/asignacion`;
+          const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/api/sms/enviar`; // URL corregida para enviar SMS
           
           console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
           
