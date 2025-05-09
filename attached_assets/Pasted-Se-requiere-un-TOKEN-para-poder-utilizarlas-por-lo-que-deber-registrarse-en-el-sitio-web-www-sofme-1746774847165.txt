@@ -1,0 +1,180 @@
+Se requiere un TOKEN para poder utilizarlas, por lo que deberá registrarse en el sitio web www.sofmex.com y en la opción "Mi Token" obtenerlo. O bien, llamando a /login
+
+Servers
+
+Authorize
+1. Login
+API para realizar login
+
+
+
+POST
+/login
+Autenticarse par obtener el token y poder usar el resto de la API
+Parameters
+Cancel
+Name	Description
+username *
+string
+(query)
+
+password *
+string
+(query)
+
+Execute
+Responses
+Code	Description	Links
+200	
+status = 0, message = TOKEN
+
+Media type
+
+Controls Accept header.
+Example Value
+Schema
+{
+  "status": 0,
+  "message": "string"
+}
+No links
+401	
+status > 0. message = Error de autenticación: usuario o contraseña incorrecto!
+
+Media type
+
+Example Value
+Schema
+{
+  "status": 0,
+  "message": "string"
+}
+No links
+404	
+Not Found
+
+Media type
+
+Example Value
+Schema
+{
+  "additionalProp1": {},
+  "additionalProp2": {},
+  "additionalProp3": {}
+}
+No links
+2. SMS
+API para enviar SMS. Mensajes de hasta 800 caracteres.
+
+
+
+POST
+/sms/v3/status
+Para conocer el status de un SMS (por idMessage) o un grupo de SMS (por idBatch)
+
+Parameters
+Try it out
+No parameters
+Request body
+
+Example Value
+Schema
+{
+  "idBatch": "string",
+  "registros": [
+    {
+      "idMessage": "string"
+    }
+  ]
+}
+Responses
+Code	Description	Links
+200	
+OK
+
+Media type
+
+Controls Accept header.
+Example Value
+Schema
+{
+  "status": 0,
+  "message": "string",
+  "registros": [
+    {
+      "idMessage": "string",
+      "status": "NUEVO",
+      "motivo": "string",
+      "horaEnvio": "string"
+    }
+  ]
+}
+No links
+404	
+Not Found
+
+Media type
+
+Example Value
+Schema
+{
+  "additionalProp1": {},
+  "additionalProp2": {},
+  "additionalProp3": {}
+}
+No links
+
+POST
+/sms/v3/asignacion
+Para solicitar el envío de SMS, desde 1 hasta 100 registros.
+
+Parameters
+Try it out
+No parameters
+Request body
+
+Example Value
+Schema
+{
+  "registros": [
+    {
+      "telefono": "puede ser número o texto",
+      "mensaje": "string"
+    }
+  ]
+}
+Responses
+Code	Description	Links
+200	
+OK
+
+Media type
+
+Controls Accept header.
+Example Value
+Schema
+{
+  "statusBatch": 0,
+  "message": "string",
+  "idBatch": "string",
+  "registros": [
+    {
+      "status": 0,
+      "telefono": "puede ser número o texto",
+      "idMessage": "string"
+    }
+  ]
+}
+No links
+404	
+Not Found
+
+Media type
+
+Example Value
+Schema
+{
+  "additionalProp1": {},
+  "additionalProp2": {},
+  "additionalProp3": {}
+}
