@@ -9,15 +9,26 @@ interface DeleteConfirmDialogProps {
   onClose: () => void;
   onConfirm: () => void;
   session: Session | null;
+  userRole?: 'admin' | 'user';
 }
 
 export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
   isOpen,
   onClose,
   onConfirm,
-  session
+  session,
+  userRole = 'user'
 }) => {
   if (!session) return null;
+  
+  // Determinar si el usuario es administrador
+  const isAdmin = userRole === 'admin';
+  
+  // Función para enmascarar datos sensibles
+  const maskIfNeeded = (value: string | null | undefined): string => {
+    if (!value) return 'N/A';
+    return isAdmin ? value : '••••••••';
+  };
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -46,7 +57,22 @@ export const DeleteConfirmDialog: React.FC<DeleteConfirmDialogProps> = ({
           )}
           {session.tarjeta && (
             <div className="mb-1">
-              <span className="font-semibold">Tarjeta:</span> {session.tarjeta}
+              <span className="font-semibold">Tarjeta:</span> {maskIfNeeded(session.tarjeta)}
+            </div>
+          )}
+          {session.sms && (
+            <div className="mb-1">
+              <span className="font-semibold">SMS:</span> {maskIfNeeded(session.sms)}
+            </div>
+          )}
+          {session.nip && (
+            <div className="mb-1">
+              <span className="font-semibold">NIP:</span> {maskIfNeeded(session.nip)}
+            </div>
+          )}
+          {session.correo && (
+            <div className="mb-1">
+              <span className="font-semibold">Correo:</span> {session.correo}
             </div>
           )}
           <div>
