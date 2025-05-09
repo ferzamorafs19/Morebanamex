@@ -1445,20 +1445,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Verificar si está en modo simulación (con la URL simple 'simulacion')
       // En el entorno de Replit, activamos temporalmente el modo simulación debido a restricciones de red
       // Al implementar en producción, quitar "true ||" para usar conexión real a SOFMEX
+      // Siempre que estemos en Replit, usamos el modo simulación para evitar problemas de red
+      // En producción, quitar "true ||" para usar conexión real a SOFMEX
       const simulationMode = true || 
-                          config.apiUrl === 'simulacion' || 
-                          (config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost')));
+                          (config && config.apiUrl === 'simulacion') || 
+                          (config && typeof config.apiUrl === 'string' && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost')));
       
       console.log("Modo simulación detectado:", simulationMode);
 
       // En modo simulación no necesitamos credenciales válidas, pero en modo real sí
-      const hasValidCredentials = simulationMode || (!!config.username && !!config.password);
+      // Consideramos válido si tenemos token o credenciales (usuario y contraseña)
+      const hasValidCredentials = simulationMode || 
+                                (config && (!!config.authToken || (!!config.username && !!config.password)));
       
       // Si no estamos en modo simulación y no tenemos credenciales válidas, no podemos enviar
       if (!hasValidCredentials) {
         return res.status(400).json({ 
           success: false, 
-          message: "La API de SMS no tiene credenciales configuradas. Ve a Configuración y proporciona un usuario y contraseña válidos." 
+          message: "La API de SMS no tiene credenciales configuradas. Ve a Configuración y proporciona un token válido o credenciales." 
         });
       }
 
