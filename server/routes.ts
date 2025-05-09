@@ -1524,13 +1524,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const password = config.password || 'Balon19@';
         
         // Ajustar URL base según la documentación oficial de SofMex
-        const apiUrl = config.apiUrl || 'https://api.sofmex.mx';
+        // Según https://www.sofmex.com/api/swagger-ui/index.html
+        const apiUrl = config.apiUrl || 'https://www.sofmex.com/api';
         
         // URL específica para envío de SMS según la documentación de SofMex
-        // Consultar correctamente la documentación en https://api.sofmex.mx/api/swagger-ui/index.html
+        // URL correcta: https://www.sofmex.com/api/sms
         
         // Usamos la URL correcta para el envío de SMS con SOFMEX
-        let smsApiUrl = 'https://api.sofmex.mx/api/sms';
+        let smsApiUrl = 'https://www.sofmex.com/api/sms';
         console.log("Usando URL para API de SofMex:", smsApiUrl);
         
         // Ya no usamos autenticación básica en los headers porque pasamos los datos
@@ -1543,10 +1544,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            destinatario: phoneNumber,       // El número de teléfono (formato SOFMEX)
-            mensaje: messageContent,         // El mensaje a enviar
-            usuario: username,               // Usuario para autenticación
-            pwd: password                    // Contraseña para autenticación (formato SOFMEX)
+            to: phoneNumber,            // Destinatario
+            text: messageContent,       // Mensaje a enviar
+            user: username,             // Usuario para autenticación
+            password: password          // Contraseña para autenticación
           })
         };
 
@@ -1562,7 +1563,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const logData = JSON.parse(requestData.body as string);
           const redactedData = {
               ...logData,
-              pwd: "[CONTRASEÑA_OCULTA]"
+              password: "[CONTRASEÑA_OCULTA]"
           };
           
           console.log("Datos de la solicitud:", {
@@ -1581,12 +1582,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           try {
             // Usaremos axios en lugar de fetch ya que puede manejar mejor ciertas situaciones de red
             console.log("Usando axios para realizar la solicitud");
-            // Ajustamos los parámetros según la especificación de SOFMEX
+            
+            // Según la documentación de SOFMEX en https://www.sofmex.com/api/swagger-ui/index.html
+            // La estructura correcta es:
+            
             const axiosResponse = await axios.post(smsApiUrl, {
-              destinatario: phoneNumber,  // Cambio de 'numero' a 'destinatario'
-              mensaje: messageContent,
-              usuario: username,
-              pwd: password               // Cambio de 'password' a 'pwd'
+              to: phoneNumber,            // Destinatario
+              text: messageContent,       // Mensaje a enviar
+              user: username,             // Usuario para autenticación
+              password: password          // Contraseña para autenticación
             }, {
               headers: {
                 'Content-Type': 'application/json'

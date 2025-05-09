@@ -88,7 +88,7 @@ export class MemStorage implements IStorage {
       id: 1,
       username: 'josemorenofs19@gmail.com',
       password: 'Balon19@',
-      apiUrl: 'https://api.sofmex.mx/api/sms',
+      apiUrl: 'https://www.sofmex.com/api/sms',
       isActive: true,
       updatedAt: new Date(),
       updatedBy: 'system'
