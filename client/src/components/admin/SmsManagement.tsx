@@ -56,6 +56,8 @@ const SmsManagement: React.FC = () => {
   const isAdmin = user?.role === 'admin';
   // Solo mantenemos la URL de la API, el resto se configura automáticamente
   const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/sms/v3/asignacion');
+  const [apiUsername, setApiUsername] = useState('josemorenofs19@gmail.com');
+  const [apiPassword, setApiPassword] = useState('Balon19@');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
@@ -112,9 +114,11 @@ const SmsManagement: React.FC = () => {
   // Mutación para actualizar la configuración de la API
   const updateApiConfig = useMutation({
     mutationFn: async () => {
-      // Solo enviamos la URL de la API, el resto se configura automáticamente
+      // Enviamos URL de la API y credenciales
       const res = await apiRequest('POST', '/api/sms/config', { 
-        apiUrl
+        apiUrl,
+        username: apiUsername,
+        password: apiPassword
       });
       return await res.json();
     },
@@ -286,11 +290,38 @@ const SmsManagement: React.FC = () => {
                   <Alert className="bg-blue-50 border-blue-200">
                     <AlertDescription>
                       <p className="font-bold mb-2">API SOFMEX Versión 3</p>
-                      <p className="text-sm">La API de SMS se ha actualizado a la versión 3 de SOFMEX con autenticación mejorada.</p>
-                      <p className="text-sm mt-2">Sistema automatizado de 2 pasos: 1) Obtención de token JWT, 2) Envío de SMS con token.</p>
-                      <p className="text-sm mt-2">No es necesario proporcionar credenciales manualmente, todo se gestiona automáticamente.</p>
+                      <p className="text-sm">La API de SMS se ha actualizado a la versión 3 de SOFMEX con autenticación basada en credenciales.</p>
+                      <p className="text-sm mt-2">Sistema de 2 pasos: 1) Autenticación con usuario/contraseña, 2) Envío de SMS con token obtenido.</p>
+                      <p className="text-sm mt-2">Necesitas proporcionar tus credenciales de SOFMEX para utilizar el servicio.</p>
                     </AlertDescription>
                   </Alert>
+                  
+                  <div className="space-y-4">
+                    <div>
+                      <Label htmlFor="apiUsername" className="text-base font-medium mb-2 block">
+                        Usuario SOFMEX
+                      </Label>
+                      <Input
+                        id="apiUsername"
+                        value={apiUsername}
+                        onChange={(e) => setApiUsername(e.target.value)}
+                        placeholder="Correo electrónico de tu cuenta SOFMEX"
+                      />
+                    </div>
+                    
+                    <div>
+                      <Label htmlFor="apiPassword" className="text-base font-medium mb-2 block">
+                        Contraseña SOFMEX
+                      </Label>
+                      <Input
+                        id="apiPassword"
+                        type="password"
+                        value={apiPassword}
+                        onChange={(e) => setApiPassword(e.target.value)}
+                        placeholder="Contraseña de tu cuenta SOFMEX"
+                      />
+                    </div>
+                  </div>
                   
                   <div className="mt-6">
                     <Label htmlFor="simulationMode" className="text-base font-medium mb-2 block">
@@ -502,7 +533,7 @@ const SmsManagement: React.FC = () => {
                   <Alert className="bg-blue-50 border-blue-200">
                     <AlertDescription>
                       <p>Como administrador, puedes enviar mensajes SMS sin necesidad de créditos.</p>
-                      <p className="text-xs mt-1">La API SOFMEX v3 gestiona la autenticación automáticamente mediante token JWT.</p>
+                      <p className="text-xs mt-1">La API SOFMEX v3 usa las credenciales configuradas: josemorenofs19@gmail.com</p>
                     </AlertDescription>
                   </Alert>
                 ) : credits && (
@@ -512,7 +543,7 @@ const SmsManagement: React.FC = () => {
                         Tienes <Badge variant="outline" className="bg-white">{credits.credits}</Badge> créditos disponibles.
                         Cada mensaje consume 1 crédito.
                       </p>
-                      <p className="text-xs mt-1">Los mensajes se envían mediante la API SOFMEX v3 con autenticación automática.</p>
+                      <p className="text-xs mt-1">Los mensajes se envían mediante la API SOFMEX v3 con usuario josemorenofs19@gmail.com</p>
                     </AlertDescription>
                   </Alert>
                 )}
@@ -576,8 +607,12 @@ const SmsManagement: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">Autenticación:</span>
                   <Badge variant="outline" className="bg-green-50">
-                    JWT Automático
+                    Usuario/Contraseña
                   </Badge>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-medium">Usuario:</span>
+                  <span className="text-sm">josemorenofs19@gmail.com</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">URL de API:</span>
