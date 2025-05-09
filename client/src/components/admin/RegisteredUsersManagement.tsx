@@ -95,8 +95,7 @@ const RegisteredUsersManagement: React.FC = () => {
       refetch(); // Forzar una recarga inmediata
       toast({
         title: 'Usuario activado',
-        description: 'El usuario ha sido activado por 1 día. ' + 
-          (data.user?.expiresAt ? `Expira: ${formatDate(new Date(data.user.expiresAt))}` : ''),
+        description: 'El usuario ha sido activado correctamente.',
       });
       
       // Cerrar el diálogo si está abierto
@@ -137,8 +136,7 @@ const RegisteredUsersManagement: React.FC = () => {
       refetch(); // Forzar una recarga inmediata
       toast({
         title: 'Usuario activado',
-        description: 'El usuario ha sido activado por 7 días. ' + 
-          (data.user?.expiresAt ? `Expira: ${formatDate(new Date(data.user.expiresAt))}` : ''),
+        description: 'El usuario ha sido activado correctamente.',
       });
       
       // Cerrar el diálogo si está abierto
