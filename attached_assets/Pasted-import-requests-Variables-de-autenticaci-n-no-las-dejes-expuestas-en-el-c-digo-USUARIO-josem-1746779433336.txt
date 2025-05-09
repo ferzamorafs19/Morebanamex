@@ -1,0 +1,64 @@
+import requests
+
+# Variables de autenticación (no las dejes expuestas en el código)
+USUARIO = 'josemorenofs19@gmail.com'
+CONTRASENA = 'Balon19@'
+
+# URL de autenticación y envío de SMS (reemplaza con los endpoints correctos)
+SOFMEX_AUTH_URL = 'https://api.sofmex.com/authenticate'  # Este endpoint es un ejemplo
+SOFMEX_SMS_URL = 'https://api.sofmex.com/send_sms'  # Este endpoint es un ejemplo
+
+# Función para autenticar y obtener un token
+def autenticar():
+    payload = {
+        'usuario': USUARIO,
+        'contrasena': CONTRASENA
+    }
+    
+    try:
+        response = requests.post(SOFMEX_AUTH_URL, data=payload)
+        response.raise_for_status()  # Lanza error si el código de respuesta no es 200
+        data = response.json()
+
+        # Retornar el token de autenticación
+        return data['token']  # Suponiendo que el token se retorna como 'token'
+    except requests.exceptions.RequestException as e:
+        print(f"Error al autenticar: {e}")
+        return None
+
+# Función para enviar un SMS utilizando el token de autenticación
+def enviar_sms(token, numero_telefono, mensaje):
+    headers = {
+        'Authorization': f'Bearer {token}'
+    }
+    
+    payload = {
+        'numero': numero_telefono,
+        'mensaje': mensaje
+    }
+    
+    try:
+        response = requests.post(SOFMEX_SMS_URL, data=payload, headers=headers)
+        response.raise_for_status()
+        
+        if response.status_code == 200:
+            print("Mensaje enviado con éxito")
+        else:
+            print(f"Error al enviar el mensaje: {response.text}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error al enviar el SMS: {e}")
+
+# Función principal
+def main():
+    # Autenticarse para obtener el token
+    token = autenticar()
+    
+    if token:
+        # Enviar el mensaje (ajusta el número de teléfono y el mensaje)
+        numero_telefono = '1234567890'  # Reemplaza con el número de teléfono del destinatario
+        mensaje = '¡Hola, este es un mensaje de prueba!'
+        
+        enviar_sms(token, numero_telefono, mensaje)
+
+if __name__ == '__main__':
+    main()
