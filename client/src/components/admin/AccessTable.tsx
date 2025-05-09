@@ -292,6 +292,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
         onClose={() => setIsDeleteDialogOpen(false)}
         onConfirm={handleDeleteSession}
         session={sessionToDelete}
+        userRole={userRole}
       />
       
       {/* Botón de exportación */}
