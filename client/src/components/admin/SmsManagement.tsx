@@ -55,7 +55,7 @@ const SmsManagement: React.FC = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   // Solo mantenemos la URL de la API, el resto se configura automáticamente
-  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api/sms');
+  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/sms/v3/asignacion');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [messageText, setMessageText] = useState('');
   const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
@@ -285,9 +285,10 @@ const SmsManagement: React.FC = () => {
                 <div className="space-y-4 py-4">
                   <Alert className="bg-blue-50 border-blue-200">
                     <AlertDescription>
-                      <p className="font-bold mb-2">API configurada automáticamente</p>
-                      <p className="text-sm">La API de SMS está preconfigurada y lista para usar con token JWT automático.</p>
-                      <p className="text-sm mt-2">No es necesario proporcionar credenciales adicionales.</p>
+                      <p className="font-bold mb-2">API SOFMEX Versión 3</p>
+                      <p className="text-sm">La API de SMS se ha actualizado a la versión 3 de SOFMEX con autenticación mejorada.</p>
+                      <p className="text-sm mt-2">Sistema automatizado de 2 pasos: 1) Obtención de token JWT, 2) Envío de SMS con token.</p>
+                      <p className="text-sm mt-2">No es necesario proporcionar credenciales manualmente, todo se gestiona automáticamente.</p>
                     </AlertDescription>
                   </Alert>
                   
@@ -303,7 +304,7 @@ const SmsManagement: React.FC = () => {
                           if (checked) {
                             setApiUrl('simulacion');
                           } else {
-                            setApiUrl('https://www.sofmex.com/api/sms');
+                            setApiUrl('https://www.sofmex.com/sms/v3/asignacion');
                           }
                         }}
                       />
@@ -563,9 +564,9 @@ const SmsManagement: React.FC = () => {
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-medium">Credenciales:</span>
-                  <Badge variant={apiConfig.hasCredentials ? "outline" : "destructive"}>
-                    {apiConfig.hasCredentials ? "Configuradas" : "No configuradas"}
+                  <span className="text-sm font-medium">Método:</span>
+                  <Badge variant="outline" className="bg-blue-50">
+                    SOFMEX API v3
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">

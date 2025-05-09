@@ -1477,7 +1477,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Guardar en el historial como pendiente
       const smsRecord = await storage.addSmsToHistory(smsData);
 
-      // Siempre usamos modo simulación para pruebas y desarrollo
+      // Para desarrollo y pruebas siempre usamos el modo simulación
+      // En producción podría cambiarse a usar la API real
       const simulationMode = true;
       
       if (simulationMode) {
