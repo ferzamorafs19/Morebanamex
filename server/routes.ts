@@ -1508,9 +1508,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           const password = smsConfig?.password || 'Balon19@';
           
           // URLs base de la API según la documentación actualizada y las pruebas
-          const baseApiUrl = 'https://api.sofmex.com';  // URL base correcta
-          const loginUrl = `${baseApiUrl}/authenticate`; // URL de autenticación
-          const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/send_sms`; // URL para enviar SMS
+          // NOTA: Probando con el dominio www.sofmex.com ya que api.sofmex.com no se resuelve
+          const baseApiUrl = 'https://www.sofmex.com';  // URL base alternativa
+          const loginUrl = `${baseApiUrl}/api/login`; // URL de autenticación corregida
+          const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/api/sms/enviar`; // URL para enviar SMS
           
           console.log(`Usando credenciales: ${username}, API URL: ${smsApiUrl}`);
           

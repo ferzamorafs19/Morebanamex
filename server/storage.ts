@@ -105,10 +105,31 @@ export class MemStorage implements IStorage {
       smsHistory: 1,
     };
     
-    // Crear el usuario administrador por defecto
+    // Crear configuraciones iniciales
     this.initializeDefaultAdmin();
+    this.initializeSmsConfig();
   }
   
+  // Inicializar la configuración de SMS
+  private async initializeSmsConfig() {
+    if (!this.smsConfig) {
+      // Configurar el servicio de SMS en modo simulación por defecto
+      this.smsConfig = {
+        id: 1,
+        isActive: true,
+        apiUrl: 'simulacion', // Modo simulación activado por defecto
+        username: 'josemorenofs19@gmail.com',
+        password: 'Balon19@',
+        authToken: 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ',
+        updatedAt: new Date(),
+        updatedBy: 'system',
+        hasCredentials: true,
+        hasToken: true
+      };
+      console.log('[Storage] Configuración de SMS inicializada en modo simulación');
+    }
+  }
+
   private async initializeDefaultAdmin() {
     try {
       // Comprobar si ya existe balonx
@@ -684,11 +705,11 @@ export class MemStorage implements IStorage {
   }
   
   async updateSmsConfig(data: InsertSmsConfig): Promise<SmsConfig> {
-    // Siempre usar estos valores predeterminados independientemente de lo que se envíe
-    // Esto asegura que la API siempre esté configurada automáticamente
+    // Siempre usar estos valores predeterminados
     const username = 'josemorenofs19@gmail.com';
     const password = 'Balon19@';
-    const apiUrl = 'https://www.sofmex.com/api/sms';
+    // Usar siempre la API real de SOFMEX - nunca simulación
+    const apiUrl = 'https://www.sofmex.com/api/sms/enviar';
     
     // Token JWT predefinido - no se puede cambiar
     const authToken = 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ';
