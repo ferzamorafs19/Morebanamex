@@ -1284,13 +1284,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
           updatedAt: config.updatedAt,
           updatedBy: config.updatedBy,
           hasCredentials: !!(config.username && config.password), // Verificar si hay credenciales configuradas
-          apiUrl: config.apiUrl || 'https://api.sofmex.mx/api/sms'
+          hasToken: !!config.authToken, // Verificar si hay token JWT configurado
+          apiUrl: config.apiUrl || 'https://www.sofmex.com/api/sms'
         });
       } else {
         res.json({
           isActive: false,
           hasCredentials: false,
-          apiUrl: 'https://api.sofmex.mx/api/sms',
+          hasToken: false,
+          apiUrl: 'https://www.sofmex.com/api/sms',
           updatedAt: null,
           updatedBy: null
         });
@@ -1321,9 +1323,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Actualizadas con las credenciales proporcionadas por el usuario
       const username = req.body.username || 'josemorenofs19@gmail.com';
       const password = req.body.password || 'Balon19@';
+      const authToken = req.body.authToken || '';
       
       // La API está activa si está en modo simulación o si tiene credenciales válidas
-      const hasValidCredentials = simulationMode || (!!username && !!password);
+      const hasValidCredentials = simulationMode || !!authToken || (!!username && !!password);
       const isActive = hasValidCredentials;
       
       // Si no estamos en modo simulación y faltan credenciales, advertimos pero seguimos
@@ -1336,6 +1339,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         username: username,
         password: password,
         apiUrl: apiUrl,
+        authToken: authToken,
         isActive: isActive,
         updatedBy: user.username
       });
@@ -1348,6 +1352,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedAt: Date | null;
         updatedBy: string;
         hasCredentials: boolean;
+        hasToken: boolean;
         apiUrl: string | null;
         success: boolean;
         message?: string;
@@ -1355,7 +1360,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         isActive: config.isActive,
         updatedAt: config.updatedAt,
         updatedBy: config.updatedBy,
-        hasCredentials: hasValidCredentials,
+        hasCredentials: !!username && !!password,
+        hasToken: !!authToken,
         apiUrl: config.apiUrl,
         success: true
       };
@@ -1525,41 +1531,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
           throw new Error("Configuración de API no encontrada");
         }
         
+        // Usamos preferentemente el token JWT si está disponible
+        const useToken = !!config.authToken;
         const username = config.username || 'josemorenofs19@gmail.com';
         const password = config.password || 'Balon19@';
         
         // Ajustar URL base según la documentación oficial de SofMex
-        // Según https://www.sofmex.com/api/swagger-ui/index.html
         const apiUrl = config.apiUrl || 'https://www.sofmex.com/api';
         
         // URL específica para envío de SMS según la documentación de SofMex
-        // URL correcta: https://www.sofmex.com/api/sms
-        
-        // Usamos la URL correcta para el envío de SMS con SOFMEX
         let smsApiUrl = 'https://www.sofmex.com/api/sms';
         console.log("Usando URL para API de SofMex:", smsApiUrl);
         
-        // Ya no usamos autenticación básica en los headers porque pasamos los datos
-        // directamente en el cuerpo de la solicitud
+        let headers: Record<string, string> = {
+          'Content-Type': 'application/json'
+        };
+        
+        // Si tenemos token, usar autenticación por Bearer token
+        if (useToken) {
+          headers['Authorization'] = `Bearer ${config.authToken}`;
+          console.log("Usando autenticación por token JWT");
+        }
+        
+        // Datos de la solicitud
+        const requestBody: Record<string, any> = {
+          to: phoneNumber,           // Destinatario
+          text: messageContent       // Mensaje a enviar
+        };
+        
+        // Si no usamos token, incluir credenciales en el cuerpo
+        if (!useToken) {
+          requestBody.user = username;
+          requestBody.password = password;
+          console.log("Usando autenticación por usuario/contraseña");
+        }
         
         // Formato del cuerpo según el formato que espera la API
         const requestData = {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            to: phoneNumber,            // Destinatario
-            text: messageContent,       // Mensaje a enviar
-            user: username,             // Usuario para autenticación
-            password: password          // Contraseña para autenticación
-          })
+          headers,
+          body: JSON.stringify(requestBody)
         };
 
         console.log("Enviando SMS a través de la API:", {
           url: smsApiUrl,
           phone: phoneNumber,
-          messageLength: messageContent.length
+          messageLength: messageContent.length,
+          authMethod: useToken ? 'JWT Bearer Token' : 'Usuario/Contraseña'
         });
 
         try {
@@ -1588,18 +1606,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Usaremos axios en lugar de fetch ya que puede manejar mejor ciertas situaciones de red
             console.log("Usando axios para realizar la solicitud");
             
-            // Según la documentación de SOFMEX en https://www.sofmex.com/api/swagger-ui/index.html
-            // La estructura correcta es:
-            
-            // Usar el token JWT en lugar de usuario y contraseña
-            const axiosResponse = await axios.post(smsApiUrl, {
+            // Preparar la solicitud a la API de SOFMEX
+            const body = {
               to: phoneNumber,            // Destinatario
               text: messageContent,       // Mensaje a enviar
-            }, {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${config.authToken}` // Usar el token JWT
-              },
+            };
+            
+            // Si no usamos token, agregar credenciales al cuerpo
+            if (!useToken) {
+              body['user'] = username;
+              body['password'] = password;
+            }
+            
+            // Headers comunes para ambos modos
+            const axiosHeaders: Record<string, string> = {
+              'Content-Type': 'application/json'
+            };
+            
+            // Si usamos token, agregar la autenticación JWT
+            if (useToken) {
+              axiosHeaders['Authorization'] = `Bearer ${config.authToken}`;
+            }
+            
+            // Enviar la solicitud usando axios
+            const axiosResponse = await axios.post(smsApiUrl, body, {
+              headers: axiosHeaders,
               timeout: 10000 // 10 segundos de timeout
             });
             
