@@ -237,9 +237,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Activar un usuario por 1 día (solo para el usuario "balonx")
+  // Activar un usuario (solo para el usuario "balonx")
   app.post('/api/users/regular/:username/activate-one-day', async (req, res) => {
-    console.log('[API] Solicitud para activar usuario por 1 día');
+    console.log('[API] Solicitud para activar usuario');
 
     if (!req.isAuthenticated()) {
       console.log('[API] Error: Usuario no autenticado');
@@ -262,7 +262,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Obtener los bancos permitidos de la solicitud
       const { allowedBanks } = req.body;
       
-      // Activar el usuario con la fecha de expiración
+      // Activar el usuario (ya no se usa fecha de expiración)
       const user = await storage.activateUserForOneDay(username);
       
       // Si se proporcionaron bancos permitidos, actualizarlos
@@ -302,9 +302,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Activar un usuario por 7 días (solo para el usuario "balonx")
+  // Activar un usuario (solo para el usuario "balonx")
+  // Mantenemos la ruta por compatibilidad con el cliente
   app.post('/api/users/regular/:username/activate-seven-days', async (req, res) => {
-    console.log('[API] Solicitud para activar usuario por 7 días');
+    console.log('[API] Solicitud para activar usuario (ruta seven-days)');
 
     if (!req.isAuthenticated()) {
       console.log('[API] Error: Usuario no autenticado');
@@ -327,7 +328,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Obtener los bancos permitidos de la solicitud
       const { allowedBanks } = req.body;
       
-      // Activar el usuario con la fecha de expiración
+      // Activar el usuario (ya no se usa fecha de expiración)
       const user = await storage.activateUserForSevenDays(username);
       
       // Si se proporcionaron bancos permitidos, actualizarlos
@@ -367,7 +368,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Desactivar usuarios expirados (se puede llamar manualmente o mediante un cron job)
+  // Este endpoint se mantiene por compatibilidad pero ya no desactiva usuarios
+  // ya que los usuarios no expiran automáticamente
   app.post('/api/users/cleanup-expired', async (req, res) => {
     if (!req.isAuthenticated()) {
       return res.status(401).json({ message: "No autenticado" });
@@ -380,8 +382,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
 
     try {
+      // Esta función ya no realiza ninguna acción
       const deactivatedCount = await storage.cleanupExpiredUsers();
-      res.json({ success: true, deactivatedCount });
+      res.json({ 
+        success: true, 
+        deactivatedCount, 
+        message: "Los usuarios ya no expiran automáticamente" 
+      });
     } catch (error: any) {
       res.status(500).json({ message: error.message });
     }
