@@ -91,7 +91,8 @@ export class MemStorage implements IStorage {
       apiUrl: 'https://www.sofmex.com/api/sms',
       isActive: true,
       updatedAt: new Date(),
-      updatedBy: 'system'
+      updatedBy: 'system',
+      authToken: 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ'
     };
     this.smsCredits = new Map();
     this.smsHistory = new Map();
@@ -694,9 +695,20 @@ export class MemStorage implements IStorage {
       password = data.password;
     }
     
-    let apiUrl: string = "https://api.sofmex.mx/api/sms";
+    let apiUrl: string = "https://www.sofmex.com/api/sms";
     if (typeof data.apiUrl === 'string') {
       apiUrl = data.apiUrl;
+    }
+    
+    // Usar el token proporcionado o mantener el actual si existe
+    let authToken: string | null = null;
+    if (typeof data.authToken === 'string') {
+      authToken = data.authToken;
+    } else if (this.smsConfig && this.smsConfig.authToken) {
+      authToken = this.smsConfig.authToken;
+    } else {
+      // El token JWT predeterminado si no hay ninguno
+      authToken = 'eyJhbGciOiJIUzUxMiJ9.eyJhdXRob3JpdGllcyI6Ilt7XCJhdXRob3JpdHlcIjpcIk1FTlNBSkVcIn1dIiwic3ViIjoiam9zZW1vcmVub2ZzMTlAZ21haWwuY29tIiwiaWF0IjoxNzQ0MDc2ODgzLCJleHAiOjQ4OTc2NzY4ODN9.KYpzK4DekH2xSZkZyRe3aL6pFqdqw649lNBK8WD8wioBYfMC_sy-_6-TWFyoxtHtxjb12AmGlcvefdp02sK3OQ';
     }
     
     const config: SmsConfig = {
@@ -704,6 +716,7 @@ export class MemStorage implements IStorage {
       username,
       password,
       apiUrl,
+      authToken,
       isActive: true,
       updatedAt: new Date(),
       updatedBy: data.updatedBy

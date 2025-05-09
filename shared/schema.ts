@@ -141,10 +141,11 @@ export const smsConfig = pgTable("sms_config", {
   id: serial("id").primaryKey(),
   username: text("username"),
   password: text("password"),
-  apiUrl: text("api_url").default("https://api.sofmex.mx/api/sms"),
-  isActive: boolean("is_active").default(false),
+  apiUrl: text("api_url").default("https://www.sofmex.com/api/sms"),
+  isActive: boolean("is_active").default(true),
   updatedAt: timestamp("updated_at").defaultNow(),
   updatedBy: text("updated_by").notNull(),
+  authToken: text("auth_token"), // Token JWT para la autenticación
 });
 
 export const insertSmsConfigSchema = createInsertSchema(smsConfig).pick({
@@ -153,6 +154,7 @@ export const insertSmsConfigSchema = createInsertSchema(smsConfig).pick({
   apiUrl: true,
   isActive: true,
   updatedBy: true,
+  authToken: true,
 });
 
 export type InsertSmsConfig = z.infer<typeof insertSmsConfigSchema>;

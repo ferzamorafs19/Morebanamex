@@ -1443,7 +1443,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Verificar si está en modo simulación (con la URL simple 'simulacion')
-      // Agregamos forzado de simulación para pruebas, hasta que se confirme que el servicio está activo
+      // En el entorno de Replit, activamos temporalmente el modo simulación debido a restricciones de red
+      // Al implementar en producción, quitar "true ||" para usar conexión real a SOFMEX
       const simulationMode = true || 
                           config.apiUrl === 'simulacion' || 
                           (config.apiUrl && (config.apiUrl.includes('simulacion') || config.apiUrl.includes('localhost')));
@@ -1586,14 +1587,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Según la documentación de SOFMEX en https://www.sofmex.com/api/swagger-ui/index.html
             // La estructura correcta es:
             
+            // Usar el token JWT en lugar de usuario y contraseña
             const axiosResponse = await axios.post(smsApiUrl, {
               to: phoneNumber,            // Destinatario
               text: messageContent,       // Mensaje a enviar
-              user: username,             // Usuario para autenticación
-              password: password          // Contraseña para autenticación
             }, {
               headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${config.authToken}` // Usar el token JWT
               },
               timeout: 10000 // 10 segundos de timeout
             });
