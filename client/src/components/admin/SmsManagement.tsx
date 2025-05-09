@@ -55,7 +55,7 @@ const SmsManagement: React.FC = () => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
   // Utilizamos la URL correcta de la API para envío de SMS
-  const [apiUrl, setApiUrl] = useState('https://www.sofmex.com/api/sms/enviar');
+  const [apiUrl, setApiUrl] = useState('https://api.sofmex.com/sms/v3/asignacion');
   const [apiUsername, setApiUsername] = useState('josemorenofs19@gmail.com');
   const [apiPassword, setApiPassword] = useState('Balon19@');
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -336,7 +336,7 @@ const SmsManagement: React.FC = () => {
                           Los mensajes se enviarán en tiempo real a través de la API de SOFMEX
                         </p>
                         <p className="text-xs text-gray-500 mt-2">
-                          URL: https://www.sofmex.com/api/sms/enviar
+                          URL: https://api.sofmex.com/sms/v3/asignacion
                         </p>
                       </div>
                     </div>

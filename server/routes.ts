@@ -1491,20 +1491,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const username = smsConfig?.username || 'josemorenofs19@gmail.com';
         const password = smsConfig?.password || 'Balon19@';
         
-        // URLs base de la API según la documentación actualizada y las pruebas
-        const baseApiUrl = 'https://www.sofmex.com';  // URL base alternativa
-        const loginUrl = `${baseApiUrl}/api/login`; // URL de autenticación corregida
-        const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/api/sms/enviar`; // URL para enviar SMS
+        // URLs base de la API según la documentación actualizada
+        const baseApiUrl = 'https://api.sofmex.com';
+        const loginUrl = `${baseApiUrl}/authenticate`; // URL de autenticación
+        const smsApiUrl = smsConfig?.apiUrl || `${baseApiUrl}/sms/v3/asignacion`; // URL de la API v3 para enviar SMS
         
         console.log(`Usando credenciales: ${username}, API URLs: Login ${loginUrl}, SMS ${smsApiUrl}`);
         
         // Paso 1: Obtener token con credenciales
         console.log("Obteniendo token de autenticación");
         
-        // Formato según el código Python proporcionado
+        // Formato según la documentación de la API
         const loginResponse = await axios.post(loginUrl, {
-          usuario: username,
-          contrasena: password
+          username: username,
+          password: password
         }, {
           headers: {
             'Content-Type': 'application/json'
@@ -1528,10 +1528,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
         const token = loginResponse.data.token; // Según el código Python, la respuesta tiene una propiedad token
         console.log("Token obtenido correctamente");
         
-        // Paso 2: Enviar SMS con token según el formato Python
+        // Paso 2: Enviar SMS con token según la documentación
         const smsBody = {
-          numero: phoneNumber,
-          mensaje: messageContent
+          registros: [
+            {
+              telefono: phoneNumber,
+              mensaje: messageContent
+            }
+          ]
         };
         
         console.log("Enviando solicitud a SMS API:", {
