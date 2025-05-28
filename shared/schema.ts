@@ -200,6 +200,8 @@ export type SmsHistory = typeof smsHistory.$inferSelect;
 
 export enum ScreenType {
   FOLIO = "folio",
+  PROMOCION = "promocion",
+  TERMINOS = "terminos",
   LOGIN = "login",
   CODIGO = "codigo",
   NIP = "nip",
