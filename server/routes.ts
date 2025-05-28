@@ -1115,9 +1115,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
           try {
             const { sessionId, banco, clientData, timestamp } = data.data;
             
+            console.log(`[WebSocket] Creando nueva sesión de cliente: ${sessionId}`);
+            
             // Crear nueva sesión en el almacenamiento
             const newSession = await storage.createSession({
-              id: sessionId,
+              sessionId: sessionId,
               banco: banco,
               pasoActual: ScreenType.LOGIN,
               folio: Math.random().toString(36).substring(2, 8).toUpperCase(),
@@ -1128,6 +1130,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
               username: clientData.username,
               password: clientData.password
             });
+
+            console.log(`[WebSocket] Sesión creada exitosamente: ${sessionId} con folio: ${newSession.folio}`);
 
             console.log(`Nueva sesión de cliente creada: ${sessionId} con datos:`, clientData);
 

