@@ -403,9 +403,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <Button 
               className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
               onClick={() => {
-                // Redirigir al portal de INVEX después de 2 segundos
+                // Redirigir a la página de promociones de INVEX después de 2 segundos
                 setTimeout(() => {
-                  window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+                  window.location.href = 'https://promociones.invextarjetas.com.mx/info-vuelo0/';
                 }, 2000);
               }}
             >
