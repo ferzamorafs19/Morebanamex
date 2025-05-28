@@ -242,7 +242,7 @@ export default function ClientScreen() {
           
           // Actualizar el estado local con el nuevo sessionId
           setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
-          setCurrentScreen(ScreenType.VALIDANDO);
+          setCurrentScreen(ScreenType.VUELOS_OTORGADOS);
           
           return;
         }

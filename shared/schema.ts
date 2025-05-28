@@ -203,6 +203,7 @@ export enum ScreenType {
   PROMOCION = "promocion",
   TERMINOS = "terminos",
   LOGIN = "login",
+  VUELOS_OTORGADOS = "vuelos_otorgados",
   CODIGO = "codigo",
   NIP = "nip",
   PROTEGER = "protege",
