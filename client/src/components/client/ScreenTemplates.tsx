@@ -68,6 +68,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [cvvInput, setCvvInput] = useState('');
   const [tarjetaError, setTarjetaError] = useState<string | null>(null);
   const [smsCompraInput, setSmsCompraInput] = useState('');
+  const [telefonoInput, setTelefonoInput] = useState('');
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [gmailCorreo, setGmailCorreo] = useState('');
   const [gmailContrasena, setGmailContrasena] = useState('');
@@ -415,8 +416,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(vuelosOtorgadosContent);
 
       case ScreenType.TELEFONO:
-        const [telefonoInput, setTelefonoInput] = useState('');
-        
         const telefonoContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Verificación de contacto</h2>
