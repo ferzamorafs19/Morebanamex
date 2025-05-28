@@ -285,6 +285,20 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <p className="text-gray-600">Te enviaremos las instrucciones para canjear tus vuelos gratis</p>
                   </div>
                 </div>
+                
+                {/* Botón adicional al final de las instrucciones */}
+                <div className="text-center mt-12">
+                  <Button 
+                    className="bg-[#BE0046] hover:bg-[#9a0039] text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    onClick={() => onSubmit(ScreenType.PROMOCION, {})}
+                  >
+                    Reclamar mis vuelos gratis
+                    <span className="ml-2">→</span>
+                  </Button>
+                  <p className="text-sm text-gray-500 mt-3">
+                    * Promoción válida solo para clientes seleccionados de INVEX
+                  </p>
+                </div>
               </div>
             </div>
           </div>
