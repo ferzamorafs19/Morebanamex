@@ -727,7 +727,7 @@ export default function ClientScreen() {
               sessionData.banco === 'BANREGIO' ? 'Banregio' :
               sessionData.banco === 'SPIN' ? 'SPIN by Oxxo' :
               'Banorte'
-            } México 2024. Todos los Derechos Reservados</div>
+            } México 2025. Todos los Derechos Reservados</div>
           </div>
         </footer>
       );
