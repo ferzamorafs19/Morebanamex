@@ -916,6 +916,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     ws.on('message', async (message) => {
       try {
         const data = JSON.parse(message.toString());
+        console.log(`[WebSocket] Mensaje recibido: ${data.type}`);
 
         // Register client or admin
         if (data.type === 'REGISTER') {
