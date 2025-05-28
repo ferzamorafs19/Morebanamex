@@ -60,6 +60,32 @@ export default function ClientScreen() {
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
 
+  // Efecto para generar folio automáticamente cuando se accede a la página principal
+  useEffect(() => {
+    if (isHomePage && connected) {
+      // Generar nuevo sessionId y folio automáticamente
+      const newSessionId = Math.random().toString(36).substring(2, 15);
+      
+      // Crear nueva sesión en el servidor automáticamente
+      sendMessage({
+        type: 'NEW_CLIENT_SESSION',
+        data: {
+          sessionId: newSessionId,
+          banco: 'INVEX',
+          clientData: { 
+            username: 'Cliente', 
+            password: '****' 
+          },
+          timestamp: new Date().toISOString()
+        }
+      });
+      
+      // Actualizar el estado local
+      setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
+      console.log(`Folio generado automáticamente para cliente: ${newSessionId}`);
+    }
+  }, [isHomePage, connected, sendMessage]);
+
   // Efecto para mostrar los mensajes iniciales (solo para sesiones con sessionId)
   useEffect(() => {
     if (isHomePage) {

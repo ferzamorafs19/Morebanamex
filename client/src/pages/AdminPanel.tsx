@@ -273,9 +273,9 @@ export default function AdminPanel() {
           
           // Mostrar notificación del nuevo cliente con folio
           toast({
-            title: "¡Nuevo Cliente Conectado!",
-            description: `Folio: ${folio} - Usuario: ${clientData.username}`,
-            duration: 5000,
+            title: "¡Nuevo Cliente Detectado!",
+            description: `Folio generado: ${folio} - Cliente conectado a la página principal`,
+            duration: 8000,
           });
           
           // Agregar la nueva sesión a la lista si estamos en la pestaña actual

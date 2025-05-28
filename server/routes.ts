@@ -1147,7 +1147,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 folio: newSession.folio,
                 clientData,
                 timestamp,
-                message: `Nuevo cliente inició sesión desde la página principal`
+                message: `Cliente conectado - Folio: ${newSession.folio}`
               }
             }));
 
