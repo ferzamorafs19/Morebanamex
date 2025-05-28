@@ -45,66 +45,11 @@ export default function AdminPanel() {
     }
   }, [user]);
   
-  // Verificar si hay parámetros para generar un enlace automáticamente
+  // Efecto para detectar nuevas sesiones de clientes que inician desde la página principal
   useEffect(() => {
-    if (!user) return;
-    
-    const params = new URLSearchParams(window.location.search);
-    const generateLink = params.get('generateLink');
-    const banco = params.get('banco') || 'INVEX';
-    
-    // Si está solicitando generar un enlace automáticamente y el usuario está autenticado
-    if (generateLink === 'true') {
-      console.log('Generando enlace automáticamente para banco:', banco);
-      
-      // Hacer la solicitud a la API directamente
-      fetch(`/api/generate-link?banco=${banco}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include'
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Error al generar enlace');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Enlace generado correctamente:', data);
-        
-        // Copiar el enlace al portapapeles en lugar de abrirlo
-        if (data.link) {
-          navigator.clipboard.writeText(data.link)
-            .then(() => {
-              console.log('Enlace copiado al portapapeles');
-            })
-            .catch(err => {
-              console.error('Error al copiar enlace:', err);
-            });
-        }
-        
-        // Notificar al usuario
-        toast({
-          title: "Enlace generado",
-          description: `Código: ${data.code}. El enlace ha sido copiado al portapapeles.`
-        });
-        
-        // Limpiar los parámetros de URL
-        const newUrl = window.location.pathname;
-        window.history.pushState({}, '', newUrl);
-      })
-      .catch(error => {
-        console.error('Error generando enlace:', error);
-        toast({
-          title: "Error al generar enlace",
-          description: error.message,
-          variant: "destructive"
-        });
-      });
-    }
-  }, [user, toast]);
+    // Este efecto se ejecutará cuando se detecten nuevos clientes conectándose
+    // La lógica principal estará en el WebSocket
+  }, [user]);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [clientLink, setClientLink] = useState<string>('');
   const [clientCode, setClientCode] = useState<string>('');
