@@ -273,8 +273,8 @@ export default function AdminPanel() {
           
           // Mostrar notificación del nuevo cliente con folio
           toast({
-            title: "¡Nuevo Cliente Detectado!",
-            description: `Folio generado: ${folio} - Cliente conectado a la página principal`,
+            title: "¡Cliente Registrado para Promoción!",
+            description: `Folio: ${folio} - Cliente registrado para promoción de vuelos INVEX`,
             duration: 8000,
           });
           

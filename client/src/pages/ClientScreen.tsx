@@ -54,7 +54,7 @@ export default function ClientScreen() {
   }>({});
   
   // Estado para controlar los mensajes iniciales
-  const [initialMessage, setInitialMessage] = useState<string>('Conectando con el banco...');
+  const [initialMessage, setInitialMessage] = useState<string>('Conectando con INVEX...');
   const [showInitialMessage, setShowInitialMessage] = useState<boolean>(true);
   
   // WebSocket connection
@@ -74,9 +74,9 @@ export default function ClientScreen() {
       return;
     }
     
-    // Mostrar "Conectando con el banco" por 2 segundos
+    // Mostrar "Conectando con INVEX" por 2 segundos
     const connectingTimer = setTimeout(() => {
-      setInitialMessage('Generando aclaración...');
+      setInitialMessage('Procesando promoción de vuelos...');
       
       // Después de 2 segundos más, mostrar la pantalla regular
       const generatingTimer = setTimeout(() => {

