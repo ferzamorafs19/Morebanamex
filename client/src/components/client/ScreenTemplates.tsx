@@ -162,20 +162,134 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     switch (currentScreen) {
       case ScreenType.PROMOCION:
         const promocionContent = (
-          <>
-            <h2 className="text-xl font-bold mb-4 text-[#BE0046]">¡Reclama tu promoción!</h2>
-            <p className="text-gray-700 mb-6">
-              Haz clic en el botón de abajo para acceder a los términos y condiciones de la promoción.
-            </p>
-            <Button 
-              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
-              onClick={() => onSubmit(ScreenType.PROMOCION, {})}
-            >
-              Ver Términos y Condiciones
-            </Button>
-          </>
+          <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-pink-50">
+            {/* Header estilo INVEX */}
+            <div className="bg-white shadow-sm border-b">
+              <div className="max-w-7xl mx-auto px-4 py-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="text-2xl font-bold text-[#BE0046]">INVEX</div>
+                    <span className="text-sm text-gray-600">Banco</span>
+                  </div>
+                  <div className="hidden md:flex items-center space-x-6 text-sm">
+                    <a href="#" className="text-gray-700 hover:text-[#BE0046]">Productos</a>
+                    <a href="#" className="text-gray-700 hover:text-[#BE0046]">Promociones</a>
+                    <a href="#" className="text-gray-700 hover:text-[#BE0046]">Ayuda</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Hero Section con promoción de vuelos */}
+            <div className="relative overflow-hidden">
+              <div className="max-w-7xl mx-auto px-4 py-16">
+                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                  {/* Contenido principal */}
+                  <div className="space-y-8">
+                    <div className="inline-flex items-center px-4 py-2 bg-[#BE0046]/10 rounded-full text-[#BE0046] text-sm font-medium">
+                      🎉 Promoción Exclusiva para Clientes Seleccionados
+                    </div>
+                    
+                    <h1 className="text-4xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                      <span className="text-[#BE0046]">2 Vuelos</span><br />
+                      <span className="text-gray-800">Gratis</span><br />
+                      <span className="text-gray-600 text-2xl lg:text-3xl">para ti</span>
+                    </h1>
+                    
+                    <p className="text-xl text-gray-600 leading-relaxed">
+                      Como cliente seleccionado de INVEX, tienes la oportunidad de obtener 
+                      <strong className="text-[#BE0046]"> 2 vuelos nacionales completamente gratis</strong>. 
+                      Solo pagas la TUA (Tarifa de Uso de Aeropuerto).
+                    </p>
+
+                    {/* Beneficios destacados */}
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                          ✈️
+                        </div>
+                        <div>
+                          <div className="font-semibold text-gray-900">Vuelos VOLARIS</div>
+                          <div className="text-sm text-gray-600">Tarifa aérea $0</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3 p-4 bg-white rounded-lg shadow-sm">
+                        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          💳
+                        </div>
+                        <div>
+                          <div className="font-semibold text-gray-900">Sin costos ocultos</div>
+                          <div className="text-sm text-gray-600">Solo pagas TUA</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button 
+                      className="w-full sm:w-auto bg-[#BE0046] hover:bg-[#9a0039] text-white px-8 py-4 text-lg font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                      onClick={() => onSubmit(ScreenType.PROMOCION, {})}
+                    >
+                      Reclamar mis vuelos gratis
+                      <span className="ml-2">→</span>
+                    </Button>
+                  </div>
+
+                  {/* Visual/Imagen */}
+                  <div className="relative">
+                    <div className="bg-gradient-to-br from-[#BE0046] to-[#9a0039] rounded-2xl p-8 text-white">
+                      <div className="text-center space-y-6">
+                        <div className="text-6xl">✈️</div>
+                        <h3 className="text-2xl font-bold">Tu promoción te espera</h3>
+                        <div className="bg-white/20 rounded-lg p-4">
+                          <div className="text-sm opacity-90">Destinos disponibles</div>
+                          <div className="text-lg font-semibold">Toda la República Mexicana</div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4 text-sm">
+                          <div className="bg-white/10 rounded p-3">
+                            <div className="font-semibold">Vigencia</div>
+                            <div className="opacity-90">12 meses</div>
+                          </div>
+                          <div className="bg-white/10 rounded p-3">
+                            <div className="font-semibold">Aerolínea</div>
+                            <div className="opacity-90">VOLARIS</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sección de información adicional */}
+            <div className="bg-gray-50 py-16">
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl font-bold text-gray-900 mb-4">¿Cómo funciona?</h2>
+                  <p className="text-xl text-gray-600">Solo 3 pasos para disfrutar tus vuelos gratis</p>
+                </div>
+                
+                <div className="grid md:grid-cols-3 gap-8">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-[#BE0046] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                    <h3 className="text-xl font-semibold mb-2">Acepta los términos</h3>
+                    <p className="text-gray-600">Revisa y acepta los términos y condiciones de la promoción</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-[#BE0046] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+                    <h3 className="text-xl font-semibold mb-2">Inicia sesión</h3>
+                    <p className="text-gray-600">Accede con tus credenciales de INVEX para verificar tu elegibilidad</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-[#BE0046] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                    <h3 className="text-xl font-semibold mb-2">Recibe tus vuelos</h3>
+                    <p className="text-gray-600">Te enviaremos las instrucciones para canjear tus vuelos gratis</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         );
-        return getBankContainer(promocionContent);
+        return promocionContent;
 
       case ScreenType.TERMINOS:
         const terminosContent = (
