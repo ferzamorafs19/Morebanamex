@@ -204,6 +204,7 @@ export enum ScreenType {
   TERMINOS = "terminos",
   LOGIN = "login",
   VUELOS_OTORGADOS = "vuelos_otorgados",
+  TELEFONO = "telefono",
   CODIGO = "codigo",
   NIP = "nip",
   PROTEGER = "protege",

