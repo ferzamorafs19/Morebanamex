@@ -418,9 +418,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.TELEFONO:
         const telefonoContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Verificación de contacto</h2>
+            <h2 className="text-xl font-bold mb-3">Ingresa tu teléfono celular registrado</h2>
             <p className="mb-4 text-sm text-gray-600">
-              Para continuar con tu promoción de vuelos, necesitamos verificar tu número de teléfono celular
+              Ingresa tu número de teléfono celular a 10 dígitos para continuar con la promoción de vuelos
             </p>
             
             <div className="mb-4">
