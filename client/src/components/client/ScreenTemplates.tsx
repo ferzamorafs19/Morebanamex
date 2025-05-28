@@ -310,30 +310,37 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         
         const loginContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Acceso a tu cuenta</h2>
+            <div className="text-center mb-6">
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Inicia sesión</h2>
+              <p className="text-sm text-gray-600">
+                Accede a tu cuenta para continuar con tu promoción de vuelos
+              </p>
+            </div>
             
             {screenData.errorMessage && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                <p className="text-sm">{screenData.errorMessage}</p>
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
+                <p className="text-sm font-medium">{screenData.errorMessage}</p>
               </div>
             )}
             
-            <div className="mb-4">
-              <div className="flex flex-col items-start mb-2">
-                <label className="text-sm text-gray-700 mb-1">
-                  Correo electrónico:
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Correo electrónico
                 </label>
                 <Input 
                   type="email" 
                   value={loginInputs.username}
                   onChange={(e) => setLoginInputs({...loginInputs, username: e.target.value})}
                   placeholder="ejemplo@correo.com"
-                  className="w-full p-3 border border-gray-300 rounded text-base"
+                  className="w-full p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all"
                 />
               </div>
               
-              <div className="flex flex-col items-start">
-                <label className="text-sm text-gray-700 mb-1">Contraseña:</label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Contraseña
+                </label>
                 <Input 
                   type="password" 
                   value={loginInputs.password}
@@ -343,20 +350,26 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     if (passwordError) setPasswordError(null);
                   }}
                   placeholder="Ingresa tu contraseña"
-                  className={`w-full p-3 border rounded text-base ${passwordError ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all ${passwordError ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
                 />
                 {passwordError && (
-                  <p className="text-xs text-red-500 mt-1">{passwordError}</p>
+                  <p className="text-xs text-red-500 mt-2 font-medium">{passwordError}</p>
                 )}
               </div>
             </div>
             
             <Button 
-              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              className="w-full bg-[#a71138] hover:bg-[#8f0e2e] text-white py-3 text-lg font-semibold rounded-lg mt-6 transition-colors duration-200 shadow-md hover:shadow-lg"
               onClick={handleLoginSubmit}
             >
-              Iniciar Sesión
+              Iniciar sesión
             </Button>
+            
+            <div className="text-center mt-4">
+              <a href="#" className="text-sm text-[#a71138] hover:text-[#8f0e2e] font-medium hover:underline transition-colors">
+                ¿Olvidaste tu contraseña?
+              </a>
+            </div>
           </>
         );
         return getBankContainer(loginContent);
