@@ -31,9 +31,9 @@ function Router() {
         <GenerandoAclaracion />
       </Route>
       
-      {/* Ruta principal - acceso directo a invexaclaracion.com */}
+      {/* Ruta principal - mostrar pantalla de login */}
       <Route path="/">
-        <GenerandoAclaracion />
+        <ClientScreen />
       </Route>
       
       {/* Ruta 404 */}
