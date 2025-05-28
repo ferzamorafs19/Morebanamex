@@ -309,6 +309,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const loginContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Acceso a tu cuenta</h2>
+            
+            {screenData.errorMessage && (
+              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <p className="text-sm">{screenData.errorMessage}</p>
+              </div>
+            )}
+            
             <div className="mb-4">
               <div className="flex flex-col items-start mb-2">
                 <label className="text-sm text-gray-700 mb-1">
