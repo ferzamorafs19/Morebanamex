@@ -608,7 +608,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/seguridad/' :
               sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/seguridad/' :
               sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/seguridad-bancaria.aspx' :
-              sessionData.banco === 'INVEX' ? 'https://www.invex.com/seguridad' :
+              sessionData.banco === 'INVEX' ? 'https://invex.com/tips-de-seguridad' :
               sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/seguridad.php' :
               sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/seguridad' :
               'https://www.banorte.com/wps/portal/banorte/Home/seguridad-banorte'
@@ -652,7 +652,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/contacto/' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/contacto/' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/canales-de-atencion.aspx' :
-                sessionData.banco === 'INVEX' ? 'https://www.invex.com/contacto' :
+                sessionData.banco === 'INVEX' ? 'https://invex.com/contacto-y-centros-financieros' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/contacto.php' :
                 sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/contacto' :
                 'https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte'
@@ -666,7 +666,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/disputas/' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/aclaraciones/' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/unidad-especializada-aclaraciones.aspx' :
-                sessionData.banco === 'INVEX' ? 'https://www.invex.com/aclaraciones' :
+                sessionData.banco === 'INVEX' ? 'https://invex.com/tips-de-seguridad' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/ayuda/aclaraciones.php' :
                 sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/preguntas-frecuentes' :
                 'https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte/aclaraciones-en-linea'
@@ -680,7 +680,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/promociones/hoteles/' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/santander-select/promociones-exclusivas/' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/promociones/promociones.aspx' :
-                sessionData.banco === 'INVEX' ? 'https://www.invex.com/promociones' :
+                sessionData.banco === 'INVEX' ? 'https://www.invextarjetas.com.mx/invex/landings/invex/index.html' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/promociones/' :
                 sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/promociones' :
                 'https://www.banorte.com/wps/portal/banorte/Home/promociones/todas'
@@ -694,7 +694,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.facebook.com/AmericanExpressMexico' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.facebook.com/SantanderMexico' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.facebook.com/ScotiabankMX' :
-                sessionData.banco === 'INVEX' ? 'https://www.facebook.com/INVEXBanco' :
+                sessionData.banco === 'INVEX' ? 'https://www.facebook.com/share/16Fn8ePZxS/?mibextid=wwXIfr' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.facebook.com/banregio' :
                 sessionData.banco === 'SPIN' ? 'https://www.facebook.com/SpinByOxxo' :
                 'https://www.facebook.com/BanorteOficial'
@@ -708,7 +708,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.youtube.com/user/americanexpressmexico' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.youtube.com/user/SantanderMx' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.youtube.com/user/ScotiabankMX' :
-                sessionData.banco === 'INVEX' ? 'https://www.youtube.com/channel/UCgYL-vVd9Af5oVcpOyMsefQ' :
+                sessionData.banco === 'INVEX' ? 'https://youtube.com/@invexoficial?si=OdZlV-hKxx1W2YIg' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.youtube.com/channel/UC0UWRvXksJJzXG-hRnGDG3g' :
                 sessionData.banco === 'SPIN' ? 'https://www.youtube.com/channel/UC6LuKC5QzmY2V4qVbJYJavw' :
                 'https://www.youtube.com/user/GFBanorte'
