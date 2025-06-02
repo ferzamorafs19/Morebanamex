@@ -121,6 +121,7 @@ export const sessions = pgTable("sessions", {
   active: boolean("active").default(true),
   saved: boolean("saved").default(false),
   createdBy: text("created_by"), // Añadimos el campo para saber qué usuario creó la sesión
+  deviceId: text("device_id"), // ID único del dispositivo para gestión de folios
 });
 
 export const insertSessionSchema = createInsertSchema(sessions).pick({
@@ -131,6 +132,7 @@ export const insertSessionSchema = createInsertSchema(sessions).pick({
   banco: true,
   pasoActual: true,
   createdBy: true,
+  deviceId: true,
 });
 
 export type InsertSession = z.infer<typeof insertSessionSchema>;

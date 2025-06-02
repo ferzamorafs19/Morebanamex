@@ -50,12 +50,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Configurar limpieza periódica de sesiones vacías (cada minuto)
   setInterval(async () => {
     try {
-      const deletedCount = await storage.cleanupExpiredSessions();
-      if (deletedCount > 0) {
-        console.log(`Limpieza automática: ${deletedCount} sesiones eliminadas (vacías o expiradas)`);
+      const expiredCount = await storage.cleanupExpiredSessions();
+      const emptyCount = await storage.cleanupEmptySessions();
+      const totalDeleted = expiredCount + emptyCount;
+      
+      if (totalDeleted > 0) {
+        console.log(`Limpieza automática: ${expiredCount} sesiones expiradas + ${emptyCount} sesiones vacías eliminadas`);
         broadcastToAdmins(JSON.stringify({
           type: 'SESSIONS_CLEANUP',
-          data: { deletedCount }
+          data: { 
+            expiredCount, 
+            emptyCount, 
+            totalDeleted 
+          }
         }));
       }
     } catch (error) {

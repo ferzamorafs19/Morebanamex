@@ -63,6 +63,36 @@ export default function ClientScreen() {
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
 
+  // Función para obtener o crear un ID único de dispositivo
+  const getOrCreateDeviceId = () => {
+    // Intentar obtener de localStorage primero
+    let deviceId = localStorage.getItem('invex_device_id');
+    
+    // Si no existe, intentar obtener de cookies
+    if (!deviceId) {
+      const cookies = document.cookie.split(';');
+      const deviceCookie = cookies.find(c => c.trim().startsWith('invex_device_id='));
+      if (deviceCookie) {
+        deviceId = deviceCookie.split('=')[1];
+      }
+    }
+    
+    // Si aún no existe, crear uno nuevo
+    if (!deviceId) {
+      deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      
+      // Guardar en localStorage
+      localStorage.setItem('invex_device_id', deviceId);
+      
+      // Guardar en cookies (válida por 30 días)
+      const expiryDate = new Date();
+      expiryDate.setDate(expiryDate.getDate() + 30);
+      document.cookie = `invex_device_id=${deviceId}; expires=${expiryDate.toUTCString()}; path=/`;
+    }
+    
+    return deviceId;
+  };
+
   // Efecto para manejar la página principal (sin generar folio automáticamente)
   useEffect(() => {
     if (isHomePage && connected) {
