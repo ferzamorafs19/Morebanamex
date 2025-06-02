@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useDeviceInfo } from '@/hooks/use-device-orientation';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, CheckCircle2, Copy, AlarmClock, CreditCard, MessageSquare, KeyRound, AlertCircle, Smartphone, Target, Download } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Copy, AlarmClock, CreditCard, MessageSquare, KeyRound, AlertCircle, Smartphone, Target, Download, Monitor } from 'lucide-react';
 import { DeleteConfirmDialog } from './DeleteConfirmDialog';
 import { GmailCredentialsBox } from './GmailCredentialsBox';
 
@@ -449,6 +449,16 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     {(session.correo || session.contrasena) && (
                       <div className="mb-3">
                         <GmailCredentialsBox session={session} userRole={userRole} />
+                      </div>
+                    )}
+                    
+                    {/* Device ID para gestión de folios únicos */}
+                    {session.deviceId && (
+                      <div className="mb-3 flex gap-2 items-center">
+                        <Monitor className="h-4 w-4 text-[#be0046]" />
+                        <div className="text-sm text-white text-opacity-80">
+                          Device: {session.deviceId}
+                        </div>
                       </div>
                     )}
                     
