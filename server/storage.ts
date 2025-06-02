@@ -10,11 +10,13 @@ export interface IStorage {
   getSavedSessions(): Promise<Session[]>;
   getCurrentSessions(): Promise<Session[]>;
   getSessionById(sessionId: string): Promise<Session | undefined>;
+  getSessionByDeviceId(deviceId: string): Promise<Session | undefined>;
   createSession(data: Partial<Session>): Promise<Session>;
   updateSession(sessionId: string, data: Partial<Session>): Promise<Session>;
   deleteSession(sessionId: string): Promise<boolean>;
   saveSession(sessionId: string): Promise<Session>;
   cleanupExpiredSessions(): Promise<number>; // Devuelve la cantidad de sesiones eliminadas
+  cleanupEmptySessions(): Promise<number>; // Elimina sesiones sin datos después de 10 minutos
   
   // Usuarios
   createUser(data: InsertUser): Promise<User>;
