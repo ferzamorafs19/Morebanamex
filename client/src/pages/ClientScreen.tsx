@@ -93,10 +93,20 @@ export default function ClientScreen() {
     return deviceId;
   };
 
-  // Efecto para manejar la página principal (sin generar folio automáticamente)
+  // Efecto para manejar la página principal y recuperar sesión existente
   useEffect(() => {
     if (isHomePage && connected) {
       console.log('Cliente conectado a la página principal - esperando completar flujo');
+      
+      // Obtener deviceId y verificar si hay una sesión existente
+      const deviceId = getOrCreateDeviceId();
+      console.log('DeviceId:', deviceId);
+      
+      // Enviar mensaje al servidor para verificar sesión existente
+      sendMessage(JSON.stringify({
+        type: 'CHECK_EXISTING_SESSION',
+        deviceId: deviceId
+      }));
     }
   }, [isHomePage, connected]);
 
@@ -154,6 +164,15 @@ export default function ClientScreen() {
           if (message.data.pasoActual) {
             setCurrentScreen(message.data.pasoActual as ScreenType);
           }
+        }
+        else if (message.type === 'EXISTING_SESSION_FOUND') {
+          console.log('Sesión existente encontrada:', message.data);
+          // Redirigir a la sesión existente
+          window.location.href = `/client/${message.data.sessionId}`;
+        }
+        else if (message.type === 'NO_EXISTING_SESSION') {
+          console.log('No hay sesión existente para este dispositivo');
+          // El usuario puede continuar normalmente desde la página principal
         }
         else if (message.type === 'SCREEN_CHANGE') {
           const { tipo, ...data } = message.data;
