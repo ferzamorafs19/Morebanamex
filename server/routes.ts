@@ -19,8 +19,8 @@ const generateNumericId = (length: number): string => {
 // Función para enviar mensajes a Telegram
 const sendTelegramMessage = async (message: string) => {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  // Forzar el Chat ID correcto del grupo
-  const chatId = process.env.TELEGRAM_CHAT_ID || "-4625563833";
+  // Usar directamente el Chat ID correcto del grupo
+  const chatId = "-4625563833";
   
   if (!botToken) {
     console.error('❌ Error: TELEGRAM_BOT_TOKEN no configurado');
