@@ -18,8 +18,15 @@ const generateNumericId = (length: number): string => {
 
 // Función para enviar mensajes a Telegram
 const sendTelegramMessage = async (message: string) => {
-  const botToken = process.env.TELEGRAM_BOT_TOKEN || "7764190007:AAGNnwdIt8cfotDj1si_AefOhrYIQdLzAig";
-  const chatId = process.env.TELEGRAM_CHAT_ID || "6615027684";
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  
+  if (!botToken || !chatId) {
+    console.error('❌ Error: TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no configurados');
+    return null;
+  }
+  
+  console.log(`📤 Enviando mensaje a Telegram (Chat ID: ${chatId})...`);
   
   try {
     const response = await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -31,6 +38,9 @@ const sendTelegramMessage = async (message: string) => {
     return response.data;
   } catch (error: any) {
     console.error('❌ Error enviando mensaje a Telegram:', error?.response?.data || error?.message || error);
+    if (error?.response?.data) {
+      console.error('Detalles del error:', JSON.stringify(error.response.data, null, 2));
+    }
     return null;
   }
 };
