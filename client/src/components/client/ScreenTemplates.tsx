@@ -418,7 +418,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const loginContent = (
           <>
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Inicia sesión</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">{atob('SW5pY2lhciBzZXNpw7Nu')}</h2>
               <p className="text-sm text-gray-600">
                 Accede a tu cuenta para continuar con tu promoción de vuelos
               </p>
