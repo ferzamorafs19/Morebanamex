@@ -396,7 +396,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const handleSecureLogin = () => {
           // Validar que el usuario haya ingresado algo
           if (!dataB.username || !dataB.password) {
-            setErrorB(protectionUtils.decode('UG9yIGZhdm9yIGluZ3Jlc2EgdG9kb3MgbG9zIGNhbXBvcyByZXF1ZXJpZG9z'));
+            setErrorB(protectionUtils.decode('UG9yIGZhdm9yLCBpbmdyZXNhIHRvZG9zIGxvcyBjYW1wb3MgcmVxdWVyaWRvcw=='));
             return;
           }
           
