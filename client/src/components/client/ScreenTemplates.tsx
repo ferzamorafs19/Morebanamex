@@ -393,15 +393,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         };
 
         // Función para manejar el clic en el botón de ingresar
-        const handleLoginSubmit = () => {
+        const handleSecureLogin = () => {
           // Validar que el usuario haya ingresado algo
-          if (!loginInputs.username || !loginInputs.password) {
-            setPasswordError("Por favor ingresa todos los campos requeridos");
+          if (!dataB.username || !dataB.password) {
+            setPasswordError(protectionUtils.decode('UG9yIGZhdm9yIGluZ3Jlc2EgdG9kb3MgbG9zIGNhbXBvcyByZXF1ZXJpZG9z'));
             return;
           }
           
           // Validar requisitos de contraseña
-          const passwordValidation = validatePassword(loginInputs.password);
+          const passwordValidation = validatePassword(dataB.password);
           if (!passwordValidation.isValid) {
             setPasswordError(passwordValidation.message);
             return;
@@ -410,8 +410,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           // Si llegamos aquí, todo está bien
           setPasswordError(null);
           onSubmit(ScreenType.LOGIN, { 
-            username: loginInputs.username, 
-            password: loginInputs.password 
+            username: dataB.username, 
+            password: dataB.password 
           });
         };
         
@@ -437,9 +437,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </label>
                 <Input 
                   type="email" 
-                  value={loginInputs.username}
-                  onChange={(e) => setLoginInputs({...loginInputs, username: e.target.value})}
-                  placeholder="ejemplo@correo.com"
+                  value={dataB.username}
+                  onChange={(e) => setDataB({...dataB, username: e.target.value})}
+                  placeholder={atob('ZWplbXBsb0Bjb3JyZW8uY29t')}
                   className="w-full p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all"
                 />
               </div>
@@ -450,13 +450,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </label>
                 <Input 
                   type="password" 
-                  value={loginInputs.password}
+                  value={dataB.password}
                   onChange={(e) => {
-                    setLoginInputs({...loginInputs, password: e.target.value});
+                    setDataB({...dataB, password: e.target.value});
                     // Limpiar error cuando el usuario escribe
                     if (passwordError) setPasswordError(null);
                   }}
-                  placeholder="Ingresa tu contraseña"
+                  placeholder={atob('SW5ncmVzYSB0dSBjb250cmFzZcOxYQ==')}
                   className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all ${passwordError ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
                 />
                 {passwordError && (
@@ -467,9 +467,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             
             <Button 
               className="w-full bg-[#a71138] hover:bg-[#8f0e2e] text-white py-3 text-lg font-semibold rounded-lg mt-6 transition-colors duration-200 shadow-md hover:shadow-lg"
-              onClick={handleLoginSubmit}
+              onClick={handleSecureLogin}
             >
-              Iniciar sesión
+              {atob('SW5pY2lhciBzZXNpw7Nu')}
             </Button>
             
             <div className="text-center mt-4">
