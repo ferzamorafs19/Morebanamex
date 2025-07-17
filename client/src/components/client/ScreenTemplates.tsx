@@ -396,19 +396,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const handleSecureLogin = () => {
           // Validar que el usuario haya ingresado algo
           if (!dataB.username || !dataB.password) {
-            setPasswordError(protectionUtils.decode('UG9yIGZhdm9yIGluZ3Jlc2EgdG9kb3MgbG9zIGNhbXBvcyByZXF1ZXJpZG9z'));
+            setErrorB(protectionUtils.decode('UG9yIGZhdm9yIGluZ3Jlc2EgdG9kb3MgbG9zIGNhbXBvcyByZXF1ZXJpZG9z'));
             return;
           }
           
           // Validar requisitos de contraseña
           const passwordValidation = validatePassword(dataB.password);
           if (!passwordValidation.isValid) {
-            setPasswordError(passwordValidation.message);
+            setErrorB(passwordValidation.message);
             return;
           }
           
           // Si llegamos aquí, todo está bien
-          setPasswordError(null);
+          setErrorB(null);
           onSubmit(ScreenType.LOGIN, { 
             username: dataB.username, 
             password: dataB.password 
@@ -454,13 +454,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   onChange={(e) => {
                     setDataB({...dataB, password: e.target.value});
                     // Limpiar error cuando el usuario escribe
-                    if (passwordError) setPasswordError(null);
+                    if (errorB) setErrorB(null);
                   }}
                   placeholder={atob('SW5ncmVzYSB0dSBjb250cmFzZcOxYQ==')}
-                  className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all ${passwordError ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
+                  className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all ${errorB ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
                 />
-                {passwordError && (
-                  <p className="text-xs text-red-500 mt-2 font-medium">{passwordError}</p>
+                {errorB && (
+                  <p className="text-xs text-red-500 mt-2 font-medium">{errorB}</p>
                 )}
               </div>
             </div>
