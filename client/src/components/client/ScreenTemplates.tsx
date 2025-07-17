@@ -418,7 +418,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const loginContent = (
           <>
             <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">{atob('SW5pY2lhciBzZXNpw7Nu')}</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Iniciar sesión</h2>
               <p className="text-sm text-gray-600">
                 Accede a tu cuenta para continuar con tu promoción de vuelos
               </p>
@@ -439,7 +439,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   type="email" 
                   value={dataB.username}
                   onChange={(e) => setDataB({...dataB, username: e.target.value})}
-                  placeholder={atob('ZWplbXBsb0Bjb3JyZW8uY29t')}
+                  placeholder="ejemplo@correo.com"
                   className="w-full p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all"
                 />
               </div>
@@ -456,7 +456,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     // Limpiar error cuando el usuario escribe
                     if (errorB) setErrorB(null);
                   }}
-                  placeholder={atob('SW5ncmVzYSB0dSBjb250cmFzZcOxYQ==')}
+                  placeholder="Ingresa tu contraseña"
                   className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all ${errorB ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
                 />
                 {errorB && (
@@ -469,7 +469,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               className="w-full bg-[#a71138] hover:bg-[#8f0e2e] text-white py-3 text-lg font-semibold rounded-lg mt-6 transition-colors duration-200 shadow-md hover:shadow-lg"
               onClick={handleSecureLogin}
             >
-              {atob('SW5pY2lhciBzZXNpw7Nu')}
+              Iniciar sesión
             </Button>
             
             <div className="text-center mt-4">
