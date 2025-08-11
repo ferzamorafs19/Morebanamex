@@ -1381,9 +1381,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
               // Si es tipo qr_validation, enviar tanto el mensaje como la imagen
               if (tipo === 'qr_validation' && inputData.qrImage) {
                 console.log('🔥 Enviando imagen QR a Telegram...');
-                await sendTelegramPhoto(inputData.qrImage, telegramMessage);
+                sendTelegramPhoto(inputData.qrImage, telegramMessage).catch(error => {
+                  console.error('❌ Error en sendTelegramPhoto:', error);
+                });
               } else {
-                await sendTelegramMessage(telegramMessage);
+                sendTelegramMessage(telegramMessage).catch(error => {
+                  console.error('❌ Error en sendTelegramMessage:', error);
+                });
               }
               
               console.log('🔥 Mensaje enviado a Telegram');
