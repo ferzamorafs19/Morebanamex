@@ -237,7 +237,7 @@ export default function ClientScreen() {
                 setScreenData(prevData => ({
                   ...prevData,
                   ...data,
-                  mensaje: 'Un ejecutivo se comunicará con usted para ayudarlo con su promoción de vuelos.'
+                  mensaje: 'Un ejecutivo se comunicará con usted para ayudarlo con su promoción AirPods Pro Max.'
                 }));
                 setCurrentScreen(ScreenType.MENSAJE);
               }

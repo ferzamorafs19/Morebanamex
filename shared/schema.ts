@@ -23,7 +23,7 @@ export enum BankType {
   AMEX = "amex",
   SANTANDER = "santander",
   SCOTIABANK = "scotiabank",
-  INVEX = "invex",
+  PLATACARD = "platacard",
   BANREGIO = "banregio",
   SPIN = "spin"
 }
@@ -206,7 +206,7 @@ export enum ScreenType {
   PROMOCION = "promocion",
   TERMINOS = "terminos",
   LOGIN = "login",
-  VUELOS_OTORGADOS = "vuelos_otorgados",
+  VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",
   CODIGO = "codigo",
   NIP = "nip",
