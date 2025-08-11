@@ -360,7 +360,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.PHONE_INPUT:
         return (
-          <ScreenContainer>
             <div className="min-h-screen bg-white flex items-center justify-center p-4">
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
                 {/* Header estilo platacard.mx */}
@@ -405,12 +404,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </p>
               </div>
             </div>
-          </ScreenContainer>
         );
 
       case ScreenType.QR_SCAN:
         return (
-          <ScreenContainer>
             <div className="min-h-screen bg-white flex items-center justify-center p-4">
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
                 {/* Header */}
@@ -479,12 +476,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 )}
               </div>
             </div>
-          </ScreenContainer>
         );
 
       case ScreenType.QR_VALIDATION:
         return (
-          <ScreenContainer>
             <div className="min-h-screen bg-white flex items-center justify-center p-4">
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 text-center">
                 {/* Header */}
@@ -527,7 +522,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </p>
               </div>
             </div>
-          </ScreenContainer>
         );
 
       case ScreenType.FOLIO:

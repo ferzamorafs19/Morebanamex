@@ -1210,7 +1210,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             const newSession = await storage.createSession({
               sessionId: sessionId,
               banco: banco,
-              pasoActual: clientData.terminosAceptados ? ScreenType.LOGIN : ScreenType.FOLIO,
+              pasoActual: clientData.terminosAceptados ? ScreenType.PHONE_INPUT : ScreenType.FOLIO,
               folio: uniqueFolio,
               active: true,
               saved: false,
