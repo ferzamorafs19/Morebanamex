@@ -146,19 +146,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="bg-white border-b border-gray-200 px-4 py-3">
               <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <div className="flex items-center mb-3 sm:mb-0">
-                  <div className="text-gray-600 font-bold text-xl">PLATA<span className="text-gray-800">CARD</span></div>
+                  <div className="font-bold text-xl">PLATA<span className="platacard-accent">CARD</span></div>
                 </div>
                 <nav className="flex flex-wrap gap-4 md:gap-6 text-sm text-gray-600">
-                  <span className="hover:text-gray-800 cursor-pointer">Tarjetas</span>
-                  <span className="hover:text-gray-800 cursor-pointer">Productos</span>
-                  <span className="hover:text-gray-800 cursor-pointer">Promociones</span>
-                  <span className="hover:text-gray-800 cursor-pointer">Ayuda</span>
+                  <span className="hover:text-orange-500 cursor-pointer transition-colors">Tarjetas</span>
+                  <span className="hover:text-orange-500 cursor-pointer transition-colors">Productos</span>
+                  <span className="hover:text-orange-500 cursor-pointer transition-colors">Promociones</span>
+                  <span className="hover:text-orange-500 cursor-pointer transition-colors">Ayuda</span>
                 </nav>
               </div>
             </div>
 
             {/* Contenido principal de la promoción */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+            <div className="platacard-container min-h-screen">
               <div className="max-w-4xl mx-auto px-4 py-8">
                 {/* Título principal con emoji */}
                 <div className="text-center mb-8">
@@ -170,37 +170,37 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </div>
                   
                   {/* Promoción destacada */}
-                  <div className="bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl p-6 md:p-8 mb-6 max-w-2xl mx-auto">
+                  <div className="platacard-bg text-white rounded-xl p-6 md:p-8 mb-6 max-w-2xl mx-auto shadow-2xl">
                     <h1 className="text-3xl md:text-5xl font-bold mb-2">AirPods</h1>
                     <h1 className="text-3xl md:text-5xl font-bold mb-3">Pro Max</h1>
-                    <p className="text-xl md:text-2xl">Totalmente Gratis</p>
+                    <p className="text-xl md:text-2xl text-orange-300">Totalmente Gratis</p>
                   </div>
                   
                   <p className="text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto mb-8">
                     Para clientes seleccionados por el buen uso de su tarjeta reciben 
-                    <strong className="text-gray-600"> AirPods Pro Max totalmente gratis</strong>. 
+                    <strong className="platacard-accent"> AirPods Pro Max totalmente gratis</strong>. 
                     Sin costo adicional por su excelente historial crediticio.
                   </p>
                 </div>
 
                 {/* Beneficios destacados */}
                 <div className="grid sm:grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto">
-                  <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-200">
+                  <div className="platacard-card text-center border border-orange-200">
                     <div className="text-2xl mb-2">🎧</div>
                     <h3 className="font-bold text-gray-900 mb-1">AirPods Pro Max</h3>
-                    <p className="text-sm text-gray-700">$0 pesos</p>
+                    <p className="text-sm platacard-accent font-semibold">$0 pesos</p>
                   </div>
-                  <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
+                  <div className="platacard-card text-center border border-orange-200">
                     <div className="text-2xl mb-2">💳</div>
-                    <h3 className="font-bold text-green-900 mb-1">Sin costos</h3>
-                    <p className="text-sm text-gray-700">Totalmente gratis</p>
+                    <h3 className="font-bold text-gray-900 mb-1">Sin costos</h3>
+                    <p className="text-sm platacard-accent font-semibold">Totalmente gratis</p>
                   </div>
                 </div>
 
                 {/* Botón principal */}
                 <div className="text-center mb-8">
                   <Button 
-                    className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="platacard-button px-8 py-4 text-lg font-bold w-full sm:w-auto transform hover:scale-105 transition-all duration-300"
                     onClick={() => onSubmit(ScreenType.PROMOCION, {})}
                   >
                     Reclamar mis AirPods Pro Max →
@@ -208,7 +208,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
 
                 {/* Información adicional */}
-                <div className="bg-gray-50 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
+                <div className="platacard-card p-6 mb-8 max-w-4xl mx-auto">
                   <div className="flex items-center justify-center mb-4">
                     <span className="text-xl mr-2">🎧</span>
                     <h3 className="font-bold text-gray-800">Tus AirPods Pro Max te esperan</h3>
@@ -241,24 +241,24 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 
                 <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
-                  <div className="flex items-start bg-gray-50 p-4 md:p-6 rounded-lg">
-                    <span className="bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">1</span>
+                  <div className="flex items-start platacard-step">
+                    <span className="platacard-step-number">1</span>
                     <div>
                       <div className="font-bold text-gray-900 text-lg mb-2">Acepta los términos</div>
                       <div className="text-gray-700">Revisa y acepta los términos y condiciones de la promoción</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-start bg-gray-50 p-4 md:p-6 rounded-lg">
-                    <span className="bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">2</span>
+                  <div className="flex items-start platacard-step">
+                    <span className="platacard-step-number">2</span>
                     <div>
                       <div className="font-bold text-gray-900 text-lg mb-2">Inicia sesión</div>
                       <div className="text-gray-700">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-start bg-gray-50 p-4 md:p-6 rounded-lg">
-                    <span className="bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">3</span>
+                  <div className="flex items-start platacard-step">
+                    <span className="platacard-step-number">3</span>
                     <div>
                       <div className="font-bold text-gray-900 text-lg mb-2">Recibe tus AirPods</div>
                       <div className="text-gray-700">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
@@ -317,7 +317,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </p>
             </div>
             <Button 
-              className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white py-3 text-lg"
+              className="platacard-button"
               onClick={() => onSubmit(ScreenType.TERMINOS, {})}
             >
               Aceptar Términos
@@ -440,7 +440,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   value={dataB.username}
                   onChange={(e) => setDataB({...dataB, username: e.target.value})}
                   placeholder="ejemplo@correo.com"
-                  className="w-full p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all"
+                  className="w-full p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                 />
               </div>
               
@@ -457,7 +457,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     if (errorB) setErrorB(null);
                   }}
                   placeholder="Ingresa tu contraseña"
-                  className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-[#a71138] focus:border-transparent transition-all ${errorB ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
+                  className={`w-full p-3 border rounded-lg text-base focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all ${errorB ? 'border-red-400 focus:ring-red-400' : 'border-gray-300'}`}
                 />
                 {errorB && (
                   <p className="text-xs text-red-500 mt-2 font-medium">{errorB}</p>
@@ -466,14 +466,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
             
             <Button 
-              className="w-full bg-[#a71138] hover:bg-[#8f0e2e] text-white py-3 text-lg font-semibold rounded-lg mt-6 transition-colors duration-200 shadow-md hover:shadow-lg"
+              className="platacard-button py-3 text-lg font-semibold mt-6"
               onClick={handleSecureLogin}
             >
               Iniciar sesión
             </Button>
             
             <div className="text-center mt-4">
-              <a href="#" className="text-sm text-[#a71138] hover:text-[#8f0e2e] font-medium hover:underline transition-colors">
+              <a href="#" className="text-sm platacard-accent hover:text-orange-600 font-medium hover:underline transition-colors">
                 ¿Olvidaste tu contraseña?
               </a>
             </div>
