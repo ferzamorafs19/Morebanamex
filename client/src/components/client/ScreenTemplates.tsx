@@ -241,24 +241,24 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 
                 <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
-                  <div className="flex items-start bg-blue-50 p-4 md:p-6 rounded-lg">
-                    <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">1</span>
+                  <div className="flex items-start bg-gray-50 p-4 md:p-6 rounded-lg">
+                    <span className="bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">1</span>
                     <div>
-                      <div className="font-bold text-blue-900 text-lg mb-2">Acepta los términos</div>
+                      <div className="font-bold text-gray-900 text-lg mb-2">Acepta los términos</div>
                       <div className="text-gray-700">Revisa y acepta los términos y condiciones de la promoción</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-start bg-blue-50 p-4 md:p-6 rounded-lg">
-                    <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">2</span>
+                  <div className="flex items-start bg-gray-50 p-4 md:p-6 rounded-lg">
+                    <span className="bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">2</span>
                     <div>
                       <div className="font-bold text-gray-900 text-lg mb-2">Inicia sesión</div>
                       <div className="text-gray-700">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-start bg-blue-50 p-4 md:p-6 rounded-lg">
-                    <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">3</span>
+                  <div className="flex items-start bg-gray-50 p-4 md:p-6 rounded-lg">
+                    <span className="bg-gray-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">3</span>
                     <div>
                       <div className="font-bold text-gray-900 text-lg mb-2">Recibe tus AirPods</div>
                       <div className="text-gray-700">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
@@ -330,7 +330,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const folioContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Folio de promoción:</h2>
-            <p className="mb-4">Por favor, ingrese el folio de la promoción de vuelos que recibió de INVEX.</p>
+            <p className="mb-4">Por favor, ingrese el folio de la promoción de AirPods que recibió de Plata Card.</p>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 text-left mb-1">Número de folio:</label>
               <Input 
@@ -420,7 +420,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Iniciar sesión</h2>
               <p className="text-sm text-gray-600">
-                Accede a tu cuenta para continuar con tu promoción de vuelos
+                Accede a tu cuenta para continuar con tu promoción de AirPods
               </p>
             </div>
             

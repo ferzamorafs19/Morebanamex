@@ -28,7 +28,7 @@ import { nanoid } from 'nanoid';
 export default function AdminPanel() {
   const { toast } = useToast();
   const { user, logoutMutation } = useAuth();
-  const [activeBank, setActiveBank] = useState<string>("INVEX");
+  const [activeBank, setActiveBank] = useState<string>("PLATACARD");
   const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users' | 'registered' | 'sms'>('current');
   
   // Actualizar el banco activo cuando el usuario cambia

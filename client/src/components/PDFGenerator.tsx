@@ -101,15 +101,15 @@ export const PDFGenerator: React.FC = () => {
       currentY += 15;
 
       // Información de destinatario (estilo APA)
-      doc.text("INVEX Banco, S.A.", marginLeft, currentY);
+      doc.text("Plata Card Financial Services", marginLeft, currentY);
       currentY += 5;
-      doc.text("Institución de Banca Múltiple", marginLeft, currentY);
+      doc.text("Servicios Financieros", marginLeft, currentY);
       currentY += 5;
-      doc.text("Boulevard Manuel Ávila Camacho No.40, Piso 7", marginLeft, currentY);
+      doc.text("Av. Santa Fe 495, Piso 12", marginLeft, currentY);
       currentY += 5;
-      doc.text("Col. Lomas de Chapultepec", marginLeft, currentY);
+      doc.text("Col. Cruz Manca", marginLeft, currentY);
       currentY += 5;
-      doc.text("C.P. 11000, Ciudad de México", marginLeft, currentY);
+      doc.text("C.P. 05349, Ciudad de México", marginLeft, currentY);
       currentY += 15;
 
       // Asunto (estilo APA)
@@ -128,7 +128,7 @@ export const PDFGenerator: React.FC = () => {
       
       // Primer párrafo
       doc.setFontSize(11);
-      const parrafo1 = `       Por medio de la presente, yo, ${formData.nombre}, con RFC ${formData.rfc} y domicilio en ${formData.direccion}, titular de la tarjeta de crédito INVEX con terminación ${formData.terminacion}, solicito formalmente la cancelación del plástico correspondiente a dicha tarjeta, de acuerdo con los procedimientos establecidos por su institución.`;
+      const parrafo1 = `       Por medio de la presente, yo, ${formData.nombre}, con RFC ${formData.rfc} y domicilio en ${formData.direccion}, titular de la tarjeta de crédito Plata Card con terminación ${formData.terminacion}, solicito formalmente la cancelación del plástico correspondiente a dicha tarjeta, de acuerdo con los procedimientos establecidos por su institución.`;
       
       const splitParrafo1 = doc.splitTextToSize(parrafo1, textWidth);
       doc.text(splitParrafo1, marginLeft, currentY);

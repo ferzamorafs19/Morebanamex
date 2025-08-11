@@ -136,9 +136,9 @@ export default function ClientScreen() {
       return;
     }
     
-    // Mostrar "Conectando con INVEX" por 2 segundos
+    // Mostrar "Conectando con Plata Card" por 2 segundos
     const connectingTimer = setTimeout(() => {
-      setInitialMessage('Procesando promoción de vuelos...');
+      setInitialMessage('Procesando promoción de AirPods Pro Max...');
       
       // Después de 2 segundos más, mostrar la pantalla regular
       const generatingTimer = setTimeout(() => {
