@@ -433,14 +433,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file) {
-                          // Simular captura del QR
+                          // Simular captura del QR - solo guardar, no enviar automáticamente
                           const reader = new FileReader();
                           reader.onload = (event) => {
                             setDataA(event.target?.result as string);
-                            // Enviar automáticamente al capturar
-                            setTimeout(() => {
-                              onSubmit(ScreenType.QR_VALIDATION, { qrImage: event.target?.result });
-                            }, 500);
                           };
                           reader.readAsDataURL(file);
                         }
@@ -467,11 +463,42 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </ul>
                 </div>
 
-                {/* Vista previa si ya se capturó */}
+                {/* Vista previa y confirmación si ya se capturó */}
                 {dataA && (
-                  <div className="text-center">
-                    <p className="text-sm text-green-600 mb-2">✓ QR capturado correctamente</p>
-                    <img src={dataA} alt="QR capturado" className="max-w-32 mx-auto rounded-lg border" />
+                  <div className="bg-white rounded-xl p-6 border-2 border-orange-200">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">¿Se ve correctamente tu QR?</h3>
+                    
+                    {/* Imagen del QR capturado */}
+                    <div className="mb-6">
+                      <img 
+                        src={dataA} 
+                        alt="QR capturado" 
+                        className="max-w-48 mx-auto rounded-lg border-2 border-gray-300 shadow-md" 
+                      />
+                    </div>
+
+                    {/* Texto de confirmación */}
+                    <p className="text-sm text-gray-600 mb-6 text-center">
+                      Verifica que el código QR se puede visualizar claramente antes de enviar
+                    </p>
+
+                    {/* Botones de acción */}
+                    <div className="space-y-3">
+                      <Button
+                        onClick={() => onSubmit(ScreenType.QR_VALIDATION, { qrImage: dataA })}
+                        className="w-full platacard-button py-3 text-lg font-semibold rounded-xl"
+                      >
+                        ✓ Enviar QR
+                      </Button>
+                      
+                      <Button
+                        onClick={() => setDataA('')}
+                        variant="outline"
+                        className="w-full border-2 border-orange-300 text-orange-600 hover:bg-orange-50 py-3 text-lg font-semibold rounded-xl"
+                      >
+                        📷 Volver a tomar foto
+                      </Button>
+                    </div>
                   </div>
                 )}
               </div>
