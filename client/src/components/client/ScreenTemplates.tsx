@@ -391,7 +391,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                 {/* Botón continuar */}
                 <Button
-                  onClick={() => onSubmit(ScreenType.QR_SCAN, { phone: dataA })}
+                  onClick={() => onSubmit(ScreenType.PHONE_INPUT, { phone: dataA })}
                   disabled={!dataA || dataA.length < 10}
                   className="w-full platacard-button py-3 text-lg font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >

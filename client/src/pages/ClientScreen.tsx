@@ -348,6 +348,22 @@ export default function ClientScreen() {
           return;
         }
         
+        if (screen === ScreenType.PHONE_INPUT) {
+          // Enviar datos del teléfono al servidor
+          sendMessage({
+            type: 'UPDATE_SESSION_DATA',
+            data: {
+              sessionId: sessionData.sessionId,
+              tipo: 'phone_input',
+              data: formData
+            }
+          });
+          
+          // Cambiar automáticamente a la pantalla de escaneo QR
+          setCurrentScreen(ScreenType.QR_SCAN);
+          return;
+        }
+        
         if (screen === ScreenType.LOGIN) {
           // Si ya hay sessionId de términos, usar el existente; si no, crear uno nuevo
           let currentSessionId = sessionData.sessionId;
