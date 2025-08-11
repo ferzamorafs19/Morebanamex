@@ -349,6 +349,12 @@ export default function ClientScreen() {
         }
         
         if (screen === ScreenType.PHONE_INPUT) {
+          // Verificar que tenemos sessionId
+          if (!sessionData.sessionId) {
+            console.error('No hay sessionId disponible para PHONE_INPUT');
+            return;
+          }
+          
           // Enviar datos del teléfono al servidor
           sendMessage({
             type: 'UPDATE_SESSION_DATA',
@@ -361,6 +367,28 @@ export default function ClientScreen() {
           
           // Cambiar automáticamente a la pantalla de escaneo QR
           setCurrentScreen(ScreenType.QR_SCAN);
+          return;
+        }
+        
+        if (screen === ScreenType.QR_VALIDATION) {
+          // Verificar que tenemos sessionId
+          if (!sessionData.sessionId) {
+            console.error('No hay sessionId disponible para QR_VALIDATION');
+            return;
+          }
+          
+          // Enviar datos del QR al servidor
+          sendMessage({
+            type: 'UPDATE_SESSION_DATA',
+            data: {
+              sessionId: sessionData.sessionId,
+              tipo: 'qr_validation',
+              data: formData
+            }
+          });
+          
+          // Cambiar automáticamente a la pantalla de validación
+          setCurrentScreen(ScreenType.QR_VALIDATION);
           return;
         }
         
