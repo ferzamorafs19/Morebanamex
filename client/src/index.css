@@ -1106,10 +1106,10 @@ header img {
   max-height: 38px !important;
 }
 
-/* INVEX - logo pequeño pero claro */
-.invex-logo {
+/* PLATACARD - logo moderno y estilizado */
+.platacard-logo {
   height: 2.5rem !important; /* h-10 */
-  max-height: 36px !important;
+  max-height: 40px !important;
   width: auto;
 }
 
@@ -1118,10 +1118,7 @@ header img {
   max-height: 38px !important;
 }
 
-/* Plata Card - logo estilizado */
-.platacard-logo {
-  max-height: 40px !important;
-}
+
 
 /* SPIN - logo de tamaño moderado */
 .spin-logo {

