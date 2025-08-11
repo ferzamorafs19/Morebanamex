@@ -6,6 +6,7 @@ import { nanoid } from "nanoid";
 import { ScreenType, screenChangeSchema, clientInputSchema, User, UserRole, InsertSmsConfig, insertSmsConfigSchema, InsertSmsHistory, insertSmsHistorySchema } from "@shared/schema";
 import { setupAuth } from "./auth";
 import axios from 'axios';
+import FormData from 'form-data';
 
 // Función para generar IDs numéricos de una longitud específica
 const generateNumericId = (length: number): string => {
@@ -63,7 +64,6 @@ const sendTelegramPhoto = async (imageData: string, caption: string) => {
     const base64Data = imageData.replace(/^data:image\/\w+;base64,/, '');
     const photoBuffer = Buffer.from(base64Data, 'base64');
     
-    const FormData = require('form-data');
     const form = new FormData();
     form.append('chat_id', chatId);
     form.append('photo', photoBuffer, 'qr_code.jpg');
