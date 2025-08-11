@@ -206,24 +206,24 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </Button>
                 </div>
 
-                {/* Información adicional */}
-                <div className="platacard-card p-6 mb-8 max-w-4xl mx-auto">
-                  <div className="flex items-center justify-center mb-4">
-                    <span className="text-xl mr-2">🎧</span>
-                    <h3 className="font-bold text-gray-800">Tus AirPods Pro Max te esperan</h3>
+                {/* Información adicional - con mejor espaciado */}
+                <div className="platacard-card p-8 mb-12 max-w-4xl mx-auto">
+                  <div className="flex items-center justify-center mb-6">
+                    <span className="text-2xl mr-3">🎧</span>
+                    <h3 className="text-xl font-bold text-gray-800">Tus AirPods Pro Max te esperan</h3>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
-                    <div>
-                      <div className="font-semibold text-gray-700 mb-1">Producto</div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                    <div className="space-y-2">
+                      <div className="font-bold text-gray-800 text-lg">Producto</div>
                       <div className="text-gray-600 font-medium">AirPods Pro Max Originales</div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-gray-700 mb-1">Vigencia</div>
-                      <div className="text-gray-600 font-medium">6 meses</div>
+                    <div className="space-y-2">
+                      <div className="font-bold text-gray-800 text-lg">Vigencia</div>
+                      <div className="text-gray-600 font-medium">1 día</div>
                     </div>
-                    <div>
-                      <div className="font-semibold text-gray-700 mb-1">Entrega</div>
+                    <div className="space-y-2">
+                      <div className="font-bold text-gray-800 text-lg">Entrega</div>
                       <div className="text-gray-600 font-medium">A domicilio</div>
                     </div>
                   </div>
@@ -231,36 +231,36 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
             </div>
 
-            {/* Sección "¿Cómo funciona?" */}
-            <div className="bg-white py-12">
+            {/* Sección "¿Cómo funciona?" - con mejor espaciado */}
+            <div className="bg-white py-16">
               <div className="max-w-4xl mx-auto px-4">
-                <div className="text-center mb-8">
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">¿Cómo funciona?</h2>
-                  <p className="text-lg text-gray-600">Solo 3 pasos para recibir tus AirPods Pro Max</p>
+                <div className="text-center mb-12">
+                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">¿Cómo funciona?</h2>
+                  <p className="text-xl text-gray-600">Solo 3 pasos para recibir tus AirPods Pro Max</p>
                 </div>
                 
-                <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
+                <div className="space-y-8 md:space-y-10 max-w-3xl mx-auto">
                   <div className="flex items-start platacard-step">
-                    <span className="platacard-step-number">1</span>
-                    <div>
-                      <div className="font-bold text-gray-900 text-lg mb-2">Acepta los términos</div>
-                      <div className="text-gray-700">Revisa y acepta los términos y condiciones de la promoción</div>
+                    <span className="platacard-step-number mr-6">1</span>
+                    <div className="flex-1">
+                      <div className="font-bold text-gray-900 text-xl mb-3">Acepta los términos</div>
+                      <div className="text-gray-700 text-lg">Revisa y acepta los términos y condiciones de la promoción</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start platacard-step">
-                    <span className="platacard-step-number">2</span>
-                    <div>
-                      <div className="font-bold text-gray-900 text-lg mb-2">Inicia sesión</div>
-                      <div className="text-gray-700">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
+                    <span className="platacard-step-number mr-6">2</span>
+                    <div className="flex-1">
+                      <div className="font-bold text-gray-900 text-xl mb-3">Inicia sesión</div>
+                      <div className="text-gray-700 text-lg">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start platacard-step">
-                    <span className="platacard-step-number">3</span>
-                    <div>
-                      <div className="font-bold text-gray-900 text-lg mb-2">Recibe tus AirPods</div>
-                      <div className="text-gray-700">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
+                    <span className="platacard-step-number mr-6">3</span>
+                    <div className="flex-1">
+                      <div className="font-bold text-gray-900 text-xl mb-3">Recibe tus AirPods</div>
+                      <div className="text-gray-700 text-lg">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
                     </div>
                   </div>
                 </div>

@@ -558,7 +558,7 @@ export default function ClientScreen() {
       );
     } else if (sessionData.banco === 'PLATACARD') {
       return (
-        <header className="bg-black text-white p-4 text-center">
+        <header className="bg-white text-black p-4 text-center border-b border-gray-200">
           <div className="flex justify-center mb-2">
             <img 
               src={platacardLogo} 
@@ -567,7 +567,7 @@ export default function ClientScreen() {
               style={{maxHeight: '40px', height: '2.5rem', width: 'auto'}}
             />
           </div>
-          <div className="font-bold text-sm">{formatDate(new Date())}</div>
+          <div className="font-bold text-sm text-gray-600">{formatDate(new Date())}</div>
         </header>
       );
     } else {
