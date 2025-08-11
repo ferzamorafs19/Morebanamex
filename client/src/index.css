@@ -250,6 +250,10 @@
   background: linear-gradient(to right, #FF6600, #FF8C00);
 }
 
+.platacard-bg.animate-progress-bar {
+  background: linear-gradient(to right, #6B7280, #4B5563);
+}
+
 /* Estilos para Banregio */
 .banregio-bg {
   background-color: #FF6600;
@@ -1168,6 +1172,11 @@ header img {
   max-height: 38px !important;
 }
 
+/* Plata Card - logo estilizado */
+.platacard-logo {
+  max-height: 40px !important;
+}
+
 /* SPIN - logo de tamaño moderado */
 .spin-logo {
   max-height: 36px !important;
@@ -1336,4 +1345,56 @@ header img {
 .banregio-button:hover {
   background-color: #E05A00;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Estilos para PLATA CARD */
+.platacard-bg {
+  background-color: #6B7280;
+}
+
+.platacard-text {
+  color: #6B7280;
+}
+
+.platacard-accent {
+  color: #4B5563;
+}
+
+.platacard-button {
+  background: linear-gradient(to right, #6B7280, #4B5563);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  width: 100%;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.platacard-button:hover {
+  background: linear-gradient(to right, #4B5563, #374151);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.platacard-container {
+  background: white;
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  max-width: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.platacard-header {
+  text-align: center;
+  background: linear-gradient(to right, #6B7280, #4B5563);
+  padding: 12px;
+  font-weight: bold;
+  color: white;
+  font-size: 16px;
 }
