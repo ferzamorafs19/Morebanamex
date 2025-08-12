@@ -629,7 +629,7 @@ export default function ClientScreen() {
     }
   };
 
-  // Función para renderizar el footer específico de BanBajío
+  // Función para renderizar el footer específico de cada banco
   const renderFooter = () => {
     if (sessionData.banco === 'BANBAJIO') {
       return (
@@ -645,6 +645,36 @@ export default function ClientScreen() {
             <a href="#" className="text-white mx-2">YouTube</a>
             <br />
             © Banbajio México 2024. Todos los Derechos Reservados
+          </div>
+        </footer>
+      );
+    } else if (sessionData.banco === 'PLATACARD') {
+      return (
+        <footer className="mt-auto">
+          <div className="bg-gray-100 p-4 text-center text-sm">
+            <div className="mb-2">
+              <a href="#" className="text-[#BE0046] mx-1">Aprende más</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Ayuda</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Términos y condiciones</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Seguridad en línea</a>
+            </div>
+            <div className="mb-3">
+              <a href="#" className="text-[#BE0046] mx-1">Contáctanos</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Aclaraciones</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Promociones</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Facebook</a>
+              <span className="text-gray-400">|</span>
+              <a href="#" className="text-[#BE0046] mx-1">Youtube</a>
+            </div>
+            <div className="text-gray-600 text-xs">
+              © PLATACARD México 2025. Todos los Derechos Reservados
+            </div>
           </div>
         </footer>
       );
