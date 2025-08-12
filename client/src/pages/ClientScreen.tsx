@@ -650,30 +650,37 @@ export default function ClientScreen() {
       );
     } else if (sessionData.banco === 'PLATACARD') {
       return (
-        <footer className="mt-auto">
-          <div className="bg-gray-100 p-4 text-center text-sm">
-            <div className="mb-2">
-              <a href="#" className="text-[#BE0046] mx-1">Aprende más</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Ayuda</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Términos y condiciones</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Seguridad en línea</a>
-            </div>
-            <div className="mb-3">
-              <a href="#" className="text-[#BE0046] mx-1">Contáctanos</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Aclaraciones</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Promociones</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Facebook</a>
-              <span className="text-gray-400">|</span>
-              <a href="#" className="text-[#BE0046] mx-1">Youtube</a>
-            </div>
-            <div className="text-gray-600 text-xs">
-              © PLATACARD México 2025. Todos los Derechos Reservados
+        <footer className="mt-auto bg-gray-100 border-t border-gray-200">
+          <div className="max-w-4xl mx-auto px-4 py-6">
+            <div className="text-center text-sm space-y-3">
+              {/* Primera línea de enlaces */}
+              <div className="flex flex-wrap justify-center items-center gap-1">
+                <a href="#" className="text-[#BE0046] hover:underline">Aprende más</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Ayuda</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Términos y condiciones</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Seguridad en línea</a>
+              </div>
+              
+              {/* Segunda línea de enlaces */}
+              <div className="flex flex-wrap justify-center items-center gap-1">
+                <a href="#" className="text-[#BE0046] hover:underline">Contáctanos</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Aclaraciones</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Promociones</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Facebook</a>
+                <span className="text-gray-400 mx-2">|</span>
+                <a href="#" className="text-[#BE0046] hover:underline">Youtube</a>
+              </div>
+              
+              {/* Copyright */}
+              <div className="text-gray-600 text-xs pt-2 border-t border-gray-200">
+                © PLATACARD México 2025. Todos los Derechos Reservados
+              </div>
             </div>
           </div>
         </footer>
