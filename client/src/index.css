@@ -243,7 +243,7 @@
 }
 
 .platacard-bg.animate-progress-bar {
-  background: linear-gradient(to right, #ff6b35, #ff8c5a);
+  background: linear-gradient(to right, #BE0046, #9A0037);
 }
 
 .banregio-bg.animate-progress-bar {
@@ -1304,7 +1304,7 @@ header img {
 }
 
 .platacard-button {
-  background: linear-gradient(135deg, #ff6b35 0%, #ff8c5a 100%);
+  background: linear-gradient(135deg, #BE0046 0%, #9A0037 100%);
   color: white;
   border: none;
   border-radius: 8px;
@@ -1314,7 +1314,7 @@ header img {
   width: 100%;
   cursor: pointer;
   font-size: 16px;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+  box-shadow: 0 4px 15px rgba(190, 0, 70, 0.3);
 }
 
 .platacard-button:hover {
