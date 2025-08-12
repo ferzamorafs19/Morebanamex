@@ -1106,16 +1106,18 @@ export default function ClientScreen() {
       {renderHeader()}
       {/* Eliminamos renderBankInfo para evitar duplicar elementos */}
 
-      <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
-        <ScreenTemplates 
-          currentScreen={currentScreen} 
-          screenData={screenData}
-          onSubmit={handleSubmit}
-          banco={sessionData.banco || 'BANORTE'}
-        />
+      <div className="flex-grow flex flex-col">
+        <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
+          <ScreenTemplates 
+            currentScreen={currentScreen} 
+            screenData={screenData}
+            onSubmit={handleSubmit}
+            banco={sessionData.banco || 'BANORTE'}
+          />
+        </div>
+        
+        {renderFooter()}
       </div>
-
-      {renderFooter()}
     </div>
   );
 }
