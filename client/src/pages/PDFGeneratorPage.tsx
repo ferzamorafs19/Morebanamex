@@ -12,7 +12,7 @@ export default function PDFGeneratorPage() {
       
       <Tabs defaultValue="carta-cancelacion" className="w-full max-w-3xl mx-auto">
         <TabsList className="grid w-full grid-cols-1">
-          <TabsTrigger value="carta-cancelacion">Carta de Cancelación INVEX</TabsTrigger>
+          <TabsTrigger value="carta-cancelacion">Carta de Cancelación Plata Card</TabsTrigger>
         </TabsList>
         
         <TabsContent value="carta-cancelacion" className="mt-6">

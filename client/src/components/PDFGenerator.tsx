@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { jsPDF } from 'jspdf';
-import invexLogo from '@assets/Invex.png';
+import plataCardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
 
 // Importar el polyfill para PDFKit en el navegador
 import '@/lib/pdf-polyfill';
@@ -59,12 +59,15 @@ export const PDFGenerator: React.FC = () => {
       
       // Cargar la imagen como URL
       const img = new Image();
-      img.src = invexLogo;
+      img.src = plataCardLogo;
       
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
       });
+      
+      // Obtener el ancho de la página
+      const pageWidth = doc.internal.pageSize.getWidth();
       
       // Convertir la imagen a una URL base64
       const canvas = document.createElement('canvas');
@@ -77,7 +80,6 @@ export const PDFGenerator: React.FC = () => {
         const dataUrl = canvas.toDataURL('image/png');
         
         // Añadir el logo en la parte superior centrada
-        const pageWidth = doc.internal.pageSize.getWidth();
         const imgWidth = 35; // Ancho de la imagen en mm
         const imgHeight = (img.height * imgWidth) / img.width; // Mantener proporción
         doc.addImage(dataUrl, 'PNG', (pageWidth - imgWidth) / 2, 15, imgWidth, imgHeight);
@@ -177,7 +179,7 @@ export const PDFGenerator: React.FC = () => {
       doc.text(`RFC: ${formData.rfc}`, marginLeft, currentY);
 
       // Guardar el PDF
-      const pdfName = `carta_cancelacion_invex_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
+      const pdfName = `carta_cancelacion_platacard_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
       doc.save(pdfName);
       
       toast({
@@ -202,7 +204,7 @@ export const PDFGenerator: React.FC = () => {
       <CardHeader>
         <CardTitle>Generar Carta de Cancelación</CardTitle>
         <CardDescription>
-          Ingresa los datos para generar la carta de cancelación de tu tarjeta INVEX
+          Ingresa los datos para generar la carta de cancelación de tu tarjeta Plata Card
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useRoute } from 'wouter';
-import invexLogo from '../assets/invex_logo.png';
+import plataCardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
 
 const GenerandoAclaracion: React.FC = () => {
   const [progress, setProgress] = useState(0);
@@ -56,8 +56,8 @@ const GenerandoAclaracion: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white text-center p-4">
       <img 
-        src={invexLogo} 
-        alt="INVEX Logo" 
+        src={plataCardLogo} 
+        alt="Plata Card Logo" 
         className="w-48 mb-8" 
       />
       
