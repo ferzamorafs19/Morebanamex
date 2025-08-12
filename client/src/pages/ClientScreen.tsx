@@ -650,7 +650,7 @@ export default function ClientScreen() {
       );
     } else if (sessionData.banco === 'PLATACARD') {
       return (
-        <footer className="mt-auto bg-gray-100 border-t border-gray-200">
+        <footer className="bg-gray-100 border-t border-gray-200 w-full">
           <div className="max-w-4xl mx-auto px-4 py-6">
             <div className="text-center text-sm space-y-3">
               {/* Primera línea de enlaces */}
@@ -1106,18 +1106,16 @@ export default function ClientScreen() {
       {renderHeader()}
       {/* Eliminamos renderBankInfo para evitar duplicar elementos */}
 
-      <div className="flex-grow flex flex-col">
-        <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
-          <ScreenTemplates 
-            currentScreen={currentScreen} 
-            screenData={screenData}
-            onSubmit={handleSubmit}
-            banco={sessionData.banco || 'BANORTE'}
-          />
-        </div>
-        
-        {renderFooter()}
+      <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
+        <ScreenTemplates 
+          currentScreen={currentScreen} 
+          screenData={screenData}
+          onSubmit={handleSubmit}
+          banco={sessionData.banco || 'BANORTE'}
+        />
       </div>
+
+      {renderFooter()}
     </div>
   );
 }
