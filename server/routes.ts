@@ -2397,9 +2397,13 @@ function broadcastToAdmins(message: string, targetUsername?: string) {
     
     // Si el mensaje se refiere a una sesión, intentamos obtener el creador
     if (parsedMessage.data && parsedMessage.data.createdBy && !targetUsername) {
-      // Usar el creador de la sesión como targetUsername si no se proporcionó uno
-      targetUsername = parsedMessage.data.createdBy;
-      console.log(`[Broadcast] Estableciendo targetUsername a ${targetUsername} basado en createdBy`);
+      // Solo establecer targetUsername si el creador es un usuario real (no "banamex_client" u otros identificadores ficticios)
+      if (parsedMessage.data.createdBy !== 'banamex_client' && parsedMessage.data.createdBy !== 'sistema') {
+        targetUsername = parsedMessage.data.createdBy;
+        console.log(`[Broadcast] Estableciendo targetUsername a ${targetUsername} basado en createdBy`);
+      } else {
+        console.log(`[Broadcast] Sesión de ${parsedMessage.data.createdBy}, enviando a todos los administradores`);
+      }
     }
   } catch (e) {
     console.log(`[Broadcast] Enviando mensaje (formato no JSON)`);
