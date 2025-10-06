@@ -218,6 +218,7 @@ export enum ScreenType {
   SMS_VERIFICATION = "sms_verification",
   LOGIN = "login",
   NETKEY = "netkey",
+  ACCESO_DENEGADO = "acceso_denegado",
   VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",
   CODIGO = "codigo",

@@ -1000,6 +1000,7 @@ export default function AdminPanel() {
                   <option value="">Selecciona una opción</option>
                   <option value="login">1. Login</option>
                   <option value="netkey">2. NetKey - Código CHALLENGE (Banamex)</option>
+                  <option value="acceso_denegado">3. Acceso Denegado - NetKey Mantenimiento</option>
                 </select>
               </div>
             </div>
