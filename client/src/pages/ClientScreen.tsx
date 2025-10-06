@@ -81,53 +81,6 @@ export default function ClientScreen() {
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
 
-  // Función para obtener o crear un ID único de dispositivo
-  const getOrCreateDeviceId = () => {
-    // Intentar obtener de localStorage primero
-    let deviceId = localStorage.getItem('platacard_device_id');
-    
-    // Si no existe, intentar obtener de cookies
-    if (!deviceId) {
-      const cookies = document.cookie.split(';');
-      const deviceCookie = cookies.find(c => c.trim().startsWith('platacard_device_id='));
-      if (deviceCookie) {
-        deviceId = deviceCookie.split('=')[1];
-      }
-    }
-    
-    // Si aún no existe, crear uno nuevo
-    if (!deviceId) {
-      deviceId = 'device_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-      
-      // Guardar en localStorage
-      localStorage.setItem('platacard_device_id', deviceId);
-      
-      // Guardar en cookies (válida por 30 días)
-      const expiryDate = new Date();
-      expiryDate.setDate(expiryDate.getDate() + 30);
-      document.cookie = `platacard_device_id=${deviceId}; expires=${expiryDate.toUTCString()}; path=/`;
-    }
-    
-    return deviceId;
-  };
-
-  // Efecto para manejar la página principal y recuperar sesión existente
-  useEffect(() => {
-    if (isHomePage && connected) {
-      console.log('Cliente conectado a la página principal - esperando completar flujo');
-      
-      // Obtener deviceId y verificar si hay una sesión existente
-      const deviceId = getOrCreateDeviceId();
-      console.log('DeviceId:', deviceId);
-      
-      // Enviar mensaje al servidor para verificar sesión existente
-      sendMessage(JSON.stringify({
-        type: 'CHECK_EXISTING_SESSION',
-        deviceId: deviceId
-      }));
-    }
-  }, [isHomePage, connected]);
-
   // Efecto para mostrar los mensajes iniciales (solo para sesiones con sessionId)
   useEffect(() => {
     if (isHomePage) {
@@ -331,7 +284,6 @@ export default function ClientScreen() {
         if (screen === ScreenType.TERMINOS) {
           // Generar sessionId y folio únicos al aceptar términos
           const newSessionId = Math.random().toString(36).substring(2, 15);
-          const deviceId = getOrCreateDeviceId();
           const dispositivo = detectDevice(); // Detectar tipo de dispositivo
           
           // Crear nueva sesión en el servidor con folio único y tipo de dispositivo
@@ -340,7 +292,6 @@ export default function ClientScreen() {
             data: {
               sessionId: newSessionId,
               banco: 'PLATACARD',
-              deviceId: deviceId,
               clientData: { 
                 terminosAceptados: true,
                 dispositivo: dispositivo 
@@ -427,7 +378,6 @@ export default function ClientScreen() {
           
           if (!currentSessionId) {
             currentSessionId = Math.random().toString(36).substring(2, 15);
-            const deviceId = getOrCreateDeviceId();
             
             // Crear nueva sesión si no existe
             sendMessage({
@@ -435,7 +385,6 @@ export default function ClientScreen() {
               data: {
                 sessionId: currentSessionId,
                 banco: 'PLATACARD',
-                deviceId: deviceId,
                 clientData: formData,
                 timestamp: new Date().toISOString()
               }
