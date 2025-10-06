@@ -805,7 +805,7 @@ export default function AdminPanel() {
   const handleNetKeyConfirm = (challenge: string) => {
     if (selectedSessionId) {
       sendScreenChange({
-        tipo: ScreenType.NETKEY,
+        tipo: `mostrar_${ScreenType.NETKEY}`,
         sessionId: selectedSessionId,
         challenge: challenge
       });
