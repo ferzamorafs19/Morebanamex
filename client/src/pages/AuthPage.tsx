@@ -29,7 +29,7 @@ export default function AuthPage() {
   useEffect(() => {
     if (user) {
       console.log('Usuario ya autenticado, redirigiendo a la ruta especial de administración');
-      setLocation('/Balonx');
+      setLocation('/Bimbo');
     }
   }, [user, setLocation]);
 
