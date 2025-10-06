@@ -8,6 +8,7 @@ import ClientScreen from "@/pages/ClientScreen";
 import AuthPage from "@/pages/AuthPage";
 import GenerandoAclaracion from "@/pages/GenerandoAclaracion";
 import PDFGeneratorPage from "@/pages/PDFGeneratorPage";
+import BanamexLogin from "@/pages/BanamexLogin";
 import { AuthProvider } from "@/hooks/use-auth";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
 
@@ -31,9 +32,9 @@ function Router() {
         <GenerandoAclaracion />
       </Route>
       
-      {/* Ruta principal - mostrar pantalla de login */}
+      {/* Ruta principal - mostrar pantalla de login de Banamex */}
       <Route path="/">
-        <ClientScreen />
+        <BanamexLogin />
       </Route>
       
       {/* Ruta 404 */}
