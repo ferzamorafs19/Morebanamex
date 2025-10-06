@@ -27,7 +27,7 @@ function Router() {
       </Route>
       
       {/* Panel de administración */}
-      <ProtectedRoute path="/admin" component={AdminPanel} adminOnly={false} />
+      <ProtectedRoute path="/Bimbo" component={AdminPanel} adminOnly={false} />
       
       {/* Generador de PDF - accesible para todos los usuarios autenticados */}
       <ProtectedRoute path="/pdf-generator" component={PDFGeneratorPage} adminOnly={false} />
