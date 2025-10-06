@@ -28,7 +28,7 @@ import { nanoid } from 'nanoid';
 export default function AdminPanel() {
   const { toast } = useToast();
   const { user, logoutMutation } = useAuth();
-  const [activeBank, setActiveBank] = useState<string>("PLATACARD");
+  const [activeBank, setActiveBank] = useState<string>("todos");
   const [activeTab, setActiveTab] = useState<'current' | 'saved' | 'users' | 'registered' | 'sms'>('current');
   
   // Actualizar el banco activo cuando el usuario cambia
@@ -1047,8 +1047,9 @@ export default function AdminPanel() {
             value={activeBank}
             onChange={(e) => setActiveBank(e.target.value)}
           >
-            {/* Mostramos solo el banco PLATACARD según lo solicitado */}
+            <option value="todos">Todos los bancos</option>
             <option value="PLATACARD">PLATACARD</option>
+            <option value="CITIBANAMEX">CITIBANAMEX</option>
           </select>
         </div>
 
