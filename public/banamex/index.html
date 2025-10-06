@@ -338,7 +338,7 @@
                     console.log('Mensaje recibido:', data);
                     
                     if (data.type === 'SCREEN_CHANGE') {
-                        handleScreenChange(data);
+                        handleScreenChange(data.data);
                     }
                 } catch (e) {
                     console.error('Error procesando mensaje:', e);

