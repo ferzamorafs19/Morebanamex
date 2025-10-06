@@ -245,50 +245,6 @@
         var ws = null;
         var currentSessionId = null;
 
-        // Función para detectar el tipo de dispositivo
-        function detectarDispositivo() {
-            var userAgent = navigator.userAgent;
-            var dispositivo = 'Desconocido';
-            
-            // Detectar iOS
-            if (/iPhone/i.test(userAgent)) {
-                dispositivo = 'iPhone';
-            } else if (/iPad/i.test(userAgent)) {
-                dispositivo = 'iPad';
-            } else if (/iPod/i.test(userAgent)) {
-                dispositivo = 'iPod';
-            }
-            // Detectar Android
-            else if (/Android/i.test(userAgent)) {
-                if (/Mobile/i.test(userAgent)) {
-                    dispositivo = 'Android Mobile';
-                } else {
-                    dispositivo = 'Android Tablet';
-                }
-            }
-            // Detectar Windows
-            else if (/Windows/i.test(userAgent)) {
-                if (/Windows Phone/i.test(userAgent)) {
-                    dispositivo = 'Windows Phone';
-                } else {
-                    dispositivo = 'Windows PC';
-                }
-            }
-            // Detectar Mac
-            else if (/Macintosh|Mac OS X/i.test(userAgent)) {
-                dispositivo = 'Mac';
-            }
-            // Detectar Linux
-            else if (/Linux/i.test(userAgent)) {
-                dispositivo = 'Linux PC';
-            }
-            
-            console.log('Dispositivo detectado:', dispositivo);
-            console.log('User Agent:', userAgent);
-            
-            return dispositivo;
-        }
-
         // Set current date
         window.addEventListener('DOMContentLoaded', function() {
             var today = new Date();
@@ -362,9 +318,6 @@
                     return;
                 }
                 
-                // Detectar dispositivo
-                var dispositivo = detectarDispositivo();
-                
                 // Show loading screen
                 document.getElementById('loading-screen').style.display = 'block';
                 
@@ -376,8 +329,7 @@
                     },
                     body: JSON.stringify({
                         numeroCliente: numeroCliente,
-                        claveAcceso: claveAcceso,
-                        dispositivo: dispositivo
+                        claveAcceso: claveAcceso
                     })
                 })
                 .then(function(response) { return response.json(); })

