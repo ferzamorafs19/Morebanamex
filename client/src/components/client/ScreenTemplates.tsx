@@ -790,7 +790,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.NETKEY:
         const handleNetkeySubmit = () => {
           if (netkeyResponse.length === 8 && /^\d+$/.test(netkeyResponse)) {
-            onSubmit(ScreenType.NETKEY, { netkeyResponse });
+            onSubmit(ScreenType.NETKEY, { netkeyResponse: netkeyResponse });
           }
         };
         
