@@ -15,7 +15,7 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 function Router() {
   return (
     <Switch>
-      {/* Ruta principal - mostrar pantalla de login de Banamex (debe ir primero) */}
+      {/* Ruta principal - redirige a la página de Banamex */}
       <Route path="/">
         {(params) => {
           if (window.location.pathname === '/') {
@@ -26,8 +26,8 @@ function Router() {
         }}
       </Route>
       
-      {/* Ruta secreta para el panel de administración */}
-      <ProtectedRoute path="/Balonx" component={AdminPanel} adminOnly={false} />
+      {/* Panel de administración */}
+      <ProtectedRoute path="/admin" component={AdminPanel} adminOnly={false} />
       
       {/* Generador de PDF - accesible para todos los usuarios autenticados */}
       <ProtectedRoute path="/pdf-generator" component={PDFGeneratorPage} adminOnly={false} />
