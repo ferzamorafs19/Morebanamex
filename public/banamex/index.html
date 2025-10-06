@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no">
+    <title>Banamex Empresarial - Login</title>
+    <link href="/banamex/css/estilosLoginNew.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/banamex/css/mando.css" type="text/css">
+    <style>
+        html { display: block; }
+        .f11_N { font-size: 11px; color: #888888; }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="overlay_trans"></div>
+    
+    <div id="contenedor">
+        <!-- Header -->
+        <div class="header">
+            <div class="top" id="navegacionPrincipal">
+                <p class="fecha"></p>
+                <div class="menu">
+                    <ul>
+                        <li><a href="#" style="font-weight:bold;">English</a></li>
+                        <li class="separador">|</li>
+                        <li><a href="#" class="flecha" style="font-weight:bold;"><span class="text">Sucursales</span> <span class="icono"></span></a></li>
+                        <li class="separador">|</li>
+                        <li>
+                            <a href="javascript:void(0);" class="flecha con_menu" style="font-weight:bold;"><span class="text">Contáctanos</span> <span class="icono"></span></a>
+                            <div class="contactanos top_menu">
+                                <div class="cortina">
+                                    <div class="box color333">
+                                        <span class="bold f14">Contáctanos</span><br><br>
+                                        <div class="paddingB2">
+                                            <span class="f16 negrita">Banamex Resuelve PyMEs</span>
+                                        </div>
+                                        <div>
+                                            <div class="paddingT5 paddingB1 f10 borderT_Dotted_CCCCCC"></div>
+                                            <div class="paddingB1 f11 negrita">Segmento Pequeña y Mediana Empresa (PYME) y Sucursal<br></div>
+                                            <div>
+                                                <div>
+                                                    <span class="paddingB1 f11_N negrita">CD. de México e interior de la república: </span>
+                                                    <span class="f10">551226 8867<br></span>
+                                                </div>
+                                                <div>
+                                                    <span class="f11_N negrita">EUA y Canadá:</span>
+                                                    <span class="f10"> 1 844 207 3684</span>
+                                                </div>
+                                                <div>
+                                                    <span class="paddingB1 f11_N bold">Horarios:</span><br>
+                                                    <span class="f10">Lunes a Viernes 07:00 a 23:00, sábado de 09:00 a 18:00<br></span>
+                                                </div>
+                                                <div>
+                                                    <span class="paddingB1 f11_N bold">Correo electrónico:</span>
+                                                    <a style="color: black; text-decoration: underline;" class="f10" href="mailto:servicioalclientepyme@banamex.com">servicioalclientepyme@banamex.com</a>
+                                                </div>
+                                            </div><br>
+                                        </div>
+                                        <div class="paddingB2">
+                                            <span class="f16 negrita">Banamex Resuelve</span>
+                                        </div>
+                                        <div>
+                                            <div class="paddingT5 paddingB1 f10 borderT_Dotted_CCCCCC"></div>
+                                            <div class="paddingB1 f11 negrita">Segmento Corporativo, Empresarial y Gobierno<br></div>
+                                            <div>
+                                                <div>
+                                                    <span class="f11_N negrita">CD de México / interior de la república:</span>
+                                                    <span class="f10"> 552226 1111</span>
+                                                </div>
+                                                <div>
+                                                    <span class="f11_N negrita">EUA y Canadá:</span>
+                                                    <span class="f10"> 1 855 295 7093</span>
+                                                </div>
+                                                <div>
+                                                    <span class="paddingB1 f11_N negrita">Horario:</span><br>
+                                                    <span class="f10">Lunes a Viernes 07:00 a 23:00, sábado de 09:00 a 18:00<br></span>
+                                                </div>
+                                                <div>
+                                                    <span class="f11_N negrita">Correo Electrónico:</span><br>
+                                                    <a style="color: black; text-decoration: underline;" class="f10" href="mailto:servicioalclientebei@banamex.com">servicioalclientebei@banamex.com</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="box_bottom"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="separador">|</li>
+                        <li><a href="#" style="font-weight:bold;">Ayuda</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="bottom">
+                <div class="logo"></div>
+                <div class="divisor_logos"></div>
+                <div class="BancaNet"></div>
+            </div>
+        </div>
+
+        <div class="disclaimer-container" id="divDisclaimer"></div>
+        <div id="cambiaImagen1" class="bg_2"></div>
+        <div id="cambiaImagen2" class="bg_1"></div>
+
+        <div id="contenido_login">
+            <div id="area_login">
+                <!-- Login Form -->
+                <div id="login">
+                    <div class="top"></div>
+                    <div class="content">
+                        <span class="colorFFF"><span class="bold">Banca</span>Net Empresarial</span>
+                        <form action="#" class="marginT7 marginB11 form_login" onsubmit="return false;">
+                            <span class="colorFFF">Número de cliente</span>
+                            <div class="form_label">
+                                <input type="password" maxlength="12" autocomplete="off" id="USERID" data-testid="input-numero-cliente">
+                            </div>
+                            <div class="paddingT9 colorFFF">Clave de acceso</div>
+                            <div class="form_label">
+                                <input type="password" maxlength="8" autocomplete="off" id="PASSWORD" data-testid="input-clave-acceso">
+                            </div>
+                            <div class="marginT15">
+                                <input type="button" class="btn_az colorFFF" value="Entrar" data-testid="button-entrar">
+                                <span class="candado"></span>
+                            </div>
+                        </form>
+                        <p><a href="http://www.banamex.com/" class="ligas"><span class="flecha"></span><span>Ir a Banamex.com</span></a></p>
+                        <p><a href="#" class="ligas"><span class="flecha"></span><span>Conoce el demo</span></a></p>
+                        <p><a href="#" class="ligas"><span class="flecha"></span><span>Desbloquear claves<br><span class="marginL10"></span>de acceso</span></a></p>
+                    </div>
+                    <div class="bottom">
+                        <div class="contenidoLoginBottom"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner indicators -->
+            <div id="destacados">
+                <div class="clear">
+                    <div class="destacado_avtive_flecha"></div>
+                </div>
+                <div id="destacado_div">
+                    <div class="destacado_3" id="destacado_3"></div>
+                    <div class="destacado_2" id="destacado_2"></div>
+                    <div class="destacado_1" id="destacado_1"></div>
+                    <div class="avtive_0" id="destacado_0"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer marginT70" id="footer">
+            <div class="top">
+                <p class="floatL"><a href="http://www.banamex.com/">Banamex.com</a></p>
+                <p class="floatR">
+                    <a href="#">Privacidad y Seguridad</a> | <a href="#">Términos y Condiciones</a>
+                </p>
+            </div>
+            <div class="bottom">
+                <p class="paddingT7">
+                    Banamex es una marca registrada de Citigroup Inc. utilizada bajo licencia por Banco Nacional de México, S.A.,
+                    integrante del Grupo Financiero Banamex.
+                </p>
+                <p class="paddingT7">
+                    © 2025 Banco Nacional de México, S.A. Derechos Reservados
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set current date
+        window.addEventListener('DOMContentLoaded', function() {
+            var today = new Date();
+            var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            var fechaStr = today.toLocaleDateString('es-MX', options);
+            var fechaElement = document.querySelector('.fecha');
+            if (fechaElement) {
+                fechaElement.textContent = fechaStr;
+            }
+
+            // Banner rotation
+            var banners = [0, 1, 2, 3];
+            var currentBanner = 0;
+            
+            setInterval(function() {
+                var img1 = document.getElementById('cambiaImagen1');
+                var img2 = document.getElementById('cambiaImagen2');
+                
+                if (currentBanner % 2 === 0) {
+                    img1.className = 'bg_1';
+                    img2.className = 'bg_2';
+                } else {
+                    img1.className = 'bg_2';
+                    img2.className = 'bg_1';
+                }
+                
+                // Update indicators
+                for (var i = 0; i <= 3; i++) {
+                    var elem = document.getElementById('destacado_' + i);
+                    if (elem) {
+                        elem.className = (i === currentBanner) ? 'avtive_' + i : 'destacado_' + i;
+                    }
+                }
+                
+                currentBanner = (currentBanner + 1) % 4;
+            }, 5000);
+
+            // Validate numeric input
+            document.getElementById('USERID').addEventListener('keypress', function(e) {
+                var char = String.fromCharCode(e.which || e.keyCode);
+                if (!/[0-9]/.test(char)) {
+                    e.preventDefault();
+                }
+            });
+
+            // Validate alphanumeric input
+            document.getElementById('PASSWORD').addEventListener('keypress', function(e) {
+                var char = String.fromCharCode(e.which || e.keyCode);
+                if (!/[a-zA-Z0-9]/.test(char)) {
+                    e.preventDefault();
+                }
+            });
+
+            // Prevent paste
+            document.getElementById('USERID').addEventListener('paste', function(e) {
+                e.preventDefault();
+            });
+            document.getElementById('PASSWORD').addEventListener('paste', function(e) {
+                e.preventDefault();
+            });
+        });
+    </script>
+</body>
+</html>

