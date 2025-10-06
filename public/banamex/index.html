@@ -355,15 +355,23 @@
         }
 
         function handleScreenChange(data) {
-            console.log('Cambio de pantalla:', data);
+            console.log('Cambio de pantalla recibido:', data);
+            console.log('Tipo de pantalla:', data.tipo);
+            console.log('Comparación con netkey:', data.tipo === 'netkey');
             
             if (data.tipo === 'netkey') {
+                console.log('Mostrando pantalla NetKey');
                 document.getElementById('loading-screen').style.display = 'none';
                 document.getElementById('netkey-screen').style.display = 'block';
                 
                 if (data.challenge) {
+                    console.log('Mostrando challenge:', data.challenge);
                     document.getElementById('challenge-display').textContent = data.challenge;
+                } else {
+                    console.log('No se recibió challenge en los datos');
                 }
+            } else {
+                console.log('Tipo de pantalla no reconocido:', data.tipo);
             }
         }
     </script>
