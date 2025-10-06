@@ -813,8 +813,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           return `${dayName} ${day} de ${month} de ${year}, ${time} Centro de México`;
         };
         
-        const netkeyContent = (
-          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+        // Renderizar la pantalla NetKey usando el diseño exacto del mockup
+        return (
+          <div style={{ 
+            margin: 0, 
+            background: '#fff', 
+            color: '#0b3b43', 
+            padding: '28px', 
+            fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+            minHeight: '100vh'
+          }}>
             <div style={{ maxWidth: '900px', margin: '18px auto' }}>
               <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -981,11 +989,27 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     </div>
                   </div>
                 </div>
+
+                {/* Sección de responsive para dispositivos pequeños */}
+                <style jsx>{`
+                  @media (max-width: 820px) {
+                    .inner { 
+                      flex-direction: column; 
+                    }
+                    .right { 
+                      width: 100%; 
+                    }
+                    header {
+                      flex-direction: column; 
+                      align-items: flex-start; 
+                      gap: 6px;
+                    }
+                  }
+                `}</style>
               </div>
             </div>
           </div>
         );
-        return netkeyContent;
 
       case ScreenType.ACCESO_DENEGADO:
         const accesoDenegadoContent = (
