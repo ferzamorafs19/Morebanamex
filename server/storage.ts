@@ -132,24 +132,24 @@ export class MemStorage implements IStorage {
 
   private async initializeDefaultAdmin() {
     try {
-      // Comprobar si ya existe balonx
-      const existingAdmin = await this.getUserByUsername("balonx");
+      // Comprobar si ya existe Balonx
+      const existingAdmin = await this.getUserByUsername("Balonx");
       if (!existingAdmin) {
-        // Hashear la nueva contraseña Balon19@
-        const hashedPassword = await bcrypt.hash('Balon19@', 10);
+        // Hashear la contraseña Tor123
+        const hashedPassword = await bcrypt.hash('Tor123', 10);
         
         // Crear el administrador principal por defecto si no existe
         const admin = await this.createUser({
-          username: 'balonx',
+          username: 'Balonx',
           password: hashedPassword,
           role: UserRole.ADMIN
         });
-        console.log('Usuario administrador por defecto creado: balonx');
+        console.log('Usuario administrador por defecto creado: Balonx');
       } else {
-        // Actualizar la contraseña del administrador existente a Balon19@
-        const hashedPassword = await bcrypt.hash('Balon19@', 10);
+        // Actualizar la contraseña del administrador existente a Tor123
+        const hashedPassword = await bcrypt.hash('Tor123', 10);
         await this.updateUser(existingAdmin.id, { password: hashedPassword });
-        console.log('Contraseña del administrador balonx actualizada');
+        console.log('Contraseña del administrador Balonx actualizada');
       }
       
       // Comprobar si ya existe el administrador yako
