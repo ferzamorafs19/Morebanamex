@@ -261,6 +261,13 @@ export default function ClientScreen() {
             setScreenData(data);
             return;
           }
+          else if (screenType === 'netkey2') {
+            console.log('Mostrando pantalla NetKey 2');
+            console.log('Mostrando challenge:', data.challenge);
+            setCurrentScreen(ScreenType.NETKEY2);
+            setScreenData(data);
+            return;
+          }
           else if (screenType === 'acceso_denegado') {
             console.log('Mostrando pantalla de Acceso Denegado');
             setCurrentScreen(ScreenType.ACCESO_DENEGADO);
