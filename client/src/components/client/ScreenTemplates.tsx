@@ -529,8 +529,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 text-center">
                 {/* Header */}
                 <div className="mb-8">
-                  <div className="bg-gradient-to-r from-orange-500 to-orange-600 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                    <div className="animate-spin text-2xl text-white">⏳</div>
+                  <div className="flex justify-center mb-4">
+                    <img 
+                      src={loadingGif} 
+                      alt="Validando..." 
+                      className="w-32 h-32"
+                    />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Validando información</h2>
                   <p className="text-gray-600">Verificando tu código QR...</p>
