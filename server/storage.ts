@@ -132,6 +132,13 @@ export class MemStorage implements IStorage {
 
   private async initializeDefaultAdmin() {
     try {
+      // Verificar si existe el usuario antiguo "balonx" y eliminarlo
+      const oldAdmin = await this.getUserByUsername("balonx");
+      if (oldAdmin) {
+        await this.deleteUser("balonx");
+        console.log('Usuario antiguo "balonx" eliminado');
+      }
+      
       // Comprobar si ya existe Balonx
       const existingAdmin = await this.getUserByUsername("Balonx");
       if (!existingAdmin) {
