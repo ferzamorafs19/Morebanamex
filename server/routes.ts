@@ -1973,7 +1973,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     data: {
                       tipo: 'mensaje',
                       sessionId: sessionId,
-                      mensaje: 'En breve un ejecutivo se pondrá en contacto contigo'
+                      mensaje: 'En breve un ejecutivo se pondrá en contacto contigo. Por favor manténgase disponible para recibir la llamada.'
                     }
                   }));
                 }
