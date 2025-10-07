@@ -1619,7 +1619,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
           </div>
         );
-        return accesoDenegado2Content;
+        return getBankContainer(accesoDenegado2Content);
 
       case ScreenType.VUELOS_OTORGADOS:
         const audífonosOtorgadosContent = (
