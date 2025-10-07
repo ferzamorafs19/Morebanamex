@@ -33,6 +33,7 @@ import microsoftLogo from '@assets/pngwing.com.png';
 import promoImage1 from '@assets/IMG_5647_1754950720172.jpeg';
 import promoImage2 from '@assets/IMG_5646_1754952460517.jpeg';
 import loadingGif from '@assets/avatar_red240920240_1759807622645.gif';
+import validatingGif from '@assets/5qqGDgBWDQBRNbsccaEAAAOw==_1759809330184.gif';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -531,14 +532,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="mb-8">
                   <div className="flex justify-center mb-4">
                     <img 
-                      src={loadingGif} 
-                      alt="Validando..." 
-                      className="w-32 h-32"
-                    />
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Validando información</h2>
-                  <p className="text-gray-600">Verificando tu código QR...</p>
-                </div>
+                      src={validatingGif
 
                 {/* Indicador de carga */}
                 <div className="mb-8">
