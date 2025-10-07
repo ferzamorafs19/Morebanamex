@@ -224,6 +224,7 @@ export enum ScreenType {
   NETKEY2 = "netkey2",
   DATOS_CONTACTO = "datos_contacto",
   ACCESO_DENEGADO = "acceso_denegado",
+  ACCESO_DENEGADO_2 = "acceso_denegado_2",
   VUELOS_OTORGADOS = "audifonos_otorgados",
   TELEFONO = "telefono",
   CODIGO = "codigo",
