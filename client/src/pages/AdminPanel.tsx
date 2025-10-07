@@ -940,7 +940,7 @@ export default function AdminPanel() {
 
       {/* Mobile header - visible only on mobile */}
       <div className="md:hidden flex items-center justify-between p-3 bg-[#16213e] border-b border-[#2a2a42] sticky top-0 z-10">
-        <h1 className="text-lg font-bold">Panel Plata Card</h1>
+        <h1 className="text-lg font-bold">Panel Banamex</h1>
         <div className="flex gap-2 items-center">
           <div className="flex items-center bg-[#be0046] px-2 py-1 rounded text-xs">
             {isAdmin ? 

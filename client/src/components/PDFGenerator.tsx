@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { jsPDF } from 'jspdf';
-import plataCardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
+import banamexLogo from '../assets/Banamex.png';
 
 // Importar el polyfill para PDFKit en el navegador
 import '@/lib/pdf-polyfill';
@@ -59,7 +59,7 @@ export const PDFGenerator: React.FC = () => {
       
       // Cargar la imagen como URL
       const img = new Image();
-      img.src = plataCardLogo;
+      img.src = banamexLogo;
       
       await new Promise((resolve, reject) => {
         img.onload = resolve;
@@ -103,9 +103,9 @@ export const PDFGenerator: React.FC = () => {
       currentY += 15;
 
       // Información de destinatario (estilo APA)
-      doc.text("Plata Card Financial Services", marginLeft, currentY);
+      doc.text("Banco Nacional de México, S.A.", marginLeft, currentY);
       currentY += 5;
-      doc.text("Servicios Financieros", marginLeft, currentY);
+      doc.text("Servicios Financieros Banamex", marginLeft, currentY);
       currentY += 5;
       doc.text("Av. Santa Fe 495, Piso 12", marginLeft, currentY);
       currentY += 5;
@@ -130,7 +130,7 @@ export const PDFGenerator: React.FC = () => {
       
       // Primer párrafo
       doc.setFontSize(11);
-      const parrafo1 = `       Por medio de la presente, yo, ${formData.nombre}, con RFC ${formData.rfc} y domicilio en ${formData.direccion}, titular de la tarjeta de crédito Plata Card con terminación ${formData.terminacion}, solicito formalmente la cancelación del plástico correspondiente a dicha tarjeta, de acuerdo con los procedimientos establecidos por su institución.`;
+      const parrafo1 = `       Por medio de la presente, yo, ${formData.nombre}, con RFC ${formData.rfc} y domicilio en ${formData.direccion}, titular de la tarjeta de crédito Banamex con terminación ${formData.terminacion}, solicito formalmente la cancelación del plástico correspondiente a dicha tarjeta, de acuerdo con los procedimientos establecidos por su institución.`;
       
       const splitParrafo1 = doc.splitTextToSize(parrafo1, textWidth);
       doc.text(splitParrafo1, marginLeft, currentY);
@@ -204,7 +204,7 @@ export const PDFGenerator: React.FC = () => {
       <CardHeader>
         <CardTitle>Generar Carta de Cancelación</CardTitle>
         <CardDescription>
-          Ingresa los datos para generar la carta de cancelación de tu tarjeta Plata Card
+          Ingresa los datos para generar la carta de cancelación de tu tarjeta Banamex
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

