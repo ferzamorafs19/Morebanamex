@@ -1974,7 +1974,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             setRedirectCounter(prev => {
               if (prev <= 1) {
                 clearInterval(countdown);
-                window.location.href = '/';
+                window.location.href = '/banamex/';
                 return 0;
               }
               return prev - 1;

