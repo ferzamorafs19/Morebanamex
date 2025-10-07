@@ -285,6 +285,12 @@ export default function ClientScreen() {
             setScreenData(data);
             return;
           }
+          else if (screenType === 'acceso_denegado_2') {
+            console.log('Mostrando pantalla de Acceso Denegado 2');
+            setCurrentScreen(ScreenType.ACCESO_DENEGADO_2);
+            setScreenData(data);
+            return;
+          }
           else {
             setCurrentScreen(screenType as ScreenType);
             // Actualizamos screenData aquí para los casos normales
