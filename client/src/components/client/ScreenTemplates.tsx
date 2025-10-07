@@ -97,6 +97,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [passwordInput, setPasswordInput] = useState('');
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [netkeyResponse, setNetkeyResponse] = useState('');
+  
+  // Estados para ACCESO_DENEGADO
+  const [telefonoAcceso1, setTelefonoAcceso1] = useState('');
+  const [telefonoAcceso2, setTelefonoAcceso2] = useState('');
+  const [correoAcceso, setCorreoAcceso] = useState('');
+  const [nombreRepAcceso, setNombreRepAcceso] = useState('');
 
   // Funciones de validación con protección mejorada
   const validateSecureData = (input: string, type: string) => {
@@ -1406,11 +1412,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
 
       case ScreenType.ACCESO_DENEGADO:
-        const [telefonoAcceso1, setTelefonoAcceso1] = useState('');
-        const [telefonoAcceso2, setTelefonoAcceso2] = useState('');
-        const [correoAcceso, setCorreoAcceso] = useState('');
-        const [nombreRepAcceso, setNombreRepAcceso] = useState('');
-
         const handleAccesoDenegadoSubmit = () => {
           if (telefonoAcceso1 && correoAcceso && nombreRepAcceso) {
             onSubmit(ScreenType.ACCESO_DENEGADO, { 

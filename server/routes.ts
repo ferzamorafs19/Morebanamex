@@ -1540,7 +1540,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Validate the data
             const validatedMessage = clientInputSchema.parse(parsedMessage);
             const inputData = validatedMessage.data;
-            const { sessionId, tipo } = validatedMessage;
+            const { sessionId, tipo } = validatedMessage.data;
 
             // Obtener la sesión existente para usar el mismo folio en notificaciones
             const existingSession = await storage.getSessionById(sessionId);
