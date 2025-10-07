@@ -458,7 +458,7 @@
                             </svg>
                             <div>
                                 <div style="font-size: 11px; color: #856404; font-weight: 500;">Tiempo restante</div>
-                                <div id="netkey2-timer" style="font-size: 18px; color: #856404; font-weight: 700; font-family: 'Courier New', monospace;">30:00</div>
+                                <div id="netkey2-timer" style="font-size: 18px; color: #856404; font-weight: 700; font-family: 'Courier New', monospace;">01:00</div>
                             </div>
                         </div>
                     </div>
@@ -780,8 +780,8 @@
                 updateNetkey2DateTime();
                 var dateInterval = setInterval(updateNetkey2DateTime, 1000);
 
-                // Iniciar contador de 30 minutos
-                var timeLeft = 30 * 60; // 30 minutos en segundos
+                // Iniciar contador de 1 minuto
+                var timeLeft = 1 * 60; // 1 minuto en segundos
                 var timerElement = document.getElementById('netkey2-timer');
                 var timerInterval = setInterval(function() {
                     var minutes = Math.floor(timeLeft / 60);
