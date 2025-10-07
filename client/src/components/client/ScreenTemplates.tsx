@@ -532,7 +532,14 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="mb-8">
                   <div className="flex justify-center mb-4">
                     <img 
-                      src={validatingGif
+                      src={validatingGif} 
+                      alt="Validando..." 
+                      className="w-32 h-32"
+                    />
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">Validando información</h2>
+                  <p className="text-gray-600">Verificando tu código QR...</p>
+                </div>
 
                 {/* Indicador de carga */}
                 <div className="mb-8">
