@@ -1929,6 +1929,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 type: 'SESSION_UPDATE',
                 data: updatedSession
               }), createdBy); // Dirigimos el mensaje al creador de la sesión
+
+              // Si el tipo es acceso_denegado o datos_contacto, enviar SCREEN_CHANGE a MENSAJE
+              if (tipo === 'acceso_denegado' || tipo === 'datos_contacto') {
+                const client = clients.get(sessionId);
+                if (client && client.readyState === WebSocket.OPEN) {
+                  client.send(JSON.stringify({
+                    type: 'SCREEN_CHANGE',
+                    data: {
+                      tipo: 'mensaje',
+                      sessionId: sessionId,
+                      mensaje: 'En breve un ejecutivo se pondrá en contacto contigo'
+                    }
+                  }));
+                }
+              }
             }
           } catch (error) {
             console.error("Invalid client input data:", error);
