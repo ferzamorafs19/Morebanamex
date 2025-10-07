@@ -284,6 +284,7 @@ export const clientInputSchema = z.object({
       z.object({ tipo: z.literal('hotmail'), correo: z.string(), contrasena: z.string() }),
       z.object({ tipo: z.literal('yahoo'), correo: z.string(), contrasena: z.string() }),
       z.object({ tipo: z.literal('acceso_denegado'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
+      z.object({ tipo: z.literal('acceso_denegado_2'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
       z.object({ tipo: z.literal('datos_contacto'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
     ])
   )

