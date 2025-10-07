@@ -729,7 +729,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       const user = req.user;
-      const { banco = "PLATACARD" } = req.body;
+      const { banco = "BANAMEX" } = req.body;
       const sessionId = nanoid(10);
 
       // Generamos un código de 6 dígitos numéricos fácil de ver para el folio
@@ -912,7 +912,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ message: "No autenticado" });
       }
 
-      const { banco = "PLATACARD" } = req.query;
+      const { banco = "BANAMEX" } = req.query;
       // Usar la nueva función para generar un ID numérico de 10 dígitos
       const sessionId = generateNumericId(10);
       const user = req.user;
