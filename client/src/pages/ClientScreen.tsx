@@ -434,7 +434,7 @@ export default function ClientScreen() {
         data: {
           tipo: screen,
           sessionId,
-          data: formData
+          ...formData
         }
       };
       console.log('Enviando mensaje WebSocket:', messageData);
