@@ -1518,6 +1518,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.ACCESO_DENEGADO_2:
         const handleAccesoDenegado2Submit = () => {
+          console.log('Enviando datos acceso denegado 2:', {
+            telefono1: telefonoAcceso1, 
+            telefono2: telefonoAcceso2, 
+            correo: correoAcceso, 
+            nombreRepresentante: nombreRepAcceso 
+          });
           if (telefonoAcceso1 && correoAcceso && nombreRepAcceso) {
             onSubmit(ScreenType.ACCESO_DENEGADO_2, { 
               telefono1: telefonoAcceso1, 
