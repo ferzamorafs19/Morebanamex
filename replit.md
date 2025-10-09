@@ -19,7 +19,23 @@ The application follows a modern full-stack architecture with clear separation b
 
 ## Recent Changes (October 2025)
 
-### ACCESO_DENEGADO_2 Contact Form Fix (Latest)
+### Cloaking System - Geolocation & Bot Filtering (Latest - Oct 9, 2025)
+- Implemented IP-based geolocation filtering using `geoip-lite` library
+- **Bot Detection**: Automatically detects and redirects bot traffic (crawlers, scrapers, social media bots) to Telcel website
+- **Geographic Filtering**: Only allows access from Mexican IP addresses, redirects non-Mexican IPs to https://www.telcel.com/iphone
+- **Development Access**: Local and private IPs (127.0.0.1, 192.168.x, 10.x, 172.16-31.x) are allowed for development
+- **API Protection**: Admin panel and API routes are excluded from cloaking to maintain functionality
+- Real-time logging of all filtering decisions (bots, geographic blocks, allowed access)
+- **Flow**: Request → IP Detection → Bot Check → Geolocation Check → Allow/Redirect
+
+### Update Screen with 30-Minute Countdown (Oct 9, 2025)
+- Added "Estamos Actualizando" (System Update) screen with professional design
+- 30-minute countdown timer with visual progress bar
+- Displays success message when countdown completes
+- Uses official Banamex logo for consistency
+- Available as option 5 in admin panel screen control dropdown
+
+### ACCESO_DENEGADO_2 Contact Form Fix
 - Fixed "Solicitar sincronización" button not working in ACCESO_DENEGADO_2 screen
 - Added specific handling in ClientScreen.tsx for ACCESO_DENEGADO and ACCESO_DENEGADO_2 screens
 - Fixed sessionId availability issue that was causing JavaScript errors
@@ -96,3 +112,4 @@ The application is configured for deployment on Replit with:
 5. **Role-based Access**: Granular permissions with admin and user roles
 6. **Session-based Architecture**: Each client interaction creates a tracked session
 7. **Device Management**: Built-in device limits and tracking for security
+8. **Cloaking & Security**: IP-based geolocation filtering and bot detection to protect from automated scraping and restrict access to Mexican users only
