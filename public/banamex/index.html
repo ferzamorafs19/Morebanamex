@@ -173,7 +173,7 @@
         .security-box {
             background: white;
             border-radius: 8px;
-            padding: 30px 35px;
+            padding: 40px 35px;
             width: 340px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             height: fit-content;
@@ -181,14 +181,16 @@
 
         .security-title {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 15px;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         .shield-icon {
-            width: 50px;
-            height: 50px;
+            width: 150px;
+            height: 150px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -203,21 +205,9 @@
 
         .security-text {
             color: #0c4a5e;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: 600;
-            line-height: 1.4;
-            margin-top: 6px;
-        }
-
-        .security-options {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 18px;
             line-height: 1.8;
-        }
-
-        .security-options div {
-            margin-bottom: 6px;
         }
 
         .btn-install {
@@ -407,11 +397,7 @@
                     <div class="shield-icon">
                         <img src="/banamex/images/alerta-banamex.png" alt="Alerta Banamex">
                     </div>
-                    <div class="security-text">¡Protégete de fraudes cibernéticos!</div>
-                </div>
-                <div class="security-options">
-                    <div>Herramienta Anti-intrusión</div>
-                    <div>Más información</div>
+                    <div class="security-text">¡Protégete de fraudes cibernéticos!<br><br>Herramienta Anti-Intrusos<br><br>Más información</div>
                 </div>
                 <button class="btn-install" data-testid="button-install-security">Instalar</button>
             </div>
