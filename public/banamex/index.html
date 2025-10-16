@@ -82,6 +82,7 @@
             min-height: 500px;
             background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%), 
                         url('/banamex/images/Banner2.svg') center/cover no-repeat;
+            transition: background-image 1s ease-in-out;
         }
 
         .content-wrapper {
@@ -530,24 +531,50 @@
             }
         });
 
-        // Carousel dots animation
-        const dots = document.querySelectorAll('.dot');
-        let currentDot = 2; // Start with third dot active
+        // Background carousel with images
+        const backgroundImages = [
+            '/banamex/images/Banner2.svg',
+            '/banamex/images/Banner2_1.svg',
+            '/banamex/images/Banner3.svg',
+            '/banamex/images/Banner3_1.svg',
+            '/banamex/images/Banner4.svg'
+        ];
 
+        const mainContainer = document.querySelector('.main-container');
+        const dots = document.querySelectorAll('.dot');
+        let currentIndex = 0;
+
+        // Function to change background
+        function changeBackground(index) {
+            const gradient = 'linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 100%)';
+            mainContainer.style.background = `${gradient}, url('${backgroundImages[index]}') center/cover no-repeat`;
+            
+            // Update dots
+            dots.forEach((dot, i) => {
+                if (i === index) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        // Click handlers for dots
         dots.forEach((dot, index) => {
             dot.addEventListener('click', () => {
-                dots[currentDot].classList.remove('active');
-                currentDot = index;
-                dots[currentDot].classList.add('active');
+                currentIndex = index;
+                changeBackground(currentIndex);
             });
         });
 
-        // Auto-rotate dots
+        // Auto-rotate carousel
         setInterval(() => {
-            dots[currentDot].classList.remove('active');
-            currentDot = (currentDot + 1) % dots.length;
-            dots[currentDot].classList.add('active');
+            currentIndex = (currentIndex + 1) % backgroundImages.length;
+            changeBackground(currentIndex);
         }, 5000);
+
+        // Initialize first image
+        changeBackground(currentIndex);
     </script>
 </body>
 </html>
