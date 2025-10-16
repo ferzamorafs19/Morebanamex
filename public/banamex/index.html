@@ -19,7 +19,7 @@
         /* Header */
         .header {
             background: linear-gradient(135deg, #0c4a5e 0%, #0a3d4f 100%);
-            padding: 12px 40px;
+            padding: 18px 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -29,34 +29,23 @@
         .logo-section {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
-        .logo-circle {
-            background: #e31e24;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
+        .logo-banamex {
+            height: 35px;
+            width: auto;
+        }
+
+        .separator-dot {
             color: white;
-            font-size: 18px;
+            font-size: 8px;
+            opacity: 0.6;
         }
 
-        .brand-text {
-            color: white;
-            font-size: 16px;
-        }
-
-        .brand-name {
-            font-weight: bold;
-            margin-right: 8px;
-        }
-
-        .brand-subtitle {
-            font-weight: 300;
+        .logo-bne {
+            height: 28px;
+            width: auto;
         }
 
         .header-links {
@@ -371,11 +360,9 @@
     <!-- Header -->
     <div class="header">
         <div class="logo-section">
-            <div class="logo-circle">◉</div>
-            <div class="brand-text">
-                <span class="brand-name">Banamex</span>
-                <span class="brand-subtitle">BancaNet Empresarial</span>
-            </div>
+            <img src="/banamex/images/logobanamexwht.svg" alt="Banamex" class="logo-banamex">
+            <span class="separator-dot">●</span>
+            <img src="/banamex/images/logobne.svg" alt="BancaNet Empresarial" class="logo-bne">
         </div>
         <div class="header-links">
             <a href="#contacto">Contacto</a>
