@@ -90,8 +90,8 @@
             margin: 0 auto;
             padding: 60px 40px;
             display: flex;
-            flex-direction: column;
-            gap: 20px;
+            flex-direction: row;
+            gap: 30px;
             position: relative;
             height: 100%;
             align-items: flex-start;
@@ -101,8 +101,8 @@
         .login-box {
             background: white;
             border-radius: 8px;
-            padding: 40px 35px;
-            width: 340px;
+            padding: 40px 40px;
+            width: 420px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             height: fit-content;
         }
@@ -173,8 +173,8 @@
         .security-box {
             background: white;
             border-radius: 8px;
-            padding: 40px 35px;
-            width: 340px;
+            padding: 35px 30px;
+            width: 280px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             height: fit-content;
         }
@@ -189,8 +189,8 @@
         }
 
         .shield-icon {
-            width: 150px;
-            height: 150px;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -205,19 +205,19 @@
 
         .security-text {
             color: #0c4a5e;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
         .btn-install {
             width: 100%;
-            padding: 14px;
+            padding: 12px;
             background: #0c4a5e;
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
@@ -331,6 +331,16 @@
             .content-wrapper {
                 flex-direction: column;
                 align-items: center;
+            }
+
+            .login-box {
+                width: 100%;
+                max-width: 420px;
+            }
+
+            .security-box {
+                width: 100%;
+                max-width: 320px;
             }
         }
 
