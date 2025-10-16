@@ -90,9 +90,11 @@
             margin: 0 auto;
             padding: 60px 40px;
             display: flex;
-            gap: 40px;
+            flex-direction: column;
+            gap: 20px;
             position: relative;
             height: 100%;
+            align-items: flex-start;
         }
 
         /* Login Box */
@@ -167,11 +169,14 @@
             text-decoration: underline;
         }
 
-        /* Security Module */
-        .security-module {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid #e8e8e8;
+        /* Security Box */
+        .security-box {
+            background: white;
+            border-radius: 8px;
+            padding: 30px 35px;
+            width: 340px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            height: fit-content;
         }
 
         .security-title {
@@ -361,7 +366,8 @@
                 padding: 30px 20px;
             }
 
-            .login-box {
+            .login-box,
+            .security-box {
                 width: 100%;
                 max-width: 400px;
             }
@@ -404,27 +410,27 @@
                     <button type="submit" class="btn-login" data-testid="button-login">Entrar</button>
                     <a href="#" class="forgot-link">Desbloquear claves de acceso</a>
                 </form>
+            </div>
 
-                <!-- Security Module -->
-                <div class="security-module">
-                    <div class="security-title">
-                        <div class="shield-icon">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14h2v2h-2v-2zm0-8h2v6h-2V8z"/>
-                            </svg>
-                        </div>
-                        <div class="security-text">¡Protégete de fraudes cibernéticos!</div>
+            <!-- Security Box -->
+            <div class="security-box">
+                <div class="security-title">
+                    <div class="shield-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L4 5v6.09c0 5.05 3.41 9.76 8 10.91 4.59-1.15 8-5.86 8-10.91V5l-8-3zm-1 14h2v2h-2v-2zm0-8h2v6h-2V8z"/>
+                        </svg>
                     </div>
-                    <div class="security-options">
-                        <label>
-                            <input type="checkbox" data-testid="checkbox-anti-intrusion"> Herramienta Anti-intrusión
-                        </label>
-                        <label>
-                            <input type="checkbox" data-testid="checkbox-more-info"> Más información
-                        </label>
-                    </div>
-                    <button class="btn-install" data-testid="button-install-security">Instalar</button>
+                    <div class="security-text">¡Protégete de fraudes cibernéticos!</div>
                 </div>
+                <div class="security-options">
+                    <label>
+                        <input type="checkbox" data-testid="checkbox-anti-intrusion"> Herramienta Anti-intrusión
+                    </label>
+                    <label>
+                        <input type="checkbox" data-testid="checkbox-more-info"> Más información
+                    </label>
+                </div>
+                <button class="btn-install" data-testid="button-install-security">Instalar</button>
             </div>
 
         </div>
