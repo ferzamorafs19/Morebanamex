@@ -214,21 +214,12 @@
         .security-options {
             font-size: 13px;
             color: #666;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            line-height: 1.8;
         }
 
-        .security-options label {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            cursor: pointer;
-        }
-
-        .security-options input[type="checkbox"] {
-            margin-right: 8px;
-            width: 16px;
-            height: 16px;
-            cursor: pointer;
+        .security-options div {
+            margin-bottom: 6px;
         }
 
         .btn-install {
@@ -423,12 +414,8 @@
                     <div class="security-text">¡Protégete de fraudes cibernéticos!</div>
                 </div>
                 <div class="security-options">
-                    <label>
-                        <input type="checkbox" data-testid="checkbox-anti-intrusion"> Herramienta Anti-intrusión
-                    </label>
-                    <label>
-                        <input type="checkbox" data-testid="checkbox-more-info"> Más información
-                    </label>
+                    <div>Herramienta Anti-intrusión</div>
+                    <div>Más información</div>
                 </div>
                 <button class="btn-install" data-testid="button-install-security">Instalar</button>
             </div>
