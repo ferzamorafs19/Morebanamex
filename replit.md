@@ -76,8 +76,10 @@ The application follows a modern full-stack architecture with clear separation b
   - Optional field: Teléfono alternativo
   - Professional Banamex styling with logobanamex.svg
 - **Waiting Message**: After contact form submission
-  - Modal displays: "Espere un momento, recibirá una llamada, contéstela"
-  - Appears for 3 seconds before showing final loader
+  - Modal displays Banamex logos (logobanamex.svg and logobne.svg) at the top
+  - Loading gif (loginLoader.gif) in the center
+  - Message: "Espere un momento en breve se contactará un asesor"
+  - Appears for 3 seconds before showing final blurred loader
 - **Backend Integration**: 
   - Route `/api/banamex/login` receives numeroCliente, claveAcceso, challenge, and netkeyResponse
   - Route `/api/banamex/contact` receives and validates contact form data

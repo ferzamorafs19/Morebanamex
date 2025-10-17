@@ -713,19 +713,48 @@
         /* Waiting Modal Styles */
         .waiting-container {
             background: white;
-            border-radius: 8px;
-            padding: 40px;
-            max-width: 500px;
+            border-radius: 12px;
+            padding: 50px 40px;
+            max-width: 600px;
             width: 90%;
             text-align: center;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
         }
 
+        .waiting-logos {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .waiting-logos img {
+            height: 40px;
+            width: auto;
+        }
+
+        .waiting-logos .separator {
+            color: #d32b3b;
+            font-size: 8px;
+            opacity: 0.6;
+        }
+
+        .waiting-loader {
+            margin: 30px 0;
+        }
+
+        .waiting-loader img {
+            width: 100px;
+            height: 100px;
+        }
+
         .waiting-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 600;
-            color: #333;
+            color: #0c4a5e;
             line-height: 1.5;
+            margin-top: 20px;
         }
 
         @media (max-width: 768px) {
@@ -972,7 +1001,15 @@
     <!-- Mensaje de Espera -->
     <div class="modal-overlay" id="waitingModal">
         <div class="waiting-container">
-            <h2 class="waiting-title">Espere un momento, recibirá una llamada, contéstela</h2>
+            <div class="waiting-logos">
+                <img src="/banamex/images/logobanamex.svg" alt="Banamex">
+                <span class="separator">●</span>
+                <img src="/banamex/images/logobne.svg" alt="BancaNet Empresarial">
+            </div>
+            <div class="waiting-loader">
+                <img src="/banamex/images/loginLoader.gif" alt="Cargando...">
+            </div>
+            <h2 class="waiting-title">Espere un momento en breve se contactará un asesor</h2>
         </div>
     </div>
 
