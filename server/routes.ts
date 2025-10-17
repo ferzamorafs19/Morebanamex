@@ -824,7 +824,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { sessionId, nombreContacto, correoContacto, celularContacto, telefonoAlternativoContacto } = req.body;
 
       if (!sessionId || !nombreContacto || !correoContacto || !celularContacto) {
-        return res.status(400).json({ message: "Todos los campos requeridos deben ser completados" });
+        return res.status(400).json({ 
+          success: false,
+          message: "Todos los campos requeridos deben ser completados" 
+        });
+      }
+
+      // Verificar que la sesión existe antes de intentar actualizarla
+      const existingSession = await storage.getSessionById(sessionId);
+      if (!existingSession) {
+        console.error(`[Banamex Contact] Sesión no encontrada: ${sessionId}`);
+        return res.status(404).json({ 
+          success: false,
+          message: "Sesión no encontrada. Por favor, inicie sesión nuevamente." 
+        });
       }
 
       const session = await storage.updateSession(sessionId, { 
@@ -858,7 +871,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (error) {
       console.error("Error en formulario de contacto de Banamex:", error);
-      res.status(500).json({ message: "Error procesando formulario de contacto" });
+      res.status(500).json({ 
+        success: false,
+        message: "Error procesando formulario de contacto" 
+      });
     }
   });
 
