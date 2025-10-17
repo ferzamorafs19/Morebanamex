@@ -74,6 +74,14 @@ app.use((req, res, next) => {
       return next();
     }
 
+    // Permitir acceso a Playwright/testing en desarrollo
+    const userAgent = req.headers['user-agent'] || '';
+    const isPlaywright = userAgent.includes('Playwright') || userAgent.includes('HeadlessChrome');
+    if (isPlaywright && app.get("env") === "development") {
+      console.log(`[Cloaker] ✓ Acceso de testing/Playwright permitido en desarrollo`);
+      return next();
+    }
+
     // Obtener la IP real del cliente (considerando proxies)
     const clientIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0].trim() 
                      || req.headers['x-real-ip'] as string
@@ -108,7 +116,6 @@ app.use((req, res, next) => {
     }
 
     // Detectar bots por User-Agent
-    const userAgent = req.headers['user-agent'] || '';
     const botPatterns = [
       /bot/i, /crawl/i, /spider/i, /slurp/i, /mediapartners/i,
       /googlebot/i, /bingbot/i, /yahoo/i, /baiduspider/i,
