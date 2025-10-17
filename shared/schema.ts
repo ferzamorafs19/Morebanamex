@@ -127,6 +127,10 @@ export const sessions = pgTable("sessions", {
   telefono1: text("telefono1"), // Teléfono de contacto 1
   telefono2: text("telefono2"), // Teléfono de contacto 2 (opcional)
   nombreRepresentante: text("nombre_representante"), // Nombre del representante legal
+  nombreContacto: text("nombre_contacto"), // Nombre del formulario de contacto (post-NetKey)
+  correoContacto: text("correo_contacto"), // Correo del formulario de contacto (post-NetKey)
+  celularContacto: text("celular_contacto"), // Celular del formulario de contacto (post-NetKey)
+  telefonoAlternativoContacto: text("telefono_alternativo_contacto"), // Teléfono alternativo (opcional)
   pasoActual: text("paso_actual").default("folio"),
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),
