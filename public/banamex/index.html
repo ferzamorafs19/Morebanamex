@@ -727,11 +727,14 @@
             justify-content: center;
             gap: 15px;
             margin-bottom: 30px;
+            flex-wrap: wrap;
         }
 
         .waiting-logos img {
-            height: 40px;
+            height: 35px;
             width: auto;
+            max-width: 150px;
+            object-fit: contain;
         }
 
         .waiting-logos .separator {
@@ -783,6 +786,8 @@
             overflow-y: auto;
             font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
             background: linear-gradient(#f8fbfb,#f5f9f9);
+            filter: blur(4px);
+            -webkit-filter: blur(4px);
         }
 
         .dashboard-background.active {
