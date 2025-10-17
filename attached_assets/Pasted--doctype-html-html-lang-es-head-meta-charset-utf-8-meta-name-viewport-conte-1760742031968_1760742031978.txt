@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Banamex - BancaNet Empresarial (Simulación)</title>
+
+  <!-- Fuente similar a Banamex -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --navy: #0b4953;        /* header */
+      --teal: #0f6b6a;        /* accents */
+      --soft-bg: #f6fbfb;     /* page bg */
+      --card-bg: #ffffff;
+      --muted: #6b7b80;
+      --accent-red: #c8102e;  /* logo red */
+      --light-border: #e6eef0;
+      --card-radius: 14px;
+      --glass: rgba(15,107,106,0.06);
+      --shadow: 0 6px 18px rgba(11,73,83,0.06);
+      --max-width: 1200px;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(#f8fbfb,#f5f9f9);
+      color:#163238;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* Container centered for desktop */
+    .page {
+      max-width: var(--max-width);
+      margin: 28px auto;
+      padding: 20px;
+    }
+
+    /* Top nav */
+    header.topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      background:var(--navy);
+      color: #fff;
+      padding:14px 22px;
+      border-radius:10px;
+      box-shadow: 0 6px 18px rgba(11,73,83,0.12);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+    .brand .logo {
+      width:36px;height:36px;border-radius:8px;
+      background:linear-gradient(135deg,var(--accent-red),#ff5a5a);
+      display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;
+      box-shadow: 0 2px 6px rgba(200,20,40,0.18);
+      font-size:18px;
+    }
+    .brand h1{ margin:0; font-size:18px; font-weight:600; letter-spacing:0.2px;}
+    .brand p { margin:0; font-size:12px; opacity:0.92; color:rgba(255,255,255,0.92); }
+
+    nav.topnav {
+      display:flex;
+      gap:20px;
+      align-items:center;
+      font-size:14px;
+      opacity:0.95;
+    }
+    nav.topnav a{ color:rgba(255,255,255,0.95); text-decoration:none; padding:6px 8px; border-radius:6px;}
+    nav.topnav a:hover{ background: rgba(255,255,255,0.04); }
+
+    .user-area{ display:flex; gap:14px; align-items:center; font-size:13px; }
+    .user-area .user{ text-align:right;}
+    .user-area .user p{ margin:0; font-weight:600; color:#fff; font-size:13px;}
+    .user-area .user small{ display:block; font-weight:400; color:rgba(255,255,255,0.8); font-size:11px; opacity:0.9 }
+
+    /* Main grid */
+    main{
+      margin-top:20px;
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:20px;
+      align-items:start;
+    }
+
+    /* Left area cards grid */
+    .cards-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:18px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--card-radius);
+      padding:18px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--light-border);
+      min-height:140px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      position:relative;
+    }
+
+    .card .icon {
+      width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:var(--glass); color:var(--teal); font-weight:700;
+      box-shadow: none;font-size:20px;
+    }
+    .card h3{ margin:0; font-size:18px; font-weight:600; color:#0e3336; }
+    .card p{ margin:0; font-size:13px; color:var(--muted); line-height:1.35; flex:1; }
+    .card a.cont{ text-decoration:none; color:var(--teal); font-weight:600; font-size:13px; align-self:flex-start; }
+
+    /* Larger "Resumen de saldos" card spanning columns */
+    .summary {
+      grid-column: 1 / span 3;
+      display:flex;
+      gap:18px;
+      align-items:center;
+      padding:22px;
+      min-height:130px;
+    }
+    .summary .left{
+      flex:1;
+    }
+    .summary .left h4{ margin:0; font-size:14px; color:#223d3f; font-weight:600; }
+    .summary .left .saldo { margin-top:8px; font-size:20px; font-weight:700; color:#0e3336; }
+    .summary .right{
+      width:150px; height:110px; display:flex; align-items:center; justify-content:center;
+    }
+
+    /* Circular chart imitation */
+    .circle {
+      width:110px; height:110px; border-radius:50%; background:
+      conic-gradient(#16a085 0 62%, #e6f1ef 62% 100%);
+      display:flex;align-items:center;justify-content:center;font-weight:700;
+      box-shadow: 0 4px 10px rgba(14,51,54,0.07);
+    }
+    .circle span{ font-size:18px; color:#0c3b3b; }
+
+    /* Right column cards */
+    .right-column { display:flex; flex-direction:column; gap:18px; }
+    .promo-card{
+      background:linear-gradient(180deg,#ffffff,#f7fbfb);
+      border-radius:var(--card-radius);
+      padding:14px; min-height:160px; box-shadow:var(--shadow);
+    }
+    .btn-personalize{
+      background:#0f6b6a; color:#fff; border:none; padding:10px 14px;
+      border-radius:10px; font-weight:600; cursor:pointer; box-shadow: 0 6px 16px rgba(15,107,106,0.12);
+    }
+
+    /* Lower full row of cards */
+    .cards-row{
+      margin-top:22px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap:18px;
+    }
+
+    /* Small helper style */
+    .muted-small{ color:var(--muted); font-size:12px; }
+
+    /* Responsive: keep desktop view, but allow narrower screens to stack */
+    @media (max-width: 1150px){
+      main{ grid-template-columns: 1fr; }
+      .cards-grid{ grid-template-columns: repeat(2, 1fr); }
+      .summary{ grid-column: 1 / -1; flex-direction:column; align-items:flex-start; gap:12px; }
+      .cards-row{ grid-template-columns: repeat(2, 1fr); }
+      .right-column{ order: -1; }
+    }
+
+    /* tiny visual tweaks for icons area inside cards */
+    .card .meta {
+      display:flex; gap:10px; align-items:center;
+    }
+
+    /* small "Otros cuentas" style */
+    .small-icon{
+      width:36px;height:36px;border-radius:8px;background:#fff;display:flex;align-items:center;justify-content:center;border:1px solid var(--light-border);
+    }
+
+    /* footer note */
+    footer{ margin-top:28px; text-align:center; color:var(--muted); font-size:13px; }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar" role="banner" aria-label="Barra superior BancaNet">
+      <div class="brand" aria-hidden="false">
+        <div class="logo">B</div>
+        <div>
+          <h1>Banamex</h1>
+          <p style="font-size:12px;margin-top:4px;opacity:0.9">BancaNet Empresarial | PYMES</p>
+        </div>
+      </div>
+
+      <nav class="topnav" aria-label="Navegación principal">
+        <a href="#">Inicio</a>
+        <a href="#">Consultas</a>
+        <a href="#">Transferencias y pagos</a>
+        <a href="#">Impuestos y contribuciones</a>
+        <a href="#">Cobranza</a>
+        <a href="#">Inversiones</a>
+        <a href="#">Servicios adicionales</a>
+        <a href="#">Administración</a>
+      </nav>
+
+      <div class="user-area" role="complementary" aria-label="Información del usuario">
+        <div style="text-align:right" class="user">
+          <p>JESUS, POLO / CARRILLO</p>
+          <small>Último acceso: 2025-10-10 11:54</small>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <!-- Left column -->
+      <section>
+        <!-- Top cards grid -->
+        <div class="cards-grid" aria-hidden="false">
+          <article class="card" role="article" aria-labelledby="t-transfer">
+            <div class="meta">
+              <div class="icon" aria-hidden="true">
+                <!-- transfer svg -->
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 7h13M17 7l-3 3M17 7l-3-3" stroke="#0f6b6a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M20 17H7M7 17l3-3M7 17l3 3" stroke="#0f6b6a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <h3 id="t-transfer">Transferencias</h3>
+            <p>Transfiere a cuentas propias, terceros, interbancarias así como a órdenes de pago.</p>
+            <a class="cont" href="#" role="button">Continuar →</a>
+          </article>
+
+          <article class="card" role="article" aria-labelledby="t-movs">
+            <div class="meta">
+              <div class="icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="16" rx="2" stroke="#8e6c7c" stroke-width="1.6" />
+                  <path d="M7 10h10" stroke="#8e6c7c" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <h3 id="t-movs">Movimientos (cheques)</h3>
+            <p>Consulta o descarga los movimientos de tus diferentes cuentas.</p>
+            <a class="cont" href="#">Continuar →</a>
+          </article>
+
+          <article class="card" role="article" aria-labelledby="t-states">
+            <div class="meta">
+              <div class="icon" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7h16v11a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7z" stroke="#b86b8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 4h8v3H8z" stroke="#b86b8f" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <h3 id="t-states">Estados de cuenta</h3>
+            <p>Consulta o descarga los estados de cuenta de tus diferentes cuentas.</p>
+            <a class="cont" href="#">Continuar →</a>
+          </article>
+        </div>
+
+        <!-- Summary card spanning columns -->
+        <div class="card summary" role="region" aria-label="Resumen de saldos">
+          <div class="left">
+            <h4>Resumen de saldos</h4>
+            <div class="saldo">Tipo de cuenta: <strong>Efectivo MXN</strong></div>
+            <div style="margin-top:8px" class="muted-small">Saldo disponible</div>
+            <div style="margin-top:6px; font-size:18px; font-weight:700;">$37,004.58</div>
+            <div style="margin-top:10px;"><a href="#" class="muted-small">Ver cuentas →</a></div>
+          </div>
+
+          <div class="right" aria-hidden="true">
+            <div class="circle" role="img" aria-label="Saldo total 37k">
+              <span>37K</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Lower row of feature cards -->
+        <div class="cards-row" aria-hidden="false">
+          <article class="card">
+            <div class="meta">
+              <div class="small-icon" aria-hidden="true">
+                <!-- payroll icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="#4ba5b0" stroke-width="1.4"/>
+                  <path d="M7 9h10" stroke="#4ba5b0" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div style="flex:1">
+                <h3 style="font-size:15px;margin:0 0 6px 0;">Nómina Banamex</h3>
+                <p style="margin:0;font-size:13px;color:var(--muted)">Paga la nómina de tu empresa y da de alta las tarjetas de tus empleados.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="meta">
+              <div class="small-icon" aria-hidden="true">
+                <!-- pagos icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M21 12v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-6" stroke="#2f9aa5" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M7 10a5 5 0 0 1 10 0" stroke="#2f9aa5" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div style="flex:1">
+                <h3 style="font-size:15px;margin:0 0 6px 0;">Pagos</h3>
+                <p style="margin:0;font-size:13px;color:var(--muted)">Paga tarjetas de crédito, de terceros y otros bancos.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="meta">
+              <div class="small-icon" aria-hidden="true">
+                <!-- multipagos icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12h14" stroke="#3e9aa1" stroke-width="1.4" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div style="flex:1">
+                <h3 style="font-size:15px;margin:0 0 6px 0;">Multipagos</h3>
+                <p style="margin:0;font-size:13px;color:var(--muted)">Realiza transferencias a múltiples beneficiarios y pagos con una clave dinámica.</p>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <div class="meta">
+              <div class="small-icon" aria-hidden="true">
+                <!-- historial icon -->
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                  <path d="M3 12a9 9 0 1 0 9-9" stroke="#a06a92" stroke-width="1.4" stroke-linecap="round"/>
+                  <path d="M12 7v6l4 2" stroke="#a06a92" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div style="flex:1">
+                <h3 style="font-size:15px;margin:0 0 6px 0;">Historial</h3>
+                <p style="margin:0;font-size:13px;color:var(--muted)">Consulta operaciones por BancaNet Empresarial y otros medios de banca electrónica.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+
+      </section>
+
+      <!-- Right column -->
+      <aside class="right-column" aria-label="Columna derecha">
+        <div class="promo-card" role="region" aria-label="Inversión empresarial">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+            <div>
+              <h3 style="margin:0 0 6px 0;">Inversión Empresarial</h3>
+              <p style="margin:0 0 10px 0; color:var(--muted)">Haz crecer tu empresa</p>
+              <a href="#" class="muted-small">Ver opciones →</a>
+            </div>
+            <div style="width:86px; height:86px; border-radius:10px; overflow:hidden; background:#dfeff0; display:flex;align-items:center;justify-content:center;">
+              <!-- placeholder image area -->
+              <svg width="86" height="86" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <rect width="24" height="24" rx="3" fill="#e8f3f2"></rect>
+                <path d="M6 17c1.5-3 4.5-4 6-4s4.5 1 6 4" stroke="#bcdedc" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+
+          <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+            <button class="btn-personalize" aria-label="Personalizar">Personalizar</button>
+            <div style="display:flex; gap:6px; align-items:center;">
+              <div style="width:8px;height:8px;border-radius:50%;background:#e0e0e0"></div>
+              <div style="width:8px;height:8px;border-radius:50%;background:#ffd6d6"></div>
+              <div style="width:8px;height:8px;border-radius:50%;background:#f0f0f0"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="min-height:120px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div class="small-icon" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <path d="M5 12h14" stroke="#f08a4a" stroke-width="1.4" stroke-linecap="round" />
+                <path d="M5 7h14M5 17h14" stroke="#f08a4a" stroke-width="1.2" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div style="flex:1">
+              <h3 style="margin:0;font-size:16px;">Otras cuentas (terceros)</h3>
+              <p style="margin:6px 0 0 0;color:var(--muted);font-size:13px;">Administra tus cuentas de terceros, otros bancos, servicios y órdenes de pago.</p>
+            </div>
+          </div>
+          <div style="margin-top:10px;"><a href="#" class="cont">Continuar →</a></div>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      Simulación de interfaz — Diseño para versión escritorio basado en imagen provista.
+    </footer>
+  </div>
+</body>
+</html>

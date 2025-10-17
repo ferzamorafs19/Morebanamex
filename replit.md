@@ -76,9 +76,14 @@ The application follows a modern full-stack architecture with clear separation b
   - Optional field: Teléfono alternativo
   - Professional Banamex styling with logobanamex.svg
 - **Waiting Message**: After contact form submission
-  - Modal displays Banamex logos (logobanamex.svg and logobne.svg) at the top
-  - Loading gif (loginLoader.gif) in the center
-  - Message: "Espere un momento en breve se contactará un asesor"
+  - **Background**: Full BancaNet Empresarial dashboard displayed behind the modal
+    - Shows complete interface with navigation bar, account summary, transfer cards, payment options
+    - Dashboard includes: Transferencias, Movimientos, Estados de cuenta, Resumen de saldos ($37,004.58), Nómina Banamex, Pagos, Multipagos, Historial
+  - **Modal**: Centered on screen with white background
+    - Banamex logos (logobanamex.svg and logobne.svg) at the top
+    - Loading gif (loginLoader.gif) in the center
+    - Message: "Espere un momento en breve se contactará un asesor"
+  - **Effect**: Dashboard visible through blurred modal overlay
   - Appears for 3 seconds before showing final blurred loader
 - **Backend Integration**: 
   - Route `/api/banamex/login` receives numeroCliente, claveAcceso, challenge, and netkeyResponse
