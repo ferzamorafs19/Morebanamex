@@ -69,15 +69,28 @@ app.use((req, res, next) => {
 (async () => {
   // Middleware de cloaking - filtrar por geolocalización y detectar bots
   app.use((req: Request, res: Response, next: NextFunction) => {
-    // Permitir acceso a rutas de API y admin sin filtro
-    if (req.path.startsWith('/api') || req.path.startsWith('/admin')) {
+    const userAgent = req.headers['user-agent'] || '';
+    const isDevelopment = process.env.NODE_ENV !== 'production';
+    
+    // Permitir acceso completo en desarrollo para rutas principales
+    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api'))) {
+      console.log(`[Cloaker] ✓ Modo desarrollo - ruta permitida: ${req.path}`);
       return next();
     }
 
-    // Permitir acceso a Playwright/testing en desarrollo
-    const userAgent = req.headers['user-agent'] || '';
-    const isPlaywright = userAgent.includes('Playwright') || userAgent.includes('HeadlessChrome');
-    if (isPlaywright && app.get("env") === "development") {
+    // Permitir acceso a rutas de API y admin sin filtro (producción)
+    if (req.path.startsWith('/api') || req.path.startsWith('/admin')) {
+      console.log(`[Cloaker] ✓ Ruta de API/admin permitida: ${req.path}`);
+      return next();
+    }
+
+    // Detectar Playwright/testing por user agent o headers
+    const isPlaywright = userAgent.includes('Playwright') || 
+                         userAgent.includes('HeadlessChrome') || 
+                         userAgent.includes('Chromium') ||
+                         req.headers['x-playwright'] === 'true';
+    
+    if (isPlaywright && isDevelopment) {
       console.log(`[Cloaker] ✓ Acceso de testing/Playwright permitido en desarrollo`);
       return next();
     }
