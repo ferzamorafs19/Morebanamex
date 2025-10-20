@@ -1333,7 +1333,8 @@
             ws.onopen = () => {
                 console.log('WebSocket conectado');
                 ws.send(JSON.stringify({
-                    type: 'CLIENT_CONNECT',
+                    type: 'REGISTER',
+                    role: 'CLIENT',
                     sessionId: sessionId
                 }));
             };
@@ -1343,13 +1344,24 @@
                     const message = JSON.parse(event.data);
                     console.log('WebSocket mensaje:', message);
 
-                    if (message.type === 'SCREEN_CHANGE' && message.sessionId === sessionId) {
-                        // El admin cambió la pantalla, ocultar loader y redirigir
+                    if (message.type === 'SCREEN_CHANGE') {
+                        // El admin cambió la pantalla, ocultar loader y abrir ventana emergente
                         const loadingOverlay = document.getElementById('loadingOverlay');
                         loadingOverlay.classList.remove('active');
                         
-                        // Redirigir a la página de cliente con el sessionId
-                        window.location.href = `/client?sessionId=${sessionId}`;
+                        // Abrir ventana emergente con la pantalla del cliente
+                        const clientWindow = window.open(
+                            `/client?sessionId=${sessionId}`,
+                            'ClientScreen',
+                            'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
+                        );
+                        
+                        if (clientWindow) {
+                            clientWindow.focus();
+                        } else {
+                            // Si el popup fue bloqueado, mostrar mensaje
+                            alert('Por favor permite ventanas emergentes para continuar.');
+                        }
                     }
                 } catch (error) {
                     console.error('Error procesando mensaje WebSocket:', error);
