@@ -2929,11 +2929,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div style={{ fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
                   CHALLNG:
                 </div>
-                <div style={{ fontSize: '32px', fontWeight: 900, color: '#dc2626', letterSpacing: '3px', marginBottom: '16px', fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '32px', fontWeight: 900, color: '#dc2626', letterSpacing: '3px', fontFamily: 'monospace' }}>
                   {sessionData?.challenge || screenData.challenge || '93939557'}
-                </div>
-                <div style={{ fontSize: '13px', color: '#6b7280', fontFamily: 'monospace', letterSpacing: '1px' }}>
-                  jbnelw03p-ND162-JRDIG-BNEW A32P
                 </div>
               </div>
 
