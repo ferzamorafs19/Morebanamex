@@ -687,6 +687,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
         const folioContent = (
           <div className="text-center py-8">
+            {/* Logo de Banamex */}
+            <div className="flex justify-center mb-8">
+              <img 
+                src={citibanamexLogo} 
+                alt="Banamex" 
+                className="h-16 object-contain"
+              />
+            </div>
+
             <div className="mb-8">
               <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
                 <div className="text-green-600 text-4xl mb-4">✓</div>
