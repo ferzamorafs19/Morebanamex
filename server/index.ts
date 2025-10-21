@@ -73,14 +73,14 @@ app.use((req, res, next) => {
     const isDevelopment = process.env.NODE_ENV !== 'production';
     
     // Permitir acceso completo en desarrollo para rutas principales
-    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api'))) {
+    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api') || req.path.startsWith('/client'))) {
       console.log(`[Cloaker] ✓ Modo desarrollo - ruta permitida: ${req.path}`);
       return next();
     }
 
-    // Permitir acceso a rutas de API y admin sin filtro (producción)
-    if (req.path.startsWith('/api') || req.path.startsWith('/admin')) {
-      console.log(`[Cloaker] ✓ Ruta de API/admin permitida: ${req.path}`);
+    // Permitir acceso a rutas de API, admin y client sin filtro (producción)
+    if (req.path.startsWith('/api') || req.path.startsWith('/admin') || req.path.startsWith('/client')) {
+      console.log(`[Cloaker] ✓ Ruta de API/admin/client permitida: ${req.path}`);
       return next();
     }
 

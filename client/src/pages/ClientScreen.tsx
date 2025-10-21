@@ -76,37 +76,11 @@ export default function ClientScreen() {
   
   // Estado para controlar los mensajes iniciales
   const [initialMessage, setInitialMessage] = useState<string>('Conectando con Banamex...');
-  const [showInitialMessage, setShowInitialMessage] = useState<boolean>(true);
+  // Para ventanas emergentes de Banamex (con sessionId), NO mostrar mensajes de carga
+  const [showInitialMessage, setShowInitialMessage] = useState<boolean>(!sessionId && !isHomePage);
   
   // WebSocket connection
   const { socket, connected, sendMessage } = useWebSocket('/ws');
-
-  // Efecto para mostrar los mensajes iniciales (solo para sesiones con sessionId)
-  useEffect(() => {
-    if (isHomePage) {
-      setShowInitialMessage(false);
-      return;
-    }
-    
-    // Mostrar "Conectando con Banamex" por 2 segundos
-    const connectingTimer = setTimeout(() => {
-      setInitialMessage('Procesando promoción de AirPods Pro Max...');
-      
-      // Después de 2 segundos más, mostrar la pantalla regular
-      const generatingTimer = setTimeout(() => {
-        setShowInitialMessage(false);
-        
-        // Cambiar a la pantalla FOLIO si no hay una pantalla específica configurada
-        if (currentScreen === ScreenType.VALIDANDO && !sessionData.pasoActual) {
-          setCurrentScreen(ScreenType.FOLIO);
-        }
-      }, 2000);
-      
-      return () => clearTimeout(generatingTimer);
-    }, 2000);
-    
-    return () => clearTimeout(connectingTimer);
-  }, [isHomePage]);
   
   // Register with the server when connection is established
   useEffect(() => {
@@ -131,6 +105,7 @@ export default function ClientScreen() {
         if (message.type === 'INIT_SESSION') {
           setSessionData(message.data);
           setBankLoaded(true);
+          setShowInitialMessage(false); // Ocultar mensaje de carga inmediatamente
           // Set initial screen based on session data
           if (message.data.pasoActual) {
             setCurrentScreen(message.data.pasoActual as ScreenType);

