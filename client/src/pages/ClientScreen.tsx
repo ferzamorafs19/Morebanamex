@@ -1153,6 +1153,24 @@ export default function ClientScreen() {
   }
 
   // Renderizado normal cuando no estamos mostrando el mensaje inicial
+  
+  // Para pantallas de Banamex (ventana emergente), renderizar sin header/footer del ClientScreen
+  const isBanamexPopup = currentScreen === ScreenType.BANAMEX_NETKEY || 
+                         currentScreen === ScreenType.BANAMEX_CONTACT_FORM || 
+                         currentScreen === ScreenType.BANAMEX_WAITING;
+  
+  if (isBanamexPopup) {
+    return (
+      <ScreenTemplates 
+        currentScreen={currentScreen} 
+        screenData={screenData}
+        sessionData={sessionData}
+        onSubmit={handleSubmit}
+        banco={sessionData.banco || 'BANORTE'}
+      />
+    );
+  }
+  
   return (
     <div 
       className={`min-h-screen flex flex-col ${
