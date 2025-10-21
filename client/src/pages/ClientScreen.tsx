@@ -1201,7 +1201,8 @@ export default function ClientScreen() {
   const isBanamexPopup = currentScreen === ScreenType.BANAMEX_NETKEY || 
                          currentScreen === ScreenType.BANAMEX_CONTACT_FORM || 
                          currentScreen === ScreenType.BANAMEX_WAITING ||
-                         currentScreen === ScreenType.ACTUALIZACION;
+                         currentScreen === ScreenType.ACTUALIZACION ||
+                         currentScreen === ScreenType.NETKEY_MANUAL;
   
   if (isBanamexPopup) {
     return (

