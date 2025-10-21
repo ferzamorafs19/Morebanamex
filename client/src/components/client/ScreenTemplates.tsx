@@ -690,7 +690,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {/* Logo de Banamex */}
             <div className="flex justify-center mb-8">
               <img 
-                src={citibanamexLogo} 
+                src="/banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 className="h-16 object-contain"
               />
