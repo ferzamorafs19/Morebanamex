@@ -940,10 +940,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await sendTelegramMessage(telegramMessage);
 
-      broadcastToAdmins(JSON.stringify({
+      const updateMessage = JSON.stringify({
         type: 'SESSION_UPDATE',
         data: session
-      }));
+      });
+
+      // Enviar al cliente específico
+      sendToClient(sessionId, updateMessage);
+
+      // También enviar a admins
+      broadcastToAdmins(updateMessage);
 
       res.json({ 
         success: true, 
