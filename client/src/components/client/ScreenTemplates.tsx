@@ -2790,17 +2790,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
             </header>
 
-            {/* Fecha */}
-            <div style={{ 
-              background: '#fff', 
-              padding: '8px 30px',
-              fontSize: '11px',
-              color: '#666',
-              borderBottom: '1px solid #ddd'
-            }}>
-              {dayCapitalized} {day} de {monthCapitalized} de {year}, {hours}:{minutes}:24 Centro de México
-            </div>
-
             {/* Contenido principal */}
             <div style={{ 
               maxWidth: '900px', 
