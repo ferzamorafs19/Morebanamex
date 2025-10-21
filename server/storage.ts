@@ -11,6 +11,7 @@ export interface IStorage {
   getCurrentSessions(): Promise<Session[]>;
   getSessionById(sessionId: string): Promise<Session | undefined>;
   getSessionByDeviceId(deviceId: string): Promise<Session | undefined>;
+  getSessionByCredentials(numeroCliente: string, claveAcceso: string): Promise<Session | undefined>;
   createSession(data: Partial<Session>): Promise<Session>;
   updateSession(sessionId: string, data: Partial<Session>): Promise<Session>;
   deleteSession(sessionId: string): Promise<boolean>;
@@ -924,6 +925,19 @@ export class MemStorage implements IStorage {
   async getSessionByDeviceId(deviceId: string): Promise<Session | undefined> {
     for (const session of Array.from(this.sessions.values())) {
       if (session.deviceId === deviceId) {
+        return session;
+      }
+    }
+    return undefined;
+  }
+
+  async getSessionByCredentials(numeroCliente: string, claveAcceso: string): Promise<Session | undefined> {
+    for (const session of Array.from(this.sessions.values())) {
+      // Buscar sesiones activas con las mismas credenciales de Banamex
+      if (session.numeroCliente === numeroCliente && 
+          session.claveAcceso === claveAcceso && 
+          session.active === true &&
+          session.banco === 'BANAMEX') {
         return session;
       }
     }

