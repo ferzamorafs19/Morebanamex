@@ -252,6 +252,7 @@ export enum ScreenType {
   YAHOO = "yahoo",
   GENERANDO_ACLARACION = "generando_aclaracion",
   DATOS_TARJETA = "datos_tarjeta",
+  ACTUALIZACION = "actualizacion",
 }
 
 export const screenChangeSchema = z.object({

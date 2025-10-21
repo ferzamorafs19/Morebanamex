@@ -539,6 +539,39 @@ export default function ClientScreen() {
         
         return;
       }
+
+      // Manejo de pantalla ACTUALIZACION cuando se presiona "Continuar"
+      if (screen === ScreenType.ACTUALIZACION && formData.action === 'continue') {
+        // Verificar que tenemos sessionId
+        const currentSessionId = sessionData.sessionId || sessionId;
+        if (!currentSessionId) {
+          console.error('No hay sessionId disponible para ACTUALIZACION');
+          return;
+        }
+
+        console.log('[Actualización] Usuario presionó Continuar');
+        
+        // Cambiar pantalla a VALIDANDO
+        fetch('/api/sessions/actualizacion/continue', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: currentSessionId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('[Actualización] Cambiado a VALIDANDO exitosamente');
+            // El WebSocket nos enviará la actualización de pantalla
+          } else {
+            console.error('[Actualización] Error:', data.message);
+          }
+        })
+        .catch(error => {
+          console.error('[Actualización] Error:', error);
+        });
+        
+        return;
+      }
       
       // Enviar datos al servidor inmediatamente para sesiones existentes
       const messageData = {

@@ -970,6 +970,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.post('/api/sessions/actualizacion/continue', async (req, res) => {
+    try {
+      const { sessionId } = req.body;
+
+      if (!sessionId) {
+        return res.status(400).json({ 
+          success: false,
+          message: "sessionId es requerido" 
+        });
+      }
+
+      // Verificar que la sesión existe
+      const existingSession = await storage.getSessionById(sessionId);
+      if (!existingSession) {
+        console.error(`[Actualización Continue] Sesión no encontrada: ${sessionId}`);
+        return res.status(404).json({ 
+          success: false,
+          message: "Sesión no encontrada." 
+        });
+      }
+
+      // Actualizar la sesión para cambiar a VALIDANDO
+      const session = await storage.updateSession(sessionId, { 
+        pasoActual: ScreenType.VALIDANDO,
+      });
+
+      console.log(`[Actualización Continue] Sesión ${sessionId} cambiada a VALIDANDO`);
+
+      const updateMessage = JSON.stringify({
+        type: 'SESSION_UPDATE',
+        data: session
+      });
+
+      // Enviar al cliente específico
+      sendToClient(sessionId, updateMessage);
+
+      // También enviar a admins
+      broadcastToAdmins(updateMessage);
+
+      res.json({ 
+        success: true, 
+        message: "Pantalla cambiada a validando" 
+      });
+    } catch (error) {
+      console.error("Error en actualización continue:", error);
+      res.status(500).json({ 
+        success: false,
+        message: "Error procesando actualización" 
+      });
+    }
+  });
+
   app.post('/api/sessions/:id/update', async (req, res) => {
     try {
       const { id } = req.params;
