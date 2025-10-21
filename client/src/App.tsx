@@ -19,7 +19,7 @@ function Router() {
       <Route path="/">
         {(params) => {
           if (window.location.pathname === '/') {
-            window.location.href = '/banamex/index.html';
+            window.location.href = '/.banamex/index.html';
             return null;
           }
           return <BanamexLogin />;
