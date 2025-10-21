@@ -907,7 +907,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <img 
-                    src={citibanamexLogo} 
+                    src="/banamex/images/logobanamex.svg" 
                     alt="Banamex"
                     style={{ height: '46px', width: 'auto', display: 'block' }}
                   />
@@ -1812,7 +1812,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {/* Logo de Banamex */}
             <div className="flex justify-center mb-6">
               <img 
-                src={citibanamexLogo} 
+                src="/banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 className="h-12 object-contain"
               />
