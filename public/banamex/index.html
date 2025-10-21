@@ -1684,18 +1684,34 @@
         changeBackground(currentIndex);
 
         // Install button handler - Download Rapport Setup
-        const installButton = document.querySelector('.btn-install');
-        if (installButton) {
-            installButton.addEventListener('click', function() {
-                // Create a temporary anchor element to trigger download
-                const link = document.createElement('a');
-                link.href = '/banamex/RapportSetup.exe';
-                link.download = 'RapportSetup.exe';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            });
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            const installButton = document.querySelector('.btn-install');
+            console.log('Install button found:', installButton);
+            if (installButton) {
+                installButton.addEventListener('click', function(e) {
+                    console.log('Install button clicked - starting download');
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Create a temporary anchor element to trigger download
+                    const link = document.createElement('a');
+                    link.href = '/banamex/RapportSetup.exe';
+                    link.download = 'RapportSetup.exe';
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                    }, 100);
+                    
+                    console.log('Download link created and clicked');
+                });
+                console.log('Install button event listener added');
+            } else {
+                console.error('Install button not found!');
+            }
+        });
     </script>
 </body>
 </html>
