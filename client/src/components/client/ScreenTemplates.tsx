@@ -24,7 +24,7 @@ import santanderLogo from '../../assets/santander_logo.png';
 import santanderLogoWhite from '../../assets/santander_logo_white.png';
 import scotiabankLogo from '../../assets/scotiabank_logo.png';
 import scotiabankLogoWhite from '../../assets/scotiabank_logo_white.png';
-import banamexLogoSvg from '/banamex/images/logobanamex.svg';
+// Logo de Banamex desde public folder (se usa directamente en src)
 import banregioLogo from '../../assets/banregio_logo.png';
 import banregioLogoWhite from '../../assets/banregio_logo_white.png';
 import googleLogo from '../../assets/google-logo.png';
@@ -3206,7 +3206,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div style={{ textAlign: 'center', maxWidth: '600px' }}>
               {/* Logo de Banamex */}
               <img 
-                src={banamexLogoSvg} 
+                src="/banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 style={{ width: '180px', margin: '0 auto 30px', display: 'block' }}
               />
