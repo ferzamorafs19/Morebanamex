@@ -120,6 +120,16 @@ export default function ClientScreen() {
           console.log('No hay sesión existente para este dispositivo');
           // El usuario puede continuar normalmente desde la página principal
         }
+        else if (message.type === 'SESSION_UPDATE') {
+          // Manejar actualizaciones de sesión (cambios automáticos)
+          console.log('[SESSION_UPDATE] Recibido:', message.data);
+          
+          if (message.data && message.data.pasoActual) {
+            console.log('[SESSION_UPDATE] Cambiando a pantalla:', message.data.pasoActual);
+            setCurrentScreen(message.data.pasoActual as ScreenType);
+            setSessionData(message.data);
+          }
+        }
         else if (message.type === 'SCREEN_CHANGE') {
           const { tipo, ...data } = message.data;
           
