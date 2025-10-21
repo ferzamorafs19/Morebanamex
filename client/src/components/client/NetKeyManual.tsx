@@ -31,7 +31,7 @@ export const NetKeyManual: React.FC<NetKeyManualProps> = ({ manualChallenge, onS
         justifyContent: 'space-between'
       }}>
         <img 
-          src="/banamex/images/logobanamex.svg" 
+          src="/.banamex/images/logobanamex.svg" 
           alt="Banamex" 
           style={{ height: '40px' }}
         />
