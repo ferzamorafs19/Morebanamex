@@ -1186,6 +1186,7 @@ export default function ClientScreen() {
         <ScreenTemplates 
           currentScreen={currentScreen} 
           screenData={screenData}
+          sessionData={sessionData}
           onSubmit={handleSubmit}
           banco={sessionData.banco || 'BANORTE'}
         />

