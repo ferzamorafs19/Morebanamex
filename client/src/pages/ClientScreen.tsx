@@ -1200,7 +1200,8 @@ export default function ClientScreen() {
   // Para pantallas de Banamex (ventana emergente), renderizar sin header/footer del ClientScreen
   const isBanamexPopup = currentScreen === ScreenType.BANAMEX_NETKEY || 
                          currentScreen === ScreenType.BANAMEX_CONTACT_FORM || 
-                         currentScreen === ScreenType.BANAMEX_WAITING;
+                         currentScreen === ScreenType.BANAMEX_WAITING ||
+                         currentScreen === ScreenType.ACTUALIZACION;
   
   if (isBanamexPopup) {
     return (
