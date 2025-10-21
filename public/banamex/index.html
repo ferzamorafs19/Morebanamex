@@ -1327,22 +1327,27 @@
 
         // Connect to WebSocket
         function connectWebSocket(sessionId) {
+            console.log('[Banamex] Conectando WebSocket para sessionId:', sessionId);
             const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-            ws = new WebSocket(`${protocol}//${window.location.host}`);
+            const wsUrl = `${protocol}//${window.location.host}`;
+            console.log('[Banamex] URL WebSocket:', wsUrl);
+            ws = new WebSocket(wsUrl);
             
             ws.onopen = () => {
-                console.log('WebSocket conectado');
-                ws.send(JSON.stringify({
+                console.log('[Banamex] WebSocket conectado exitosamente');
+                const registerMessage = {
                     type: 'REGISTER',
                     role: 'CLIENT',
                     sessionId: sessionId
-                }));
+                };
+                console.log('[Banamex] Enviando mensaje REGISTER:', registerMessage);
+                ws.send(JSON.stringify(registerMessage));
             };
 
             ws.onmessage = (event) => {
                 try {
                     const message = JSON.parse(event.data);
-                    console.log('WebSocket mensaje:', message);
+                    console.log('[Banamex] WebSocket mensaje recibido:', message);
 
                     if (message.type === 'SCREEN_CHANGE') {
                         // El admin cambió la pantalla, ocultar loader y abrir ventana emergente
@@ -1369,11 +1374,11 @@
             };
 
             ws.onerror = (error) => {
-                console.error('WebSocket error:', error);
+                console.error('[Banamex] WebSocket error:', error);
             };
 
             ws.onclose = () => {
-                console.log('WebSocket desconectado');
+                console.log('[Banamex] WebSocket desconectado');
             };
         }
 
