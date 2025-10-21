@@ -748,7 +748,7 @@ export default function ClientScreen() {
         <header className="bg-white text-black p-4 text-center border-b border-gray-200">
           <div className="flex justify-center mb-2">
             <img 
-              src="/banamex/images/logobanamex.svg" 
+              src="/.banamex/images/logobanamex.svg" 
               className="banamex-logo inline-block" 
               alt="Banamex" 
               style={{maxHeight: '40px', height: '2.5rem', width: 'auto'}}
