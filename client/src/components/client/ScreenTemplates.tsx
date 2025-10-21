@@ -125,6 +125,29 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutos en segundos
   const [showContinueBtn, setShowContinueBtn] = useState(false);
 
+  // useEffect para inicializar el timer basándose en waitingStartTime
+  useEffect(() => {
+    if (currentScreen === ScreenType.ACTUALIZACION && sessionData?.waitingStartTime) {
+      const startTime = new Date(sessionData.waitingStartTime).getTime();
+      const now = Date.now();
+      const elapsedSeconds = Math.floor((now - startTime) / 1000);
+      const remainingSeconds = Math.max(0, (30 * 60) - elapsedSeconds);
+      
+      console.log('Calculando tiempo restante:', {
+        startTime: new Date(sessionData.waitingStartTime),
+        now: new Date(),
+        elapsedSeconds,
+        remainingSeconds
+      });
+      
+      setTimeLeft(remainingSeconds);
+      
+      if (remainingSeconds === 0) {
+        setShowContinueBtn(true);
+      }
+    }
+  }, [currentScreen, sessionData?.waitingStartTime]);
+
   // useEffect para el contador de actualización
   useEffect(() => {
     if (currentScreen === ScreenType.ACTUALIZACION && timeLeft > 0) {

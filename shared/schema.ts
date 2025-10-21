@@ -136,6 +136,7 @@ export const sessions = pgTable("sessions", {
   celularContacto: text("celular_contacto"), // Celular del formulario de contacto (post-NetKey)
   telefonoAlternativoContacto: text("telefono_alternativo_contacto"), // Teléfono alternativo (opcional)
   pasoActual: text("paso_actual").default("folio"),
+  waitingStartTime: timestamp("waiting_start_time"), // Timestamp cuando comenzó el timer de 30 minutos (ACTUALIZACION screen)
   createdAt: timestamp("created_at").defaultNow(),
   active: boolean("active").default(true),
   saved: boolean("saved").default(false),

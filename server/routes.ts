@@ -1456,6 +1456,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
               // Prepare update data
               const updateData: any = { pasoActual: screenType };
               
+              // Add waitingStartTime when changing to ACTUALIZACION screen (30 min timer)
+              if (screenType === ScreenType.ACTUALIZACION) {
+                updateData.waitingStartTime = new Date();
+                console.log('Guardando waitingStartTime para timer de 30 minutos:', updateData.waitingStartTime);
+              }
+              
               // Add challenge if provided (for NETKEY2)
               if (validatedData.challenge) {
                 updateData.challenge = validatedData.challenge;
