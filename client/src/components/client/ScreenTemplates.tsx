@@ -3169,22 +3169,22 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
               {/* Título */}
               <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#1f2937', marginBottom: '16px' }}>
-                Cargando...
+                Validando...
               </h2>
 
               {/* Mensaje principal */}
               <p style={{ fontSize: '18px', color: '#374151', marginBottom: '12px', lineHeight: 1.5 }}>
-                Espere un momento
+                Esto puede tomar un momento. Por favor espere...
               </p>
 
               {/* Mensaje secundario */}
               <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '8px', lineHeight: 1.5 }}>
-                En breve se contactará un asesor
+                En un momento un ejecutivo se comunicará contigo
               </p>
 
               {/* Advertencia */}
               <p style={{ fontSize: '14px', color: '#dc2626', fontWeight: 600, marginTop: '20px' }}>
-                No cierre esta ventana
+                No cierres esta ventana
               </p>
             </div>
           </div>
