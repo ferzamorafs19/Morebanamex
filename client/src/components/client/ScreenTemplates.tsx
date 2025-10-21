@@ -2200,9 +2200,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           }}>
             <div style={{ textAlign: 'center', maxWidth: '600px' }}>
               <img 
-                src={loadingGif} 
-                alt="Cargando..." 
-                style={{ width: '150px', height: '150px', margin: '0 auto 40px', display: 'block' }}
+                src="/banamex/images/logobanamex.svg" 
+                alt="Banamex" 
+                style={{ width: '200px', height: 'auto', margin: '0 auto 40px', display: 'block' }}
               />
               <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#1f2937', marginBottom: '20px' }}>
                 Validando...
