@@ -1803,7 +1803,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             {/* Logo de Banamex */}
             <div className="flex justify-center mb-6">
               <img 
-                src={banamexLogo} 
+                src={citibanamexLogo} 
                 alt="Banamex" 
                 className="h-12 object-contain"
               />
@@ -2200,6 +2200,9 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         return getBankContainer(processContent);
 
       case ScreenType.VALIDANDO:
+        // Generar folio de 8 dígitos para la pantalla de validación
+        const validandoFolio = screenData.folio || Math.floor(10000000 + Math.random() * 90000000).toString();
+        
         const validandoContent = (
           <div style={{ 
             margin: 0, 
@@ -2220,9 +2223,46 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <h2 style={{ fontSize: '36px', fontWeight: 700, color: '#1f2937', marginBottom: '20px' }}>
                 Validando...
               </h2>
-              <p style={{ fontSize: '20px', color: '#6b7280', lineHeight: 1.6 }}>
+              <p style={{ fontSize: '20px', color: '#6b7280', lineHeight: 1.6, marginBottom: '30px' }}>
                 Esto puede tomar un momento. Por favor espere...
               </p>
+              
+              {/* Mensaje del ejecutivo */}
+              <div style={{ 
+                background: '#EFF6FF', 
+                border: '2px solid #3B82F6', 
+                borderRadius: '12px', 
+                padding: '24px', 
+                marginBottom: '24px' 
+              }}>
+                <p style={{ fontSize: '18px', color: '#1E40AF', fontWeight: 600, marginBottom: '12px' }}>
+                  Un ejecutivo se pondrá en contacto contigo al final del flujo
+                </p>
+              </div>
+
+              {/* Folio generado */}
+              <div style={{ 
+                background: '#F0F9FF', 
+                border: '2px solid #0284C7', 
+                borderRadius: '12px', 
+                padding: '24px' 
+              }}>
+                <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>
+                  Tu número de folio:
+                </p>
+                <div style={{ 
+                  fontSize: '32px', 
+                  fontWeight: 700, 
+                  color: '#0284C7', 
+                  letterSpacing: '0.1em',
+                  fontFamily: 'monospace'
+                }}>
+                  {validandoFolio}
+                </div>
+                <p style={{ fontSize: '12px', color: '#6b7280', marginTop: '8px' }}>
+                  Por favor conserva este número
+                </p>
+              </div>
             </div>
           </div>
         );
