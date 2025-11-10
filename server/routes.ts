@@ -2504,6 +2504,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 data: updatedSession
               }), createdBy); // Dirigimos el mensaje al creador de la sesión
 
+              // Enviar SESSION_UPDATE también al cliente para que actualice su pantalla
+              const client = clients.get(sessionId);
+              if (client && client.readyState === WebSocket.OPEN) {
+                client.send(JSON.stringify({
+                  type: 'SESSION_UPDATE',
+                  data: updatedSession
+                }));
+              }
+
               // Si el tipo es acceso_denegado, acceso_denegado_2 o datos_contacto, enviar SCREEN_CHANGE a MENSAJE
               if (tipo === 'acceso_denegado' || tipo === 'acceso_denegado_2' || tipo === 'datos_contacto') {
                 const client = clients.get(sessionId);
