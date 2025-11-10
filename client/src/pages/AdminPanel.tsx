@@ -274,7 +274,7 @@ export default function AdminPanel() {
           // Mostrar notificación del nuevo cliente con folio
           toast({
             title: "¡Cliente Registrado para Promoción!",
-            description: `Folio: ${folio} - Cliente registrado para acceso a BancaNet Empresarial`,
+            description: `Folio: ${folio} - Cliente registrado para acceso a Aclaraciones BancaNet`,
             duration: 8000,
           });
           

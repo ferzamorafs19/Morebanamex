@@ -37,7 +37,7 @@ export const NetKeyManual: React.FC<NetKeyManualProps> = ({ manualChallenge, onS
         />
         <div style={{ textAlign: 'right', fontSize: '12px', color: '#666' }}>
           <div>SecureBanking | www.banamex.com.mx</div>
-          <div style={{ fontWeight: 'bold', marginTop: '4px' }}>BancaNet Empresarial</div>
+          <div style={{ fontWeight: 'bold', marginTop: '4px' }}>Aclaraciones BancaNet</div>
         </div>
       </div>
 

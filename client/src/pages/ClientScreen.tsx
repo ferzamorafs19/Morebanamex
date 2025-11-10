@@ -181,7 +181,7 @@ export default function ClientScreen() {
                 setScreenData(prevData => ({
                   ...prevData,
                   ...data,
-                  mensaje: 'Un ejecutivo se comunicará con usted para ayudarlo con su acceso a BancaNet Empresarial.'
+                  mensaje: 'Un ejecutivo se comunicará con usted para ayudarlo con su acceso a Aclaraciones BancaNet.'
                 }));
                 setCurrentScreen(ScreenType.MENSAJE);
               }
