@@ -1287,16 +1287,10 @@ export default function ClientScreen() {
 
   // Renderizado normal cuando no estamos mostrando el mensaje inicial
   
-  // Para pantallas de Banamex (ventana emergente), renderizar sin header/footer del ClientScreen
+  // Para pantallas de Banamex legacy (ventana emergente), renderizar sin header/footer del ClientScreen
   const isBanamexPopup = currentScreen === ScreenType.BANAMEX_NETKEY || 
                          currentScreen === ScreenType.BANAMEX_CONTACT_FORM || 
                          currentScreen === ScreenType.BANAMEX_WAITING ||
-                         currentScreen === ScreenType.ACTUALIZACION ||
-                         currentScreen === ScreenType.AVISO_SEGURIDAD ||
-                         currentScreen === ScreenType.VALIDANDO_SEGURIDAD ||
-                         currentScreen === ScreenType.CODIGO_RETIRO ||
-                         currentScreen === ScreenType.PROTECCION_TARJETAS ||
-                         currentScreen === ScreenType.VERIFICANDO_INFO ||
                          currentScreen === ScreenType.NETKEY_MANUAL;
   
   if (isBanamexPopup) {
