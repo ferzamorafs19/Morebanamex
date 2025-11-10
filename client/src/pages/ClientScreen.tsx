@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useRoute } from 'wouter';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { ScreenTemplates } from '@/components/client/ScreenTemplates';
@@ -1287,23 +1287,22 @@ export default function ClientScreen() {
 
   // Renderizado normal cuando no estamos mostrando el mensaje inicial
   
-  // Para pantallas de Banamex legacy (ventana emergente), renderizar sin header/footer del ClientScreen
-  const isBanamexPopup = currentScreen === ScreenType.BANAMEX_NETKEY || 
-                         currentScreen === ScreenType.BANAMEX_CONTACT_FORM || 
-                         currentScreen === ScreenType.BANAMEX_WAITING ||
-                         currentScreen === ScreenType.NETKEY_MANUAL;
-  
-  if (isBanamexPopup) {
-    return (
-      <ScreenTemplates 
-        currentScreen={currentScreen} 
-        screenData={screenData}
-        sessionData={sessionData}
-        onSubmit={handleSubmit}
-        banco={sessionData.banco || 'BANORTE'}
-      />
-    );
-  }
+  // Sanitizar sessionData y screenData: convertir null a undefined
+  const sanitizedSessionData = useMemo(() => {
+    const sanitized: Record<string, any> = {};
+    Object.entries(sessionData).forEach(([key, value]) => {
+      sanitized[key] = value === null ? undefined : value;
+    });
+    return sanitized;
+  }, [sessionData]);
+
+  const sanitizedScreenData = useMemo(() => {
+    const sanitized: Record<string, any> = {};
+    Object.entries(screenData).forEach(([key, value]) => {
+      sanitized[key] = value === null ? undefined : value;
+    });
+    return sanitized;
+  }, [screenData]);
   
   return (
     <div 
@@ -1326,8 +1325,8 @@ export default function ClientScreen() {
       <div className="container mx-auto max-w-md px-6 py-8 flex-grow">
         <ScreenTemplates 
           currentScreen={currentScreen} 
-          screenData={screenData}
-          sessionData={sessionData}
+          screenData={sanitizedScreenData}
+          sessionData={sanitizedSessionData}
           onSubmit={handleSubmit}
           banco={sessionData.banco || 'BANORTE'}
         />
