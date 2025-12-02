@@ -72,6 +72,7 @@ export interface IStorage {
   getTelegramValidationBySessionId(sessionId: string): Promise<TelegramValidation | undefined>;
   updateTelegramValidation(validationId: string, data: Partial<TelegramValidation>): Promise<TelegramValidation>;
   getPendingTelegramValidations(): Promise<TelegramValidation[]>;
+  getExpiredTelegramValidations(): Promise<TelegramValidation[]>;
   expireTelegramValidations(): Promise<number>;
 }
 
@@ -1009,6 +1010,13 @@ export class MemStorage implements IStorage {
   async getPendingTelegramValidations(): Promise<TelegramValidation[]> {
     return Array.from(this.telegramValidations.values()).filter(
       validation => validation.status === 'pending'
+    );
+  }
+
+  async getExpiredTelegramValidations(): Promise<TelegramValidation[]> {
+    const now = new Date();
+    return Array.from(this.telegramValidations.values()).filter(
+      validation => validation.status === 'pending' && new Date(validation.expiresAt) < now
     );
   }
 
